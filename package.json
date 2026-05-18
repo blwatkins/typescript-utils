@@ -1,0 +1,27 @@
+{
+  "name": "@brittni/utils",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": false,
+  "description": "A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utilities for everyday development.",
+  "author": {
+    "name": "Brittni Watkins",
+    "url": "https://blwatkins.github.io/"
+  },
+  "homepage": "https://github.com/blwatkins/typescript-utils#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blwatkins/typescript-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/blwatkins/typescript-utils/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  },
+  "main": "dist/index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
