@@ -11,7 +11,7 @@
   "homepage": "https://github.com/blwatkins/typescript-utils#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blwatkins/typescript-utils.git"
+    "url": "git+https://github.com/blwatkins/typescript-utils.git"
   },
   "bugs": {
     "url": "https://github.com/blwatkins/typescript-utils/issues"
