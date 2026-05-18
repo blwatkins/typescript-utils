@@ -42,11 +42,15 @@
     "./README.md"
   ],
   "scripts": {
+    "lint:js": "eslint -c eslint.config.js.mjs .",
+    "lint:ts": "eslint -c eslint.config.ts.mjs .",
+    "lint:all": "npm run lint:js && npm run lint:ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^25.9.0",
     "@vitest/coverage-v8": "^4.1.6",
     "@vitest/ui": "^4.1.6",
     "eslint": "^10.4.0",
