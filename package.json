@@ -20,7 +20,27 @@
   "engines": {
     "node": "^22.13.0 || >=24"
   },
-  "main": "_dist/index.mjs",
+  "types": "./_dist/index.d.cts",
+  "module": "./_dist/index.mjs",
+  "main": "./_dist/index.cjs",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./_dist/index.d.mts",
+        "default": "./_dist/index.mjs"
+      },
+      "require": {
+        "types": "./_dist/index.d.cts",
+        "default": "./_dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "./_dist",
+    "./LICENSE",
+    "./package.json",
+    "./README.md"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
