@@ -13,3 +13,9 @@ node_modules/
 _site/
 .jekyll-cache/
 .sass-cache/
+
+# Compiling, bundling, testing, and coverage output
+_compiled/
+_coverage/
+_dist/
+_doc/
