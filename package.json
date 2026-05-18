@@ -20,18 +20,15 @@
   "engines": {
     "node": "^22.13.0 || >=24"
   },
-  "types": "./_dist/index.d.cts",
+  "types": "./_dist/index.d.mts",
   "module": "./_dist/index.mjs",
-  "main": "./_dist/index.cjs",
+  "main": "./_dist/index.mjs",
   "exports": {
     ".": {
       "import": {
         "types": "./_dist/index.d.mts",
-        "default": "./_dist/index.mjs"
-      },
-      "require": {
-        "types": "./_dist/index.d.cts",
-        "default": "./_dist/index.cjs"
+        "default": "./_dist/index.mjs",
+        "map": "./_dist/index.mjs.map"
       }
     }
   },
@@ -45,7 +42,8 @@
     "lint:js": "eslint -c eslint.config.js.mjs .",
     "lint:ts": "eslint -c eslint.config.ts.mjs .",
     "lint:all": "npm run lint:js && npm run lint:ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsdown"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
