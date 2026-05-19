@@ -1,6 +1,6 @@
 {
   "name": "@brittni/utils",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha-rc.000",
   "license": "MIT",
   "private": false,
   "description": "A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utilities for everyday development.",
