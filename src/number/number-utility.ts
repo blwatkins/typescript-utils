@@ -19,7 +19,7 @@
  */
 
 /**
- * Static properties and methods for validating and sanitizing number types.
+ * Static properties and methods for validating number types.
  */
 export class NumberUtility {
     /**

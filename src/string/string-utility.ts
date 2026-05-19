@@ -19,7 +19,7 @@
  */
 
 /**
- * Static properties and methods for validating and sanitizing string types.
+ * Static properties and methods for validating string types.
  */
 export class StringUtility {
     /**
