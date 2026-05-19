@@ -27,8 +27,7 @@
     ".": {
       "import": {
         "types": "./_dist/index.d.mts",
-        "default": "./_dist/index.mjs",
-        "map": "./_dist/index.mjs.map"
+        "default": "./_dist/index.mjs"
       }
     }
   },
@@ -43,6 +42,7 @@
     "lint:ts": "eslint -c eslint.config.ts.mjs .",
     "lint:all": "npm run lint:js && npm run lint:ts",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "typedoc",
     "build": "tsdown"
   },
   "devDependencies": {

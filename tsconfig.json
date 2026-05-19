@@ -25,9 +25,9 @@
 
     /* Emit */
     "outDir": "./_compiled",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "removeComments": false,
     "noEmitOnError": true,
     "preserveConstEnums": true,

@@ -26,7 +26,7 @@ export default defineConfig({
     },
     outDir: './_dist',
     globalName: 'brittniUtils',
-    sourcemap: true,
+    sourcemap: false,
     clean: true,
     dts: true,
     failOnWarn: true,
