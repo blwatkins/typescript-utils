@@ -1,0 +1,51 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+
+  "entryPoints": [
+    "./src/number/index.ts",
+    "./src/string/index.ts"
+  ],
+
+  "out": "./_doc",
+
+  "includeVersion": true,
+
+  "navigationLinks": {
+    "TypeScript Utilities": "https://blwatkins.github.io/typescript-utils/",
+    "Brittni Watkins": "https://blwatkins.github.io/"
+  },
+
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true,
+    "includeFolders": true
+  },
+
+  "visibilityFilters": {
+    "private": true,
+    "protected": true,
+    "inherited": true,
+    "external": true,
+    "@alpha": true,
+    "@beta": true,
+    "@deprecated": true
+  },
+
+  "sort": ["kind", "visibility", "static-first", "alphabetical", "enum-value-ascending"],
+
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": true
+  },
+
+  "intentionallyNotDocumented": [],
+
+  "treatWarningsAsErrors": true,
+
+  "customFooterHtml": "<br/>Copyright &copy; 2024-2026 Brittni Watkins."
+}

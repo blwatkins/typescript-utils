@@ -1,4 +1,9 @@
-# TypeScript Utilities
+---
+title: "TypeScript Utilities"
+layout: page
+---
+
+## About This Project
 
 A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utilities for everyday development.
 
@@ -6,7 +11,7 @@ A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utiliti
 
 *Coming soon!*
 
-[Documentation by Version Number](https://blwatkins.github.io/typescript-utils/releases.html)
+[Documentation by Version Number](./releases.md)
 
 ## License
 
@@ -23,7 +28,3 @@ A huge thank you to all the open source contributors who have made this project 
 
 A special thank you to all the educators, mentors, and content creators who have shared their knowledge and expertise in the fields of web development and computer science.
 Thank you for giving me the tools, resources, opportunities, support, and inspiration to learn and grow as a developer.
-
-----
-
-Copyright &copy; 2024-2026 Brittni Watkins.

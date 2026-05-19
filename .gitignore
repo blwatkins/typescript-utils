@@ -1,0 +1,21 @@
+*.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Node.js and npm
+node_modules/
+
+# Jekyll
+_site/
+.jekyll-cache/
+.sass-cache/
+
+# Compiling, bundling, testing, and coverage output
+_compiled/
+_coverage/
+_dist/
+_doc/
