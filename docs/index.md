@@ -11,6 +11,8 @@ A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utiliti
 
 *Coming soon!*
 
+[Documentation by Version Number](./releases.md)
+
 ## License
 
 The source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
