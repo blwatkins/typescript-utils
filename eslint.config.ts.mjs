@@ -35,6 +35,7 @@ export default defineConfig([
         '_dist/**',
         '_doc/**',
         'docs/doc/**',
+        'docs/releases/**',
         'docs/_site/**',
         '**/*.js',
         '**/*.cjs',
