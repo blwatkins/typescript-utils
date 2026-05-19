@@ -19,44 +19,52 @@
  */
 
 // noinspection JSPrimitiveTypeWrapperUsage
-export const nonStringInputs: unknown[] = [
+export const nonNumberInputs: unknown[] = [
     null,
     undefined,
-    0,
-    1,
-    -1,
-    Number.NaN,
-    Infinity,
-    true,
-    false,
+    '',
+    'string',
+    '\n\t',
+    '     ',
     {},
     { key: 'value' },
-    [],
-    ['value'],
-    (): string => 'value',
+    (): number => 10,
     Math.random,
-    new String('value'),
-    10n
-];
-
-export const emptyStringInputs: string[] = [
-    '',
-    ' ',
-    '     ',
-    '\n',
-    '\t',
-    '\n\t',
-    ' \n\t '
-];
-
-export const nonEmptyStringInputs: string[] = [
-    'Hello, World!',
-    'string',
-    'value',
-    'a',
+    true,
+    false,
+    '5',
+    '5.5',
+    '-5',
     '0',
-    ' false ',
-    '\u{1F3A8}',
-    '🎨',
-    'ë'
+    new Number(10),
+    10n,
+    [],
+    ['value']
 ];
+
+export const nonFiniteNumberInputs: number[] = [
+    NaN,
+    Infinity,
+    -Infinity
+];
+
+export const positiveNumberInputs: number[] = [
+    10,
+    10.01,
+    Number.MIN_VALUE,
+    Number.MAX_VALUE,
+    Number.MAX_SAFE_INTEGER,
+    Number.EPSILON
+];
+
+export const negativeNumberInputs: number[] = [
+    -10,
+    -10.01,
+    -Number.MIN_VALUE,
+    -Number.MAX_VALUE,
+    -Number.MAX_SAFE_INTEGER,
+    -Number.EPSILON,
+    Number.MIN_SAFE_INTEGER
+];
+
+export const zeroInputs: number[] = [0, -0];
