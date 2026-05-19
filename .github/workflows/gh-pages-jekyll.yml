@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.306.0
+        uses: ruby/setup-ruby@v1.308.0
         with:
           bundler: 4.0.8
           bundler-cache: true
