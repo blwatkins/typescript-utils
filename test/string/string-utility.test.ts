@@ -35,29 +35,29 @@ describe('StringUtility', (): void => {
     });
 
     describe('isString', (): void => {
-       const scenarios: Scenario[] = [
-           {
-               label: 'non-string inputs',
-               inputs: [...nonStringInputs],
-               expected: false
-           },
-           {
-               label: 'string inputs',
-               inputs: [...emptyStringInputs, ...nonEmptyStringInputs],
-               expected: true
-           }
-       ];
+        const scenarios: Scenario[] = [
+            {
+                label: 'non-string inputs',
+                inputs: [...nonStringInputs],
+                expected: false
+            },
+            {
+                label: 'string inputs',
+                inputs: [...emptyStringInputs, ...nonEmptyStringInputs],
+                expected: true
+            }
+        ];
 
-       describe.each(
-           scenarios
-       )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-          const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        describe.each(
+            scenarios
+        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-          test.each(
-              testCases
-          )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-              expect(StringUtility.isString(testInput)).toBe(testExpected);
-          })
-       });
+            test.each(
+                testCases
+            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(StringUtility.isString(testInput)).toBe(testExpected);
+            });
+        });
     });
 });

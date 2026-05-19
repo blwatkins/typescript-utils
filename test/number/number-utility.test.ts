@@ -22,7 +22,7 @@ import { describe, test, expect } from 'vitest';
 
 import { NumberUtility } from '../../src';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
-import {negativeNumberInputs, nonNumberInputs, positiveNumberInputs, zeroInputs} from "../utils/input/number-inputs";
+import { negativeNumberInputs, nonNumberInputs, positiveNumberInputs, zeroInputs } from '../utils/input/number-inputs';
 
 describe('NumberUtility', (): void => {
     describe('new NumberUtility()', (): void => {
@@ -35,40 +35,40 @@ describe('NumberUtility', (): void => {
     });
 
     describe('isNumber', (): void => {
-       const scenarios: Scenario[] = [
-           {
-               label: 'non-number inputs',
-               inputs: [...nonNumberInputs],
-               expected: false
-           },
-           {
-               label: 'number inputs',
-               inputs: [
-                   ...positiveNumberInputs,
-                   ...negativeNumberInputs,
-                   ...zeroInputs,
-                   Infinity,
-                   -Infinity
-               ],
-               expected: true
-           },
-           {
-               label: 'NaN',
-               inputs: [NaN],
-               expected: false
-           }
-       ];
+        const scenarios: Scenario[] = [
+            {
+                label: 'non-number inputs',
+                inputs: [...nonNumberInputs],
+                expected: false
+            },
+            {
+                label: 'number inputs',
+                inputs: [
+                    ...positiveNumberInputs,
+                    ...negativeNumberInputs,
+                    ...zeroInputs,
+                    Infinity,
+                    -Infinity
+                ],
+                expected: true
+            },
+            {
+                label: 'NaN',
+                inputs: [NaN],
+                expected: false
+            }
+        ];
 
-       describe.each(
-           scenarios
-       )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-          const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        describe.each(
+            scenarios
+        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-          test.each(
-              testCases
-          )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-              expect(NumberUtility.isNumber(testInput)).toBe(testExpected);
-          })
-       });
+            test.each(
+                testCases
+            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(NumberUtility.isNumber(testInput)).toBe(testExpected);
+            });
+        });
     });
 });
