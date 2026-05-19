@@ -35,6 +35,7 @@ export class NumberUtility {
      *
      * @param {unknown} input
      * @returns {input is number}
+     * @since 0.1.0
      */
     public static isNumber(input: unknown): input is number {
         return typeof input === 'number' && !isNaN(input);

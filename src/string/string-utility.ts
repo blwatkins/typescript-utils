@@ -35,6 +35,7 @@ export class StringUtility {
      *
      * @param {unknown} input
      * @returns {input is string}
+     * @since 0.1.0
      */
     public static isString(input: unknown): input is string {
         return typeof input === 'string';
