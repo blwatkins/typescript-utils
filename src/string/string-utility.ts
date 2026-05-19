@@ -20,6 +20,8 @@
 
 /**
  * Static properties and methods for validating string types.
+ *
+ * @since 0.1.0
  */
 export class StringUtility {
     /**
