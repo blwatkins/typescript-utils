@@ -18,5 +18,25 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './number';
-export * from './string';
+/**
+ * Static properties and methods for validating and sanitizing string types.
+ */
+export class StringUtility {
+    /**
+     * @throws {Error} - StringUtility is a static class and cannot be instantiated.
+     * @private
+     */
+    private constructor() {
+        throw new Error('StringUtility is a static class and cannot be instantiated.');
+    }
+
+    /**
+     * Is the given input a string?
+     *
+     * @param {unknown} input
+     * @returns {input is string}
+     */
+    public static isString(input: unknown): input is string {
+        return typeof input === 'string';
+    }
+}

@@ -18,5 +18,25 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './number';
-export * from './string';
+/**
+ * Static properties and methods for validating and sanitizing number types.
+ */
+export class NumberUtility {
+    /**
+     * @throws {Error} - NumberUtility is a static class and cannot be instantiated.
+     * @private
+     */
+    private constructor() {
+        throw new Error('NumberUtility is a static class and cannot be instantiated.');
+    }
+
+    /**
+     * Is the given input a number?
+     *
+     * @param {unknown} input
+     * @returns {input is number}
+     */
+    public static isNumber(input: unknown): input is number {
+        return typeof input === 'number' && !isNaN(input);
+    }
+}
