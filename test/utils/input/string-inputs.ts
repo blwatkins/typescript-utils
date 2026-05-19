@@ -36,6 +36,7 @@ export const nonStringInputs: unknown[] = [
     (): string => 'value',
     Math.random,
     new String('value'),
+    Object('value'),
     10n
 ];
 

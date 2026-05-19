@@ -37,6 +37,7 @@ export const nonNumberInputs: unknown[] = [
     '-5',
     '0',
     new Number(10),
+    Object(10),
     10n,
     [],
     ['value']
