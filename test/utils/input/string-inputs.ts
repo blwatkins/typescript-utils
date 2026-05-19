@@ -18,6 +18,44 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { test } from 'vitest';
+// noinspection JSPrimitiveTypeWrapperUsage
+export const nonStringInputs: unknown[] = [
+    null,
+    undefined,
+    0,
+    1,
+    -1,
+    Number.NaN,
+    Infinity,
+    true,
+    false,
+    {},
+    { key: 'value' },
+    [],
+    ['value'],
+    (): string => 'value',
+    new String('value'),
+    10n
+];
 
-test.todo('Tests coming soon!');
+export const emptyStringInputs: string[] = [
+    '',
+    ' ',
+    '     ',
+    '\n',
+    '\t',
+    '\n\t',
+    ' \n\t '
+];
+
+export const nonEmptyStringInputs: string[] = [
+    'Hello, World!',
+    'string',
+    'value',
+    'a',
+    '0',
+    ' false ',
+    '\u{1F3A8}',
+    '🎨',
+    'ë'
+];
