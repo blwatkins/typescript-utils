@@ -25,18 +25,25 @@ export default defineConfig({
         globals: true,
         environment: 'node',
         include: ['test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-        exclude: ['node_modules', '_dist', '_compiled', '_coverage', '_doc', 'docs'],
+        exclude: [
+            'node_modules/**',
+            '_dist/**',
+            '_compiled/**',
+            '_coverage/**',
+            '_doc/**',
+            'docs/**'
+        ],
         coverage: {
             provider: 'v8',
             reporter: ['text', 'lcov', 'json', 'json-summary', 'clover', 'html'],
             reportsDirectory: './_coverage',
             exclude: [
-                'node_modules/',
-                '_dist/',
-                '_compiled/',
-                '_doc/',
-                'docs/',
-                'test/',
+                'node_modules/**',
+                '_dist/**',
+                '_compiled/**',
+                '_doc/**',
+                'docs/**',
+                'test/**',
                 '**/*.d.ts',
                 '**/*.config.{js,mjs,cjs,ts}',
                 'eslint.config.*.mjs'
