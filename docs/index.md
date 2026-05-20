@@ -7,9 +7,7 @@ layout: page
 
 A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utilities for everyday development.
 
-## Documentation
-
-*Coming soon!*
+## [Documentation](./doc/index.html)
 
 [Documentation by Version Number](./releases.md)
 
