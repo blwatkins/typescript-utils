@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-- Package name: `@brittni/utils`
+- Package name: `@blwat/utils`
 - Language: TypeScript (ESM)
 - Current utilities are organized by domain under `src/` (for example, `src/string` and `src/number`) and re-exported through `src/index.ts`.
 - Tests are located under `test/` and run with Vitest.
