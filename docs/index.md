@@ -9,7 +9,7 @@ A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utiliti
 
 ## Documentation
 
-*Coming soon!*
+[Latest Documentation](./doc/index.html)
 
 [Documentation by Version Number](./releases.md)
 
