@@ -25,6 +25,7 @@ jobs:
 
   publish-npm:
     permissions:
+      id-token: write
       contents: read
     needs: build
     runs-on: ubuntu-latest
@@ -36,5 +37,3 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish --access public --tag ${{ github.event.inputs.release_tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}

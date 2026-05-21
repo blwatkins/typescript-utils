@@ -10,6 +10,7 @@ on:
 jobs:
   deprecate-npm:
     permissions:
+      id-token: write
       contents: read
     runs-on: ubuntu-latest
     steps:
@@ -19,5 +20,3 @@ jobs:
           node-version: '24.x'
           registry-url: https://registry.npmjs.org/
       - run: npm deprecate @blwat/utils@${{ github.event.inputs.package_version }} "Version ${{ github.event.inputs.package_version }} is no longer supported."
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
