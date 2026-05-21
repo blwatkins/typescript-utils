@@ -4,7 +4,7 @@ A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utiliti
 
 ## Documentation
 
-[Latest Documentation](https://blwatkins.github.io/typescript-utils/doc/index.html)
+[Latest Release](https://blwatkins.github.io/typescript-utils/doc/index.html)
 
 [Documentation by Version Number](https://blwatkins.github.io/typescript-utils/releases.html)
 
