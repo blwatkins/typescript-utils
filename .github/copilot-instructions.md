@@ -26,8 +26,8 @@
 |---|---|---|---|
 | `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
 | `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
-| `npm-deprecate.yml` | npm Package Deprecate | Manual (`workflow_dispatch`) | Deprecates a specific package version on npm; requires `package_version` input and `npm_token` secret |
-| `npm-publish.yml` | npm Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm; requires `release_tag` input and `npm_token` secret |
+| `npm-deprecate.yml` | npm Package Deprecate | Manual (`workflow_dispatch`) | Deprecates a specific package version on npm; requires `package_version` input and uses `id-token: write` trusted publishing permissions |
+| `npm-publish.yml` | npm Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm; requires `release_tag` input and uses `id-token: write` trusted publishing permissions |
 | `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
 
 ## Development Guidelines
