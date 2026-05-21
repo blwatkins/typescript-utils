@@ -61,7 +61,7 @@ export const numberAndSymbolTrimmedInputs: string[] = [
     '🎨 🎨',
     '12345',
     '12345 67890',
-    '!@#$%^&*()-_+=~`"\'/\\|,.<>?;:',
+    '!@#$%^&*()-_+=~`"\'/\\|,.<>?;:'
 ];
 
 export const singleLineMixedCaseTrimmedInputs: string[] = [
@@ -111,7 +111,7 @@ export const singleLineLowercaseTrimmedFailureInputs: string[] = [
     'internal\n spaces\n example',
     'internal\t spaces\t example',
     'internal  spaces  example',
-    'internal   spaces   example',
+    'internal   spaces   example'
 ];
 
 export const nonEmptyStringInputs: string[] = [

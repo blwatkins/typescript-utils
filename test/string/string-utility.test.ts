@@ -83,12 +83,12 @@ describe('StringUtility', (): void => {
                 expected: false
             },
             {
-                label:'Incorrect case inputs',
+                label: 'Incorrect case inputs',
                 inputs: [
                     ...singleLineUppercaseTrimmedInputs,
                     ...singleLineMixedCaseTrimmedInputs
                 ],
-                expected: false,
+                expected: false
             },
             {
                 label: 'Whitespace failure inputs',

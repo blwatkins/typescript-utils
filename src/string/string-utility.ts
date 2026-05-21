@@ -22,7 +22,7 @@ const RegularExpressions = {
     singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
     singleLineUppercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Ll})(?!.* {2})[^\t\r\n]+$/u,
     singleLineTrimmed: /^(?!\s)(?!.*\s$)(?!.* {2})[^\t\r\n]+$/
-}
+};
 
 /**
  * Static properties and methods for validating string types.
