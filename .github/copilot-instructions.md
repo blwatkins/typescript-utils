@@ -306,6 +306,7 @@ Common high-value bullets:
 
 ```markdown
 - [ ] Section structure matches portfolio template pattern
+- [ ] Required Front Matter is present and correct (`title`, `layout`, `date`, `modified_date`)
 - [ ] Overview is clear and not over-claiming scope
 - [ ] "At a Glance" is scannable and terminology is precise
 - [ ] Capability bullets explain technical value, not just tech names
