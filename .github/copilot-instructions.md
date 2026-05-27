@@ -23,12 +23,12 @@
 
 ### Portfolio Page Generation
 
-Use the following prompt template when generating or updating the `portfolio-skills.md` page — for example, when a new project is started, when key dependencies or tooling change, or when the project's capabilities evolve across branch updates or pull requests.
+Use the following prompt template when generating or updating the `portfolio-skills.md` page — for example, when a new project is started, when key dependencies or tooling change, or when the project's capabilities, functionality, or implementation evolve.
 
 #### Prompt Template
 
 ````markdown
-You are generating a technical portfolio page documenting a software project template, starter, or implementation, following a specific evidence-based structure.
+You are generating a technical portfolio page documenting a software project, template, starter, or implementation, following a specific evidence-based structure.
 
 ## Context
 
@@ -126,7 +126,7 @@ Generate a Markdown file with these sections in order:
   - Good: "scheduled npm updates via Dependabot"
   - Avoid: "monthly npm updates on the 1st"
 - **Balance:** Mix facts with engineering intent (why architecture choices matter)
-- **Consistency:** Match capitalization, punctuation, and structure across similar portfolio pages
+- **Consistency:** Match capitalization, punctuation, and structure across similar portfolio and documentation pages
 - **Limits:** Be clear about what the project intentionally does not include
 - **Scope discipline:** Do not overstate maturity, completeness, or production-readiness unless directly supported by evidence
 
@@ -208,7 +208,7 @@ Then paste the full template prompt with these values filled in.
 
 ## Portfolio Skills Page Review Instructions
 
-Use the following standards for Copilot code review and any agentic Copilot sessions reviewing changes to portfolio skills pages.
+Use the following standards for Copilot code review and any agentic Copilot sessions reviewing changes to `portfolio-skills.md`.
 
 ### Reusable Summary for This Portfolio Page Pattern
 
@@ -223,7 +223,7 @@ These pages follow a strong, repeatable structure:
 
 The core standard is: **every technical claim should be durable and traceable to source evidence**.
 
-### What to Verify When Reviewing Similar Pages
+### What to Verify When Reviewing `portfolio-skills.md`
 
 #### 1) Structure and completeness
 
@@ -375,6 +375,7 @@ Place annotations in the following order for consistency and readability:
 1. `@returns`
 1. `@throws`
 1. `@default`
+1. `@constant`
 1. `@see`
 1. `@example`
 1. `@readonly`
