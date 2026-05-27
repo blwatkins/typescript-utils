@@ -70,7 +70,7 @@ The full text of the license is included with the project source code.
 
 ## Sources and Technical Notes
 
-*Coming soon!*
+[Demonstrated Portfolio Skills](./portfolio-skills.md)
 
 ## Thank Yous
 
