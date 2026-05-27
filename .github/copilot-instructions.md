@@ -45,31 +45,36 @@ Key Technologies: [list 3-5 core tech choices]
 Generate a Markdown file with these sections in order:
 
 1. **Front Matter** (Jekyll metadata):
-   - title: "[PROJECT_NAME]"
-   - layout: page
+   - title: "[PROJECT_NAME] - Demonstrated Portfolio Skills"
+   - layout: post
    - date: [CREATION_DATE in YYYY-MM-DD]
    - modified_date: [TODAY_DATE in YYYY-MM-DD]
+   - toc: true
 
-2. **Project Overview** (2–3 sentences)
+2. **About This Page**
+   - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
+   
+3. **Project Overview** (2–3 sentences)
    - What is this project and what does it help you build?
    - Link to the GitHub repository
    - Mention 2–3 key technologies
-   - End with: "This page is a technical record of the skills, tools, and engineering practices represented in the project."
 
-3. **At a Glance** (bulleted list)
+4. **At a Glance** (bulleted list)
    - Project Type
-   - Primary Runtime
    - Primary Language
+   - Primary Runtime
    - Primary Framework/Library (if applicable)
-   - Build System / Tools (if applicable)
-   - Key Quality/Automation tool mentions
-   - Dependency automation approach
-   - Security analysis approach
-   - Documentation Pattern
+   - Rendering Library/Engine (if applicable)
+   - Build Pipeline (if applicable)
+   - Quality Controls (if applicable)
+   - Automation (if applicable)
+   - Dependency Automation (if applicable)
+   - Security Analysis (if applicable)
+   - Documentation Pattern (if applicable)
 
    Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
 
-4. **Skills and Tooling Inventory** (categorized lists)
+5. **Skills and Tooling Inventory** (categorized lists)
    - Languages
    - Runtime & Frameworks (or similar category)
    - Key libraries and middleware
@@ -92,14 +97,14 @@ Generate a Markdown file with these sections in order:
    Link each tool/language to its official documentation.
    Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
 
-5. **Capability Record** (bulleted list)
+6. **Capability Record** (bulleted list)
    - 5–10 bullets describing what this project demonstrates
    - Each bullet should connect implementation to engineering value
    - Use language like "...to improve [benefit]" or "...enabling [outcome]"
    - Avoid just listing tech names
    - Keep statements durable; avoid time-sensitive details
 
-6. **Detailed Technical Notes** (subsections with evidence)
+7. **Detailed Technical Notes** (subsections with evidence)
    - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
    - Create 5–7 subsections, each with:
      - A descriptive heading (e.g., "Express app composition and middleware stack")
@@ -112,7 +117,7 @@ Generate a Markdown file with these sections in order:
      - If a claim spans multiple concerns, link all relevant files needed to support it
    - Focus on implementation facts and engineering intent, not promotional phrasing
 
-7. **Current Gaps / Future Improvements** (bulleted list)
+8. **Current Gaps / Future Improvements** (bulleted list)
    - 2–4 concise bullets describing what the project or template does NOT cover
    - Be honest about intentional scope limits
    - Include automation, testing, documentation, or deployment gaps where applicable
