@@ -304,18 +304,12 @@ Common high-value bullets:
 
 ### Quick Review Checklist
 
+Reuse the earlier template usage checklist as the canonical baseline review list. Use this section only for additional review-specific checks:
+
 ```markdown
-- [ ] Section structure matches portfolio template pattern
-- [ ] Required Front Matter is present and correct (`title`, `layout`, `date`, `modified_date`)
-- [ ] Overview is clear and not over-claiming scope
-- [ ] "At a Glance" is scannable and terminology is precise
-- [ ] Capability bullets explain technical value, not just tech names
-- [ ] Every technical claim has direct evidence links
-- [ ] Evidence is representative of the current runtime/configured implementation when relevant
-- [ ] Time-sensitive details are durable or intentionally maintained
-- [ ] Tooling/runtime/security wording is accurate, and inventory categories do not mix unrelated concerns (e.g. CI, deployment, security analysis, dependency automation)
-- [ ] Casing/style/punctuation are consistent with other portfolio pages
-- [ ] "Current Gaps / Future Improvements" is present and meaningful
+- [ ] Evidence links still support the final wording after edits
+- [ ] Any time-sensitive details are durable or intentionally maintained
+- [ ] Terminology, casing, and punctuation are consistent with other portfolio pages
 - [ ] Final read feels evidence-based, concise, and professional
 ```
 
