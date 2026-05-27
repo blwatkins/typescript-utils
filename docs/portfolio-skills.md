@@ -1,110 +1,53 @@
 ---
-title: "TypeScript Utilities"
-layout: page
+title: "TypeScript Utilities - Demonstrated Portfolio Skills"
+author:
+  - Brittni Watkins
+  - GitHub Copilot
+layout: post
 date: 2026-05-27
 modified_date: 2026-05-27
+toc: true
 ---
+
+## About This Page
+
+This page is a technical record of the skills, tools, and engineering practices represented in the TypeScript Utilities project.
 
 ## Project Overview
 
-TypeScript Utilities is a reusable utility package for shared type-checking helpers in JavaScript and TypeScript projects. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript, tsdown, and Vitest. This page is a technical record of the skills, tools, and engineering practices represented in the project.
+TypeScript Utilities is a reusable utility package for shared type-checking helpers in JavaScript and TypeScript projects. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
 - **Project Type:** TypeScript utility library package
-- **Primary Runtime:** [Node.js](https://nodejs.org/)
 - **Primary Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Primary Runtime:** [Node.js](https://nodejs.org/en)
 - **Primary Framework/Library:** Minimal framework-free utility architecture
-- **Build System / Tools:** [npm scripts](https://docs.npmjs.com/cli/v10/using-npm/scripts), [tsdown](https://tsdown.dev/)
-- **Key Quality/Automation Tool Mentions:** [ESLint](https://eslint.org/), [Vitest](https://vitest.dev/), [GitHub Actions](https://docs.github.com/actions)
-- **Dependency Automation Approach:** [Dependabot version updates](https://docs.github.com/code-security/dependabot/dependabot-version-updates)
-- **Security Analysis Approach:** [CodeQL](https://codeql.github.com/docs/) via GitHub Actions
+- **Build Pipeline:** [tsdown](https://tsdown.dev/)
+- **Quality Controls:** [ESLint](https://eslint.org/) and [GitHub Actions](https://github.com/features/actions)
+- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
+- **Security Analysis:** [CodeQL](https://codeql.github.com/) via GitHub Actions
 - **Documentation Pattern:** [TypeDoc](https://typedoc.org/) output plus manually maintained release docs in `docs/releases/...`
 
 ## Skills and Tooling Inventory
 
-### Languages
-
-- [TypeScript](https://www.typescriptlang.org/)
-- [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript)
-- [YAML](https://yaml.org/)
-- [Ruby](https://www.ruby-lang.org/en/)
-
-### Runtime & Frameworks
-
-- [Node.js](https://nodejs.org/)
-
-### Key Libraries and Middleware
-
-- [tsdown](https://tsdown.dev/)
-- [TypeDoc](https://typedoc.org/)
-
-### Testing
-
-- [Vitest](https://vitest.dev/)
-
-### Build / Bundling
-
-- [tsdown](https://tsdown.dev/)
-
-### Code Quality
-
-- [ESLint](https://eslint.org/)
-- [typescript-eslint](https://typescript-eslint.io/)
-- [@stylistic/eslint-plugin](https://eslint.style/packages/default)
-
-### Documentation
-
-- [TypeDoc](https://typedoc.org/)
-- [Markdown](https://www.markdownguide.org/)
-
-### Site Generation
-
-- [Jekyll](https://jekyllrb.com/)
-- [GitHub Pages](https://docs.github.com/pages)
-
-### Dependency Management
-
-- [npm](https://docs.npmjs.com/)
-
-### Versioning & Platform
-
-- [npm package versioning](https://docs.npmjs.com/about-semantic-versioning)
-- [Git](https://git-scm.com/doc)
-- [GitHub](https://docs.github.com/)
-
-### Automation
-
-- [GitHub Actions](https://docs.github.com/actions)
-
-### Hosting & Deployment
-
-- [GitHub Pages deployments](https://docs.github.com/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
-- [npm package publishing](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages)
-
-### Code Analysis / Security
-
-- [CodeQL](https://codeql.github.com/docs/)
-
-### Dependency Automation
-
-- [Dependabot](https://docs.github.com/code-security/dependabot)
-
-### Development Utilities
-
-- [npm CLI](https://docs.npmjs.com/cli/v10)
-
-### Environment Management
-
-- [Node.js release lines](https://nodejs.org/en/about/previous-releases)
-
-### Development Environments
-
-- [GitHub](https://github.com/)
-
-### AI-Assisted Development
-
-- [GitHub Copilot](https://docs.github.com/copilot)
+- **Languages:** [TypeScript](https://www.typescriptlang.org/), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Markdown](https://www.markdownguide.org/), [YAML](https://yaml.org/)
+- **Runtime & Libraries:** [Node.js](https://nodejs.org/en)
+- **Testing:** [Vitest](https://vitest.dev/)
+- **Build / Bundling:** [tsdown](https://tsdown.dev/)
+- **Code Quality:** [ESLint](https://eslint.org/)
+- **Documentation:** [TypeDoc](https://typedoc.org/)
+- **Site Generation:** [Bundler](https://bundler.io/), [Jekyll](https://jekyllrb.com/), [Liquid](https://shopify.github.io/liquid/)
+- **Dependency Management:** [npm](https://www.npmjs.com/)
+- **Versioning & Platform:** [Git](https://git-scm.com/), [GitHub](https://github.com/)
+- **Automation:** [GitHub Actions](https://github.com/features/actions)
+- **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm Package Registry](https://www.npmjs.com/)
+- **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
+- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
+- **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli/v11)
+- **Environment Management:** [n](https://github.com/tj/n), [rbenv](https://rbenv.org/)
+- **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)
+- **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot)
 
 ## Capability Record
 
