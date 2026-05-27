@@ -216,7 +216,7 @@ These pages follow a strong, repeatable structure:
 
 1. **Concise project framing**
 2. **Scannable metadata ("At a Glance")**
-3. **Skills/tool inventory**
+3. **Skills and Tooling Inventory**
 4. **Capability statements**
 5. **Evidence-backed technical notes**
 6. **Explicit current gaps/future improvements**
