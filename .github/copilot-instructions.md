@@ -260,7 +260,7 @@ For each claim in technical notes, verify linked evidence **directly supports** 
 Example rule:
 - If claim says output path is `_dist/`, evidence should include `webpack.config.*` or build scripts (`package.json`), not only asset files.
 
-Also check whether the linked evidence is **representative of the project’s current implementation path** when the page describes active behavior, not just an older or illustrative example.
+Also check whether the linked evidence is **representative of the project's current implementation path** when the page describes active behavior, not just an older or illustrative example.
 
 This is a common high-impact review issue.
 
