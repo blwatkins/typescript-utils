@@ -227,7 +227,7 @@ The core standard is: **every technical claim should be durable and traceable to
 
 #### 1) Structure and completeness
 
-Ensure the page includes these sections (or equivalents):
+Ensure the page includes the required front matter and these sections (or equivalents):
 
 - Required Front Matter (`title`, `layout`, `date`, `modified_date`)
 - `Project Overview`
