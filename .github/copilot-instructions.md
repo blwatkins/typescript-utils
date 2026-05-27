@@ -34,6 +34,7 @@ You are generating a technical portfolio page documenting a software project tem
 
 Project Name: [PROJECT_NAME]
 Project Repository: [GITHUB_REPO_URL]
+Target Ref for Evidence Links: [TARGET_REF, e.g., main or the active branch]
 Primary Language(s): [e.g., TypeScript, JavaScript, Python]
 Primary Framework/Library: [e.g., Express.js, p5.js, React]
 Runtime: [e.g., Node.js, Python 3.11+]
@@ -143,12 +144,19 @@ Generate a Markdown file with these sections in order:
 ## Output Format
 
 Return the complete Markdown file ready to save and publish. Ensure:
-- All links use the full GitHub repo URL with `/blob/main/` path format for files
-- Use `/tree/main/` for directory links when appropriate
+- All links use the full GitHub repo URL with `/blob/[TARGET_REF]/` path format for files
+- Use `/tree/[TARGET_REF]/` for directory links when appropriate
 - All code blocks and filenames use backticks
 - Proper Markdown heading hierarchy (`##` for sections, `###` for subsections)
 - No trailing whitespace; clean formatting
 - The page reads as evidence-based, concise, and professional
+
+## Update Mode (when `portfolio-skills.md` already exists)
+
+- Preserve any accurate, still-relevant sections and links that do not need changes
+- Update only sections where repository evidence, tooling, or capabilities changed
+- Keep front matter `date` from the original file; only update `modified_date`
+- If prior claims cannot be supported by current evidence, rewrite or remove them
 ````
 
 #### How to Use This Template
@@ -156,6 +164,7 @@ Return the complete Markdown file ready to save and publish. Ensure:
 1. **Customize the bracketed fields** at the top with your project's info:
    - `[PROJECT_NAME]` → actual name
    - `[GITHUB_REPO_URL]` → full URL
+   - `[TARGET_REF]` → `main` or the branch/ref you want evidence links to point to
    - `[PRIMARY_LANGUAGE]` → language(s)
    - etc.
 
