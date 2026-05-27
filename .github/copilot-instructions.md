@@ -229,6 +229,7 @@ The core standard is: **every technical claim should be durable and traceable to
 
 Ensure the page includes these sections (or equivalents):
 
+- Required Front Matter (`title`, `layout`, `date`, `modified_date`)
 - `Project Overview`
 - `At a Glance`
 - `Skills and Tooling Inventory`
