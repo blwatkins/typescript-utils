@@ -206,6 +206,131 @@ Key Technologies: PyTorch, pre-trained models, Docker, GitHub Actions
 
 Then paste the full template prompt with these values filled in.
 
+## Portfolio Skills Page Review Instructions
+
+Use the following standards for Copilot code review and any agentic Copilot sessions reviewing changes to portfolio skills pages.
+
+### Reusable Summary for This Portfolio Page Pattern
+
+These pages follow a strong, repeatable structure:
+
+1. **Concise project framing**
+2. **Scannable metadata ("At a Glance")**
+3. **Skills and Tooling Inventory**
+4. **Capability statements**
+5. **Evidence-backed technical notes**
+6. **Explicit current gaps/future improvements**
+
+The core standard is: **every technical claim should be durable and traceable to source evidence**.
+
+### What to Verify When Reviewing Similar Pages
+
+#### 1) Structure and completeness
+
+Ensure the page includes the required front matter and these sections (or equivalents):
+
+- Required Front Matter (`title`, `layout`, `date`, `modified_date`)
+- `Project Overview`
+- `At a Glance`
+- `Skills and Tooling Inventory`
+- `Capability Record`
+- `Detailed Technical Notes`
+- `Current Gaps / Future Improvements`
+
+Why: this keeps pages consistent and easy to compare across projects.
+
+#### 2) Claim quality (accuracy + durability)
+
+Check that claims are:
+
+- **specific enough to be meaningful**
+- **not brittle/time-sensitive unless intentionally maintained**
+- **not over-claiming scope**
+
+Good pattern:
+- "scheduled updates", "multiple supported Node.js release lines"
+
+Risky pattern:
+- hardcoding exact versions/cadences unless you plan frequent updates
+
+#### 3) Evidence alignment (most important review item)
+
+For each claim in technical notes, verify linked evidence **directly supports** it.
+
+Example rule:
+- If claim says output path is `_dist/`, evidence should include `webpack.config.*` or build scripts (`package.json`), not only asset files.
+
+Also check whether the linked evidence is **representative of the project's current implementation path** when the page describes active behavior, not just an older or illustrative example.
+
+This is a common high-impact review issue.
+
+#### 4) Portfolio tone calibration
+
+Look for balance between:
+
+- implementation facts ("what exists")
+- engineering intent ("why it helps")
+- honest limitations ("what's missing")
+
+Avoid:
+- overly promotional language
+- absolute claims not backed by links
+
+#### 5) Consistency across pages
+
+When reviewing a new page, compare with existing template pages for:
+
+- heading style/casing
+- label style in `At a Glance`
+- tense and sentence style
+- bullet punctuation consistency
+- naming conventions (`webpack` vs `Webpack`, etc.)
+
+Consistency boosts professionalism at portfolio scale.
+
+#### 6) Gaps section quality
+
+A strong `Current Gaps / Future Improvements` section is:
+
+- concise (2–4 bullets)
+- concrete
+- non-defensive
+- aligned with evidence
+
+Common high-value bullets:
+- tests not yet implemented
+- intentionally minimal architecture scope
+- deployment/docs not yet covered (if true)
+
+### Quick Review Checklist
+
+Reuse the earlier template usage checklist as the canonical baseline review list. Use this section only for additional review-specific checks:
+
+```markdown
+- [ ] Evidence links still support the final wording after edits
+- [ ] Any time-sensitive details are durable or intentionally maintained
+- [ ] Terminology, casing, and punctuation are consistent with other portfolio pages
+- [ ] Final read feels evidence-based, concise, and professional
+```
+
+### Common Pitfalls to Catch Early
+
+- Claim/evidence mismatch (most frequent)
+- Hardcoded version/cadence details that will drift
+- "CI/CD" wording when no deployment pipeline is shown
+- Overstated capability language ("production-ready" without context)
+- Missing limitations section
+- Evidence is technically relevant but not representative of the current runtime/configured implementation
+- Mixed category labels in tooling inventory that blur automation, deployment, security, and dependency management
+
+### One-Sentence Review Standard
+
+When you review the next page, use this rule:
+
+**"If a reader challenges any technical statement, can I point to an exact linked file that proves it, and is the wording likely to stay accurate over time?"**
+
+If yes, the page is likely in good shape.
+
 ## GitHub Actions Workflows
 
 | Workflow file | Name | Trigger | Description |
