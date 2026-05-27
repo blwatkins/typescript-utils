@@ -264,7 +264,7 @@ Risky pattern:
 For each claim in technical notes, verify linked evidence **directly supports** it.
 
 Example rule:
-- If claim says output path is `_dist/`, evidence should include `tsdown.config.ts` or build scripts (`package.json`), not only asset files.
+- If claim says output path is `_dist/`, evidence should include configuration files (e.g. `tsdown.config.ts`, `webpack.config.mjs`) or build scripts (`package.json`), not only asset files.
 
 Also check whether the linked evidence is **representative of the project's current implementation path** when the page describes active behavior, not just an older or illustrative example.
 
