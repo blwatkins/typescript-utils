@@ -262,7 +262,7 @@ Example rule:
 
 Also check whether the linked evidence is **representative of the project’s current implementation path** when the page describes active behavior, not just an older or illustrative example.
 
-This was the main issue discovered and fixed during review.
+This is a common high-impact review issue.
 
 #### 4) Portfolio tone calibration
 
