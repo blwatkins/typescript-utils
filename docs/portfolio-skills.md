@@ -45,7 +45,7 @@ TypeScript Utilities is a reusable utility package for shared type-checking help
 - **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
 - **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli/v11)
-- **Environment Management:** [n](https://github.com/tj/n), [rbenv](https://rbenv.org/)
+- **Environment Configuration:** Node.js and Ruby version pinning via `.node-version` / `.ruby-version`
 - **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)
 - **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot)
 
