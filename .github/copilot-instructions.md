@@ -215,7 +215,7 @@ Use the following standards for Copilot code review and any agentic Copilot sess
 These pages follow a strong, repeatable structure:
 
 1. **Concise project framing**
-2. **Scannable metadata (“At a Glance”)**
+2. **Scannable metadata ("At a Glance")**
 3. **Skills/tool inventory**
 4. **Capability statements**
 5. **Evidence-backed technical notes**
@@ -248,7 +248,7 @@ Check that claims are:
 - **not over-claiming scope**
 
 Good pattern:
-- “scheduled updates”, “multiple supported Node.js release lines”
+- "scheduled updates", "multiple supported Node.js release lines"
 
 Risky pattern:
 - hardcoding exact versions/cadences unless you plan frequent updates
@@ -268,9 +268,9 @@ This is a common high-impact review issue.
 
 Look for balance between:
 
-- implementation facts (“what exists”)
-- engineering intent (“why it helps”)
-- honest limitations (“what’s missing”)
+- implementation facts ("what exists")
+- engineering intent ("why it helps")
+- honest limitations ("what's missing")
 
 Avoid:
 - overly promotional language
@@ -307,14 +307,14 @@ Common high-value bullets:
 ```markdown
 - [ ] Section structure matches portfolio template pattern
 - [ ] Overview is clear and not over-claiming scope
-- [ ] “At a Glance” is scannable and terminology is precise
+- [ ] "At a Glance" is scannable and terminology is precise
 - [ ] Capability bullets explain technical value, not just tech names
 - [ ] Every technical claim has direct evidence links
 - [ ] Evidence is representative of the current runtime/configured implementation when relevant
 - [ ] Time-sensitive details are durable or intentionally maintained
 - [ ] Tooling/runtime/security wording is accurate, and inventory categories do not mix unrelated concerns (e.g. CI, deployment, security analysis, dependency automation)
 - [ ] Casing/style/punctuation are consistent with other portfolio pages
-- [ ] “Current Gaps / Future Improvements” is present and meaningful
+- [ ] "Current Gaps / Future Improvements" is present and meaningful
 - [ ] Final read feels evidence-based, concise, and professional
 ```
 
@@ -322,8 +322,8 @@ Common high-value bullets:
 
 - Claim/evidence mismatch (most frequent)
 - Hardcoded version/cadence details that will drift
-- “CI/CD” wording when no deployment pipeline is shown
-- Overstated capability language (“production-ready” without context)
+- "CI/CD" wording when no deployment pipeline is shown
+- Overstated capability language ("production-ready" without context)
 - Missing limitations section
 - Evidence is technically relevant but not representative of the current runtime/configured implementation
 - Mixed category labels in tooling inventory that blur automation, deployment, security, and dependency management
@@ -332,7 +332,7 @@ Common high-value bullets:
 
 When you review the next page, use this rule:
 
-**“If a reader challenges any technical statement, can I point to an exact linked file that proves it, and is the wording likely to stay accurate over time?”**
+**"If a reader challenges any technical statement, can I point to an exact linked file that proves it, and is the wording likely to stay accurate over time?"**
 
 If yes, the page is likely in good shape.
 
