@@ -19,9 +19,11 @@
  */
 
 import { describe, test, expect } from 'vitest';
-import {SeedVersion, SeedVersions} from "../../../src/random/seeded-random/seed-versions";
-import {buildTestCases, Scenario, TestCase} from "../../utils/test-case/test-case";
-import {negativeNumberInputs, nonNumberInputs} from "../../utils/input/number-inputs";
+
+import { SeedVersion, SeedVersions } from '../../../src/random/seeded-random/seed-versions';
+
+import { negativeNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
+import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', () => {
     const expectedSeedVersions: SeedVersion[] = [
@@ -35,57 +37,59 @@ describe('SeedVersions', () => {
         }
     ];
 
-   describe('size', () => {
-      test(`SeedVersions.size should be ${expectedSeedVersions.length}`, () => {
-         expect(SeedVersions.size).toBe(expectedSeedVersions.length);
-      });
-   });
+    describe('size', () => {
+        test(`SeedVersions.size should be ${expectedSeedVersions.length}`, () => {
+            expect(SeedVersions.size).toBe(expectedSeedVersions.length);
+        });
+    });
 
-   describe('isValidIndex', () => {
-       function buildValidIndexes() {
-           const indexes: number[] = [];
+    describe('isValidIndex', () => {
+        function buildValidIndexes() {
+            const indexes: number[] = [];
 
-           for (let i = 0; i < SeedVersions.size; i++) {
-               indexes.push(i);
-           }
+            for (let i = 0; i < SeedVersions.size; i++) {
+                indexes.push(i);
+            }
 
-           return indexes;
-       }
+            return indexes;
+        }
 
-       const scenarios: Scenario[] = [
-           {
-               label: 'Non-number inputs',
-               inputs: [...nonNumberInputs],
-               expected: false
-           },
-           {
-             label: 'Invalid number indexes',
-               inputs: [
-                   SeedVersions.size,
-                   SeedVersions.size + 1,
-                   ...negativeNumberInputs
-               ],
-               expected: false
-           },
-           {
-               label: 'Valid indexes',
-               inputs: [
-                   ...buildValidIndexes()
-               ],
-               expected: true
-           },
-       ];
+        const scenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: [...nonNumberInputs],
+                expected: false
+            },
+            {
+                label: 'Invalid number indexes',
+                inputs: [
+                    SeedVersions.size,
+                    SeedVersions.size + 1,
+                    ...negativeNumberInputs
+                ],
+                expected: false
+            },
+            {
+                label: 'Valid indexes',
+                inputs: [
+                    ...buildValidIndexes()
+                ],
+                expected: true
+            }
+        ];
 
-       describe.each(
-           scenarios
-       )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-           const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        describe.each(
+            scenarios
+        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-           test.each(
-               testCases
-           )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-               expect(SeedVersions.isValidIndex(testInput as number)).toBe(testExpected);
-           });
-       });
-   });
+            test.each(
+                testCases
+            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(SeedVersions.isValidIndex(testInput as number)).toBe(testExpected);
+            });
+        });
+    });
+
+    test.todo('SeedVersions.getVersion()');
 });

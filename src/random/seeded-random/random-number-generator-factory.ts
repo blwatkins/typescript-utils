@@ -81,7 +81,7 @@ export class RandomNumberGeneratorFactory {
         };
 
         return [
-            hash(o0), hash(o1), hash(o2), hash(o3),
+            hash(o0), hash(o1), hash(o2), hash(o3)
         ];
     }
 
@@ -94,10 +94,10 @@ export class RandomNumberGeneratorFactory {
         const v = new DataView(hashBuffer);
 
         return [
-            (v.getUint32( 0, false) ^ v.getUint32(16, false)) >>> 0,
-            (v.getUint32( 4, false) ^ v.getUint32(20, false)) >>> 0,
-            (v.getUint32( 8, false) ^ v.getUint32(24, false)) >>> 0,
-            (v.getUint32(12, false) ^ v.getUint32(28, false)) >>> 0,
+            (v.getUint32(0, false) ^ v.getUint32(16, false)) >>> 0,
+            (v.getUint32(4, false) ^ v.getUint32(20, false)) >>> 0,
+            (v.getUint32(8, false) ^ v.getUint32(24, false)) >>> 0,
+            (v.getUint32(12, false) ^ v.getUint32(28, false)) >>> 0
         ];
     }
 }

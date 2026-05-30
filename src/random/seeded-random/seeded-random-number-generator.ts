@@ -18,7 +18,6 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 // Algorithm Source: https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro
 
 import { SeedVersions } from './seed-versions';
