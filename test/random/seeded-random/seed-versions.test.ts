@@ -20,13 +20,20 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { SeedVersion, SeedVersions } from '../../../src/random/seeded-random/seed-versions';
+import { SeedVersion, SeedVersions } from '../../../src';
 
 import { negativeNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', () => {
-    const expectedSeedVersions: SeedVersion[] = [
+    /**
+     * @remarks Once a seed version has been published, it should NEVER be changed or updated.
+     * The order of seed versions should NEVER be changed.
+     * New seed versions can only be added to the end of the array.
+     * Each element in the offsets array should be unique.
+     * This array is meant to ensure that the published SeedVersion data NEVER changes.
+     */
+    const expectedSeedVersions: readonly SeedVersion[] = [
         {
             offsets: Object.freeze([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a]),
             defaultStateValue: Object.freeze(0x6a09e667)
@@ -37,6 +44,25 @@ describe('SeedVersions', () => {
         }
     ];
 
+    function buildValidIndexes() {
+        const indexes: number[] = [];
+
+        for (let i = 0; i < expectedSeedVersions.length; i++) {
+            indexes.push(i);
+        }
+
+        return indexes;
+    }
+
+    describe('new SeedVersions()', (): void => {
+        describe('Runtime behavior guards', (): void => {
+            test('Constructor should throw an error when instantiated at runtime', (): void => {
+                const RuntimeConstructor = SeedVersions as unknown as new () => SeedVersions;
+                expect((): SeedVersions => new RuntimeConstructor()).toThrow(Error);
+            });
+        });
+    });
+
     describe('size', () => {
         test(`SeedVersions.size should be ${expectedSeedVersions.length}`, () => {
             expect(SeedVersions.size).toBe(expectedSeedVersions.length);
@@ -44,16 +70,6 @@ describe('SeedVersions', () => {
     });
 
     describe('isValidIndex', () => {
-        function buildValidIndexes() {
-            const indexes: number[] = [];
-
-            for (let i = 0; i < SeedVersions.size; i++) {
-                indexes.push(i);
-            }
-
-            return indexes;
-        }
-
         const scenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
@@ -63,8 +79,8 @@ describe('SeedVersions', () => {
             {
                 label: 'Invalid number indexes',
                 inputs: [
-                    SeedVersions.size,
-                    SeedVersions.size + 1,
+                    expectedSeedVersions.length,
+                    expectedSeedVersions.length + 1,
                     ...negativeNumberInputs
                 ],
                 expected: false
@@ -91,5 +107,22 @@ describe('SeedVersions', () => {
         });
     });
 
-    test.todo('SeedVersions.getVersion()');
+    describe('getVersion', (): void => {
+        test.each([
+            ...buildValidIndexes()
+        ])('Valid index (%i) should return the expected seed version.', (index: number): void => {
+            expect(SeedVersions.getVersion(index)).toEqual(expectedSeedVersions[index]);
+        });
+
+        test.each([
+            ...nonNumberInputs,
+            expectedSeedVersions.length,
+            expectedSeedVersions.length + 1,
+            ...negativeNumberInputs
+        ])('Invalid index (%o) should throw a RangeError.', (input: unknown): void => {
+            expect((): void => {
+                SeedVersions.getVersion(input as number);
+            }).toThrow(RangeError);
+        });
+    });
 });
