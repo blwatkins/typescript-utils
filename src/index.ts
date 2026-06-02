@@ -19,4 +19,5 @@
  */
 
 export * from './number';
+export * from './random';
 export * from './string';

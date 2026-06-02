@@ -34,18 +34,18 @@ export interface SeedVersion {
 
     /**
      * A default state value to be used when the random number generator reaches a zero-state.
-     * This value should NEVER be zero.
+     * This value should <b>NEVER</b> be zero.
      */
     readonly defaultStateValue: number;
 }
 
 /**
- * @remarks Once a seed version has been published, it should NEVER be changed or updated.
- * The order of seed versions should NEVER be changed.
+ * @remarks Once a seed version has been published, it should <b>NEVER</b> be changed or updated.
+ * The order of seed versions should <b>NEVER</b> be changed.
  * New seed versions can only be added to the end of the array.
  * Each element in the offsets array should be unique.
  */
-const seedVersions: SeedVersion[] = [
+const seedVersions: readonly SeedVersion[] = [
     {
         offsets: Object.freeze([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a]),
         defaultStateValue: Object.freeze(0x6a09e667)
@@ -97,7 +97,7 @@ export class SeedVersions {
      * @since 0.1.0
      */
     static getVersion(index: number): SeedVersion {
-        if (SeedVersions.isValidIndex(index)) {
+        if (!SeedVersions.isValidIndex(index)) {
             throw new RangeError(`SeedVersion ${index} does not exist`);
         }
 
