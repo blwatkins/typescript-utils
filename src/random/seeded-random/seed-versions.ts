@@ -44,6 +44,8 @@ export interface SeedVersion {
  * The order of seed versions should <b>NEVER</b> be changed.
  * New seed versions can only be added to the end of the array.
  * Each element in the offsets array should be unique.
+ *
+ * @constant
  */
 const seedVersions: readonly SeedVersion[] = [
     {
