@@ -72,6 +72,8 @@ The full text of the license is included with the project source code.
 
 [Demonstrated Portfolio Skills](./portfolio-skills.md)
 
+[Resources and References](./resources-and-references.md)
+
 ## Thank Yous
 
 A huge thank you to all the open source contributors who have made this project possible by creating and maintaining the libraries and tools used in this project, and to the open source community for fostering collaboration and innovation.
