@@ -65,7 +65,7 @@ export class RandomNumberGeneratorFactory {
      */
     public static build(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
-        const state = RandomNumberGeneratorFactory.#generateFnvHashState(input);
+        const state = RandomNumberGeneratorFactory.#generateFnvHashState(input, version);
         return new SeededRandomNumberGenerator(state, version);
     }
 
@@ -117,7 +117,7 @@ export class RandomNumberGeneratorFactory {
      */
     static #generateFnvHashState(input: string, version: number = 0): [number, number, number, number] {
         const bytes = textEncoder.encode(input);
-        let offsets;
+        let offsets: readonly [number, number, number, number];
 
         if (SeedVersions.isValidIndex(version)) {
             offsets = SeedVersions.getVersion(version).offsets;
@@ -152,8 +152,8 @@ export class RandomNumberGeneratorFactory {
      * @async
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
-        const hashBuffer = await crypto.subtle.digest('SHA-256', textEncoder.encode(input));
-        const v = new DataView(hashBuffer);
+        const hashBuffer: ArrayBuffer = await crypto.subtle.digest('SHA-256', textEncoder.encode(input));
+        const v: DataView = new DataView(hashBuffer);
 
         return [
             (v.getUint32(0, false) ^ v.getUint32(16, false)) >>> 0,
