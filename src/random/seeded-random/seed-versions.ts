@@ -18,8 +18,6 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { NumberUtility } from '../../number';
-
 /**
  * A seed version defines a specific set of offsets and a default state value for the seeded random number generator algorithm.
  *
@@ -89,7 +87,7 @@ export class SeedVersions {
      * @since 0.1.0
      */
     static isValidIndex(index: number): boolean {
-        return NumberUtility.isNumber(index) && index >= 0 && index < seedVersions.length;
+        return Number.isInteger(index) && index >= 0 && index < seedVersions.length;
     }
 
     /**
