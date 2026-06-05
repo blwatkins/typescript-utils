@@ -33,11 +33,24 @@ export class NumberUtility {
     }
 
     /**
+     * Is the given input a finite number?
+     *
+     * @param {unknown} input
+     * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
+     * @since 0.1.0
+     */
+    public static isFiniteNumber(input: unknown): input is number {
+        return Number.isFinite(input);
+    }
+
+    /* ---------- DEPRECATED METHODS ---------- */
+    /**
      * Is the given input a number?
      *
      * @param {unknown} input
      * @returns {input is number}
-     * @since 0.1.0
+     * @deprecated To be removed in v0.1.0-alpha.2.
+     * Replaced by {@link NumberUtility.isFiniteNumber}.
      */
     public static isNumber(input: unknown): input is number {
         return typeof input === 'number' && !isNaN(input);

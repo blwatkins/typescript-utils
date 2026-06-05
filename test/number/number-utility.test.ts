@@ -34,7 +34,7 @@ describe('NumberUtility', (): void => {
         });
     });
 
-    describe('isNumber', (): void => {
+    describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [
             {
                 label: 'non-number inputs',
@@ -46,15 +46,21 @@ describe('NumberUtility', (): void => {
                 inputs: [
                     ...positiveNumberInputs,
                     ...negativeNumberInputs,
-                    ...zeroInputs,
-                    Infinity,
-                    -Infinity
+                    ...zeroInputs
                 ],
                 expected: true
             },
             {
                 label: 'NaN',
                 inputs: [NaN],
+                expected: false
+            },
+            {
+                label: 'Infinity',
+                inputs: [
+                    Infinity,
+                    -Infinity
+                ],
                 expected: false
             }
         ];
@@ -67,7 +73,7 @@ describe('NumberUtility', (): void => {
             test.each(
                 testCases
             )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(NumberUtility.isNumber(testInput)).toBe(testExpected);
+                expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
             });
         });
     });
