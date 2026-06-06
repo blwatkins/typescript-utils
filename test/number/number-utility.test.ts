@@ -67,12 +67,12 @@ describe('NumberUtility', (): void => {
 
         describe.each(
             scenarios
-        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
             test.each(
                 testCases
-            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
             });
         });
