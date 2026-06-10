@@ -20,6 +20,7 @@
 
 import { SeedVersions } from './seed-versions';
 import { SeededRandomNumberGenerator } from './seeded-random-number-generator';
+import {StringUtility} from "../../string";
 
 /**
  * @type {TextEncoder}
@@ -97,7 +98,7 @@ export class RandomNumberGeneratorFactory {
      * @returns {string}
      */
     static #buildInputString(seed: string, namespace?: string): string {
-        if (namespace) {
+        if (StringUtility.isString(namespace)) {
             return `${namespace}\x00${seed}`;
         } else {
             return seed;

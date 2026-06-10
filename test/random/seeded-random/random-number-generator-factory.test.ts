@@ -24,6 +24,7 @@ import { RandomNumberGeneratorFactory } from '../../../src/random/seeded-random/
 import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
 
 import { SingleInputScenario } from '../../utils/test-case/test-case';
+import {StringUtility} from "../../../src";
 
 describe('RandomNumberGeneratorFactory', (): void => {
     describe('new RandomNumberGeneratorFactory()', (): void => {
@@ -47,9 +48,21 @@ describe('RandomNumberGeneratorFactory', (): void => {
              * Once a test seed and namespace sequence has been determined, any deviation from that expected behavior is indicative of a breaking change and should be investigated immediately.
              */
             const sequences: { [key: string]: number[][] } = {
+                '': [
+                    [0.6126510770991445, 0.3232760636601597, 0.5053844235371798, 0.5004723358433694, 0.8444383488968015],
+                    [0.49630083329975605, 0.26718430570326746, 0.5911665598396212, 0.9048203160054982, 0.24119087704457343]
+                ],
+                '\x00': [
+                    [0.39831331721507013, 0.4331224621273577, 0.6937443742062896, 0.19698031223379076, 0.8398848185315728],
+                    [0.00922908284701407, 0.3375692891422659, 0.3045982476323843, 0.6381423401180655, 0.7763565834611654]
+                ],
                 'test-seed-00': [
                     [0.634432977065444, 0.8579290516208857, 0.8093228186480701, 0.06116068898700178, 0.4406876463908702],
                     [0.9131155568175018, 0.8299572116229683, 0.8383598797954619, 0.09797090291976929, 0.7856007595546544]
+                ],
+                '\x00test-seed-00': [
+                    [0.9857979689259082, 0.24636835046112537, 0.5494615291245282, 0.5093912568408996, 0.7697517338674515],
+                    [0.32814985048025846, 0.22640329715795815, 0.7572518708184361, 0.619672927306965, 0.4001562672201544],
                 ],
                 'test-seed-01': [
                     [0.13497344846837223, 0.8579290620982647, 0.06300078285858035, 0.06043651350773871, 0.4764115291181952],
@@ -74,7 +87,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
             };
 
             function buildKey(seed: string, namespace?: string): string {
-                if (namespace) {
+                if (StringUtility.isString(namespace)) {
                     return `${namespace}\x00${seed}`;
                 } else {
                     return seed;
@@ -112,6 +125,49 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
             const scenarios: SingleInputScenario[] = [
                 {
+                    label: 'build("")',
+                    input: {
+                        seed: '',
+                    },
+                    expected: getSequence('')
+                },
+                {
+                    label: 'build("", undefined, 0)',
+                    input: {
+                        seed: '',
+                        version: 0
+                    },
+                    expected: getSequence('', undefined, 0)
+                },
+                {
+                    label: 'build("", undefined, 1)',
+                    input:
+                        {
+                            seed: '',
+                            version: 1,
+                        },
+                    expected: getSequence('', undefined, 1)
+                },
+                {
+                    label: 'build("", "", 0)',
+                    input: {
+                        seed: '',
+                        namespace: '',
+                        version: 0
+                    },
+                    expected: getSequence('', '', 0)
+                },
+                {
+                    label: 'build("", "", 1)',
+                    input:
+                        {
+                            seed: '',
+                            namespace: '',
+                            version: 1,
+                        },
+                    expected: getSequence('', '', 1)
+                },
+                {
                     label: 'build(test-seed-00)',
                     input: {
                         seed: 'test-seed-00',
@@ -122,7 +178,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-00, undefined, 0)',
                     input: {
                         seed: 'test-seed-00',
-                        namespace: undefined,
                         version: 0,
                     },
                     expected: getSequence('test-seed-00', undefined, 0)
@@ -132,10 +187,36 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input:
                         {
                             seed: 'test-seed-00',
-                            namespace: undefined,
                             version: 1,
                         },
                     expected: getSequence('test-seed-00', undefined, 1)
+                },
+                {
+                    label: 'build(test-seed-00, "")',
+                    input: {
+                        seed: 'test-seed-00',
+                        namespace: ''
+                    },
+                    expected: getSequence('test-seed-00', '')
+                },
+                {
+                    label: 'build(test-seed-00, "", 0)',
+                    input: {
+                        seed: 'test-seed-00',
+                        namespace: '',
+                        version: 0,
+                    },
+                    expected: getSequence('test-seed-00', '', 0)
+                },
+                {
+                    label: 'build(test-seed-00, "", 1)',
+                    input:
+                        {
+                            seed: 'test-seed-00',
+                            namespace: '',
+                            version: 1,
+                        },
+                    expected: getSequence('test-seed-00', '', 1)
                 },
                 {
                     label: 'build(test-seed-01)',
@@ -149,7 +230,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-01, undefined, 0)',
                     input: {
                         seed: 'test-seed-01',
-                        namespace: undefined,
                         version: 0,
                     },
                     expected: getSequence('test-seed-01', undefined, 0)
@@ -158,7 +238,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-01, undefined, 1)',
                     input: {
                         seed: 'test-seed-01',
-                        namespace: undefined,
                         version: 1,
                     },
                     expected: getSequence('test-seed-01', undefined, 1)
@@ -214,6 +293,32 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         version: 1,
                     },
                     expected: getSequence('test-seed-01', 'test-namespace-00', 1)
+                },
+                {
+                    label: 'build(test-seed-00, test-namespace-01)',
+                    input: {
+                        seed: 'test-seed-00',
+                        namespace: 'test-namespace-01',
+                    },
+                    expected: getSequence('test-seed-00', 'test-namespace-01')
+                },
+                {
+                    label: 'build(test-seed-00, test-namespace-01, 0)',
+                    input: {
+                        seed: 'test-seed-00',
+                        namespace: 'test-namespace-01',
+                        version: 0,
+                    },
+                    expected: getSequence('test-seed-00', 'test-namespace-01', 0)
+                },
+                {
+                    label: 'build(test-seed-00, test-namespace-01, 1)',
+                    input: {
+                        seed: 'test-seed-00',
+                        namespace: 'test-namespace-01',
+                        version: 1,
+                    },
+                    expected: getSequence('test-seed-00', 'test-namespace-01', 1)
                 }
             ];
 
