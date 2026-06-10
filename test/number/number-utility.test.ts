@@ -77,4 +77,8 @@ describe('NumberUtility', (): void => {
             });
         });
     });
+
+    test.todo('Number.isInteger');
+
+    test.todo('Number.isPositiveInteger');
 });
