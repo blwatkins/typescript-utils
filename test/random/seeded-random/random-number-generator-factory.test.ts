@@ -21,8 +21,9 @@
 import { describe, test, expect } from 'vitest';
 
 import { RandomNumberGeneratorFactory } from '../../../src/random/seeded-random/random-number-generator-factory';
+import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
 
-import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
+import { SingleInputScenario } from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     describe('new RandomNumberGeneratorFactory()', (): void => {
@@ -62,8 +63,8 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 [0.16553925978951156, 0.3284351306501776, 0.5189291620627046, 0.4091069942805916, 0.28637753427028656]
             ],
             'test-namespace-00\x00test-seed-01': [
-                [1, 2, 3, 4, 5],
-                [1, 2, 3, 4, 5]
+                [0.8683627741411328, 0.7439748151227832, 0.16317949281074107, 0.568283086642623, 0.9389660542365164],
+                [0.6660797311924398, 0.3273193002678454, 0.8574078464880586, 0.17541947425343096, 0.7369510729331523]
             ],
             'test-namespace-01\x00test-seed-00': [
                 [0.3755729671102017, 0.7366348921786994, 0.5166533759329468, 0.46790983714163303, 0.0813936865888536],
@@ -79,7 +80,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
             }
         }
 
-        function getSequence(seed: string, namespace?: string, version?: number) {
+        function getSequence(seed: string, namespace?: string, version?: number): number[] {
             const key: string = buildKey(seed, namespace);
             const index: number = version ?? 0;
             return sequences[key][index];
@@ -88,16 +89,16 @@ describe('RandomNumberGeneratorFactory', (): void => {
         function getOtherSequences(seed: string, namespace?: string, version?: number): number[][] {
             const key: string = buildKey(seed, namespace);
             const index: number = version ?? 0;
-            const keySequences = sequences[key];
-            const otherKeys: string[] = Object.keys(sequences).filter(k => k !== key);
+            const keySequences: number[][] = sequences[key];
+            const otherKeys: string[] = Object.keys(sequences).filter((k: string): boolean => k !== key);
             const otherSequences: number[][] = [];
 
-            otherKeys.forEach(k => {
-                const others = sequences[k];
+            otherKeys.forEach((k: string): void => {
+                const others: number[][] = sequences[k];
                 otherSequences.push(...others);
             });
 
-            for (let i = 0; i < keySequences.length; i++) {
+            for (let i: number = 0; i < keySequences.length; i++) {
                 if (i === index) {
                     continue;
                 }
@@ -108,105 +109,114 @@ describe('RandomNumberGeneratorFactory', (): void => {
             return otherSequences;
         }
 
-        // TODO - make special scenario type for these tests. Single input, single output.
-        const scenarios: Scenario[] = [
+        const scenarios: SingleInputScenario[] = [
+            {
+                label: 'build(test-seed-00)',
+                input: {
+                    seed: 'test-seed-00',
+                },
+                expected: getSequence('test-seed-00')
+            },
             {
                 label: 'build(test-seed-00, undefined, 0)',
-                inputs: [
-                    {
-                        seed: 'test-seed-00',
-                        namespace: undefined,
-                        version: 0,
-                    }
-                ],
+                input: {
+                    seed: 'test-seed-00',
+                    namespace: undefined,
+                    version: 0,
+                },
                 expected: getSequence('test-seed-00', undefined, 0)
             },
             {
                 label: 'build(test-seed-00, undefined, 1)',
-                inputs: [
+                input:
                     {
                         seed: 'test-seed-00',
                         namespace: undefined,
                         version: 1,
-                    }
-                ],
+                    },
                 expected: getSequence('test-seed-00', undefined, 1)
             },
             {
-                label: 'build(test-seed-00)',
-                inputs: [
+                label: 'build(test-seed-01)',
+                input:
                     {
-                        seed: 'test-seed-00',
-                    }
-                ],
-                expected: getSequence('test-seed-00')
+                        seed: 'test-seed-01',
+                    },
+                expected: getSequence('test-seed-01')
             },
             {
                 label: 'build(test-seed-01, undefined, 0)',
-                inputs: [
-                    {
-                        seed: 'test-seed-01',
-                        namespace: undefined,
-                        version: 0,
-                    }
-                ],
+                input: {
+                    seed: 'test-seed-01',
+                    namespace: undefined,
+                    version: 0,
+                },
                 expected: getSequence('test-seed-01', undefined, 0)
             },
             {
                 label: 'build(test-seed-01, undefined, 1)',
-                inputs: [
-                    {
-                        seed: 'test-seed-01',
-                        namespace: undefined,
-                        version: 1,
-                    }
-                ],
+                input: {
+                    seed: 'test-seed-01',
+                    namespace: undefined,
+                    version: 1,
+                },
                 expected: getSequence('test-seed-01', undefined, 1)
             },
             {
-                label: 'build(test-seed-01)',
-                inputs: [
-                    {
-                        seed: 'test-seed-01',
-                    }
-                ],
-                expected: getSequence('test-seed-01')
+                label: 'build(test-seed-00, test-namespace-00)',
+                input: {
+                    seed: 'test-seed-00',
+                    namespace: 'test-namespace-00',
+                },
+                expected: getSequence('test-seed-00', 'test-namespace-00')
             },
             {
                 label: 'build(test-seed-00, test-namespace-00, 0)',
-                inputs: [
-                    {
-                        seed: 'test-seed-00',
-                        namespace: 'test-namespace-00',
-                        version: 0,
-                    }
-                ],
+                input: {
+                    seed: 'test-seed-00',
+                    namespace: 'test-namespace-00',
+                    version: 0,
+                },
                 expected: getSequence('test-seed-00', 'test-namespace-00', 0)
             },
             {
                 label: 'build(test-seed-00, test-namespace-00, 1)',
-                inputs: [
-                    {
-                        seed: 'test-seed-00',
-                        namespace: 'test-namespace-00',
-                        version: 1,
-                    }
-                ],
+                input: {
+                    seed: 'test-seed-00',
+                    namespace: 'test-namespace-00',
+                    version: 1,
+                },
                 expected: getSequence('test-seed-00', 'test-namespace-00', 1)
             },
             {
-                label: 'build(test-seed-00, test-namespace-00)',
-                inputs: [
-                    {
-                        seed: 'test-seed-00',
-                        namespace: 'test-namespace-00',
-                    }
-                ],
-                expected: getSequence('test-seed-00', 'test-namespace-00')
+                label: 'build(test-seed-01, test-namespace-00)',
+                input: {
+                    seed: 'test-seed-01',
+                    namespace: 'test-namespace-00',
+                },
+                expected: getSequence('test-seed-01', 'test-namespace-00')
+            },
+            {
+                label: 'build(test-seed-01, test-namespace-00, 0)',
+                input: {
+                    seed: 'test-seed-01',
+                    namespace: 'test-namespace-00',
+                    version: 0,
+                },
+                expected: getSequence('test-seed-01', 'test-namespace-00', 0)
+            },
+            {
+                label: 'build(test-seed-01, test-namespace-00, 1)',
+                input: {
+                    seed: 'test-seed-01',
+                    namespace: 'test-namespace-00',
+                    version: 1,
+                },
+                expected: getSequence('test-seed-01', 'test-namespace-00', 1)
             }
         ];
 
-        function callBuild(seed: string, namespace?: string, version?: number) {
+        function callBuild(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
             if (version !== undefined) {
                 return RandomNumberGeneratorFactory.build(seed, namespace, version);
             } else if (namespace !== undefined) {
@@ -216,36 +226,30 @@ describe('RandomNumberGeneratorFactory', (): void => {
             return RandomNumberGeneratorFactory.build(seed);
         }
 
-        describe.each(
+        test.each(
             scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        )('%# - $label - build should return a SeededRandomNumberGenerator with the expected sequence.',
+            ({input: scenarioInput, expected: scenarioExpected}: SingleInputScenario): void => {
+            const expected = scenarioExpected as number[];
+            const input = scenarioInput as { seed: string; namespace?: string; version?: number };
+            const otherSequences: number[][] = getOtherSequences(input.seed, input.namespace, input.version);
+            const rng: SeededRandomNumberGenerator = callBuild(input.seed, input.namespace, input.version);
+            const sequence: number[] = [];
 
-            test.each(
-                testCases
-            )('build should return a SeededRandomNumberGenerator with the expected sequence.', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                const e = testExpected as number[];
-                const i = testInput as { seed: string; namespace?: string; version?: number };
-                const otherSequences = getOtherSequences(i.seed, i.namespace, i.version);
-                const rng = callBuild(i.seed, i.namespace, i.version);
+            for (let i: number = 0; i < expected.length; i++) {
+                sequence.push(rng.next());
+            }
 
-                const sequence: number[] = [];
+            expect(sequence).toEqual(expected);
 
-                for (let i = 0; i < e.length; i++) {
-                    sequence.push(rng.next());
+            otherSequences.forEach((other: number[]): void => {
+                if (other.length === sequence.length) {
+                    expect(sequence).not.toEqual(other);
+                } else if (other.length < sequence.length) {
+                    expect(sequence.slice(0, other.length)).not.toEqual(other);
+                } else if (other.length > sequence.length) {
+                    expect(sequence).not.toEqual(other.slice(0, sequence.length));
                 }
-
-                expect(sequence).toEqual(e);
-
-                otherSequences.forEach((other: number[]): void => {
-                    if (other.length === sequence.length) {
-                        expect(sequence).not.toEqual(other);
-                    } else if (other.length < sequence.length) {
-                        expect(sequence.slice(0, other.length)).not.toEqual(other);
-                    } else if (other.length > sequence.length) {
-                        expect(sequence).not.toEqual(other.slice(0, sequence.length));
-                    }
-                });
             });
         });
     });
