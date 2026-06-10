@@ -18,9 +18,11 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { NumberUtility } from '../../number';
+import { StringUtility } from '../../string';
+
 import { SeedVersions } from './seed-versions';
 import { SeededRandomNumberGenerator } from './seeded-random-number-generator';
-import {StringUtility} from "../../string";
 
 /**
  * @type {TextEncoder}
@@ -35,6 +37,7 @@ const textEncoder: TextEncoder = new TextEncoder();
 export class RandomNumberGeneratorFactory {
     /**
      * @throws {Error} - RandomNumberGeneratorFactory is a static class and cannot be instantiated.
+     *
      * @private
      */
     private constructor() {
@@ -44,8 +47,10 @@ export class RandomNumberGeneratorFactory {
     /**
      * Prime number for FNV-1a hashing algorithm.
      * This number is an algorithmic constant; it must not change.
+     *
      * @constant
      * @private
+     *
      * @returns {0x01000193}
      */
     static get #fnvPrime(): 0x01000193 {
@@ -62,11 +67,16 @@ export class RandomNumberGeneratorFactory {
      *
      * @returns {SeededRandomNumberGenerator}
      *
+     * @throws {TypeError} - When the given seed is not a string.
+     * @throws {TypeError} - When the given namespace is not a string.
+     * @throws {TypeError} - When the given version is not a positive integer.
+     *
      * @since 0.1.0
      */
     public static build(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
-        const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
-        const state = RandomNumberGeneratorFactory.#generateFnvHashState(input, version);
+        RandomNumberGeneratorFactory.#validateTypes(seed, namespace, version);
+        const input: string = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
+        const state: [number, number, number, number] = RandomNumberGeneratorFactory.#generateFnvHashState(input, version);
         return new SeededRandomNumberGenerator(state, version);
     }
 
@@ -81,12 +91,39 @@ export class RandomNumberGeneratorFactory {
      * @returns {SeededRandomNumberGenerator}
      *
      * @since 0.1.0
+     *
      * @async
      */
     public static async asyncBuild(seed: string, namespace?: string, version: number = 0): Promise<SeededRandomNumberGenerator> {
+        RandomNumberGeneratorFactory.#validateTypes(seed, namespace, version);
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
         return new SeededRandomNumberGenerator(state, version);
+    }
+
+    /**
+     * @param {string} seed - seed to validate
+     * @param {string?} namespace - namespace to validate
+     * @param {number?} version - version to validate
+     *
+     * @throws {TypeError} - When the given seed is not a string.
+     * @throws {TypeError} - When the given namespace is not a string.
+     * @throws {TypeError} - When the given version is not a positive integer.
+     *
+     * @private
+     */
+    static #validateTypes(seed: string, namespace?: string, version?: number): void {
+        if (!StringUtility.isString(seed)) {
+            throw new TypeError('Seed must be a string.');
+        }
+
+        if (namespace !== undefined && !StringUtility.isString(namespace)) {
+            throw new TypeError('Namespace must be a string.');
+        }
+
+        if (version !== undefined && !NumberUtility.isPositiveInteger(version, true)) {
+            throw new TypeError('Version must be a positive integer.');
+        }
     }
 
     /**
@@ -94,10 +131,17 @@ export class RandomNumberGeneratorFactory {
      *
      * @param {string} seed
      * @param {string?} namespace - Optional namespace to create different sequences from the same seed.
+     *
      * @private
+     *
      * @returns {string}
+     *
+     * @throws {TypeError} - When the given seed is not a string.
+     * @throws {TypeError} - When the given namespace is not a string.
      */
     static #buildInputString(seed: string, namespace?: string): string {
+        this.#validateTypes(seed, namespace);
+
         if (StringUtility.isString(namespace)) {
             return `${namespace}\x00${seed}`;
         } else {
@@ -113,10 +157,17 @@ export class RandomNumberGeneratorFactory {
      * @param {number} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same input.
      * Default value is 0.
+     *
      * @private
+     *
      * @returns {[number, number, number, number]}
+     *
+     * @throws {TypeError} - When the given input is not a string.
+     * @throws {TypeError} - When the given version is not a positive integer.
      */
     static #generateFnvHashState(input: string, version: number = 0): [number, number, number, number] {
+        this.#validateTypes(input, undefined, version);
+
         const bytes = textEncoder.encode(input);
         let offsets: readonly [number, number, number, number];
 
@@ -147,12 +198,20 @@ export class RandomNumberGeneratorFactory {
      * Create a state array from the given input using the SHA-256 hashing algorithm.
      *
      * @remarks This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.
+     *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
+     *
      * @private
+     *
      * @returns {[number, number, number, number]}
+     *
+     * @throws {TypeError} - When the given input is not a string.
+     *
      * @async
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
+        this.#validateTypes(input);
+
         const hashBuffer: ArrayBuffer = await crypto.subtle.digest('SHA-256', textEncoder.encode(input));
         const v: DataView = new DataView(hashBuffer);
 
