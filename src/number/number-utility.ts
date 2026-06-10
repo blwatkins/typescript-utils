@@ -43,12 +43,40 @@ export class NumberUtility {
         return Number.isFinite(input);
     }
 
-    /* ---------- DEPRECATED METHODS ---------- */
     /**
-     * Is the given input a number?
+     * Is the given input an integer?
      *
      * @param {unknown} input
-     * @returns {input is number}
+     * @returns {input is number} `true` when the input is an integer; `false` otherwise.
+     * @since 0.1.0
+     */
+    public static isInteger(input: unknown): input is number {
+        return Number.isInteger(input);
+    }
+
+    /**
+     * Is the given input a positive integer?
+     *
+     * @param {unknown} input
+     * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
+     * `false` if zero should be considered an invalid input.
+     * @returns {input is number} `true` if the given input is a positive integer, or zero when `zeroInclusive` is `true`; `false` otherwise.
+     * @since 0.1.0
+     */
+    public static isPositiveInteger(input: unknown, zeroInclusive?: boolean): input is number {
+        if (!NumberUtility.isInteger(input)) {
+            return false;
+        }
+
+        if (zeroInclusive === true) {
+            return input >= 0;
+        }
+
+        return input > 0;
+    }
+
+    /* ---------- DEPRECATED METHODS ---------- */
+    /**
      * @deprecated To be removed in v0.1.0-alpha.2.
      * Replaced by {@link NumberUtility.isFiniteNumber}.
      */
