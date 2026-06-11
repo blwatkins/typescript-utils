@@ -39,7 +39,7 @@ import {
 import { buildTestCases, Scenario, SingleInputScenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
-    const sequenceLength: 5 = 5;
+    const sequenceLength: 5 = 5 as const;
 
     function callBuild(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
         if (version !== undefined) {
@@ -61,7 +61,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         return sequence;
     }
-
 
     async function callAsyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
         if (namespace !== undefined) {
@@ -159,7 +158,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     {
                         label: 'non-number versions',
                         inputs: [
-                            ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
+                            ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined)
                         ],
                         expected: TypeError
                     },
@@ -191,9 +190,9 @@ describe('RandomNumberGeneratorFactory', (): void => {
         });
 
         describe('version fallback', (): void => {
-            const seed: string = 'test-seed-00';
-            const namespace: string = 'test-namespace-00';
-            const fallbackVersion: 0 = 0;
+            const seed: 'test-seed-00' = 'test-seed-00' as const;
+            const namespace: 'test-namespace-00' = 'test-namespace-00' as const;
+            const fallbackVersion: 0 = 0 as const;
 
             test.each([
                 SeedVersions.size,
