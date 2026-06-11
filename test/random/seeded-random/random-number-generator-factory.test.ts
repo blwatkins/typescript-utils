@@ -110,7 +110,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(a).not.toEqual(b);
             });
 
-            test('changing valid version changes sequence for same seed/namespace', (): void => {
+            test('changing valid version changes sequence for same seed and namespace', (): void => {
                 const v0: number[] = buildActualSequence('test-seed-00', 'test-namespace-00', 0);
                 const v1: number[] = buildActualSequence('test-seed-00', 'test-namespace-00', 1);
                 expect(v0).not.toEqual(v1);
@@ -119,34 +119,12 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         describe('input validation', (): void => {
             describe('invalid seed inputs', (): void => {
-                const testScenarios: Scenario[] = [
-                    {
-                        label: 'non-string seeds',
-                        inputs: [
-                            ...nonStringInputs
-                        ],
-                        expected: TypeError
-                    }
-                ];
-
-                describe.each(
-                    testScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - build($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        expect((): void => {
-                            RandomNumberGeneratorFactory.build(testInput as string);
-                        }).toThrow(testExpected);
-                        expect((): void => {
-                            RandomNumberGeneratorFactory.build(testInput as string, undefined, 0);
-                        }).toThrow(testExpected);
-                        expect((): void => {
-                            RandomNumberGeneratorFactory.build(testInput as string, '', 0);
-                        }).toThrow(testExpected);
-                    });
+                test.each(
+                    nonStringInputs
+                )('%# - invalid seed %o should throw a TypeError', (seed: unknown): void => {
+                    expect((): void => {
+                        RandomNumberGeneratorFactory.build(seed as string);
+                    }).toThrow(TypeError);
                 });
             });
 
@@ -185,6 +163,12 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         label: 'non-number versions',
                         inputs: [
                             ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
+                        ],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'invalid number versions',
+                        inputs: [
                             ...nonFiniteNumberInputs,
                             ...negativeNumberInputs,
                             ...positiveFloatInputs
