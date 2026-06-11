@@ -157,92 +157,50 @@ const asciiNamespace: 'test-namespace-00' = 'test-namespace-00';
 const unicodeSeed: '⭐' = '⭐';
 const unicodeNamespace: '⭐' = '⭐';
 
+function buildScenarios(seeds: string[], namespaces: string[], versions: number[]): SingleInputScenario[] {
+    const scenarios: SingleInputScenario[] = [];
+
+    seeds.forEach((seed: string) => {
+       scenarios.push({
+           label: `build("${seed}")`,
+           input: { seed },
+           expected: getExpectedSequence(seed)
+       });
+
+       namespaces.forEach((namespace: string) => {
+           scenarios.push({
+               label: `build("${seed}", "${namespace}")`,
+               input: { seed, namespace },
+               expected: getExpectedSequence(seed, namespace)
+           });
+
+           versions.forEach((version: number) => {
+               scenarios.push({
+                   label: `build("${seed}", "${namespace}", ${version}")`,
+                   input: { seed, namespace, version },
+                   expected: getExpectedSequence(seed, namespace, version)
+               });
+           });
+       });
+
+        versions.forEach((version: number) => {
+            scenarios.push({
+                label: `build("${seed}", undefined, ${version}")`,
+                input: { seed, version },
+                expected: getExpectedSequence(seed, undefined, version)
+            });
+        });
+    });
+
+    return scenarios;
+}
+
 export const scenarios: SingleInputScenario[] = [
-    {
-        label: `build("${emptySeed}")`,
-        input: { seed: emptySeed },
-        expected: getExpectedSequence(emptySeed)
-    },
-    {
-        label: `build("${emptySeed}", "${emptyNamespace}")`,
-        input: { seed: emptySeed, namespace: emptyNamespace },
-        expected: getExpectedSequence(emptySeed, emptyNamespace)
-    },
-    {
-        label: `build("${emptySeed}", "${asciiNamespace}")`,
-        input: { seed: emptySeed, namespace: asciiNamespace },
-        expected: getExpectedSequence(emptySeed, asciiNamespace)
-    },
-    {
-        label: `build("${emptySeed}", "${unicodeNamespace}")`,
-        input: { seed: emptySeed, namespace: unicodeNamespace },
-        expected: getExpectedSequence(emptySeed, unicodeNamespace)
-    },
-    {
-        label: `build("${emptySeed}", "${unicodeNamespace}", 1)`,
-        input: { seed: emptySeed, namespace: unicodeNamespace, version: 1 },
-        expected: getExpectedSequence(emptySeed, unicodeNamespace, 1)
-    },
-    {
-        label: `build("${asciiSeed}")`,
-        input: { seed: asciiSeed },
-        expected: getExpectedSequence(asciiSeed)
-    },
-    {
-        label: `build("${asciiSeed}", "${emptyNamespace}")`,
-        input: { seed: asciiSeed, namespace: emptyNamespace },
-        expected: getExpectedSequence(asciiSeed, emptyNamespace)
-    },
-    {
-        label: `build("${asciiSeed}", "${asciiNamespace}")`,
-        input: { seed: asciiSeed, namespace: asciiNamespace },
-        expected: getExpectedSequence(asciiSeed, asciiNamespace)
-    },
-    {
-        label: `build("${asciiSeed}", "${unicodeNamespace}")`,
-        input: { seed: asciiSeed, namespace: unicodeNamespace },
-        expected: getExpectedSequence(asciiSeed, unicodeNamespace)
-    },
-    {
-        label: `build("${asciiSeed}", "${asciiNamespace}", 0)`,
-        input: { seed: asciiSeed, namespace: asciiNamespace, version: 0 },
-        expected: getExpectedSequence(asciiSeed, asciiNamespace, 0)
-    },
-    {
-        label: `build("${asciiSeed}", "${asciiNamespace}", 1)`,
-        input: { seed: asciiSeed, namespace: asciiNamespace, version: 1 },
-        expected: getExpectedSequence(asciiSeed, asciiNamespace, 1)
-    },
-    {
-        label: `build("${unicodeSeed}")`,
-        input: { seed: unicodeSeed },
-        expected: getExpectedSequence(unicodeSeed)
-    },
-    {
-        label: `build("${unicodeSeed}", "${emptyNamespace}")`,
-        input: { seed: unicodeSeed, namespace: emptyNamespace },
-        expected: getExpectedSequence(unicodeSeed, emptyNamespace)
-    },
-    {
-        label: `build("${unicodeSeed}", "${asciiNamespace}")`,
-        input: { seed: unicodeSeed, namespace: asciiNamespace },
-        expected: getExpectedSequence(unicodeSeed, asciiNamespace)
-    },
-    {
-        label: `build("${unicodeSeed}", "${unicodeNamespace}")`,
-        input: { seed: unicodeSeed, namespace: unicodeNamespace },
-        expected: getExpectedSequence(unicodeSeed, unicodeNamespace)
-    },
-    {
-        label: `build("${unicodeSeed}", "${unicodeNamespace}", 0)`,
-        input: { seed: unicodeSeed, namespace: unicodeNamespace, version: 0 },
-        expected: getExpectedSequence(unicodeSeed, unicodeNamespace, 0)
-    },
-    {
-        label: `build("${unicodeSeed}", "${unicodeNamespace}", 1)`,
-        input: { seed: unicodeSeed, namespace: unicodeNamespace, version: 1 },
-        expected: getExpectedSequence(unicodeSeed, unicodeNamespace, 1)
-    }
+    ...buildScenarios(
+        [emptySeed, asciiSeed, unicodeSeed],
+        [emptyNamespace, asciiNamespace, unicodeNamespace],
+        [0, 1]
+    )
 ];
 
 export const asyncScenarios: SingleInputScenario[] = [
