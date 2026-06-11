@@ -25,10 +25,8 @@
   "main": "./_dist/index.mjs",
   "exports": {
     ".": {
-      "import": {
-        "types": "./_dist/index.d.mts",
-        "default": "./_dist/index.mjs"
-      }
+      "types": "./_dist/index.d.mts",
+      "default": "./_dist/index.mjs"
     }
   },
   "files": [
