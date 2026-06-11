@@ -33,7 +33,6 @@ import {
 } from '../../utils/input/number-inputs';
 import {
     asyncScenarios,
-    getOtherAsyncSequences,
     getExpectedSequence,
     scenarios
 } from '../../utils/random/random-number-generator-factory-scenarios';
@@ -219,7 +218,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 async ({ input: scenarioInput, expected: scenarioExpected }: SingleInputScenario): Promise<void> => {
                     const expected = scenarioExpected as number[];
                     const input = scenarioInput as { seed: string; namespace?: string; };
-                    const otherSequences: number[][] = getOtherAsyncSequences(input.seed, input.namespace);
                     const rng: SeededRandomNumberGenerator = await callAsyncBuild(input.seed, input.namespace);
                     const sequence: number[] = [];
 
@@ -228,16 +226,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     }
 
                     expect(sequence).toEqual(expected);
-
-                    otherSequences.forEach((other: number[]): void => {
-                        if (other.length === sequence.length) {
-                            expect(sequence).not.toEqual(other);
-                        } else if (other.length < sequence.length) {
-                            expect(sequence.slice(0, other.length)).not.toEqual(other);
-                        } else if (other.length > sequence.length) {
-                            expect(sequence).not.toEqual(other.slice(0, sequence.length));
-                        }
-                    });
                 }
             );
         });

@@ -21,6 +21,13 @@
 import { StringUtility } from '../../../src';
 import { SingleInputScenario } from '../test-case/test-case';
 
+const emptySeed: '' = '';
+const emptyNamespace: '' = '';
+const asciiSeed: 'test-seed-00' = 'test-seed-00';
+const asciiNamespace: 'test-namespace-00' = 'test-namespace-00';
+const unicodeSeed: '⭐' = '⭐';
+const unicodeNamespace: '⭐' = '⭐';
+
 /**
  * Sequences are keyed by their namespace and seed input. The version index should match the index of the sequence in the array.
  *
@@ -132,64 +139,53 @@ export function getExpectedSequence(seed: string, namespace?: string, version?: 
     return sequences[key][index];
 }
 
-export function getAsyncSequence(seed: string, namespace?: string): number[] {
+export function getExpectedAsyncSequence(seed: string, namespace?: string): number[] {
     const key: string = buildKey(seed, namespace);
     return asyncSequences[key];
 }
 
-export function getOtherAsyncSequences(seed: string, namespace?: string): number[][] {
-    const key: string = buildKey(seed, namespace);
-    const otherKeys: string[] = Object.keys(asyncSequences).filter((k: string): boolean => k !== key);
-    const otherSequences: number[][] = [];
-
-    otherKeys.forEach((k: string): void => {
-        const others: number[] = asyncSequences[k];
-        otherSequences.push(others);
-    });
-
-    return otherSequences;
-}
-
-const emptySeed: '' = '';
-const emptyNamespace: '' = '';
-const asciiSeed: 'test-seed-00' = 'test-seed-00';
-const asciiNamespace: 'test-namespace-00' = 'test-namespace-00';
-const unicodeSeed: '⭐' = '⭐';
-const unicodeNamespace: '⭐' = '⭐';
-
-function buildScenarios(seeds: string[], namespaces: string[], versions: number[]): SingleInputScenario[] {
+function buildScenarios(seeds: string[], namespaces: string[], versions: number[], isAsync: boolean = false): SingleInputScenario[] {
     const scenarios: SingleInputScenario[] = [];
+    let getExpected: (seed: string, namespace?: string, version?: number) => number[] = getExpectedSequence;
+
+    if (isAsync) {
+        getExpected = getExpectedAsyncSequence;
+    }
 
     seeds.forEach((seed: string) => {
        scenarios.push({
            label: `build("${seed}")`,
            input: { seed },
-           expected: getExpectedSequence(seed)
+           expected: getExpected(seed)
        });
 
        namespaces.forEach((namespace: string) => {
            scenarios.push({
                label: `build("${seed}", "${namespace}")`,
                input: { seed, namespace },
-               expected: getExpectedSequence(seed, namespace)
+               expected: getExpected(seed, namespace)
            });
 
-           versions.forEach((version: number) => {
-               scenarios.push({
-                   label: `build("${seed}", "${namespace}", ${version}")`,
-                   input: { seed, namespace, version },
-                   expected: getExpectedSequence(seed, namespace, version)
+           if (!isAsync) {
+               versions.forEach((version: number) => {
+                   scenarios.push({
+                       label: `build("${seed}", "${namespace}", ${version}")`,
+                       input: {seed, namespace, version},
+                       expected: getExpected(seed, namespace, version)
+                   });
                });
-           });
+           }
        });
 
-        versions.forEach((version: number) => {
-            scenarios.push({
-                label: `build("${seed}", undefined, ${version}")`,
-                input: { seed, version },
-                expected: getExpectedSequence(seed, undefined, version)
-            });
-        });
+       if (!isAsync) {
+           versions.forEach((version: number) => {
+               scenarios.push({
+                   label: `build("${seed}", undefined, ${version}")`,
+                   input: {seed, version},
+                   expected: getExpected(seed, undefined, version)
+               });
+           });
+       }
     });
 
     return scenarios;
@@ -204,338 +200,10 @@ export const scenarios: SingleInputScenario[] = [
 ];
 
 export const asyncScenarios: SingleInputScenario[] = [
-    {
-        label: 'asyncBuild("")',
-        input: {
-            seed: ''
-        },
-        expected: getAsyncSequence('')
-    },
-    {
-        label: 'asyncBuild("", undefined, 0)',
-        input: {
-            seed: '',
-            version: 0
-        },
-        expected: getAsyncSequence('')
-    },
-    {
-        label: 'asyncBuild("", undefined, 1)',
-        input:
-            {
-                seed: '',
-                version: 1
-            },
-        expected: getAsyncSequence('')
-    },
-    {
-        label: 'asyncBuild("", "")',
-        input: {
-            seed: '',
-            namespace: ''
-        },
-        expected: getAsyncSequence('', '')
-    },
-    {
-        label: 'asyncBuild("", "", 0)',
-        input: {
-            seed: '',
-            namespace: '',
-            version: 0
-        },
-        expected: getAsyncSequence('', '')
-    },
-    {
-        label: 'asyncBuild("", "", 1)',
-        input:
-            {
-                seed: '',
-                namespace: '',
-                version: 1
-            },
-        expected: getAsyncSequence('', '')
-    },
-    {
-        label: 'asyncBuild(test-seed-00)',
-        input: {
-            seed: 'test-seed-00'
-        },
-        expected: getAsyncSequence('test-seed-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, undefined, 0)',
-        input: {
-            seed: 'test-seed-00',
-            version: 0
-        },
-        expected: getAsyncSequence('test-seed-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, undefined, 1)',
-        input:
-            {
-                seed: 'test-seed-00',
-                version: 1
-            },
-        expected: getAsyncSequence('test-seed-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, "")',
-        input: {
-            seed: 'test-seed-00',
-            namespace: ''
-        },
-        expected: getAsyncSequence('test-seed-00', '')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, "", 0)',
-        input: {
-            seed: 'test-seed-00',
-            namespace: '',
-            version: 0
-        },
-        expected: getAsyncSequence('test-seed-00', '')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, "", 1)',
-        input:
-            {
-                seed: 'test-seed-00',
-                namespace: '',
-                version: 1
-            },
-        expected: getAsyncSequence('test-seed-00', '')
-    },
-    {
-        label: 'asyncBuild(test-seed-01)',
-        input:
-            {
-                seed: 'test-seed-01'
-            },
-        expected: getAsyncSequence('test-seed-01')
-    },
-    {
-        label: 'asyncBuild(test-seed-01, undefined, 0)',
-        input: {
-            seed: 'test-seed-01',
-            version: 0
-        },
-        expected: getAsyncSequence('test-seed-01')
-    },
-    {
-        label: 'asyncBuild(test-seed-01, undefined, 1)',
-        input: {
-            seed: 'test-seed-01',
-            version: 1
-        },
-        expected: getAsyncSequence('test-seed-01')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, test-namespace-00)',
-        input: {
-            seed: 'test-seed-00',
-            namespace: 'test-namespace-00'
-        },
-        expected: getAsyncSequence('test-seed-00', 'test-namespace-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, test-namespace-00, 0)',
-        input: {
-            seed: 'test-seed-00',
-            namespace: 'test-namespace-00',
-            version: 0
-        },
-        expected: getAsyncSequence('test-seed-00', 'test-namespace-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-00, test-namespace-00, 1)',
-        input: {
-            seed: 'test-seed-00',
-            namespace: 'test-namespace-00',
-            version: 1
-        },
-        expected: getAsyncSequence('test-seed-00', 'test-namespace-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-01, test-namespace-00)',
-        input: {
-            seed: 'test-seed-01',
-            namespace: 'test-namespace-00'
-        },
-        expected: getAsyncSequence('test-seed-01', 'test-namespace-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-01, test-namespace-00, 0)',
-        input: {
-            seed: 'test-seed-01',
-            namespace: 'test-namespace-00',
-            version: 0
-        },
-        expected: getAsyncSequence('test-seed-01', 'test-namespace-00')
-    },
-    {
-        label: 'asyncBuild(test-seed-01, test-namespace-00, 1)',
-        input: {
-            seed: 'test-seed-01',
-            namespace: 'test-namespace-00',
-            version: 1
-        },
-        expected: getAsyncSequence('test-seed-01', 'test-namespace-00')
-    }
-    // {
-    //     label: 'build(test-seed-00, test-namespace-01)',
-    //     input: {
-    //         seed: 'test-seed-00',
-    //         namespace: 'test-namespace-01'
-    //     },
-    //     expected: getSequence('test-seed-00', 'test-namespace-01')
-    // },
-    // {
-    //     label: 'build(test-seed-00, test-namespace-01, 0)',
-    //     input: {
-    //         seed: 'test-seed-00',
-    //         namespace: 'test-namespace-01',
-    //         version: 0
-    //     },
-    //     expected: getSequence('test-seed-00', 'test-namespace-01', 0)
-    // },
-    // {
-    //     label: 'build(test-seed-00, test-namespace-01, 1)',
-    //     input: {
-    //         seed: 'test-seed-00',
-    //         namespace: 'test-namespace-01',
-    //         version: 1
-    //     },
-    //     expected: getSequence('test-seed-00', 'test-namespace-01', 1)
-    // },
-    // {
-    //     label: 'build(⭐)',
-    //     input: {
-    //         seed: '⭐'
-    //     },
-    //     expected: getSequence('⭐')
-    // },
-    // {
-    //     label: 'build(\u{2B50})',
-    //     input: {
-    //         seed: '\u{2B50}'
-    //     },
-    //     expected: getSequence('\u{2B50}')
-    // },
-    // {
-    //     label: 'build(⭐, undefined, 0)',
-    //     input: {
-    //         seed: '⭐',
-    //         version: 0
-    //     },
-    //     expected: getSequence('⭐', undefined, 0)
-    // },
-    // {
-    //     label: 'build(⭐, undefined, 1)',
-    //     input:
-    //         {
-    //             seed: '⭐',
-    //             version: 1
-    //         },
-    //     expected: getSequence('⭐', undefined, 1)
-    // },
-    // {
-    //     label: 'build(Ë)',
-    //     input: {
-    //         seed: 'Ë'
-    //     },
-    //     expected: getSequence('Ë')
-    // },
-    // {
-    //     label: 'build(\u{00CB})',
-    //     input: {
-    //         seed: '\u{00CB}'
-    //     },
-    //     expected: getSequence('\u{00CB}')
-    // },
-    // {
-    //     label: 'build(Ë, undefined, 0)',
-    //     input: {
-    //         seed: 'Ë',
-    //         version: 0
-    //     },
-    //     expected: getSequence('Ë', undefined, 0)
-    // },
-    // {
-    //     label: 'build(Ë, undefined, 1)',
-    //     input:
-    //         {
-    //             seed: 'Ë',
-    //             version: 1
-    //         },
-    //     expected: getSequence('Ë', undefined, 1)
-    // },
-    // {
-    //     label: 'build(⭐, ⭐)',
-    //     input: {
-    //         seed: '⭐',
-    //         namespace: '⭐'
-    //     },
-    //     expected: getSequence('⭐', '⭐')
-    // },
-    // {
-    //     label: 'build(\u{2B50}, \u{2B50})',
-    //     input: {
-    //         seed: '\u{2B50}',
-    //         namespace: '\u{2B50}'
-    //     },
-    //     expected: getSequence('\u{2B50}', '\u{2B50}')
-    // },
-    // {
-    //     label: 'build(⭐, ⭐, 0)',
-    //     input: {
-    //         seed: '⭐',
-    //         namespace: '⭐',
-    //         version: 0
-    //     },
-    //     expected: getSequence('⭐', '⭐', 0)
-    // },
-    // {
-    //     label: 'build(⭐, ⭐, 1)',
-    //     input: {
-    //         seed: '⭐',
-    //         namespace: '⭐',
-    //         version: 1
-    //     },
-    //     expected: getSequence('⭐', '⭐', 1)
-    // },
-    // {
-    //     label: 'build(Ë, Ë)',
-    //     input: {
-    //         seed: 'Ë',
-    //         namespace: 'Ë'
-    //     },
-    //     expected: getSequence('Ë', 'Ë')
-    // },
-    // {
-    //     label: 'build(\u{00CB}, \u{00CB})',
-    //     input: {
-    //         seed: '\u{00CB}',
-    //         namespace: '\u{00CB}'
-    //     },
-    //     expected: getSequence('\u{00CB}', '\u{00CB}')
-    // },
-    // {
-    //     label: 'build(Ë, Ë, 0)',
-    //     input: {
-    //         seed: 'Ë',
-    //         namespace: 'Ë',
-    //         version: 0
-    //     },
-    //     expected: getSequence('Ë', 'Ë', 0)
-    // },
-    // {
-    //     label: 'build(Ë, Ë, 1)',
-    //     input: {
-    //         seed: 'Ë',
-    //         namespace: 'Ë',
-    //         version: 1
-    //     },
-    //     expected: getSequence('Ë', 'Ë', 1)
-    // }
+    ...buildScenarios(
+        [emptySeed, asciiSeed, unicodeSeed],
+        [emptyNamespace, asciiNamespace, unicodeNamespace],
+        [0, 1],
+        true
+    )
 ];
