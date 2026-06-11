@@ -64,10 +64,8 @@ describe('RandomNumberGeneratorFactory', (): void => {
     }
 
 
-    async function callAsyncBuild(seed: string, namespace?: string, version?: number): Promise<SeededRandomNumberGenerator> {
-        if (version !== undefined) {
-            return await RandomNumberGeneratorFactory.asyncBuild(seed, namespace, version);
-        } else if (namespace !== undefined) {
+    async function callAsyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
+        if (namespace !== undefined) {
             return await RandomNumberGeneratorFactory.asyncBuild(seed, namespace);
         }
 
@@ -220,9 +218,9 @@ describe('RandomNumberGeneratorFactory', (): void => {
             )('%# - $label - asyncBuild should return a SeededRandomNumberGenerator with the expected sequence.',
                 async ({ input: scenarioInput, expected: scenarioExpected }: SingleInputScenario): Promise<void> => {
                     const expected = scenarioExpected as number[];
-                    const input = scenarioInput as { seed: string; namespace?: string; version?: number; };
+                    const input = scenarioInput as { seed: string; namespace?: string; };
                     const otherSequences: number[][] = getOtherAsyncSequences(input.seed, input.namespace);
-                    const rng: SeededRandomNumberGenerator = await callAsyncBuild(input.seed, input.namespace, input.version);
+                    const rng: SeededRandomNumberGenerator = await callAsyncBuild(input.seed, input.namespace);
                     const sequence: number[] = [];
 
                     for (let i: number = 0; i < sequenceLength; i++) {

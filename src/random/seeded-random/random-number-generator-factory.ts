@@ -81,12 +81,10 @@ export class RandomNumberGeneratorFactory {
     }
 
     /**
-     * Build a {@link SeededRandomNumberGenerator} object with the given seed, namespace, and version from an asynchronous hashing algorithm.
+     * Build a {@link SeededRandomNumberGenerator} object with the given seed and namespace from an asynchronous hashing algorithm.
      *
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string?} namespace - The optional namespace to create different sequences from the same seed.
-     * @param {number?} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
-     * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
      *
      * @returns {SeededRandomNumberGenerator}
      *
@@ -94,11 +92,11 @@ export class RandomNumberGeneratorFactory {
      *
      * @async
      */
-    public static async asyncBuild(seed: string, namespace?: string, version: number = 0): Promise<SeededRandomNumberGenerator> {
-        RandomNumberGeneratorFactory.#validateTypes(seed, namespace, version);
+    public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
+        RandomNumberGeneratorFactory.#validateTypes(seed, namespace);
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
-        return new SeededRandomNumberGenerator(state, version);
+        return new SeededRandomNumberGenerator(state);
     }
 
     /**
