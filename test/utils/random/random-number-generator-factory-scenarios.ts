@@ -137,29 +137,6 @@ export function getAsyncSequence(seed: string, namespace?: string): number[] {
     return asyncSequences[key];
 }
 
-export function getOtherSequences(seed: string, namespace?: string, version?: number): number[][] {
-    const key: string = buildKey(seed, namespace);
-    const index: number = version ?? 0;
-    const keySequences: number[][] = sequences[key];
-    const otherKeys: string[] = Object.keys(sequences).filter((k: string): boolean => k !== key);
-    const otherSequences: number[][] = [];
-
-    otherKeys.forEach((k: string): void => {
-        const others: number[][] = sequences[k];
-        otherSequences.push(...others);
-    });
-
-    for (let i: number = 0; i < keySequences.length; i++) {
-        if (i === index) {
-            continue;
-        }
-
-        otherSequences.push(keySequences[i]);
-    }
-
-    return otherSequences;
-}
-
 export function getOtherAsyncSequences(seed: string, namespace?: string): number[][] {
     const key: string = buildKey(seed, namespace);
     const otherKeys: string[] = Object.keys(asyncSequences).filter((k: string): boolean => k !== key);
