@@ -24,14 +24,14 @@ import {SeedVersions, StringUtility} from '../../../src';
 import { RandomNumberGeneratorFactory } from '../../../src/random/seeded-random/random-number-generator-factory';
 import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
 
-import {buildTestCases, Scenario, SingleInputScenario, TestCase} from '../../utils/test-case/test-case';
-import {nonStringInputs} from "../../utils/input/string-inputs";
+import { nonStringInputs } from '../../utils/input/string-inputs';
 import {
     negativeNumberInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
     positiveFloatInputs
-} from "../../utils/input/number-inputs";
+} from '../../utils/input/number-inputs';
+import { buildTestCases, Scenario, SingleInputScenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     describe('new RandomNumberGeneratorFactory()', (): void => {
@@ -63,24 +63,20 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 [0.00922908284701407, 0.3375692891422659, 0.3045982476323843, 0.6381423401180655, 0.7763565834611654]
             ],
             'Ë': [
-                [1, 2, 3, 4, 5],
-                [1, 2, 3, 4, 5]
+                [0.8712875235360116, 0.26320099574513733, 0.10322601883672178, 0.09657859709113836, 0.8213197118602693],
+                [0.627448758808896, 0.789355386979878, 0.22389372275210917, 0.7672866720240563, 0.8605319424532354]
             ],
-            'Ë\x00Ë': [
-                [1, 2, 3, 4, 5],
-                [1, 2, 3, 4, 5]
+            '\u{00CB}\x00\u{00CB}': [
+                [0.7256847326643765, 0.8443186667282134, 0.3638235698454082, 0.24236159515567124, 0.049290241207927465],
+                [0.38947216677479446, 0.4713413678109646, 0.7621940351091325, 0.30963829858228564, 0.08248079381883144]
             ],
-            '⭐': [ // TODO - test that ASCII is equivalent
-                [1, 2, 3, 4, 5],
-                [1, 2, 3, 4, 5]
+            '⭐': [
+                [0.9694232840556651, 0.9242921115364879, 0.8754217408131808, 0.5243206792511046, 0.45104918046854436],
+                [0.7025466905906796, 0.5448313450906426, 0.6962815392762423, 0.12431758479215205, 0.5638441045302898,]
             ],
-            '⭐\x00⭐': [ // TODO - test that ASCII is equivalent
-                [1, 2, 3, 4, 5],
-                [1, 2, 3, 4, 5]
-            ],
-            '\u{1F3A8}\x00\u{1F3A8}': [ // TODO - Test that 🎨\x00🎨 is equivalent
-                [1, 2, 3, 4, 5],
-                [1, 2, 3, 4, 5]
+            '\u{2B50}\x00\u{2B50}': [
+                [0.8694517486728728, 0.267334503820166, 0.5202956276480108, 0.7923379603307694, 0.156677037011832],
+                [0.4572813929989934, 0.6103907972574234, 0.8155440571717918, 0.743932654382661, 0.09259677515365183]
             ],
             'test-seed-00': [
                 [0.634432977065444, 0.8579290516208857, 0.8093228186480701, 0.06116068898700178, 0.4406876463908702],
@@ -356,6 +352,140 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         version: 1,
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-01', 1)
+                },
+                {
+                    label: 'build(⭐)',
+                    input: {
+                        seed: '⭐',
+                    },
+                    expected: getSequence('⭐')
+                },
+                {
+                    label: 'build(\u{2B50})',
+                    input: {
+                        seed: '\u{2B50}',
+                    },
+                    expected: getSequence('\u{2B50}')
+                },
+                {
+                    label: 'build(⭐, undefined, 0)',
+                    input: {
+                        seed: '⭐',
+                        version: 0
+                    },
+                    expected: getSequence('⭐', undefined, 0)
+                },
+                {
+                    label: 'build(⭐, undefined, 1)',
+                    input:
+                        {
+                            seed: '⭐',
+                            version: 1,
+                        },
+                    expected: getSequence('⭐', undefined, 1)
+                },
+                {
+                    label: 'build(Ë)',
+                    input: {
+                        seed: 'Ë',
+                    },
+                    expected: getSequence('Ë')
+                },
+                {
+                    label: 'build(\u{00CB})',
+                    input: {
+                        seed: '\u{00CB}',
+                    },
+                    expected: getSequence('\u{00CB}')
+                },
+                {
+                    label: 'build(Ë, undefined, 0)',
+                    input: {
+                        seed: 'Ë',
+                        version: 0
+                    },
+                    expected: getSequence('Ë', undefined, 0)
+                },
+                {
+                    label: 'build(Ë, undefined, 1)',
+                    input:
+                        {
+                            seed: 'Ë',
+                            version: 1,
+                        },
+                    expected: getSequence('Ë', undefined, 1)
+                },
+                {
+                    label: 'build(⭐, ⭐)',
+                    input: {
+                        seed: '⭐',
+                        namespace: '⭐',
+                    },
+                    expected: getSequence('⭐', '⭐')
+                },
+                {
+                    label: 'build(\u{2B50}, \u{2B50})',
+                    input: {
+                        seed: '\u{2B50}',
+                        namespace: '\u{2B50}',
+                    },
+                    expected: getSequence('\u{2B50}', '\u{2B50}')
+                },
+                {
+                    label: 'build(⭐, ⭐, 0)',
+                    input: {
+                        seed: '⭐',
+                        namespace: '⭐',
+                        version: 0,
+                    },
+                    expected: getSequence('⭐', '⭐', 0)
+                },
+                {
+                    label: 'build(⭐, ⭐, 1)',
+                    input: {
+                        seed: '⭐',
+                        namespace: '⭐',
+                        version: 1,
+                    },
+                    expected: getSequence('⭐', '⭐', 1)
+                },
+
+
+
+
+                {
+                    label: 'build(Ë, Ë)',
+                    input: {
+                        seed: 'Ë',
+                        namespace: 'Ë',
+                    },
+                    expected: getSequence('Ë', 'Ë')
+                },
+                {
+                    label: 'build(\u{00CB}, \u{00CB})',
+                    input: {
+                        seed: '\u{00CB}',
+                        namespace: '\u{00CB}',
+                    },
+                    expected: getSequence('\u{00CB}', '\u{00CB}')
+                },
+                {
+                    label: 'build(Ë, Ë, 0)',
+                    input: {
+                        seed: 'Ë',
+                        namespace: 'Ë',
+                        version: 0,
+                    },
+                    expected: getSequence('Ë', 'Ë', 0)
+                },
+                {
+                    label: 'build(Ë, Ë, 1)',
+                    input: {
+                        seed: 'Ë',
+                        namespace: 'Ë',
+                        version: 1,
+                    },
+                    expected: getSequence('Ë', 'Ë', 1)
                 }
             ];
 
