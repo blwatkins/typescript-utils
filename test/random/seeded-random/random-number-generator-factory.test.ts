@@ -20,7 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import {SeedVersions, StringUtility} from '../../../src';
+import { SeedVersions, StringUtility } from '../../../src';
 import { RandomNumberGeneratorFactory } from '../../../src/random/seeded-random/random-number-generator-factory';
 import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
 
@@ -34,6 +34,8 @@ import {
 import { buildTestCases, Scenario, SingleInputScenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
+    const sequenceLength: number = 5;
+
     describe('new RandomNumberGeneratorFactory()', (): void => {
         describe('Runtime behavior guards', (): void => {
             test('Constructor should throw an error when instantiated at runtime', (): void => {
@@ -53,7 +55,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
          * This array is meant to help ensure that the published SeedVersion data <b>NEVER</b> changes.
          * Once a test seed and namespace sequence has been determined, any deviation from that expected behavior is indicative of a breaking change and should be investigated immediately.
          */
-        const sequences: { [key: string]: number[][] } = {
+        const sequences: Record<string, number[][]> = {
             '': [
                 [0.6126510770991445, 0.3232760636601597, 0.5053844235371798, 0.5004723358433694, 0.8444383488968015],
                 [0.49630083329975605, 0.26718430570326746, 0.5911665598396212, 0.9048203160054982, 0.24119087704457343]
@@ -72,7 +74,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
             ],
             '⭐': [
                 [0.9694232840556651, 0.9242921115364879, 0.8754217408131808, 0.5243206792511046, 0.45104918046854436],
-                [0.7025466905906796, 0.5448313450906426, 0.6962815392762423, 0.12431758479215205, 0.5638441045302898,]
+                [0.7025466905906796, 0.5448313450906426, 0.6962815392762423, 0.12431758479215205, 0.5638441045302898]
             ],
             '\u{2B50}\x00\u{2B50}': [
                 [0.8694517486728728, 0.267334503820166, 0.5202956276480108, 0.7923379603307694, 0.156677037011832],
@@ -84,7 +86,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
             ],
             '\x00test-seed-00': [
                 [0.9857979689259082, 0.24636835046112537, 0.5494615291245282, 0.5093912568408996, 0.7697517338674515],
-                [0.32814985048025846, 0.22640329715795815, 0.7572518708184361, 0.619672927306965, 0.4001562672201544],
+                [0.32814985048025846, 0.22640329715795815, 0.7572518708184361, 0.619672927306965, 0.4001562672201544]
             ],
             'test-seed-01': [
                 [0.13497344846837223, 0.8579290620982647, 0.06300078285858035, 0.06043651350773871, 0.4764115291181952],
@@ -160,7 +162,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 {
                     label: 'build("")',
                     input: {
-                        seed: '',
+                        seed: ''
                     },
                     expected: getSequence('')
                 },
@@ -177,7 +179,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input:
                         {
                             seed: '',
-                            version: 1,
+                            version: 1
                         },
                     expected: getSequence('', undefined, 1)
                 },
@@ -196,14 +198,14 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         {
                             seed: '',
                             namespace: '',
-                            version: 1,
+                            version: 1
                         },
                     expected: getSequence('', '', 1)
                 },
                 {
                     label: 'build(test-seed-00)',
                     input: {
-                        seed: 'test-seed-00',
+                        seed: 'test-seed-00'
                     },
                     expected: getSequence('test-seed-00')
                 },
@@ -211,7 +213,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-00, undefined, 0)',
                     input: {
                         seed: 'test-seed-00',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('test-seed-00', undefined, 0)
                 },
@@ -220,7 +222,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input:
                         {
                             seed: 'test-seed-00',
-                            version: 1,
+                            version: 1
                         },
                     expected: getSequence('test-seed-00', undefined, 1)
                 },
@@ -237,7 +239,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-00',
                         namespace: '',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('test-seed-00', '', 0)
                 },
@@ -247,7 +249,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         {
                             seed: 'test-seed-00',
                             namespace: '',
-                            version: 1,
+                            version: 1
                         },
                     expected: getSequence('test-seed-00', '', 1)
                 },
@@ -255,7 +257,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-01)',
                     input:
                         {
-                            seed: 'test-seed-01',
+                            seed: 'test-seed-01'
                         },
                     expected: getSequence('test-seed-01')
                 },
@@ -263,7 +265,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-01, undefined, 0)',
                     input: {
                         seed: 'test-seed-01',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('test-seed-01', undefined, 0)
                 },
@@ -271,7 +273,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-01, undefined, 1)',
                     input: {
                         seed: 'test-seed-01',
-                        version: 1,
+                        version: 1
                     },
                     expected: getSequence('test-seed-01', undefined, 1)
                 },
@@ -279,7 +281,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-00, test-namespace-00)',
                     input: {
                         seed: 'test-seed-00',
-                        namespace: 'test-namespace-00',
+                        namespace: 'test-namespace-00'
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-00')
                 },
@@ -288,7 +290,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-00',
                         namespace: 'test-namespace-00',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-00', 0)
                 },
@@ -297,7 +299,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-00',
                         namespace: 'test-namespace-00',
-                        version: 1,
+                        version: 1
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-00', 1)
                 },
@@ -305,7 +307,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-01, test-namespace-00)',
                     input: {
                         seed: 'test-seed-01',
-                        namespace: 'test-namespace-00',
+                        namespace: 'test-namespace-00'
                     },
                     expected: getSequence('test-seed-01', 'test-namespace-00')
                 },
@@ -314,7 +316,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-01',
                         namespace: 'test-namespace-00',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('test-seed-01', 'test-namespace-00', 0)
                 },
@@ -323,7 +325,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-01',
                         namespace: 'test-namespace-00',
-                        version: 1,
+                        version: 1
                     },
                     expected: getSequence('test-seed-01', 'test-namespace-00', 1)
                 },
@@ -331,7 +333,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(test-seed-00, test-namespace-01)',
                     input: {
                         seed: 'test-seed-00',
-                        namespace: 'test-namespace-01',
+                        namespace: 'test-namespace-01'
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-01')
                 },
@@ -340,7 +342,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-00',
                         namespace: 'test-namespace-01',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-01', 0)
                 },
@@ -349,21 +351,21 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'test-seed-00',
                         namespace: 'test-namespace-01',
-                        version: 1,
+                        version: 1
                     },
                     expected: getSequence('test-seed-00', 'test-namespace-01', 1)
                 },
                 {
                     label: 'build(⭐)',
                     input: {
-                        seed: '⭐',
+                        seed: '⭐'
                     },
                     expected: getSequence('⭐')
                 },
                 {
                     label: 'build(\u{2B50})',
                     input: {
-                        seed: '\u{2B50}',
+                        seed: '\u{2B50}'
                     },
                     expected: getSequence('\u{2B50}')
                 },
@@ -380,21 +382,21 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input:
                         {
                             seed: '⭐',
-                            version: 1,
+                            version: 1
                         },
                     expected: getSequence('⭐', undefined, 1)
                 },
                 {
                     label: 'build(Ë)',
                     input: {
-                        seed: 'Ë',
+                        seed: 'Ë'
                     },
                     expected: getSequence('Ë')
                 },
                 {
                     label: 'build(\u{00CB})',
                     input: {
-                        seed: '\u{00CB}',
+                        seed: '\u{00CB}'
                     },
                     expected: getSequence('\u{00CB}')
                 },
@@ -411,7 +413,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input:
                         {
                             seed: 'Ë',
-                            version: 1,
+                            version: 1
                         },
                     expected: getSequence('Ë', undefined, 1)
                 },
@@ -419,7 +421,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(⭐, ⭐)',
                     input: {
                         seed: '⭐',
-                        namespace: '⭐',
+                        namespace: '⭐'
                     },
                     expected: getSequence('⭐', '⭐')
                 },
@@ -427,7 +429,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(\u{2B50}, \u{2B50})',
                     input: {
                         seed: '\u{2B50}',
-                        namespace: '\u{2B50}',
+                        namespace: '\u{2B50}'
                     },
                     expected: getSequence('\u{2B50}', '\u{2B50}')
                 },
@@ -436,7 +438,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: '⭐',
                         namespace: '⭐',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('⭐', '⭐', 0)
                 },
@@ -445,19 +447,15 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: '⭐',
                         namespace: '⭐',
-                        version: 1,
+                        version: 1
                     },
                     expected: getSequence('⭐', '⭐', 1)
                 },
-
-
-
-
                 {
                     label: 'build(Ë, Ë)',
                     input: {
                         seed: 'Ë',
-                        namespace: 'Ë',
+                        namespace: 'Ë'
                     },
                     expected: getSequence('Ë', 'Ë')
                 },
@@ -465,7 +463,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'build(\u{00CB}, \u{00CB})',
                     input: {
                         seed: '\u{00CB}',
-                        namespace: '\u{00CB}',
+                        namespace: '\u{00CB}'
                     },
                     expected: getSequence('\u{00CB}', '\u{00CB}')
                 },
@@ -474,7 +472,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'Ë',
                         namespace: 'Ë',
-                        version: 0,
+                        version: 0
                     },
                     expected: getSequence('Ë', 'Ë', 0)
                 },
@@ -483,7 +481,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     input: {
                         seed: 'Ë',
                         namespace: 'Ë',
-                        version: 1,
+                        version: 1
                     },
                     expected: getSequence('Ë', 'Ë', 1)
                 }
@@ -492,14 +490,14 @@ describe('RandomNumberGeneratorFactory', (): void => {
             test.each(
                 scenarios
             )('%# - $label - build should return a SeededRandomNumberGenerator with the expected sequence.',
-                ({input: scenarioInput, expected: scenarioExpected}: SingleInputScenario): void => {
+                ({ input: scenarioInput, expected: scenarioExpected }: SingleInputScenario): void => {
                     const expected = scenarioExpected as number[];
-                    const input = scenarioInput as { seed: string; namespace?: string; version?: number };
+                    const input = scenarioInput as { seed: string; namespace?: string; version?: number; };
                     const otherSequences: number[][] = getOtherSequences(input.seed, input.namespace, input.version);
                     const rng: SeededRandomNumberGenerator = callBuild(input.seed, input.namespace, input.version);
                     const sequence: number[] = [];
 
-                    for (let i: number = 0; i < expected.length; i++) {
+                    for (let i: number = 0; i < sequenceLength; i++) {
                         sequence.push(rng.next());
                     }
 
@@ -532,15 +530,21 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
                 describe.each(
                     scenarios
-                )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                     const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                     test.each(
                         testCases
-                    )('%# - build($input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
-                        expect((): void => { RandomNumberGeneratorFactory.build(testInput as string) }).toThrow(testExpected);
-                        expect((): void => { RandomNumberGeneratorFactory.build(testInput as string, undefined, 0) }).toThrow(testExpected);
-                        expect((): void => { RandomNumberGeneratorFactory.build(testInput as string, '', 0) }).toThrow(testExpected);
+                    )('%# - build($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            RandomNumberGeneratorFactory.build(testInput as string);
+                        }).toThrow(testExpected);
+                        expect((): void => {
+                            RandomNumberGeneratorFactory.build(testInput as string, undefined, 0);
+                        }).toThrow(testExpected);
+                        expect((): void => {
+                            RandomNumberGeneratorFactory.build(testInput as string, '', 0);
+                        }).toThrow(testExpected);
                     });
                 });
             });
@@ -558,14 +562,18 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
                 describe.each(
                     scenarios
-                )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                     const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                     test.each(
                         testCases
-                    )('%# - build("", $input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
-                        expect((): void => { RandomNumberGeneratorFactory.build('', testInput as string) }).toThrow(testExpected);
-                        expect((): void => { RandomNumberGeneratorFactory.build('', testInput as string, 0) }).toThrow(testExpected);
+                    )('%# - build("", $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            RandomNumberGeneratorFactory.build('', testInput as string);
+                        }).toThrow(testExpected);
+                        expect((): void => {
+                            RandomNumberGeneratorFactory.build('', testInput as string, 0);
+                        }).toThrow(testExpected);
                     });
                 });
             });
@@ -586,13 +594,15 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
                 describe.each(
                     scenarios
-                )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                     const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                     test.each(
                         testCases
-                    )('%# - build("", "", $input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
-                        expect((): void => { RandomNumberGeneratorFactory.build('', '', testInput as number) }).toThrow(testExpected);
+                    )('%# - build("", "", $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            RandomNumberGeneratorFactory.build('', '', testInput as number);
+                        }).toThrow(testExpected);
                     });
                 });
             });
@@ -617,12 +627,12 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
                 describe.each(
                     scenarios
-                )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                     const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                     test.each(
                         testCases
-                    )('%# - build with version $input should default to version 0', ({input: testInput, expected: testExpected}: TestCase): void => {
+                    )('%# - build with version $input should default to version 0', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const expected: number[][] = testExpected as number[][];
                         const input: number = testInput as number;
                         const rng1: SeededRandomNumberGenerator = callBuild(seed, undefined, input);

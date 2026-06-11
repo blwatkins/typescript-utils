@@ -61,7 +61,7 @@ export const positiveNumberInputs: number[] = [
     ...positiveFloatInputs,
     10,
     Number.MAX_VALUE,
-    Number.MAX_SAFE_INTEGER,
+    Number.MAX_SAFE_INTEGER
 ];
 
 export const negativeNumberInputs: number[] = [
