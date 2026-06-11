@@ -7,12 +7,141 @@
 - Current utilities are organized by domain under `src/` (for example, `src/string` and `src/number`) and re-exported through `src/index.ts`.
 - Tests are located under `test/` and run with Vitest.
 
+## Tech Stack
+
+To be completed as project development progresses.
+
 ## Development and Validation
+
+To be completed as project development progresses.
+
+### Development Status
+
+To be completed as project development progresses.
+
+### Validation Steps
 
 - Install dependencies with `npm ci`.
 - Run lint checks with `npm run lint:all`.
 - Build with `npm run build`.
 - Run tests with `npm run test`.
+
+## npm Scripts
+
+To be completed as project development progresses.
+
+## GitHub Actions CI
+
+| Workflow file | Name | Trigger | Description |
+|---|---|---|---|
+| `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
+| `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
+| `npm-publish.yml` | npm Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm; requires `release_tag` input and uses `id-token: write` trusted publishing permissions |
+| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
+
+## Security and Dependency Management
+
+To be completed as project development progresses.
+
+## Development Guidelines
+
+Keep changes scoped to existing files unless a task explicitly requires scaffolding project code.
+
+### TypeScript Conventions
+
+To be completed as project development progresses.
+
+#### Static Classes
+
+Static utility classes must:
+- Have a `private constructor()` that throws an `Error` to prevent instantiation
+- Include a JSDoc `@throws` on the constructor documenting the instantiation error
+- Expose public static getters or methods only
+
+## Code Style
+
+#### Code Style Preferences and Conventions
+- Prefer `if`/`else` blocks over ternary operators for conditional logic.
+- Prefer `@returns` (not `@return`) in TSDoc comments.
+
+#### Formatting Rules
+
+To be completed as project development progresses.
+
+### Documentation Comment Preferences
+
+When writing or reviewing code, follow these documentation standards for maximum compatibility:
+
+- **Use `@returns` instead of `@return`**: Always use `@returns` in documentation comments for compatibility with documentation generators.
+- **Use `@param {type} name` format**: Always specify parameter types with the format `@param {type} name` (e.g., `@param {string} hex`) rather than `@param name {type}`.
+- **Always specify return types with `@returns`**: Include a type indicator in every `@returns` annotation (e.g., `@returns {boolean}`).
+- **Document void returns with `@returns {void}`**: For methods that do not return a value, explicitly use `@returns {void}`.
+- **Use `@returns` for getter methods**: Prefer `@returns` for getter documentation.
+- **Document version with `@since`**: Add `@since` to all public/exported members.
+- **Annotate abstract members with `@abstract`**: Use `@abstract` for all abstract classes, methods, and properties.
+- **Annotate readonly members with `@readonly`**: Use `@readonly` for all readonly members.
+- **Annotate private members with `@private`**: Use `@private` for all private members.
+- **Annotate protected members with `@protected`**: Use `@protected` for all protected members.
+- **Annotate overrides with `@override`**: Use `@override` for all methods that override parent class methods.
+- **Enclose boolean values in backticks**: Always use backticks for `true` and `false` in documentation comments.
+- **Use consistent tense and voice**: Write documentation in the present tense and active voice for clarity.
+- **Document exceptions with `@throws`**: Use `@throws` to document any errors or exceptions a function may throw.
+- **Document default parameter values**: Indicate default values for parameters in the `@param` annotation.
+- **Document all exported symbols**: Ensure every exported class, function, interface, type, enum, and constant has a documentation comment.
+
+**Annotation Order:**
+Place annotations in the following order for consistency and readability:
+
+1. `@remarks`
+1. `@see`
+1. `@param`
+1. `@returns`
+1. `@throws`
+1. `@default`
+1. `@example`
+1. `@constant`
+1. `@readonly`
+1. `@private`
+1. `@protected`
+1. `@public`
+1. `@abstract`
+1. `@override`
+1. `@async`
+1. `@deprecated`
+1. `@since`
+1. `@category`
+
+Include other relevant tags (such as `@template`, `@type`) after the above, as appropriate for the context.
+
+### File Headers
+
+All source files must include the MIT License copyright header at the top:
+
+```typescript
+/*
+ * Copyright (c) <year> Brittni Watkins.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom
+ * the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+```
+
+## Directory Structure
+
+To be completed as project development progresses.
 
 ## Documentation and GitHub Pages
 
@@ -23,14 +152,16 @@
 - The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths. For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site. Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
 - `README.md` and `docs/index.md` should stay in sync for shared content, but they are not expected to be identical. Expected differences include Jekyll front matter, file-specific introductory or heading sections, footer or copyright text, and internal link differences. Any addition, removal, or update to shared sections must be applied consistently to both files.
 
-### Portfolio Page Generation
+## Portfolio Page Generation and Maintenance
+
+The guidance in this section applies only when `docs/portfolio-skills.md` is present or intentionally being created.
 
 Use the following prompt template when generating or updating the `docs/portfolio-skills.md` page — for example, when a new project is started, when key dependencies or tooling change, or when the project's capabilities, functionality, or implementation evolve.
 
-#### Prompt Template
+### Prompt Template
 
 ````markdown
-You are generating a technical portfolio page documenting a software project, template, starter, or implementation, following a specific evidence-based structure.
+You are generating/updating a technical portfolio page documenting a software project, template, starter, or implementation, following a specific evidence-based structure.
 
 ## Context
 
@@ -166,7 +297,7 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 - If prior claims cannot be supported by current evidence, rewrite or remove them
 ````
 
-#### How to Use This Template
+### How to Use This Template
 
 1. **Customize the bracketed fields** at the top with your project's info:
    - `[PROJECT_NAME]` → actual name
@@ -198,7 +329,7 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
    - Ask Copilot to split mixed inventory categories into more precise labels
    - Ask Copilot to add stronger evidence links where claims are currently under-supported
 
-#### Example Customization
+### Example Customization
 
 If you were documenting a new project called `my-ml-starter`:
 
@@ -337,63 +468,3 @@ When you review the next page, use this rule:
 **"If a reader challenges any technical statement, can I point to an exact linked file that proves it, and is the wording likely to stay accurate over time?"**
 
 If yes, the page is likely in good shape.
-
-## GitHub Actions Workflows
-
-| Workflow file | Name | Trigger | Description |
-|---|---|---|---|
-| `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
-| `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
-| `npm-publish.yml` | npm Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm; requires `release_tag` input and uses `id-token: write` trusted publishing permissions |
-| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
-
-## Development Guidelines
-
-### Code Style Preferences and Conventions
-- Prefer `if`/`else` blocks over ternary operators for conditional logic.
-- Prefer `@returns` (not `@return`) in TSDoc comments.
-
-### Documentation Comment Preferences
-
-When writing or reviewing code, follow these documentation standards for maximum compatibility:
-
-- **Use `@returns` instead of `@return`**: Always use `@returns` in documentation comments for compatibility with documentation generators.
-- **Use `@param {type} name` format**: Always specify parameter types with the format `@param {type} name` (e.g., `@param {string} hex`) rather than `@param name {type}`.
-- **Always specify return types with `@returns`**: Include a type indicator in every `@returns` annotation (e.g., `@returns {boolean}`).
-- **Document void returns with `@returns {void}`**: For methods that do not return a value, explicitly use `@returns {void}`.
-- **Use `@returns` for getter methods**: Prefer `@returns` for getter documentation.
-- **Document version with `@since`**: Add `@since` to all public/exported members.
-- **Annotate abstract members with `@abstract`**: Use `@abstract` for all abstract classes, methods, and properties.
-- **Annotate readonly members with `@readonly`**: Use `@readonly` for all readonly members.
-- **Annotate private members with `@private`**: Use `@private` for all private members.
-- **Annotate protected members with `@protected`**: Use `@protected` for all protected members.
-- **Annotate overrides with `@override`**: Use `@override` for all methods that override parent class methods.
-- **Enclose boolean values in backticks**: Always use backticks for `true` and `false` in documentation comments.
-- **Use consistent tense and voice**: Write documentation in the present tense and active voice for clarity.
-- **Document exceptions with `@throws`**: Use `@throws` to document any errors or exceptions a function may throw.
-- **Document default parameter values**: Indicate default values for parameters in the `@param` annotation.
-- **Document all exported symbols**: Ensure every exported class, function, interface, type, enum, and constant has a documentation comment.
-
-**Annotation Order:**
-Place annotations in the following order for consistency and readability:
-
-1. `@remarks`
-1. `@see`
-1. `@param`
-1. `@returns`
-1. `@throws`
-1. `@default`
-1. `@example`
-1. `@constant`
-1. `@readonly`
-1. `@private`
-1. `@protected`
-1. `@public`
-1. `@abstract`
-1. `@override`
-1. `@async`
-1. `@deprecated`
-1. `@since`
-1. `@category`
-
-Include other relevant tags (such as `@template`, `@type`) after the above, as appropriate for the context.
