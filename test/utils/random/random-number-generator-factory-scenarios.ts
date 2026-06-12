@@ -169,7 +169,7 @@ function buildScenarios(seeds: string[], namespaces: string[], versions: number[
             if (!isAsync) {
                 versions.forEach((version: number) => {
                     scenarios.push({
-                        label: `build("${seed}", "${namespace}", ${version}")`,
+                        label: `build("${seed}", "${namespace}", ${version})`,
                         input: { seed, namespace, version },
                         expected: getExpected(seed, namespace, version)
                     });
