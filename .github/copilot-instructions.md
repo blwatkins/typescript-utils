@@ -101,14 +101,12 @@ Place annotations in the following order for consistency and readability:
 1. `@throws`
 1. `@default`
 1. `@example`
-1. `@constant`
 1. `@readonly`
 1. `@private`
 1. `@protected`
 1. `@public`
 1. `@abstract`
 1. `@override`
-1. `@async`
 1. `@deprecated`
 1. `@since`
 1. `@category`
