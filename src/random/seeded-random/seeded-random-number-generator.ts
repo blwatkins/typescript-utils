@@ -41,6 +41,10 @@ export class SeededRandomNumberGenerator {
      *
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * @param {number} version - Seed version index used when repairing a zero-state. Default is 0.
+     *
+     * @throws {TypeError} - When the given version is not an integer.
+     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     *
      * @since 0.1.0
      */
     public constructor(state: [number, number, number, number], version: number = 0) {
