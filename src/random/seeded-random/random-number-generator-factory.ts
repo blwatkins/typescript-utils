@@ -99,7 +99,7 @@ export class RandomNumberGeneratorFactory {
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string|undefined} namespace - Namespace to create different sequences from the same seed.
      *
-     * @returns {SeededRandomNumberGenerator}
+     * @returns {Promise<SeededRandomNumberGenerator>}
      *
      * @throws {Error} - When the Web Crypto API is not available.
      * @throws {TypeError} - When the given seed is not a string.
@@ -230,7 +230,7 @@ export class RandomNumberGeneratorFactory {
         }
 
         RandomNumberGeneratorFactory.#validateBuildInputs(input);
-        const hashBuffer: ArrayBuffer = await globalThis.crypto.subtle.digest('SHA-256', textEncoder.encode(input));
+        const hashBuffer: ArrayBuffer = await cryptoApi.subtle.digest('SHA-256', textEncoder.encode(input));
         const v: DataView = new DataView(hashBuffer);
 
         return [
