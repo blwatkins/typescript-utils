@@ -28,6 +28,7 @@ import { NumberUtility } from '../../number';
  *
  * @since 0.1.0
  */
+export class SeededRandomNumberGenerator {
     /**
      * Placeholder
      * @private
