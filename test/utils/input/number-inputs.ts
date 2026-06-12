@@ -49,12 +49,38 @@ export const nonFiniteNumberInputs: number[] = [
     -Infinity
 ];
 
+export const zeroInputs: number[] = [0, -0];
+
+export const negativeFloatInputs: number[] = [
+    -Number.MIN_VALUE,
+    -Number.EPSILON,
+    -10.01,
+    -0.01,
+    -(1.0 / 3)
+];
+
 export const positiveFloatInputs: number[] = [
     Number.MIN_VALUE,
     Number.EPSILON,
     10.01,
     0.01,
     (1.0 / 3)
+];
+
+export const floatInputs: number[] = [
+    ...negativeFloatInputs,
+    ...positiveFloatInputs
+];
+
+export const negativeIntegerInputs: number[] = [
+    -Number.MAX_VALUE,
+    -Number.MAX_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER,
+    -1,
+    -10,
+    -100,
+    -1000,
+    -1000.0
 ];
 
 export const positiveNumberInputs: number[] = [
@@ -65,13 +91,6 @@ export const positiveNumberInputs: number[] = [
 ];
 
 export const negativeNumberInputs: number[] = [
-    -10,
-    -10.01,
-    -Number.MIN_VALUE,
-    -Number.MAX_VALUE,
-    -Number.MAX_SAFE_INTEGER,
-    -Number.EPSILON,
-    Number.MIN_SAFE_INTEGER
+    ...negativeFloatInputs,
+    ...negativeIntegerInputs
 ];
-
-export const zeroInputs: number[] = [0, -0];

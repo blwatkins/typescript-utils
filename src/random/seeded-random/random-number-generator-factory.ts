@@ -39,6 +39,8 @@ export class RandomNumberGeneratorFactory {
      * @throws {Error} - RandomNumberGeneratorFactory is a static class and cannot be instantiated.
      *
      * @private
+     *
+     * @since 0.1.0
      */
     private constructor() {
         throw new Error('RandomNumberGeneratorFactory is a static class and cannot be instantiated.');
@@ -48,10 +50,9 @@ export class RandomNumberGeneratorFactory {
      * Prime number for FNV-1a hashing algorithm.
      * This number is an algorithmic constant; it must not change.
      *
-     * @constant
      * @private
      *
-     * @returns {0x01000193}
+     * @returns {number} - 0x01000193
      */
     static get #fnvPrime(): 0x01000193 {
         return 0x01000193;
@@ -61,58 +62,67 @@ export class RandomNumberGeneratorFactory {
      * Build a {@link SeededRandomNumberGenerator} object with the given seed, namespace, and version.
      *
      * @param {string} seed - The primary input to determine the random number sequence.
-     * @param {string?} namespace - The optional namespace to create different sequences from the same seed.
-     * @param {number?} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
+     * @param {string|undefined} namespace - Namespace to create different sequences from the same seed.
+     * @param {number|undefined} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
      *
      * @returns {SeededRandomNumberGenerator}
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
-     * @throws {TypeError} - When the given version is not a positive integer.
+     * @throws {TypeError} - When the given version is not an integer.
+     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     *
+     * @see {@link SeedVersions.size}
+     * @see {@link SeedVersions.isValidIndex}
      *
      * @since 0.1.0
      */
     public static build(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
-        RandomNumberGeneratorFactory.#validateTypes(seed, namespace, version);
+        RandomNumberGeneratorFactory.#validateBuildInputs(seed, namespace, version);
         const input: string = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state: [number, number, number, number] = RandomNumberGeneratorFactory.#generateFnvHashState(input, version);
         return new SeededRandomNumberGenerator(state, version);
     }
 
     /**
-     * Build a {@link SeededRandomNumberGenerator} object with the given seed, namespace, and version from an asynchronous hashing algorithm.
+     * Build a {@link SeededRandomNumberGenerator} object with the given seed and namespace from an asynchronous hashing algorithm.
+     *
+     * @remarks This method relies on the Web Crypto API via `crypto.subtle`.
+     * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
      * @param {string} seed - The primary input to determine the random number sequence.
-     * @param {string?} namespace - The optional namespace to create different sequences from the same seed.
-     * @param {number?} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
-     * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
+     * @param {string|undefined} namespace - Namespace to create different sequences from the same seed.
      *
-     * @returns {SeededRandomNumberGenerator}
+     * @returns {Promise<SeededRandomNumberGenerator>}
+     *
+     * @throws {TypeError} - When the given seed is not a string.
+     * @throws {TypeError} - When the given namespace is not a string.
      *
      * @since 0.1.0
-     *
-     * @async
      */
-    public static async asyncBuild(seed: string, namespace?: string, version: number = 0): Promise<SeededRandomNumberGenerator> {
-        RandomNumberGeneratorFactory.#validateTypes(seed, namespace, version);
+    public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
+        RandomNumberGeneratorFactory.#validateBuildInputs(seed, namespace);
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
-        return new SeededRandomNumberGenerator(state, version);
+        return new SeededRandomNumberGenerator(state);
     }
 
     /**
      * @param {string} seed - seed to validate
-     * @param {string?} namespace - namespace to validate
-     * @param {number?} version - version to validate
+     * @param {string|undefined} namespace - namespace to validate
+     * @param {number|undefined} version - version to validate
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
-     * @throws {TypeError} - When the given version is not a positive integer.
+     * @throws {TypeError} - When the given version is not an integer.
+     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     *
+     * @see {@link SeedVersions.isValidIndex}
      *
      * @private
      */
-    static #validateTypes(seed: string, namespace?: string, version?: number): void {
+    static #validateBuildInputs(seed: string, namespace?: string, version?: number): void {
         if (!StringUtility.isString(seed)) {
             throw new TypeError('Seed must be a string.');
         }
@@ -121,27 +131,26 @@ export class RandomNumberGeneratorFactory {
             throw new TypeError('Namespace must be a string.');
         }
 
-        if (version !== undefined && !NumberUtility.isPositiveInteger(version, true)) {
-            throw new TypeError('Version must be a positive integer.');
+        if (version !== undefined && !NumberUtility.isInteger(version)) {
+            throw new TypeError('Version must be an integer.');
+        }
+
+        if (version !== undefined && !SeedVersions.isValidIndex(version)) {
+            throw new RangeError('Version must be a valid seed versions index.');
         }
     }
 
     /**
-     * Build the hash input string from the given seed and namespace.
+     * Build the hash algorithm input string from the given seed and namespace.
      *
      * @param {string} seed
-     * @param {string?} namespace - Optional namespace to create different sequences from the same seed.
-     *
-     * @private
+     * @param {string|undefined} namespace - Optional namespace to create different sequences from the same seed.
      *
      * @returns {string}
      *
-     * @throws {TypeError} - When the given seed is not a string.
-     * @throws {TypeError} - When the given namespace is not a string.
+     * @private
      */
     static #buildInputString(seed: string, namespace?: string): string {
-        this.#validateTypes(seed, namespace);
-
         if (StringUtility.isString(namespace)) {
             return `${namespace}\x00${seed}`;
         } else {
@@ -158,26 +167,21 @@ export class RandomNumberGeneratorFactory {
      * Changing the version number will result in a different sequence of random numbers for the same input.
      * Default value is 0.
      *
-     * @private
-     *
      * @returns {[number, number, number, number]}
      *
      * @throws {TypeError} - When the given input is not a string.
-     * @throws {TypeError} - When the given version is not a positive integer.
+     * @throws {TypeError} - When the given version is not an integer.
+     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     *
+     * @see {@link SeedVersions.size}
+     * @see {@link SeedVersions.isValidIndex}
+     *
+     * @private
      */
     static #generateFnvHashState(input: string, version: number = 0): [number, number, number, number] {
-        this.#validateTypes(input, undefined, version);
-
+        RandomNumberGeneratorFactory.#validateBuildInputs(input, undefined, version);
         const bytes = textEncoder.encode(input);
-        let offsets: readonly [number, number, number, number];
-
-        if (SeedVersions.isValidIndex(version)) {
-            offsets = SeedVersions.getVersion(version).offsets;
-        } else {
-            console.warn(`Seed version ${version} is not a valid index. Defaulting to version 0.`);
-            offsets = SeedVersions.getVersion(0).offsets;
-        }
-
+        const offsets: readonly [number, number, number, number] = SeedVersions.getVersion(version).offsets;
         const [o0, o1, o2, o3] = offsets;
 
         const hash = (offset: number): number => {
@@ -197,21 +201,20 @@ export class RandomNumberGeneratorFactory {
     /**
      * Create a state array from the given input using the SHA-256 hashing algorithm.
      *
-     * @remarks This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.
+     * @remarks This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.<hr/>
+     * This method relies on the Web Crypto API via `crypto.subtle`.
+     * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
-     *
-     * @private
      *
      * @returns {[number, number, number, number]}
      *
      * @throws {TypeError} - When the given input is not a string.
      *
-     * @async
+     * @private
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
-        this.#validateTypes(input);
-
+        RandomNumberGeneratorFactory.#validateBuildInputs(input);
         const hashBuffer: ArrayBuffer = await crypto.subtle.digest('SHA-256', textEncoder.encode(input));
         const v: DataView = new DataView(hashBuffer);
 

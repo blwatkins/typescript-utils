@@ -21,21 +21,46 @@
 // Algorithm Source: https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro
 
 import { SeedVersions } from './seed-versions';
+import { NumberUtility } from '../../number';
 
+/**
+ * Deterministic seeded pseudorandom number generator (xoshiro128**).
+ *
+ * @since 0.1.0
+ */
 export class SeededRandomNumberGenerator {
+    /**
+     * Internal xoshiro128** state (4 x 32-bit unsigned integers).
+     *
+     * @private
+     */
     #state: [number, number, number, number];
 
+    /**
+     * Create a new seeded RNG with the given initial state.
+     *
+     * @param {[number, number, number, number]} state - Initial 128-bit state.
+     * @param {number} version - Seed version index used when repairing a zero-state. Default is 0.
+     *
+     * @throws {TypeError} - When the given version is not an integer.
+     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     *
+     * @since 0.1.0
+     */
     public constructor(state: [number, number, number, number], version: number = 0) {
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            if (SeedVersions.isValidIndex(version)) {
-                state[0] = SeedVersions.getVersion(version).defaultStateValue;
-            } else {
-                console.warn(`Seed version ${version} is not a valid index. Defaulting to version 0.`);
-                state[0] = SeedVersions.getVersion(0).defaultStateValue;
+            if (!NumberUtility.isInteger(version)) {
+                throw new TypeError('Version must be an integer.');
             }
-        }
 
-        this.#state = [state[0], state[1], state[2], state[3]];
+            if (!SeedVersions.isValidIndex(version)) {
+                throw new RangeError('Version must be a valid seed versions index.');
+            }
+
+            this.#state = [SeedVersions.getVersion(version).defaultStateValue, state[1], state[2], state[3]];
+        } else {
+            this.#state = [state[0], state[1], state[2], state[3]];
+        }
     }
 
     /**
@@ -56,6 +81,12 @@ export class SeededRandomNumberGenerator {
     //  * Advances the internal 128-bit xoshiro128** state by one step.
     //  * Successive calls produce an independent, uniformly distributed sequence.
     //  */
+    /**
+     * Get the next pseudorandom float in the range [0, 1).
+     *
+     * @returns {number}
+     * @since 0.1.0
+     */
     public next(): number {
         const [s0, s1, s2, s3] = this.#state;
 

@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-05-27
+modified_date: 2026-06-12
 toc: true
 ---
 
@@ -15,7 +15,7 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities is a reusable utility package for shared type-checking helpers in JavaScript and TypeScript projects. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
+TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, and deterministic seeded pseudorandom number generation. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
@@ -52,6 +52,7 @@ TypeScript Utilities is a reusable utility package for shared type-checking help
 ## Capability Record
 
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
+- Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven Vitest suites to improve confidence in utility correctness across input classes.
@@ -74,15 +75,14 @@ The package is configured as ESM and publishes built artifacts from `_dist`, inc
 
 ### Utility module composition and re-export boundaries
 
-The public entry point re-exports domain modules, and each domain module re-exports a dedicated utility class. This keeps the package API small while still allowing clear internal organization by domain.
+The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes. This keeps the package API small while still allowing clear internal organization by domain.
 
 **Evidence:**
 
 - [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
+- [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
-- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
-- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -96,13 +96,13 @@ TypeScript is configured with strict checks, including implicit-type and unused-
 
 ### Test strategy and CI verification gates
 
-The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted.
+The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils/` support scenario-driven test suites across all modules.
 
 **Evidence:**
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [test/number/number-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/number/number-utility.test.ts)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
+- [test/utils/random/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/random/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
 ### Documentation generation and GitHub Pages publishing path
@@ -129,6 +129,6 @@ Security analysis is automated with a dedicated CodeQL workflow covering Actions
 
 ## Current Gaps / Future Improvements
 
-- The utility surface is intentionally narrow (currently centered on number and string validation), so additional domains would be needed for broader coverage.
+- The package is currently in an alpha release line; additional utility domains and API surface are still being developed.
 - Tests currently focus on unit-level utility behavior; higher-level integration or consumer-facing examples are not yet part of the verification strategy.
 - Release documentation under `docs/releases/...` is maintained manually, which can increase maintenance overhead as release volume grows.
