@@ -23,9 +23,21 @@
 import { SeedVersions } from './seed-versions';
 import {NumberUtility} from "../../number";
 
+/**
+ * Placeholder
+ */
 export class SeededRandomNumberGenerator {
+    /**
+     * Placeholder
+     * @private
+     */
     #state: [number, number, number, number];
 
+    /**
+     * Placeholder
+     * @param state
+     * @param version
+     */
     public constructor(state: [number, number, number, number], version: number = 0) {
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
             if (!NumberUtility.isFiniteNumber(version)) {
@@ -60,6 +72,9 @@ export class SeededRandomNumberGenerator {
     //  * Advances the internal 128-bit xoshiro128** state by one step.
     //  * Successive calls produce an independent, uniformly distributed sequence.
     //  */
+    /**
+     * Placeholder
+     */
     public next(): number {
         const [s0, s1, s2, s3] = this.#state;
 

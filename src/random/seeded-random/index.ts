@@ -20,3 +20,4 @@
 
 export * from './random-number-generator-factory';
 export * from './seed-versions';
+export * from './seeded-random-number-generator';
