@@ -75,7 +75,7 @@ The package is configured as ESM and publishes built artifacts from `_dist`, inc
 
 ### Utility module composition and re-export boundaries
 
-The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes. This keeps the package API small while still allowing clear internal organization by domain. The `random` module introduces a seeded-random sub-module that exports `SeedVersion`, `SeedVersions`, `RandomNumberGeneratorFactory`, and `SeededRandomNumberGenerator`.
+The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes. This keeps the package API small while still allowing clear internal organization by domain.
 
 **Evidence:**
 
@@ -83,10 +83,6 @@ The public entry point re-exports domain modules, and each domain module re-expo
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
-- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
-- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
-- [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
-- [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -105,9 +101,7 @@ The project uses Vitest for repeatable unit testing, with scripts wired into loc
 **Evidence:**
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [test/number/number-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/number/number-utility.test.ts)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
-- [test/random/seeded-random/random-number-generator-factory.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/random-number-generator-factory.test.ts)
 - [test/utils/random/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/random/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 

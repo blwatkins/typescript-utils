@@ -20,13 +20,9 @@ The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, a
 
 Primary development work happens in `src/` and corresponding tests under `test/`.
 
-Repository validation is centered on the existing npm workflow: install with `npm ci`, lint with `npm run lint:all`, build with `npm run build`, and run the test suite with `npm run test`.
-
 ### Development Status
 
 The package is currently in an alpha release line and exports grouped utility modules from `src/number`, `src/random`, and `src/string`.
-
-The random module currently includes deterministic seeded-random utilities under `src/random/seeded-random`. The seeded-random sub-module exports `SeedVersion` (interface), `SeedVersions` (static class), `RandomNumberGeneratorFactory` (static factory class), and `SeededRandomNumberGenerator` (xoshiro128** PRNG class). Matching tests live under `test/random/seeded-random/`, with shared test input fixtures and scenario builders in `test/utils/`.
 
 ### Validation Steps
 
