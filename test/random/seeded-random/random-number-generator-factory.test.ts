@@ -20,8 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { SeedVersions } from '../../../src';
-import { RandomNumberGeneratorFactory } from '../../../src/random/seeded-random/random-number-generator-factory';
+import { RandomNumberGeneratorFactory, SeedVersions } from '../../../src';
 import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
 
 import { nonStringInputs } from '../../utils/input/string-inputs';
