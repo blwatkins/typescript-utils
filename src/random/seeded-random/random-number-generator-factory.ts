@@ -108,7 +108,8 @@ export class RandomNumberGeneratorFactory {
      * @since 0.1.0
      */
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
-        if (!cryptoApi?.subtle.digest) {
+        const subtle: SubtleCrypto | undefined = cryptoApi?.subtle;
+        if (!subtle) {
             throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
         }
 
@@ -225,12 +226,13 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
-        if (!cryptoApi?.subtle.digest) {
+        const subtle: SubtleCrypto | undefined = cryptoApi?.subtle;
+        if (!subtle) {
             throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
         }
 
         RandomNumberGeneratorFactory.#validateBuildInputs(input);
-        const hashBuffer: ArrayBuffer = await cryptoApi.subtle.digest('SHA-256', textEncoder.encode(input));
+        const hashBuffer: ArrayBuffer = await subtle.digest('SHA-256', textEncoder.encode(input));
         const v: DataView = new DataView(hashBuffer);
 
         return [
