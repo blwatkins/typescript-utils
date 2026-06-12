@@ -35,9 +35,11 @@ import { NumberUtility } from '../../number';
     #state: [number, number, number, number];
 
     /**
-     * Placeholder
-     * @param state
-     * @param version
+     * Create a new seeded RNG with the given initial state.
+     *
+     * @param {[number, number, number, number]} state - Initial 128-bit state.
+     * @param {number} version - Seed version index used when repairing a zero-state. Default is 0.
+     * @since 0.1.0
      */
     public constructor(state: [number, number, number, number], version: number = 0) {
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
