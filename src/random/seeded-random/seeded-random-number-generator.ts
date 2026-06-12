@@ -30,7 +30,8 @@ import { NumberUtility } from '../../number';
  */
 export class SeededRandomNumberGenerator {
     /**
-     * Placeholder
+     * Internal xoshiro128** state (4 x 32-bit unsigned integers).
+     *
      * @private
      */
     #state: [number, number, number, number];
