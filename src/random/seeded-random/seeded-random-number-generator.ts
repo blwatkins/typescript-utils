@@ -76,7 +76,10 @@ import { NumberUtility } from '../../number';
     //  * Successive calls produce an independent, uniformly distributed sequence.
     //  */
     /**
-     * Placeholder
+     * Get the next pseudorandom float in the range [0, 1).
+     *
+     * @returns {number}
+     * @since 0.1.0
      */
     public next(): number {
         const [s0, s1, s2, s3] = this.#state;
