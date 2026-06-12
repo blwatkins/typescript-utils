@@ -48,15 +48,15 @@ export class SeededRandomNumberGenerator {
      * @since 0.1.0
      */
     public constructor(state: [number, number, number, number], version: number = 0) {
+        if (!NumberUtility.isInteger(version)) {
+            throw new TypeError('Version must be an integer.');
+        }
+
+        if (!SeedVersions.isValidIndex(version)) {
+            throw new RangeError('Version must be a valid seed versions index.');
+        }
+
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            if (!NumberUtility.isInteger(version)) {
-                throw new TypeError('Version must be an integer.');
-            }
-
-            if (!SeedVersions.isValidIndex(version)) {
-                throw new RangeError('Version must be a valid seed versions index.');
-            }
-
             this.#state = [SeedVersions.getVersion(version).defaultStateValue, state[1], state[2], state[3]];
         } else {
             this.#state = [state[0], state[1], state[2], state[3]];
