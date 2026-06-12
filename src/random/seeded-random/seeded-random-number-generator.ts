@@ -49,18 +49,18 @@ export class SeededRandomNumberGenerator {
      */
     public constructor(state: [number, number, number, number], version: number = 0) {
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            if (!NumberUtility.isFiniteNumber(version)) {
-                throw new TypeError('Version must be a finite number.');
+            if (!NumberUtility.isInteger(version)) {
+                throw new TypeError('Version must be an integer.');
             }
 
             if (!SeedVersions.isValidIndex(version)) {
                 throw new RangeError('Version must be a valid seed versions index.');
             }
 
-            state[0] = SeedVersions.getVersion(version).defaultStateValue;
+            this.#state = [SeedVersions.getVersion(version).defaultStateValue, state[1], state[2], state[3]];
+        } else {
+            this.#state = [state[0], state[1], state[2], state[3]];
         }
-
-        this.#state = [state[0], state[1], state[2], state[3]];
     }
 
     /**
