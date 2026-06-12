@@ -125,7 +125,7 @@ const asyncSequences: Record<string, number[]> = {
     '\u{2B50}\x00\u{2B50}': [0.5487537963781506, 0.07445831736549735, 0.5099981590174139, 0.15358263882808387, 0.9415363778825849]
 };
 
-export function buildKey(seed: string, namespace?: string): string {
+function buildKey(seed: string, namespace?: string): string {
     if (StringUtility.isString(namespace)) {
         return `${namespace}\x00${seed}`;
     } else {
@@ -133,13 +133,13 @@ export function buildKey(seed: string, namespace?: string): string {
     }
 }
 
-export function getExpectedSequence(seed: string, namespace?: string, version?: number): number[] {
+function getExpectedSequence(seed: string, namespace?: string, version?: number): number[] {
     const key: string = buildKey(seed, namespace);
     const index: number = version ?? 0;
     return sequences[key][index];
 }
 
-export function getExpectedAsyncSequence(seed: string, namespace?: string): number[] {
+function getExpectedAsyncSequence(seed: string, namespace?: string): number[] {
     const key: string = buildKey(seed, namespace);
     return asyncSequences[key];
 }

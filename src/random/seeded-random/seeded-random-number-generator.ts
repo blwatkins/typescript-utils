@@ -21,18 +21,22 @@
 // Algorithm Source: https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro
 
 import { SeedVersions } from './seed-versions';
+import {NumberUtility} from "../../number";
 
 export class SeededRandomNumberGenerator {
     #state: [number, number, number, number];
 
     public constructor(state: [number, number, number, number], version: number = 0) {
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            if (SeedVersions.isValidIndex(version)) {
-                state[0] = SeedVersions.getVersion(version).defaultStateValue;
-            } else {
-                console.warn(`Seed version ${version} is not a valid index. Defaulting to version 0.`);
-                state[0] = SeedVersions.getVersion(0).defaultStateValue;
+            if (!NumberUtility.isFiniteNumber(version)) {
+                throw new TypeError('Version must be a finite number.');
             }
+
+            if (!SeedVersions.isValidIndex(version)) {
+                throw new RangeError('Version must be a valid seed versions index.');
+            }
+
+            state[0] = SeedVersions.getVersion(version).defaultStateValue;
         }
 
         this.#state = [state[0], state[1], state[2], state[3]];

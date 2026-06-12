@@ -25,19 +25,28 @@ import { RandomNumberGeneratorFactory } from '../../../src/random/seeded-random/
 import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
 
 import { nonStringInputs } from '../../utils/input/string-inputs';
+
 import {
-    negativeNumberInputs,
+    floatInputs, negativeIntegerInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
-    positiveFloatInputs
 } from '../../utils/input/number-inputs';
+
 import {
     asyncScenarios,
-    getExpectedSequence,
     scenarios,
-    asciiSeed, alternateAsciiSeed, asciiNamespace, alternateAsciiNamespace
+    asciiSeed,
+    alternateAsciiSeed,
+    asciiNamespace,
+    alternateAsciiNamespace
 } from '../../utils/random/random-number-generator-factory-scenarios';
-import { buildTestCases, Scenario, SingleInputScenario, TestCase } from '../../utils/test-case/test-case';
+
+import {
+    Scenario,
+    SingleInputScenario,
+    TestCase,
+    buildTestCases,
+} from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     const sequenceLength: 5 = 5 as const;
@@ -144,20 +153,25 @@ describe('RandomNumberGeneratorFactory', (): void => {
             describe('invalid version inputs', (): void => {
                 const testScenarios: Scenario[] = [
                     {
-                        label: 'non-number versions',
+                        label: 'non-number, non-finite, and float versions',
                         inputs: [
-                            ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined)
+                            ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
+                            ...nonFiniteNumberInputs,
+                            ...floatInputs
                         ],
                         expected: TypeError
                     },
                     {
-                        label: 'non-finite, negative, and float versions',
+                        label: 'out-of-range integer versions',
                         inputs: [
-                            ...nonFiniteNumberInputs,
-                            ...negativeNumberInputs,
-                            ...positiveFloatInputs
+                            ...negativeIntegerInputs,
+                            SeedVersions.size,
+                            SeedVersions.size + 1,
+                            Number.MAX_SAFE_INTEGER,
+                            500,
+                            1_000
                         ],
-                        expected: TypeError
+                        expected: RangeError
                     }
                 ];
 
@@ -174,27 +188,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         }).toThrow(testExpected);
                     });
                 });
-            });
-        });
-
-        describe('version fallback', (): void => {
-            const seed: 'test-seed-00' = 'test-seed-00' as const;
-            const namespace: 'test-namespace-00' = 'test-namespace-00' as const;
-            const fallbackVersion: 0 = 0 as const;
-
-            test.each([
-                SeedVersions.size,
-                SeedVersions.size + 1,
-                Number.MAX_SAFE_INTEGER,
-                500,
-                1_000
-            ])('%# - invalid integer version %d defaults to version 0', (version: number): void => {
-                const expected: number[] = getExpectedSequence(seed, undefined, fallbackVersion);
-                const expectedWithNamespace: number[] = getExpectedSequence(seed, namespace, fallbackVersion);
-                const rng: SeededRandomNumberGenerator = callBuild(seed, undefined, version);
-                const rngWithNamespace: SeededRandomNumberGenerator = callBuild(seed, namespace, version);
-                expect(buildActualSequence(rng)).toEqual(expected);
-                expect(buildActualSequence(rngWithNamespace)).toEqual(expectedWithNamespace);
             });
         });
     });
@@ -214,141 +207,40 @@ describe('RandomNumberGeneratorFactory', (): void => {
             );
         });
 
-        test.todo('async build with invalid inputs');
+        describe('sequence distinctness contracts', (): void => {
+            test('changing seed changes sequence', async (): Promise<void> => {
+                const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed);
+                const rngB: SeededRandomNumberGenerator = await callAsyncBuild(alternateAsciiSeed);
+                const a: number[] = buildActualSequence(rngA);
+                const b: number[] = buildActualSequence(rngB);
+                expect(a).not.toEqual(b);
+            });
 
-        // describe('build with invalid inputs', (): void => {
-        //     describe('invalid seed inputs', (): void => {
-        //         const scenarios: Scenario[] = [
-        //             {
-        //                 label: 'non-string seeds',
-        //                 inputs: [
-        //                     ...nonStringInputs
-        //                 ],
-        //                 expected: TypeError
-        //             }
-        //         ];
-        //
-        //         describe.each(
-        //             scenarios
-        //         )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-        //             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-        //
-        //             test.each(
-        //                 testCases
-        //             )('%# - build($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-        //                 expect((): void => {
-        //                     RandomNumberGeneratorFactory.build(testInput as string);
-        //                 }).toThrow(testExpected);
-        //                 expect((): void => {
-        //                     RandomNumberGeneratorFactory.build(testInput as string, undefined, 0);
-        //                 }).toThrow(testExpected);
-        //                 expect((): void => {
-        //                     RandomNumberGeneratorFactory.build(testInput as string, '', 0);
-        //                 }).toThrow(testExpected);
-        //             });
-        //         });
-        //     });
-        //
-        //     describe('invalid namespace inputs', (): void => {
-        //         const scenarios: Scenario[] = [
-        //             {
-        //                 label: 'non-string namespaces',
-        //                 inputs: [
-        //                     ...nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-        //                 ],
-        //                 expected: TypeError
-        //             }
-        //         ];
-        //
-        //         describe.each(
-        //             scenarios
-        //         )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-        //             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-        //
-        //             test.each(
-        //                 testCases
-        //             )('%# - build("", $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-        //                 expect((): void => {
-        //                     RandomNumberGeneratorFactory.build('', testInput as string);
-        //                 }).toThrow(testExpected);
-        //                 expect((): void => {
-        //                     RandomNumberGeneratorFactory.build('', testInput as string, 0);
-        //                 }).toThrow(testExpected);
-        //             });
-        //         });
-        //     });
-        //
-        //     describe('invalid version inputs', (): void => {
-        //         const scenarios: Scenario[] = [
-        //             {
-        //                 label: 'non-number versions',
-        //                 inputs: [
-        //                     ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
-        //                     ...nonFiniteNumberInputs,
-        //                     ...negativeNumberInputs,
-        //                     ...positiveFloatInputs
-        //                 ],
-        //                 expected: TypeError
-        //             }
-        //         ];
-        //
-        //         describe.each(
-        //             scenarios
-        //         )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-        //             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-        //
-        //             test.each(
-        //                 testCases
-        //             )('%# - build("", "", $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-        //                 expect((): void => {
-        //                     RandomNumberGeneratorFactory.build('', '', testInput as number);
-        //                 }).toThrow(testExpected);
-        //             });
-        //         });
-        //     });
-        //
-        //     describe('invalid version integer inputs', (): void => {
-        //         const seed: string = 'test-seed-00';
-        //         const namespace: string = 'test-namespace-00';
-        //
-        //         const scenarios: Scenario[] = [
-        //             {
-        //                 label: 'integer versions without a matching index entry',
-        //                 inputs: [
-        //                     SeedVersions.size,
-        //                     SeedVersions.size + 1,
-        //                     Number.MAX_SAFE_INTEGER,
-        //                     500,
-        //                     1_000
-        //                 ],
-        //                 expected: [getSequence(seed), getSequence(seed, namespace)]
-        //             }
-        //         ];
-        //
-        //         describe.each(
-        //             scenarios
-        //         )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-        //             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-        //
-        //             test.each(
-        //                 testCases
-        //             )('%# - build with version $input should default to version 0', ({ input: testInput, expected: testExpected }: TestCase): void => {
-        //                 const expected: number[][] = testExpected as number[][];
-        //                 const input: number = testInput as number;
-        //                 const rng1: SeededRandomNumberGenerator = callBuild(seed, undefined, input);
-        //                 const rng2: SeededRandomNumberGenerator = callBuild(seed, namespace, input);
-        //                 const sequence1: number[] = [];
-        //                 const sequence2: number[] = [];
-        //
-        //                 for (let i: number = 0; i < Math.min(expected[0].length, expected[1].length); i++) {
-        //                     sequence1.push(rng1.next());
-        //                     sequence2.push(rng2.next());
-        //                 }
-        //
-        //                 expect([sequence1, sequence2]).toEqual(expected);
-        //             });
-        //         });
-        //     });
-        // });
+            test('changing namespace changes sequence', async (): Promise<void> => {
+                const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, asciiNamespace);
+                const rngB: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, alternateAsciiNamespace);
+                const a: number[] = buildActualSequence(rngA);
+                const b: number[] = buildActualSequence(rngB);
+                expect(a).not.toEqual(b);
+            });
+        });
+
+        describe('input validation', (): void => {
+            describe('invalid seed inputs', (): void => {
+                test.each(
+                    nonStringInputs
+                )('%# - invalid seed %o should throw a TypeError', async (seed: unknown): Promise<void> => {
+                    await expect(RandomNumberGeneratorFactory.asyncBuild(seed as string)).rejects.toThrow(TypeError);
+                });
+            });
+
+            describe('invalid namespace inputs', (): void => {
+                test.each(
+                    nonStringInputs.filter((s: unknown): boolean => s !== undefined)
+                )('%# - invalid namespace %o should throw a TypeError', async (namespace: unknown): Promise<void> => {
+                    await expect(RandomNumberGeneratorFactory.asyncBuild('', namespace as string)).rejects.toThrow(TypeError);
+                });
+            });
+        });
     });
 });
