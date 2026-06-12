@@ -18,13 +18,12 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// Algorithm Source: https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro
-
 import { SeedVersions } from './seed-versions';
 import { NumberUtility } from '../../number';
 
 /**
- * Deterministic seeded pseudorandom number generator (xoshiro128**).
+ * Deterministic seeded pseudorandom number generator.
+ * This generator utilizes the xoshiro128** algorithm, which is a pseudo random number generator suitable for general-purpose use.
  *
  * @since 0.1.0
  */
@@ -33,14 +32,13 @@ export class SeededRandomNumberGenerator {
      * Internal xoshiro128** state (4 x 32-bit unsigned integers).
      *
      * @private
+     * @readonly
      */
-    #state: [number, number, number, number];
+    readonly #state: [number, number, number, number];
 
     /**
-     * Create a new seeded RNG with the given initial state.
-     *
      * @param {[number, number, number, number]} state - Initial 128-bit state.
-     * @param {number} version - Seed version index used when repairing a zero-state. Default is 0.
+     * @param {number} version - Seed version index used when repairing a zero-state (each value of state is 0). Default is 0.
      *
      * @throws {TypeError} - When the given version is not an integer.
      * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
@@ -48,15 +46,15 @@ export class SeededRandomNumberGenerator {
      * @since 0.1.0
      */
     public constructor(state: [number, number, number, number], version: number = 0) {
+        if (!NumberUtility.isInteger(version)) {
+            throw new TypeError('Version must be an integer.');
+        }
+
+        if (!SeedVersions.isValidIndex(version)) {
+            throw new RangeError('Version must be a valid seed versions index.');
+        }
+
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            if (!NumberUtility.isInteger(version)) {
-                throw new TypeError('Version must be an integer.');
-            }
-
-            if (!SeedVersions.isValidIndex(version)) {
-                throw new RangeError('Version must be a valid seed versions index.');
-            }
-
             this.#state = [SeedVersions.getVersion(version).defaultStateValue, state[1], state[2], state[3]];
         } else {
             this.#state = [state[0], state[1], state[2], state[3]];
@@ -64,27 +62,11 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
-     * Rotates the bits of a 32-bit unsigned integer left by k positions.
+     * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
+     * Successive calls produce an independent, uniformly distributed sequence.
      *
-     * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
-     * @param {number} k - The number of bits to rotate.
-     * @returns {number}
-     * @private
-     */
-    static #rotl(x: number, k: number): number {
-        return ((x << k) | (x >>> (32 - k))) >>> 0;
-    }
-
-    // /**
-    //  * Returns the next pseudorandom float in the range [0, 1).
-    //  *
-    //  * Advances the internal 128-bit xoshiro128** state by one step.
-    //  * Successive calls produce an independent, uniformly distributed sequence.
-    //  */
-    /**
-     * Get the next pseudorandom float in the range [0, 1).
+     * @returns {number} - The next pseudorandom float in the range [0, 1).
      *
-     * @returns {number}
      * @since 0.1.0
      */
     public next(): number {
@@ -104,5 +86,17 @@ export class SeededRandomNumberGenerator {
         this.#state[3] = SeededRandomNumberGenerator.#rotl(s3, 11);
 
         return output;
+    }
+
+    /**
+     * Rotates the bits of a 32-bit unsigned integer left by k positions.
+     *
+     * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
+     * @param {number} k - The number of bits to rotate.
+     * @returns {number}
+     * @private
+     */
+    static #rotl(x: number, k: number): number {
+        return ((x << k) | (x >>> (32 - k))) >>> 0;
     }
 }
