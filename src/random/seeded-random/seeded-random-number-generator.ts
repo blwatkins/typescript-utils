@@ -24,9 +24,10 @@ import { SeedVersions } from './seed-versions';
 import { NumberUtility } from '../../number';
 
 /**
- * Placeholder
+ * Deterministic seeded pseudorandom number generator (xoshiro128**).
+ *
+ * @since 0.1.0
  */
-export class SeededRandomNumberGenerator {
     /**
      * Placeholder
      * @private
@@ -34,9 +35,11 @@ export class SeededRandomNumberGenerator {
     #state: [number, number, number, number];
 
     /**
-     * Placeholder
-     * @param state
-     * @param version
+     * Create a new seeded RNG with the given initial state.
+     *
+     * @param {[number, number, number, number]} state - Initial 128-bit state.
+     * @param {number} version - Seed version index used when repairing a zero-state. Default is 0.
+     * @since 0.1.0
      */
     public constructor(state: [number, number, number, number], version: number = 0) {
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
@@ -73,7 +76,10 @@ export class SeededRandomNumberGenerator {
     //  * Successive calls produce an independent, uniformly distributed sequence.
     //  */
     /**
-     * Placeholder
+     * Get the next pseudorandom float in the range [0, 1).
+     *
+     * @returns {number}
+     * @since 0.1.0
      */
     public next(): number {
         const [s0, s1, s2, s3] = this.#state;
