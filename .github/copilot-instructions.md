@@ -112,7 +112,7 @@ When writing or reviewing code, follow these documentation standards for maximum
 - **Document exceptions with `@throws`**: Use `@throws` to document any errors or exceptions a function may throw.
 - **Document default parameter values**: Indicate default values for parameters in the `@param` annotation.
 - **Document all exported symbols**: Ensure every exported class, function, interface, type, enum, and constant has a documentation comment.
-- **Separate annotation groups with blank lines**: Add a blank line between groups of TSDoc annotations, unless consecutive tags do not include additional information, such as `@private`, `@protected`, `@public`, `@async`, or `@override`.
+- **Separate annotation groups with blank lines**: Add a blank line between groups of TSDoc annotations, unless consecutive tags do not include additional information, such as `@private`, `@protected`, `@public`, or `@override`.
 
 **Annotation Order:**
 Place annotations in the following order for consistency and readability:
