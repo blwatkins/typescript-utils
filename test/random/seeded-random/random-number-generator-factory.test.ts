@@ -20,15 +20,15 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { RandomNumberGeneratorFactory, SeedVersions } from '../../../src';
-import { SeededRandomNumberGenerator } from '../../../src/random/seeded-random/seeded-random-number-generator';
+import { RandomNumberGeneratorFactory, SeedVersions, SeededRandomNumberGenerator } from '../../../src';
 
 import { nonStringInputs } from '../../utils/input/string-inputs';
 
 import {
-    floatInputs, negativeIntegerInputs,
+    floatInputs,
+    negativeIntegerInputs,
     nonFiniteNumberInputs,
-    nonNumberInputs,
+    nonNumberInputs
 } from '../../utils/input/number-inputs';
 
 import {
@@ -44,7 +44,7 @@ import {
     Scenario,
     SingleInputScenario,
     TestCase,
-    buildTestCases,
+    buildTestCases
 } from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {

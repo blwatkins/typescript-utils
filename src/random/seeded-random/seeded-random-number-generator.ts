@@ -21,7 +21,7 @@
 // Algorithm Source: https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro
 
 import { SeedVersions } from './seed-versions';
-import {NumberUtility} from "../../number";
+import { NumberUtility } from '../../number';
 
 /**
  * Placeholder

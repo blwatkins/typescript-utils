@@ -30,6 +30,11 @@ import { SeededRandomNumberGenerator } from './seeded-random-number-generator';
 const textEncoder: TextEncoder = new TextEncoder();
 
 /**
+ * @type {Crypto|undefined}
+ */
+const cryptoApi: Crypto | undefined = globalThis.crypto;
+
+/**
  * A static factory class for creating a {@link SeededRandomNumberGenerator} object.
  *
  * @since 0.1.0
@@ -103,7 +108,7 @@ export class RandomNumberGeneratorFactory {
      * @since 0.1.0
      */
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
-        if (!globalThis.crypto?.subtle?.digest) {
+        if (!cryptoApi?.subtle.digest) {
             throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
         }
 
@@ -220,7 +225,7 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
-        if (!globalThis.crypto?.subtle?.digest) {
+        if (!cryptoApi?.subtle.digest) {
             throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
         }
 
