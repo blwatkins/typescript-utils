@@ -108,11 +108,7 @@ export class RandomNumberGeneratorFactory {
      * @since 0.1.0
      */
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
-        const subtle: SubtleCrypto | undefined = cryptoApi?.subtle;
-        if (!subtle) {
-            throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
-        }
-
+        RandomNumberGeneratorFactory.#requireSubtleCrypto();
         RandomNumberGeneratorFactory.#validateBuildInputs(seed, namespace);
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
@@ -210,6 +206,23 @@ export class RandomNumberGeneratorFactory {
     }
 
     /**
+     * Get the SubtleCrypto interface from the Web Crypto API.
+     *
+     * @returns {SubtleCrypto}
+     *
+     * @throws {Error} - When the Web Crypto API is not available.
+     *
+     * @private
+     */
+    static #requireSubtleCrypto(): SubtleCrypto {
+        const subtle: SubtleCrypto | undefined = cryptoApi?.subtle;
+        if (!subtle) {
+            throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
+        }
+        return subtle;
+    }
+
+    /**
      * Create a state array from the given input using the SHA-256 hashing algorithm.
      *
      * @remarks This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.<hr/>
@@ -226,11 +239,7 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
-        const subtle: SubtleCrypto | undefined = cryptoApi?.subtle;
-        if (!subtle) {
-            throw new Error('Web Crypto API is not available in this environment. asyncBuild requires crypto.subtle.digest support.');
-        }
-
+        const subtle: SubtleCrypto = RandomNumberGeneratorFactory.#requireSubtleCrypto();
         RandomNumberGeneratorFactory.#validateBuildInputs(input);
         const hashBuffer: ArrayBuffer = await subtle.digest('SHA-256', textEncoder.encode(input));
         const v: DataView = new DataView(hashBuffer);
