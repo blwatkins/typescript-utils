@@ -24,9 +24,10 @@ import { SeedVersions } from './seed-versions';
 import { NumberUtility } from '../../number';
 
 /**
- * Placeholder
+ * Deterministic seeded pseudorandom number generator (xoshiro128**).
+ *
+ * @since 0.1.0
  */
-export class SeededRandomNumberGenerator {
     /**
      * Placeholder
      * @private
