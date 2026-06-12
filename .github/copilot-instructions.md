@@ -26,7 +26,7 @@ Repository validation is centered on the existing npm workflow: install with `np
 
 The package is currently in an alpha release line and exports grouped utility modules from `src/number`, `src/random`, and `src/string`.
 
-The random module currently includes deterministic seeded-random utilities under `src/random/seeded-random`, with matching tests and release documentation maintained alongside the source updates.
+The random module currently includes deterministic seeded-random utilities under `src/random/seeded-random`. The seeded-random sub-module exports `SeedVersion` (interface), `SeedVersions` (static class), `RandomNumberGeneratorFactory` (static factory class), and `SeededRandomNumberGenerator` (xoshiro128** PRNG class). Matching tests live under `test/random/seeded-random/`, with shared test input fixtures and scenario builders in `test/utils/`.
 
 ### Validation Steps
 
@@ -182,7 +182,7 @@ All source files must include the MIT License copyright header at the top:
 ### TypeDoc Configuration
 
 - API docs are generated with TypeDoc (`npm run docs`) using `typedoc.json`.
-- TypeDoc entry points are intentionally pointed to module-level index files (e.g., `./src/hello-world/index.ts`) rather than the root package entry point (e.g., `./src/index.ts`). This is done purposefully to maintain module-level organization in the generated documentation output. Do not change TypeDoc entry points to the root package entry point.
+- TypeDoc entry points are intentionally pointed to module-level index files (e.g., `./src/number/index.ts`, `./src/random/index.ts`) rather than the root package entry point (e.g., `./src/index.ts`). This is done purposefully to maintain module-level organization in the generated documentation output. Do not change TypeDoc entry points to the root package entry point.
 
 ### Release Documentation
 
