@@ -18,12 +18,14 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test } from 'vitest';
+import { SeededRandomNumberGenerator } from '../../../../src';
 
-// import { SeededRandomNumberGenerator } from '../../../src';
+export function buildActualSequence(rng: SeededRandomNumberGenerator, sequenceLength: number): number[] {
+    const sequence: number[] = [];
 
-describe('SeededRandomNumberGenerator', () => {
-    test.todo('SeededRandomNumberGenerator constructor input validation for version');
+    for (let i: number = 0; i < sequenceLength; i++) {
+        sequence.push(rng.next());
+    }
 
-    test.todo('SeededRandomNumberGenerator constructor input validation for state (array with 4 unsigned integers)');
-});
+    return sequence;
+}

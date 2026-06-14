@@ -18,8 +18,6 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { SeedVersions } from './seed-versions';
-
 import { NumberUtility } from '../../number';
 
 /**
@@ -39,30 +37,13 @@ export class SeededRandomNumberGenerator {
 
     /**
      * @param {[number, number, number, number]} state - Initial 128-bit state.
-     * @param {number} version - Seed version index used when repairing a zero-state (each value of state is 0). Default is 0.
-     *
-     * @throws {TypeError} - When the given version is not an integer.
-     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
-     *
-     * @see {@link SeedVersions.size}
-     * @see {@link SeedVersions.isValidIndex}
+     * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
      * @since 0.1.0
      */
-    public constructor(state: [number, number, number, number], version: number = 0) {
-        if (!NumberUtility.isInteger(version)) {
-            throw new TypeError('Version must be an integer.');
-        }
-
-        if (!SeedVersions.isValidIndex(version)) {
-            throw new RangeError('Version must be a valid seed versions index.');
-        }
-
-        if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            this.#state = [SeedVersions.getVersion(version).defaultStateValue, state[1], state[2], state[3]];
-        } else {
-            this.#state = [state[0], state[1], state[2], state[3]];
-        }
+    public constructor(state: [number, number, number, number]) {
+        this.#validateState(state);
+        this.#state = [state[0], state[1], state[2], state[3]];
     }
 
     /**
@@ -102,5 +83,33 @@ export class SeededRandomNumberGenerator {
      */
     static #rotl(x: number, k: number): number {
         return ((x << k) | (x >>> (32 - k))) >>> 0;
+    }
+
+    /**
+     * Validate that state is an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
+     *
+     * @param {[number, number, number, number]} state - The state to validate.
+     *
+     * @throws {TypeError} If state is not an array with 4 elements.
+     * @throws {RangeError} If each element of state is not a positive integer.
+     * @throws {RangeError} If state does not have at least one element that is greater than 0.
+     *
+     * @private
+     */
+    #validateState(state: [number, number, number, number]): void {
+        if (!Array.isArray(state) || state.length !== 4) {
+            throw new TypeError('state must be an array with 4 elements.');
+        }
+
+        if (!NumberUtility.isPositiveInteger(state[0], true)
+            || !NumberUtility.isPositiveInteger(state[1], true)
+            || !NumberUtility.isPositiveInteger(state[2], true)
+            || !NumberUtility.isPositiveInteger(state[3], true)) {
+            throw new RangeError('All elements of state must be non-negative integers.');
+        }
+
+        if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
+            throw new RangeError('State must have at least one element that greater than 0.');
+        }
     }
 }

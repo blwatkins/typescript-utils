@@ -23,7 +23,7 @@ import { describe, test, expect } from 'vitest';
 import { SeedVersion, SeedVersions } from '../../../src';
 
 import { negativeNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
-import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
+import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', () => {
     /**
@@ -35,12 +35,10 @@ describe('SeedVersions', () => {
      */
     const expectedSeedVersions: readonly SeedVersion[] = [
         {
-            offsets: Object.freeze([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a]),
-            defaultStateValue: Object.freeze(0x6a09e667)
+            offsets: Object.freeze([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a])
         },
         {
-            offsets: Object.freeze([0x811c9dc5, 0x34f9a34, 0xa1b2c3d4, 0x5e6f7a8b]),
-            defaultStateValue: Object.freeze(0x811c9dc5)
+            offsets: Object.freeze([0x811c9dc5, 0x34f9a34, 0xa1b2c3d4, 0x5e6f7a8b])
         }
     ];
 
@@ -110,19 +108,21 @@ describe('SeedVersions', () => {
     describe('getVersion', (): void => {
         test.each([
             ...buildValidIndexes()
-        ])('Valid index (%i) should return the expected seed version.', (index: number): void => {
+        ])('%# - Valid index (%i) should return the expected seed version.', (index: number): void => {
             expect(SeedVersions.getVersion(index)).toEqual(expectedSeedVersions[index]);
         });
 
-        test.each([
-            ...nonNumberInputs,
-            expectedSeedVersions.length,
-            expectedSeedVersions.length + 1,
-            ...negativeNumberInputs
-        ])('Invalid index (%o) should throw a RangeError.', (input: unknown): void => {
-            expect((): void => {
-                SeedVersions.getVersion(input as number);
-            }).toThrow(RangeError);
+        describe('input validation', (): void => {
+            test.each([
+                ...nonNumberInputs,
+                expectedSeedVersions.length,
+                expectedSeedVersions.length + 1,
+                ...negativeNumberInputs
+            ])('%# - Invalid index (%o) should throw a RangeError.', (input: unknown): void => {
+                expect((): void => {
+                    SeedVersions.getVersion(input as number);
+                }).toThrow(RangeError);
+            });
         });
     });
 });

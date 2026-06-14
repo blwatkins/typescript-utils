@@ -18,8 +18,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { StringUtility } from '../../../src';
-import { SingleInputScenario } from '../test-case/test-case';
+import { StringUtility } from '../../../../src';
+import { SingleInputScenario } from '../test-case';
 
 export const emptySeed: '' = '' as const;
 export const emptyNamespace: '' = '' as const;
