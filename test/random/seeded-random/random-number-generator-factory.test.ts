@@ -31,8 +31,6 @@ import {
     nonNumberInputs
 } from '../../utils/input/number-inputs';
 
-import { buildActualSequence } from '../../utils/random/seeded-random/seeded-random-number-generator-utils';
-
 import {
     asyncScenarios,
     scenarios,
@@ -49,7 +47,6 @@ import {
     buildTestCases
 } from '../../utils/test-case/test-case';
 
-
 describe('RandomNumberGeneratorFactory', (): void => {
     const sequenceLength: 5 = 5 as const;
 
@@ -63,7 +60,15 @@ describe('RandomNumberGeneratorFactory', (): void => {
         return RandomNumberGeneratorFactory.build(seed);
     }
 
+    function buildActualSequence(rng: SeededRandomNumberGenerator, length: number): number[] {
+        const sequence: number[] = [];
 
+        for (let i: number = 0; i < length; i++) {
+            sequence.push(rng.next());
+        }
+
+        return sequence;
+    }
 
     async function callAsyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
         if (namespace !== undefined) {
