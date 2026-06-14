@@ -97,15 +97,15 @@ export class SeededRandomNumberGenerator {
      * @private
      */
     #validateState(state: [number, number, number, number]): void {
-        if (!Array.isArray(state) || state.length !== 4) {
-            throw new TypeError('state must be an array with 4 elements.');
+        if (!Array.isArray(state)) {
+            throw new TypeError('state must be an array.');
         }
 
         if (!NumberUtility.isPositiveInteger(state[0], true)
             || !NumberUtility.isPositiveInteger(state[1], true)
             || !NumberUtility.isPositiveInteger(state[2], true)
             || !NumberUtility.isPositiveInteger(state[3], true)) {
-            throw new RangeError('All elements of state must be non-negative integers.');
+            throw new RangeError('Elements of state must be non-negative integers.');
         }
 
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
