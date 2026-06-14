@@ -19,11 +19,12 @@
  */
 
 import { SeedVersions } from './seed-versions';
+
 import { NumberUtility } from '../../number';
 
 /**
  * Deterministic seeded pseudorandom number generator.
- * This generator utilizes the xoshiro128** algorithm, which is a pseudo random number generator suitable for general-purpose use.
+ * This generator utilizes the xoshiro128** algorithm, which is a pseudorandom number generator suitable for general-purpose use.
  *
  * @since 0.1.0
  */
@@ -42,6 +43,9 @@ export class SeededRandomNumberGenerator {
      *
      * @throws {TypeError} - When the given version is not an integer.
      * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     *
+     * @see {@link SeedVersions.size}
+     * @see {@link SeedVersions.isValidIndex}
      *
      * @since 0.1.0
      */
