@@ -40,7 +40,7 @@ export class SeededRandomNumberGenerator {
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
      * @throws {TypeError} If state is not an array with 4 elements.
-     * @throws {RangeError} If each element of state is not a non-negative integer.
+     * @throws {RangeError} If each element of state is not a 32-bit unsigned integer.
      * @throws {RangeError} If state does not have at least one element that is greater than 0.
      *
      * @since 0.1.0
@@ -90,12 +90,23 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
+     * The maximum valid value in the state array.
+     *
+     * @returns {number} 0xFFFFFFFF
+     *
+     * @private
+     */
+    static get #maxStateValue(): 0xFFFFFFFF {
+        return 0xFFFFFFFF;
+    }
+
+    /**
      * Validate that state is an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
      * @param {[number, number, number, number]} state - The state to validate.
      *
      * @throws {TypeError} If state is not an array with 4 elements.
-     * @throws {RangeError} If each element of state is not a non-negative integer.
+     * @throws {RangeError} If each element of state is not a 32-bit unsigned integer
      * @throws {RangeError} If state does not have at least one element that is greater than 0.
      *
      * @private
@@ -105,15 +116,15 @@ export class SeededRandomNumberGenerator {
             throw new TypeError('state must be an array with 4 elements.');
         }
 
-        if (!NumberUtility.isPositiveInteger(state[0], true)
-            || !NumberUtility.isPositiveInteger(state[1], true)
-            || !NumberUtility.isPositiveInteger(state[2], true)
-            || !NumberUtility.isPositiveInteger(state[3], true)) {
-            throw new RangeError('Elements of state must be non-negative integers.');
+        if (!NumberUtility.isPositiveInteger(state[0], true) || state[0] > SeededRandomNumberGenerator.#maxStateValue
+            || !NumberUtility.isPositiveInteger(state[1], true) || state[1] > SeededRandomNumberGenerator.#maxStateValue
+            || !NumberUtility.isPositiveInteger(state[2], true) || state[2] > SeededRandomNumberGenerator.#maxStateValue
+            || !NumberUtility.isPositiveInteger(state[3], true) || state[3] > SeededRandomNumberGenerator.#maxStateValue) {
+            throw new RangeError('Elements of state must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
         }
 
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
-            throw new RangeError('State must have at least one element that greater than 0.');
+            throw new RangeError('State must have at least one element that is greater than 0.');
         }
     }
 }

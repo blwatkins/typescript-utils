@@ -58,6 +58,16 @@ describe('SeededRandomNumberGenerator', () => {
                     expected: RangeError
                 },
                 {
+                    label: 'array inputs greater than 0xFFFFFFFF (max 32-bit unsigned integer)',
+                    inputs: [
+                        [(0xFFFFFFFF + 1), 0, 0, 0],
+                        [0, (0xFFFFFFFF + 1), 0, 0],
+                        [0, 0, (0xFFFFFFFF + 1), 0],
+                        [0, 0, 0, (0xFFFFFFFF + 1)]
+                    ],
+                    expected: RangeError
+                },
+                {
                     label: 'array inputs with negative elements',
                     inputs: [
                         [-1, 0, 0, 0],
@@ -89,11 +99,12 @@ describe('SeededRandomNumberGenerator', () => {
 
         describe('valid state', (): void => {
             test.each([
-                [1, 0, 0, 0],
-                [0, 1, 0, 0],
-                [0, 0, 0, 1]
-            ])('%# - state %o should construct successfully', (state: [number, number, number, number]): void => {
-                expect((): SeededRandomNumberGenerator => new SeededRandomNumberGenerator(state)).not.toThrow();
+                { state: [1, 0, 0, 0] },
+                { state: [0, 1, 0, 0] },
+                { state: [0, 0, 1, 0] },
+                { state: [0, 0, 0, 1] }
+            ])('%# - state %o should construct successfully', ({ state }: { state: number[]; }): void => {
+                expect((): SeededRandomNumberGenerator => new SeededRandomNumberGenerator(state as [number, number, number, number])).not.toThrow();
             });
         });
     });
