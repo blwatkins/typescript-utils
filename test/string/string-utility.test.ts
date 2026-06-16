@@ -21,7 +21,7 @@
 import { describe, test, expect } from 'vitest';
 
 import { StringUtility } from '../../src';
-import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
+
 import {
     emptyStringInputs,
     nonEmptyStringInputs,
@@ -32,6 +32,8 @@ import {
     singleLineMixedCaseTrimmedInputs,
     singleLineUppercaseTrimmedInputs
 } from '../utils/input/string-inputs';
+
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('StringUtility', (): void => {
     describe('new StringUtility()', (): void => {

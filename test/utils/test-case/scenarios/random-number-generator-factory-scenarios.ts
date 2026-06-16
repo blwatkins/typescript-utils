@@ -19,6 +19,7 @@
  */
 
 import { StringUtility } from '../../../../src';
+
 import { SingleInputScenario } from '../test-case';
 
 export const emptySeed: '' = '' as const;

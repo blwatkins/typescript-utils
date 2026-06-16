@@ -21,8 +21,9 @@
 import { describe, test, expect } from 'vitest';
 
 import { NumberUtility } from '../../src';
-import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
+
 import { negativeNumberInputs, nonNumberInputs, positiveNumberInputs, zeroInputs } from '../utils/input/number-inputs';
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('NumberUtility', (): void => {
     describe('new NumberUtility()', (): void => {

@@ -18,12 +18,73 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
-// import { SeededRandomNumberGenerator } from '../../../src';
+import { SeededRandomNumberGenerator } from '../../../src';
+
+import { nonArrayInputs } from '../../utils/input/array-inputs';
+import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeededRandomNumberGenerator', () => {
-    test.todo('SeededRandomNumberGenerator constructor input validation for version');
+    describe('new SeededRandomNumberGenerator()', () => {
+        describe('input validation', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'non-array inputs',
+                    inputs: [
+                        ...nonArrayInputs
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'array inputs with incorrect length',
+                    inputs: [
+                        [],
+                        [1],
+                        [1, 2],
+                        [1, 2, 3],
+                        [1, 2, 3, 4, 5]
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'array inputs with non-integer elements',
+                    inputs: [
+                        [1.5, 0, 0, 0],
+                        [0, 1.5, 0, 0],
+                        [0, 0, 1.5, 0],
+                        [0, 0, 0, 1.5]
+                    ],
+                    expected: RangeError
+                },
+                {
+                    label: 'array inputs with negative elements',
+                    inputs: [
+                        [-1, 0, 0, 0],
+                        [0, -1, 0, 0],
+                        [0, 0, -1, 0],
+                        [0, 0, 0, -1]
+                    ],
+                    expected: RangeError
+                },
+                {
+                    label: 'array input with zero state (all elements are 0)',
+                    inputs: [[0, 0, 0, 0]],
+                    expected: RangeError
+                }
+            ];
 
-    test.todo('SeededRandomNumberGenerator constructor input validation for state (array with 4 unsigned integers)');
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - invalid state $input should throw an error $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): SeededRandomNumberGenerator => new SeededRandomNumberGenerator(testInput as [number, number, number, number])).toThrow(testExpected);
+                });
+            });
+        });
+    });
 });

@@ -32,6 +32,13 @@ import {
 } from '../../utils/input/number-inputs';
 
 import {
+    Scenario,
+    SingleInputScenario,
+    TestCase,
+    buildTestCases
+} from '../../utils/test-case/test-case';
+
+import {
     asyncScenarios,
     scenarios,
     asciiSeed,
@@ -39,13 +46,6 @@ import {
     asciiNamespace,
     alternateAsciiNamespace
 } from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
-
-import {
-    Scenario,
-    SingleInputScenario,
-    TestCase,
-    buildTestCases
-} from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     const sequenceLength: 5 = 5 as const;

@@ -96,9 +96,9 @@ export class SeededRandomNumberGenerator {
      *
      * @private
      */
-    #validateState(state: [number, number, number, number]): void {
-        if (!Array.isArray(state)) {
-            throw new TypeError('state must be an array.');
+    #validateState(state: number[]): void {
+        if (!Array.isArray(state) || state.length !== 4) {
+            throw new TypeError('state must be an array with 4 elements.');
         }
 
         if (!NumberUtility.isPositiveInteger(state[0], true)
