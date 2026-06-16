@@ -261,6 +261,7 @@ Generate a Markdown file with these sections in order:
      - 1–2 claim sentences
      - An "Evidence:" section with direct GitHub links to source files
    - **Critical rule:** every claim must link to evidence that *directly* proves it
+     - Evidence does not need to enumerate every implementation instance in the repository — a representative selection that successfully demonstrates the claim is sufficient
      - If claiming "output to directory X", link config/build files, not just example files
      - If claiming "TypeScript configuration", link `tsconfig.*`, ESLint config, or build config files, not just `.ts` source files
      - If describing current project behavior, prefer evidence that reflects the current runtime/configured implementation path, not only an illustrative or older example
@@ -397,7 +398,7 @@ Risky pattern:
 - hardcoding exact versions/cadences unless you plan frequent updates
 
 #### 3) Evidence alignment (most important review item)
-For each claim in technical notes, verify linked evidence **directly supports** it.
+For each claim in technical notes, verify linked evidence **directly supports** it. Evidence does not need to enumerate every implementation instance in the repository — a representative selection that successfully demonstrates the claim is sufficient.
 
 Example rule:
 - If claim says output path is `_dist/`, evidence should include configuration files (e.g. `tsdown.config.ts`, `webpack.config.mjs`) or build scripts (`package.json`), not only asset files.
