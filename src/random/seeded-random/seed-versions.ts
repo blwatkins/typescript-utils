@@ -28,7 +28,7 @@ import { NumberUtility } from '../../number';
  */
 export interface SeedVersion {
     /**
-     * A collection of offset values that can be utilized in the seeded random number generator algorithm.
+     * A collection of offset values for the FNV-1a hashing algorithm.
      * Each offset value should be a 32-bit unsigned integer.
      */
     readonly offsets: readonly [number, number, number, number];
