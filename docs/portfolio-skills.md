@@ -75,7 +75,7 @@ The package is configured as ESM and publishes built artifacts from `_dist`, inc
 
 ### Utility module composition and re-export boundaries
 
-The public entry point re-exports domain modules, and the random module delegates seeded-random exports through its own nested index. This keeps the package API small while still allowing clear internal organization by domain.
+The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes. This keeps the package API small while still allowing clear internal organization by domain.
 
 **Evidence:**
 
@@ -83,7 +83,6 @@ The public entry point re-exports domain modules, and the random module delegate
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
-- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -97,14 +96,13 @@ TypeScript is configured with strict checks, including implicit-type and unused-
 
 ### Test strategy and CI verification gates
 
-The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils/input` and `test/utils/test-case` support scenario-driven test suites and seeded-random validation across modules.
+The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
 
 **Evidence:**
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
-- [test/random/seeded-random/seeded-random-number-generator.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/seeded-random-number-generator.test.ts)
-- [test/utils/input/array-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/array-inputs.ts)
+- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
