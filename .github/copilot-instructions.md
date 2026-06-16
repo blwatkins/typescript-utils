@@ -1,13 +1,11 @@
 # Copilot Instructions
 
 ## Project Overview
-
 This repository contains `@blwat/utils`, a growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
 
 The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
 
 ## Tech Stack
-
 - TypeScript source compiled and bundled for ESM distribution
 - Node.js runtime support aligned with `package.json` engines (`^22.22.0 || >=24`)
 - `tsdown` for package builds and declaration output
@@ -17,23 +15,19 @@ The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, a
 - Jekyll-based `docs/` site content for published project and release documentation
 
 ## Development and Validation
-
 Primary development work happens in `src/` and corresponding tests under `test/`.
 Shared test fixtures and scenario helpers live under `test/utils`.
 
 ### Development Status
-
 The package is currently in an alpha release line and exports grouped utility modules from `src/number`, `src/random`, and `src/string`.
 
 ### Validation Steps
-
 - Install dependencies with `npm ci`.
 - Run lint checks with `npm run lint:all`.
 - Build with `npm run build`.
 - Run tests with `npm run test`.
 
 ## npm Scripts
-
 - `npm run lint:js` — lint repository files with `eslint.config.js.mjs`
 - `npm run lint:ts` — lint repository files with `eslint.config.ts.mjs`
 - `npm run lint:all` — run both lint configurations
@@ -46,7 +40,6 @@ The package is currently in an alpha release line and exports grouped utility mo
 - `npm run prepack` — build the package before packing or publishing
 
 ## GitHub Actions CI
-
 | Workflow file | Name | Trigger | Description |
 |---|---|---|---|
 | `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
@@ -55,28 +48,23 @@ The package is currently in an alpha release line and exports grouped utility mo
 | `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
 
 ## Security and Dependency Management
-
 - GitHub Actions runs CodeQL analysis for `actions`, `javascript-typescript`, and `ruby`.
 - Dependabot is configured for monthly updates to npm dependencies, GitHub Actions workflows, and Bundler dependencies under `docs/`.
 - The npm publish workflow uses npm Trusted Publishing with GitHub OIDC (`id-token: write`) instead of a committed registry token.
 - The package currently declares no runtime dependencies in `package.json`; the toolchain is maintained through `devDependencies`.
 
 ## Development Guidelines
-
 Keep changes scoped to existing files unless a task explicitly requires scaffolding project code.
 
 ### TypeScript Conventions
-
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
 - Public exports flow through module index files. For example, `src/index.ts` re-exports from `src/number/index.ts`, which re-exports from individual utility files. This pattern is intentional to maintain clear module boundaries and organization in both source code and generated documentation.
 - API documentation entry points stay module-scoped (`src/number/index.ts`, `src/random/index.ts`, `src/string/index.ts`) rather than pointing TypeDoc at the root package entry point.
 
 #### tsdown Build Output
-
 This project uses `tsdown` to bundle and emit declaration files. When the output format is `esm`, tsdown emits format-specific file extensions: `.mjs` for the bundle and `.d.mts` for the declaration file, regardless of whether the source files use the `.ts` or `.mts` extension. The `types`, `module`, `main`, and `exports` fields in `package.json` should always reference these `.mjs`/`.d.mts` paths (e.g., `./_dist/index.mjs` and `./_dist/index.d.mts`).
 
 #### Static Classes
-
 Static utility classes must:
 - Have a `private constructor()` that throws an `Error` to prevent instantiation
 - Include a JSDoc `@throws` on the constructor documenting the instantiation error
@@ -89,12 +77,10 @@ Static utility classes must:
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 
 #### Formatting Rules
-
 - Keep formatting compatible with the repository ESLint configurations in `eslint.config.js.mjs` and `eslint.config.ts.mjs`.
 - Do not introduce formatting-only tooling or workflow changes unless the task explicitly requires them.
 
 ### Documentation Comment Preferences
-
 When writing or reviewing code, follow these documentation standards for maximum compatibility:
 
 - **Use `@returns` instead of `@return`**: Always use `@returns` in documentation comments for compatibility with documentation generators.
@@ -138,7 +124,6 @@ Place annotations in the following order for consistency and readability:
 Include other relevant tags (such as `@template`, `@type`) after the above, as appropriate for the context.
 
 ### File Headers
-
 All source files must include the MIT License copyright header at the top:
 
 ```typescript
@@ -164,7 +149,6 @@ All source files must include the MIT License copyright header at the top:
 ```
 
 ## Directory Structure
-
 - `src/` — package source code
 - `test/` — Vitest test suites
 - `test/utils` - Shared test fixtures and scenario helpers for use across test suites
@@ -174,39 +158,31 @@ All source files must include the MIT License copyright header at the top:
 - `.github/workflows/` — CI, publishing, documentation, and analysis workflows
 
 ## Documentation and GitHub Pages
-
 - `README.md` and `docs/index.md` should stay in sync for shared content, but they are not expected to be identical. Expected differences include Jekyll front matter, file-specific introductory or heading sections, footer or copyright text, and internal link differences. Any addition, removal, or update to shared sections must be applied consistently to both files.
 
 ### TypeDoc Configuration
-
 - API docs are generated with TypeDoc (`npm run docs`) using `typedoc.json`.
 - TypeDoc entry points are intentionally pointed to module-level index files (e.g., `./src/number/index.ts`, `./src/random/index.ts`) rather than the root package entry point (e.g., `./src/index.ts`). This is done purposefully to maintain module-level organization in the generated documentation output. Do not change TypeDoc entry points to the root package entry point.
 
 ### Release Documentation
-
 - Release documentation organized in `docs/releases/...` is maintained manually and not generated by any automated process.
 - Release docs follow the directory structure: `docs/releases/v{major}.x/v{major}.{minor}.x/v{version-prefix}.x/{full-version}/doc/`, where `{version-prefix}` includes the major, minor, patch, and any pre-release type identifier (e.g., `v0.1.0-alpha` for versions like `v0.1.0-alpha.0`).
-
-### Portfolio Skills Page
-- The portfolio skills page for this repository lives at `docs/portfolio-skills.md` and is published through the Jekyll site under `docs/`.
-- Evidence links in `docs/portfolio-skills.md` should always point to the `main` branch, even when the page is updated from another branch.
 
 ### Jekyll Build
 - The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths. For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site. Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
 
 ## Portfolio Page Generation and Maintenance
-
-The guidance in this section applies only when `docs/portfolio-skills.md` is present or intentionally being created.
-
-Use the following prompt template when generating or updating the `docs/portfolio-skills.md` page — for example, when a new project is started, when key dependencies or tooling change, or when the project's capabilities, functionality, or implementation evolve.
+- The portfolio skills page for this repository lives at `docs/portfolio-skills.md` and is published through the Jekyll site under `docs/`.
+- Evidence links in `docs/portfolio-skills.md` should always point to the `main` branch, even when the page is updated from another branch.
+- The guidance in this section applies only when `docs/portfolio-skills.md` is present or intentionally being created.
 
 ### Prompt Template
+Use the following prompt template when generating or updating the `docs/portfolio-skills.md` page — for example, when a new project is started, when key dependencies or tooling change, or when the project's capabilities, functionality, or implementation evolve.
 
 ````markdown
 You are generating/updating a technical portfolio page documenting a software project, template, starter, or implementation, following a specific evidence-based structure.
 
 ## Context
-
 Project Name: [PROJECT_NAME]
 Project Repository: [GITHUB_REPO_URL]
 Target Ref for Evidence Links: main
@@ -216,7 +192,6 @@ Runtime: [e.g., Node.js, Python 3.11+]
 Key Technologies: [list 3-5 core tech choices]
 
 ## Structure Requirements
-
 Generate a Markdown file with these sections in order:
 
 1. **Front Matter** (Jekyll metadata):
@@ -299,7 +274,6 @@ Generate a Markdown file with these sections in order:
    - Avoid defensive language; treat gaps as engineering decisions or next-step opportunities
 
 ## Tone & Style Guidelines
-
 - **Clarity:** Use precise technical language; avoid marketing speak
 - **Evidence-first:** Every statement in "Detailed Technical Notes" must be traceable
 - **Durability:** Generalize version/cadence claims unless you will actively maintain them
@@ -311,7 +285,6 @@ Generate a Markdown file with these sections in order:
 - **Scope discipline:** Do not overstate maturity, completeness, or production-readiness unless directly supported by evidence
 
 ## Common Pitfalls to Avoid
-
 - Claim/evidence mismatch (e.g., claiming workflow setup but only linking asset files)
 - Evidence that is technically relevant but not representative of the current runtime/configured implementation
 - Overstated scope (e.g., "full-stack" when really just frontend or backend)
@@ -322,7 +295,6 @@ Generate a Markdown file with these sections in order:
 - Capability bullets that list technologies without explaining engineering value
 
 ## Output Format
-
 Return the complete Markdown file ready to save as `docs/portfolio-skills.md` and publish. Ensure:
 - All links use the full GitHub repo URL with `/blob/main/` path format for files
 - Use `/tree/main/` for directory links when appropriate
@@ -332,7 +304,6 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 - The page reads as evidence-based, concise, and professional
 
 ## Update Mode (when `docs/portfolio-skills.md` already exists)
-
 - Preserve any accurate, still-relevant sections and links that do not need changes
 - Update only sections where repository evidence, tooling, or capabilities changed
 - Keep front matter `date` from the original file; only update `modified_date`
@@ -340,7 +311,6 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 ````
 
 ### How to Use This Template
-
 1. **Customize the bracketed fields** at the top with your project's info:
    - `[PROJECT_NAME]` → actual name
    - `[GITHUB_REPO_URL]` → full URL
@@ -350,7 +320,6 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 2. **Paste the entire prompt into Copilot** (or your IDE's inline AI assistant).
 
 3. **Review the output** against this checklist:
-
    ```markdown
    - [ ] Section structure matches the portfolio page pattern
    - [ ] Overview is clear and not over-claiming scope
@@ -371,7 +340,6 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
    - Ask Copilot to add stronger evidence links where claims are currently under-supported
 
 ### Example Customization
-
 If you were documenting a new project called `my-ml-starter`:
 
 ```text
@@ -386,11 +354,9 @@ Key Technologies: PyTorch, pre-trained models, Docker, GitHub Actions
 Then paste the full template prompt with these values filled in.
 
 ## Portfolio Skills Page Review Instructions
-
 Use the following standards for Copilot code review and any agentic Copilot sessions reviewing changes to `docs/portfolio-skills.md`.
 
 ### Reusable Summary for This Portfolio Page Pattern
-
 These pages follow a strong, repeatable structure:
 
 1. **Concise project framing**
@@ -405,7 +371,6 @@ The core standard is: **every technical claim should be durable and traceable to
 ### What to Verify When Reviewing `docs/portfolio-skills.md`
 
 #### 1) Structure and completeness
-
 Ensure the page includes the required front matter and these sections (or equivalents):
 
 - Required Front Matter (`title`, `layout`, `date`, `modified_date`)
@@ -419,7 +384,6 @@ Ensure the page includes the required front matter and these sections (or equiva
 Why: this keeps pages consistent and easy to compare across projects.
 
 #### 2) Claim quality (accuracy + durability)
-
 Check that claims are:
 
 - **specific enough to be meaningful**
@@ -433,7 +397,6 @@ Risky pattern:
 - hardcoding exact versions/cadences unless you plan frequent updates
 
 #### 3) Evidence alignment (most important review item)
-
 For each claim in technical notes, verify linked evidence **directly supports** it.
 
 Example rule:
@@ -444,7 +407,6 @@ Also check whether the linked evidence is **representative of the project's curr
 This is a common high-impact review issue.
 
 #### 4) Portfolio tone calibration
-
 Look for balance between:
 
 - implementation facts ("what exists")
@@ -456,7 +418,6 @@ Avoid:
 - absolute claims not backed by links
 
 #### 5) Consistency across pages
-
 When reviewing a new page, compare with existing template pages for:
 
 - heading style/casing
@@ -468,7 +429,6 @@ When reviewing a new page, compare with existing template pages for:
 Consistency boosts professionalism at portfolio scale.
 
 #### 6) Gaps section quality
-
 A strong `Current Gaps / Future Improvements` section is:
 
 - concise (2–4 bullets)
@@ -482,7 +442,6 @@ Common high-value bullets:
 - deployment/docs not yet covered (if true)
 
 ### Quick Review Checklist
-
 Reuse the earlier template usage checklist as the canonical baseline review list. Use this section only for additional review-specific checks:
 
 ```markdown
@@ -493,7 +452,6 @@ Reuse the earlier template usage checklist as the canonical baseline review list
 ```
 
 ### Common Pitfalls to Catch Early
-
 - Claim/evidence mismatch (most frequent)
 - Hardcoded version/cadence details that will drift
 - "CI/CD" wording when no deployment pipeline is shown
@@ -503,7 +461,6 @@ Reuse the earlier template usage checklist as the canonical baseline review list
 - Mixed category labels in tooling inventory that blur automation, deployment, security, and dependency management
 
 ### One-Sentence Review Standard
-
 When you review the next page, use this rule:
 
 **"If a reader challenges any technical statement, can I point to an exact linked file that proves it, and is the wording likely to stay accurate over time?"**
