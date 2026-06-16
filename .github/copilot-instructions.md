@@ -189,6 +189,7 @@ All source files must include the MIT License copyright header at the top:
 
 ### Portfolio Skills Page
 - The portfolio skills page for this repository lives at `docs/portfolio-skills.md` and is published through the Jekyll site under `docs/`.
+- Evidence links in `docs/portfolio-skills.md` should always point to the `main` branch, even when the page is updated from another branch.
 
 ### Jekyll Build
 - The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths. For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site. Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
@@ -208,7 +209,7 @@ You are generating/updating a technical portfolio page documenting a software pr
 
 Project Name: [PROJECT_NAME]
 Project Repository: [GITHUB_REPO_URL]
-Target Ref for Evidence Links: [TARGET_REF, e.g., main or the active branch]
+Target Ref for Evidence Links: main
 Primary Language(s): [e.g., TypeScript, JavaScript, Python]
 Primary Framework/Library: [e.g., Express.js, p5.js, React]
 Runtime: [e.g., Node.js, Python 3.11+]
@@ -323,8 +324,8 @@ Generate a Markdown file with these sections in order:
 ## Output Format
 
 Return the complete Markdown file ready to save as `docs/portfolio-skills.md` and publish. Ensure:
-- All links use the full GitHub repo URL with `/blob/[TARGET_REF]/` path format for files
-- Use `/tree/[TARGET_REF]/` for directory links when appropriate
+- All links use the full GitHub repo URL with `/blob/main/` path format for files
+- Use `/tree/main/` for directory links when appropriate
 - All code blocks and filenames use backticks
 - Proper Markdown heading hierarchy (`##` for sections, `###` for subsections)
 - No trailing whitespace; clean formatting
@@ -343,7 +344,6 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 1. **Customize the bracketed fields** at the top with your project's info:
    - `[PROJECT_NAME]` → actual name
    - `[GITHUB_REPO_URL]` → full URL
-   - `[TARGET_REF]` → `main` or the branch/ref you want evidence links to point to
    - `[PRIMARY_LANGUAGE]` → language(s)
    - etc.
 
