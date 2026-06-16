@@ -82,7 +82,7 @@ export class RandomNumberGeneratorFactory {
         RandomNumberGeneratorFactory.#validateBuildInputs(seed, namespace, version);
         const input: string = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state: [number, number, number, number] = RandomNumberGeneratorFactory.#generateFnvHashState(input, version);
-        return new SeededRandomNumberGenerator(state, version);
+        return new SeededRandomNumberGenerator(state);
     }
 
     /**

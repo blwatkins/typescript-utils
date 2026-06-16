@@ -21,22 +21,17 @@
 import { NumberUtility } from '../../number';
 
 /**
- * A seed version defines a specific set of offsets and a default state value for the seeded random number generator algorithm.
+ * A seed version defines a specific set of offsets for the FNV-1a hashing algorithm.
+ * A different set of offsets results in a different hash for the same input, which results in a different initial state for the seeded random number generator, which results in a different sequence of pseudorandom numbers.
  *
  * @since 0.1.0
  */
 export interface SeedVersion {
     /**
-     * A collection of offset values that can be utilized in the seeded random number generator algorithm.
+     * A collection of offset values for the FNV-1a hashing algorithm.
      * Each offset value should be a 32-bit unsigned integer.
      */
     readonly offsets: readonly [number, number, number, number];
-
-    /**
-     * A default state value to be used when the random number generator reaches a zero-state.
-     * This value should <b>NEVER</b> be zero.
-     */
-    readonly defaultStateValue: number;
 }
 
 /**
@@ -49,12 +44,10 @@ export interface SeedVersion {
  */
 const seedVersions: readonly SeedVersion[] = [
     {
-        offsets: Object.freeze([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a]),
-        defaultStateValue: Object.freeze(0x6a09e667)
+        offsets: Object.freeze([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a])
     },
     {
-        offsets: Object.freeze([0x811c9dc5, 0x34f9a34, 0xa1b2c3d4, 0x5e6f7a8b]),
-        defaultStateValue: Object.freeze(0x811c9dc5)
+        offsets: Object.freeze([0x811c9dc5, 0x34f9a34, 0xa1b2c3d4, 0x5e6f7a8b])
     }
 ];
 

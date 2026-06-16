@@ -32,20 +32,20 @@ import {
 } from '../../utils/input/number-inputs';
 
 import {
+    Scenario,
+    SingleInputScenario,
+    TestCase,
+    buildTestCases
+} from '../../utils/test-case/test-case';
+
+import {
     asyncScenarios,
     scenarios,
     asciiSeed,
     alternateAsciiSeed,
     asciiNamespace,
     alternateAsciiNamespace
-} from '../../utils/random/random-number-generator-factory-scenarios';
-
-import {
-    Scenario,
-    SingleInputScenario,
-    TestCase,
-    buildTestCases
-} from '../../utils/test-case/test-case';
+} from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     const sequenceLength: 5 = 5 as const;
@@ -60,10 +60,10 @@ describe('RandomNumberGeneratorFactory', (): void => {
         return RandomNumberGeneratorFactory.build(seed);
     }
 
-    function buildActualSequence(rng: SeededRandomNumberGenerator): number[] {
+    function buildActualSequence(rng: SeededRandomNumberGenerator, length: number): number[] {
         const sequence: number[] = [];
 
-        for (let i: number = 0; i < sequenceLength; i++) {
+        for (let i: number = 0; i < length; i++) {
             sequence.push(rng.next());
         }
 
@@ -96,7 +96,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     const expected = scenarioExpected as number[];
                     const input = scenarioInput as { seed: string; namespace?: string; version?: number; };
                     const rng: SeededRandomNumberGenerator = callBuild(input.seed, input.namespace, input.version);
-                    const sequence: number[] = buildActualSequence(rng);
+                    const sequence: number[] = buildActualSequence(rng, sequenceLength);
                     expect(sequence).toEqual(expected);
                 }
             );
@@ -106,24 +106,24 @@ describe('RandomNumberGeneratorFactory', (): void => {
             test('changing seed changes sequence', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed);
                 const rngB: SeededRandomNumberGenerator = callBuild(alternateAsciiSeed);
-                const a: number[] = buildActualSequence(rngA);
-                const b: number[] = buildActualSequence(rngB);
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
                 expect(a).not.toEqual(b);
             });
 
             test('changing namespace changes sequence', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace);
                 const rngB: SeededRandomNumberGenerator = callBuild(asciiSeed, alternateAsciiNamespace);
-                const a: number[] = buildActualSequence(rngA);
-                const b: number[] = buildActualSequence(rngB);
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
                 expect(a).not.toEqual(b);
             });
 
             test('changing valid version changes sequence for same seed and namespace', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace, 0);
                 const rngB: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace, 1);
-                const v0: number[] = buildActualSequence(rngA);
-                const v1: number[] = buildActualSequence(rngB);
+                const v0: number[] = buildActualSequence(rngA, sequenceLength);
+                const v1: number[] = buildActualSequence(rngB, sequenceLength);
                 expect(v0).not.toEqual(v1);
             });
         });
@@ -200,7 +200,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     const expected = scenarioExpected as number[];
                     const input = scenarioInput as { seed: string; namespace?: string; };
                     const rng: SeededRandomNumberGenerator = await callAsyncBuild(input.seed, input.namespace);
-                    const sequence: number[] = buildActualSequence(rng);
+                    const sequence: number[] = buildActualSequence(rng, sequenceLength);
                     expect(sequence).toEqual(expected);
                 }
             );
@@ -210,16 +210,16 @@ describe('RandomNumberGeneratorFactory', (): void => {
             test('changing seed changes sequence', async (): Promise<void> => {
                 const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed);
                 const rngB: SeededRandomNumberGenerator = await callAsyncBuild(alternateAsciiSeed);
-                const a: number[] = buildActualSequence(rngA);
-                const b: number[] = buildActualSequence(rngB);
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
                 expect(a).not.toEqual(b);
             });
 
             test('changing namespace changes sequence', async (): Promise<void> => {
                 const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, asciiNamespace);
                 const rngB: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, alternateAsciiNamespace);
-                const a: number[] = buildActualSequence(rngA);
-                const b: number[] = buildActualSequence(rngB);
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
                 expect(a).not.toEqual(b);
             });
         });

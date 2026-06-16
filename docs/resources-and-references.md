@@ -17,3 +17,5 @@ toc: true
 [MDN Web Docs - Number.isInteger()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger)
 
 ## Pseudorandom Number Generation
+
+[Xoshiro128** Algorithm](https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro)

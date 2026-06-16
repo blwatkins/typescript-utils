@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-12
+modified_date: 2026-06-16
 toc: true
 ---
 
@@ -55,7 +55,7 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
-- Validates behavior with scenario-driven Vitest suites to improve confidence in utility correctness across input classes.
+- Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
 - Automates lint, build, and test checks in GitHub Actions to improve change reliability before merge and release.
 - Produces API documentation and publishes a docs site workflow to improve discoverability and maintenance of project knowledge.
 - Runs CodeQL and Dependabot automation to improve baseline security and dependency hygiene over time.
@@ -82,6 +82,7 @@ The public entry point re-exports domain modules, and each domain module re-expo
 - [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
+- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
 - [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
 ### Strict typing and lint enforcement model
@@ -96,13 +97,14 @@ TypeScript is configured with strict checks, including implicit-type and unused-
 
 ### Test strategy and CI verification gates
 
-The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils/` support scenario-driven test suites across all modules.
+The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
 
 **Evidence:**
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
-- [test/utils/random/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/random/random-number-generator-factory-scenarios.ts)
+- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
+- [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
 ### Documentation generation and GitHub Pages publishing path
