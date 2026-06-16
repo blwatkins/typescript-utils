@@ -86,5 +86,15 @@ describe('SeededRandomNumberGenerator', () => {
                 });
             });
         });
+
+        describe('valid state', (): void => {
+            test.each([
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 1]
+            ])('%# - state %o should construct successfully', (state: [number, number, number, number]): void => {
+                expect((): SeededRandomNumberGenerator => new SeededRandomNumberGenerator(state)).not.toThrow();
+            });
+        });
     });
 });
