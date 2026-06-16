@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-12
+modified_date: 2026-06-16
 toc: true
 ---
 
@@ -55,7 +55,7 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
-- Validates behavior with scenario-driven Vitest suites to improve confidence in utility correctness across input classes.
+- Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
 - Automates lint, build, and test checks in GitHub Actions to improve change reliability before merge and release.
 - Produces API documentation and publishes a docs site workflow to improve discoverability and maintenance of project knowledge.
 - Runs CodeQL and Dependabot automation to improve baseline security and dependency hygiene over time.
@@ -70,19 +70,20 @@ The package is configured as ESM and publishes built artifacts from `_dist`, inc
 
 **Evidence:**
 
-- [package.json](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [tsdown.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/tsdown.config.ts)
+- [package.json](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/package.json)
+- [tsdown.config.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/tsdown.config.ts)
 
 ### Utility module composition and re-export boundaries
 
-The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes. This keeps the package API small while still allowing clear internal organization by domain.
+The public entry point re-exports domain modules, and the random module delegates seeded-random exports through its own nested index. This keeps the package API small while still allowing clear internal organization by domain.
 
 **Evidence:**
 
-- [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
-- [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
-- [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
-- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
+- [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/src/index.ts)
+- [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/src/number/index.ts)
+- [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/src/random/index.ts)
+- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/src/random/seeded-random/index.ts)
+- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/src/string/index.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -90,20 +91,22 @@ TypeScript is configured with strict checks, including implicit-type and unused-
 
 **Evidence:**
 
-- [tsconfig.json](https://github.com/blwatkins/typescript-utils/blob/main/tsconfig.json)
-- [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.js.mjs)
-- [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
+- [tsconfig.json](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/tsconfig.json)
+- [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/eslint.config.js.mjs)
+- [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/eslint.config.ts.mjs)
 
 ### Test strategy and CI verification gates
 
-The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils/` support scenario-driven test suites across all modules.
+The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils/input` and `test/utils/test-case` support scenario-driven test suites and seeded-random validation across modules.
 
 **Evidence:**
 
-- [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
-- [test/utils/random/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/random/random-number-generator-factory-scenarios.ts)
-- [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
+- [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/package.json)
+- [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/test/string/string-utility.test.ts)
+- [test/random/seeded-random/seeded-random-number-generator.test.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/test/random/seeded-random/seeded-random-number-generator.test.ts)
+- [test/utils/input/array-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/test/utils/input/array-inputs.ts)
+- [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
+- [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/.github/workflows/npm-test.yml)
 
 ### Documentation generation and GitHub Pages publishing path
 
@@ -111,11 +114,11 @@ API docs are generated with TypeDoc, while the documentation site is built from 
 
 **Evidence:**
 
-- [typedoc.json](https://github.com/blwatkins/typescript-utils/blob/main/typedoc.json)
-- [gh-pages-jekyll.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/gh-pages-jekyll.yml)
-- [docs/index.md](https://github.com/blwatkins/typescript-utils/blob/main/docs/index.md)
-- [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
-- [copilot-instructions.md](https://github.com/blwatkins/typescript-utils/blob/main/.github/copilot-instructions.md)
+- [typedoc.json](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/typedoc.json)
+- [gh-pages-jekyll.yml](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/.github/workflows/gh-pages-jekyll.yml)
+- [docs/index.md](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/docs/index.md)
+- [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/deterministic-randomness/seeded-prng-unit-tests/docs/releases)
+- [copilot-instructions.md](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/.github/copilot-instructions.md)
 
 ### Security scanning and dependency update automation
 
@@ -123,9 +126,9 @@ Security analysis is automated with a dedicated CodeQL workflow covering Actions
 
 **Evidence:**
 
-- [codeql.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/codeql.yml)
-- [dependabot.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/dependabot.yml)
-- [npm-publish.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-publish.yml)
+- [codeql.yml](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/.github/workflows/codeql.yml)
+- [dependabot.yml](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/.github/dependabot.yml)
+- [npm-publish.yml](https://github.com/blwatkins/typescript-utils/blob/deterministic-randomness/seeded-prng-unit-tests/.github/workflows/npm-publish.yml)
 
 ## Current Gaps / Future Improvements
 
