@@ -39,6 +39,10 @@ export class SeededRandomNumberGenerator {
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
+     * @throws {TypeError} If state is not an array with 4 elements.
+     * @throws {RangeError} If each element of state is not a non-negative integer.
+     * @throws {RangeError} If state does not have at least one element that is greater than 0.
+     *
      * @since 0.1.0
      */
     public constructor(state: [number, number, number, number]) {
@@ -91,7 +95,7 @@ export class SeededRandomNumberGenerator {
      * @param {[number, number, number, number]} state - The state to validate.
      *
      * @throws {TypeError} If state is not an array with 4 elements.
-     * @throws {RangeError} If each element of state is not a positive integer.
+     * @throws {RangeError} If each element of state is not a non-negative integer.
      * @throws {RangeError} If state does not have at least one element that is greater than 0.
      *
      * @private
