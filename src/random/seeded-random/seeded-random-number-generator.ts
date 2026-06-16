@@ -113,14 +113,13 @@ export class SeededRandomNumberGenerator {
      */
     #validateState(state: number[]): void {
         if (!Array.isArray(state) || state.length !== 4) {
-            throw new TypeError('state must be an array with 4 elements.');
+            throw new TypeError('State must be an array with 4 elements.');
         }
 
-        if (!NumberUtility.isPositiveInteger(state[0], true) || state[0] > SeededRandomNumberGenerator.#maxStateValue
-            || !NumberUtility.isPositiveInteger(state[1], true) || state[1] > SeededRandomNumberGenerator.#maxStateValue
-            || !NumberUtility.isPositiveInteger(state[2], true) || state[2] > SeededRandomNumberGenerator.#maxStateValue
-            || !NumberUtility.isPositiveInteger(state[3], true) || state[3] > SeededRandomNumberGenerator.#maxStateValue) {
-            throw new RangeError('Elements of state must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
+        for (const value of state) {
+            if (!NumberUtility.isPositiveInteger(value, true) || value > SeededRandomNumberGenerator.#maxStateValue) {
+                throw new RangeError('Elements of state must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
+            }
         }
 
         if (state[0] === 0 && state[1] === 0 && state[2] === 0 && state[3] === 0) {
