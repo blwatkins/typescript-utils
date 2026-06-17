@@ -21,7 +21,7 @@
 import { describe, test, expect } from 'vitest';
 
 import { StringUtility } from '../../src';
-import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
+
 import {
     emptyStringInputs,
     nonEmptyStringInputs,
@@ -32,6 +32,8 @@ import {
     singleLineMixedCaseTrimmedInputs,
     singleLineUppercaseTrimmedInputs
 } from '../utils/input/string-inputs';
+
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('StringUtility', (): void => {
     describe('new StringUtility()', (): void => {
@@ -59,12 +61,12 @@ describe('StringUtility', (): void => {
 
         describe.each(
             scenarios
-        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
             test.each(
                 testCases
-            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(StringUtility.isString(testInput)).toBe(testExpected);
             });
         });
@@ -109,12 +111,12 @@ describe('StringUtility', (): void => {
 
         describe.each(
             scenarios
-        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
             test.each(
                 testCases
-            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(StringUtility.isSingleLineLowercaseTrimmedString(testInput)).toBe(testExpected);
             });
         });

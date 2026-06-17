@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,24 +18,27 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { defineConfig } from 'tsdown';
-
-export default defineConfig({
-    entry: {
-        index: './src/index.ts'
-    },
-    outDir: './_dist',
-    globalName: 'blwatUtils',
-    sourcemap: false,
-    clean: true,
-    dts: true,
-    failOnWarn: true,
-    minify: false,
-    format: ['esm'],
-    deps: {
-        neverBundle: []
-    },
-    outputOptions: {
-        globals: {}
-    }
-});
+export const nonArrayInputs: unknown[] = [
+    null,
+    undefined,
+    '',
+    'string',
+    '\n\t',
+    '     ',
+    {},
+    { key: 'value' },
+    (): number => 10,
+    Math.random,
+    true,
+    false,
+    '5',
+    '5.5',
+    '-5',
+    '0',
+    10n,
+    0,
+    1,
+    -1,
+    Number.NaN,
+    Infinity
+];

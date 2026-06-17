@@ -20,15 +20,21 @@
 
 export interface TestCase {
     readonly input: unknown;
-    readonly expected: boolean;
+    readonly expected: unknown;
 }
 
 export interface Scenario {
     readonly label: string;
     readonly inputs: unknown[];
-    readonly expected: boolean;
+    readonly expected: unknown;
 }
 
-export function buildTestCases(testInputs: readonly unknown[], testExpected: boolean): TestCase[] {
+export interface SingleInputScenario {
+    readonly label: string;
+    readonly input: unknown;
+    readonly expected: unknown;
+}
+
+export function buildTestCases(testInputs: readonly unknown[], testExpected: unknown): TestCase[] {
     return testInputs.map((input: unknown): TestCase => ({ input: input, expected: testExpected }));
 }

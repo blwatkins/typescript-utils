@@ -17,6 +17,7 @@
 
     /* Libraries */
     "lib": [
+      "dom",
       "es2022"
     ],
     "types": [
