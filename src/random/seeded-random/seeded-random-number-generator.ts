@@ -59,20 +59,18 @@ export class SeededRandomNumberGenerator {
      * @since 0.1.0
      */
     public next(): number {
-        const [s0, s1, s2, s3] = this.#state;
-
-        // xoshiro128** output: rotl(s1 * 5, 7) * 9, mapped to [0, 1)
-        const result = SeededRandomNumberGenerator.#rotl(Math.imul(s1, 5), 7);
+        // xoshiro128** output: rotl(this.#state[1] * 5, 7) * 9, mapped to [0, 1)
+        const result = SeededRandomNumberGenerator.#rotl(Math.imul(this.#state[1], 5), 7);
         const output = (Math.imul(result, 9) >>> 0) / 4294967296;
 
         // xoshiro128** state advancement
-        const t = (s1 << 9) >>> 0;
-        this.#state[2] ^= s0;
-        this.#state[3] ^= s1;
-        this.#state[1] ^= s2;
-        this.#state[0] ^= s3;
+        const t = (this.#state[1] << 9) >>> 0;
+        this.#state[2] ^= this.#state[0];
+        this.#state[3] ^= this.#state[1];
+        this.#state[1] ^= this.#state[2];
+        this.#state[0] ^= this.#state[3];
         this.#state[2] ^= t;
-        this.#state[3] = SeededRandomNumberGenerator.#rotl(s3, 11);
+        this.#state[3] = SeededRandomNumberGenerator.#rotl(this.#state[3], 11);
 
         return output;
     }
