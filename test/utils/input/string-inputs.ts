@@ -43,11 +43,75 @@ export const nonStringInputs: unknown[] = [
 export const emptyStringInputs: string[] = [
     '',
     ' ',
-    '     ',
+    '  ',
+    '   ',
     '\n',
     '\t',
     '\n\t',
+    '\n \t',
+    '\n  \t',
+    '\n   \t',
     ' \n\t '
+];
+
+export const numberAndSymbolTrimmedInputs: string[] = [
+    '\u{1F3A8}',
+    '\u{1F3A8} \u{1F3A8}',
+    '🎨',
+    '🎨 🎨',
+    '12345',
+    '12345 67890',
+    '!@#$%^&*()-_+=~`"\'/\\|,.<>?;:'
+];
+
+export const singleLineMixedCaseTrimmedInputs: string[] = [
+    'Example',
+    'ëË',
+    'ë Ë',
+    'Other Example',
+    'three WORD example',
+    'this IS an Example sEnTeNcE!'
+];
+
+export const singleLineLowercaseTrimmedInputs: string[] = [
+    'example',
+    'ë',
+    'ë ë',
+    'other example',
+    'three word example',
+    'this is an example sentence!'
+];
+
+export const singleLineUppercaseTrimmedInputs: string[] = [
+    'EXAMPLE',
+    'Ë',
+    'Ë Ë',
+    'OTHER EXAMPLE',
+    'THREE WORD EXAMPLE',
+    'THIS IS AN EXAMPLE SENTENCE!'
+];
+
+export const singleLineLowercaseTrimmedFailureInputs: string[] = [
+    ' example ',
+    '\nexample\n',
+    '\texample\t',
+    ' \n\texample\t\n ',
+    ' leading whitespace example',
+    '\nleading whitespace example',
+    '\tleading whitespace example',
+    ' \n\tleading whitespace example',
+    'trailing whitespace example ',
+    'trailing whitespace example\n',
+    'trailing whitespace example\t',
+    'trailing whitespace example\t\n ',
+    'internal\nspaces\nexample',
+    'internal\tspaces\texample',
+    'internal\n\nspaces\n\nexample',
+    'internal\t\tspaces\t\texample',
+    'internal\n spaces\n example',
+    'internal\t spaces\t example',
+    'internal  spaces  example',
+    'internal   spaces   example'
 ];
 
 export const nonEmptyStringInputs: string[] = [
@@ -59,5 +123,9 @@ export const nonEmptyStringInputs: string[] = [
     ' false ',
     '\u{1F3A8}',
     '🎨',
-    'ë'
+    'ë',
+    ...singleLineLowercaseTrimmedFailureInputs,
+    ...singleLineLowercaseTrimmedInputs,
+    ...singleLineUppercaseTrimmedInputs,
+    ...singleLineMixedCaseTrimmedInputs
 ];

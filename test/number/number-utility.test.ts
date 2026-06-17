@@ -21,8 +21,9 @@
 import { describe, test, expect } from 'vitest';
 
 import { NumberUtility } from '../../src';
-import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
+
 import { negativeNumberInputs, nonNumberInputs, positiveNumberInputs, zeroInputs } from '../utils/input/number-inputs';
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('NumberUtility', (): void => {
     describe('new NumberUtility()', (): void => {
@@ -34,7 +35,7 @@ describe('NumberUtility', (): void => {
         });
     });
 
-    describe('isNumber', (): void => {
+    describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [
             {
                 label: 'non-number inputs',
@@ -46,9 +47,7 @@ describe('NumberUtility', (): void => {
                 inputs: [
                     ...positiveNumberInputs,
                     ...negativeNumberInputs,
-                    ...zeroInputs,
-                    Infinity,
-                    -Infinity
+                    ...zeroInputs
                 ],
                 expected: true
             },
@@ -56,19 +55,31 @@ describe('NumberUtility', (): void => {
                 label: 'NaN',
                 inputs: [NaN],
                 expected: false
+            },
+            {
+                label: 'Infinity',
+                inputs: [
+                    Infinity,
+                    -Infinity
+                ],
+                expected: false
             }
         ];
 
         describe.each(
             scenarios
-        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
             test.each(
                 testCases
-            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(NumberUtility.isNumber(testInput)).toBe(testExpected);
+            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
             });
         });
     });
+
+    test.todo('NumberUtility.isInteger');
+
+    test.todo('NumberUtility.isPositiveInteger');
 });

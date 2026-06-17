@@ -21,8 +21,19 @@
 import { describe, test, expect } from 'vitest';
 
 import { StringUtility } from '../../src';
+
+import {
+    emptyStringInputs,
+    nonEmptyStringInputs,
+    nonStringInputs,
+    numberAndSymbolTrimmedInputs,
+    singleLineLowercaseTrimmedFailureInputs,
+    singleLineLowercaseTrimmedInputs,
+    singleLineMixedCaseTrimmedInputs,
+    singleLineUppercaseTrimmedInputs
+} from '../utils/input/string-inputs';
+
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
-import { emptyStringInputs, nonEmptyStringInputs, nonStringInputs } from '../utils/input/string-inputs';
 
 describe('StringUtility', (): void => {
     describe('new StringUtility()', (): void => {
@@ -37,12 +48,12 @@ describe('StringUtility', (): void => {
     describe('isString', (): void => {
         const scenarios: Scenario[] = [
             {
-                label: 'non-string inputs',
+                label: 'Non-string inputs',
                 inputs: [...nonStringInputs],
                 expected: false
             },
             {
-                label: 'string inputs',
+                label: 'String inputs',
                 inputs: [...emptyStringInputs, ...nonEmptyStringInputs],
                 expected: true
             }
@@ -50,13 +61,63 @@ describe('StringUtility', (): void => {
 
         describe.each(
             scenarios
-        )('$label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
             test.each(
                 testCases
-            )('$input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(StringUtility.isString(testInput)).toBe(testExpected);
+            });
+        });
+    });
+
+    describe('isSingleLineLowercaseTrimmedString', (): void => {
+        const scenarios: Scenario[] = [
+            {
+                label: 'Non-string inputs',
+                inputs: [...nonStringInputs],
+                expected: false
+            },
+            {
+                label: 'Empty string inputs',
+                inputs: [...emptyStringInputs],
+                expected: false
+            },
+            {
+                label: 'Incorrect case inputs',
+                inputs: [
+                    ...singleLineUppercaseTrimmedInputs,
+                    ...singleLineMixedCaseTrimmedInputs
+                ],
+                expected: false
+            },
+            {
+                label: 'Whitespace failure inputs',
+                inputs: [...singleLineLowercaseTrimmedFailureInputs],
+                expected: false
+            },
+            {
+                label: 'Single line lowercase trimmed inputs',
+                inputs: [...singleLineLowercaseTrimmedInputs],
+                expected: true
+            },
+            {
+                label: 'Number and symbol trimmed inputs',
+                inputs: [...numberAndSymbolTrimmedInputs],
+                expected: true
+            }
+        ];
+
+        describe.each(
+            scenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+            test.each(
+                testCases
+            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(StringUtility.isSingleLineLowercaseTrimmedString(testInput)).toBe(testExpected);
             });
         });
     });

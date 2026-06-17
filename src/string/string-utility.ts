@@ -18,6 +18,12 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const RegularExpressions = {
+    singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
+    singleLineUppercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Ll})(?!.* {2})[^\t\r\n]+$/u,
+    singleLineTrimmed: /^(?!\s)(?!.*\s$)(?!.* {2})[^\t\r\n]+$/
+};
+
 /**
  * Static properties and methods for validating string types.
  *
@@ -33,6 +39,39 @@ export class StringUtility {
     }
 
     /**
+     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     *
+     * @returns {RegExp} Regular expression pattern for validating single-line lowercase strings.
+     *
+     * @since 0.1.0
+     */
+    public static get singleLineLowercaseTrimmedPattern(): RegExp {
+        return RegularExpressions.singleLineLowercaseTrimmed;
+    }
+
+    /**
+     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     *
+     * @returns {RegExp} Regular expression pattern for validating single-line uppercase strings.
+     *
+     * @since 0.1.0
+     */
+    public static get singleLineUppercaseTrimmedPattern(): RegExp {
+        return RegularExpressions.singleLineUppercaseTrimmed;
+    }
+
+    /**
+     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     *
+     * @returns {RegExp} Regular expression pattern for validating single-line mixed-case strings.
+     *
+     * @since 0.1.0
+     */
+    public static get singleLineTrimmedPattern(): RegExp {
+        return RegularExpressions.singleLineTrimmed;
+    }
+
+    /**
      * Is the given input a string?
      *
      * @param {unknown} input
@@ -41,5 +80,56 @@ export class StringUtility {
      */
     public static isString(input: unknown): input is string {
         return typeof input === 'string';
+    }
+
+    /**
+     * Is the given input a non-empty string?
+     * Non-empty strings must contain at least one non-whitespace character.
+     *
+     * @param {unknown} input
+     *
+     * @returns {boolean}
+     */
+    public static isNonEmptyString(input: unknown): boolean {
+        return StringUtility.isString(input) && (input.trim().length > 0);
+    }
+
+    /**
+     * Is the given input a single-line lowercase string that is trimmed (no leading or trailing whitespace)?
+     *
+     * @see {@link StringUtility.singleLineLowercaseTrimmedPattern}
+     *
+     * @param {unknown} input
+     *
+     * @returns {boolean}
+     */
+    public static isSingleLineLowercaseTrimmedString(input: unknown): boolean {
+        return StringUtility.isString(input) && (StringUtility.singleLineLowercaseTrimmedPattern.test(input));
+    }
+
+    /**
+     * Is the given input a single-line uppercase string that is trimmed (no leading or trailing whitespace)?
+     *
+     * @see {@link StringUtility.singleLineUppercaseTrimmedPattern}
+     *
+     * @param {unknown} input
+     *
+     * @returns {boolean}
+     */
+    public static isSingleLineUppercaseTrimmedString(input: unknown): boolean {
+        return StringUtility.isString(input) && (StringUtility.singleLineUppercaseTrimmedPattern.test(input));
+    }
+
+    /**
+     * Is the given input a single-line string that is trimmed (no leading or trailing whitespace)?
+     *
+     * @see {@link StringUtility.singleLineTrimmedPattern}
+     *
+     * @param {unknown} input
+     *
+     * @returns {boolean}
+     */
+    public static isSingleLineTrimmedString(input: unknown): boolean {
+        return StringUtility.isString(input) && (StringUtility.singleLineTrimmedPattern.test(input));
     }
 }
