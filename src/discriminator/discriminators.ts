@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,7 +18,15 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminator';
-export * from './number';
-export * from './random';
-export * from './string';
+/**
+ * Base set of discriminators used by the library.
+ * These discriminator constants can be used to define the schema of an interface and implement multiple instances that all utilize the same discriminator value.
+ */
+export const Discriminators = {
+    seedVersion: '@blwat/utils:SeedVersion'
+} as const;
+
+/**
+ * Exported type definition for the values of the Discriminators object.
+ */
+export type Discriminators = (typeof Discriminators)[keyof typeof Discriminators];

@@ -18,7 +18,18 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminator';
-export * from './number';
-export * from './random';
-export * from './string';
+import { Type, type Static } from 'typebox';
+
+/**
+ * TypeBox schema for validating that an object implements the {@link Discriminable} type.
+ */
+export const discriminableSchema = Type.Object(
+    {
+        discriminator: Type.Readonly(Type.String())
+    }
+);
+
+/**
+ * Discriminable objects can be categorized by a discriminator value.
+ */
+export type Discriminable = Static<typeof discriminableSchema>;
