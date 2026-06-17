@@ -37,7 +37,7 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - **Build / Bundling:** [tsdown](https://tsdown.dev/)
 - **Code Quality:** [ESLint](https://eslint.org/)
 - **Documentation:** [TypeDoc](https://typedoc.org/)
-- **Site Generation:** [Bundler](https://bundler.io/), [Jekyll](https://jekyllrb.com/), [Liquid](https://shopify.github.io/liquid/)
+- **Site Generation:** [Bundler](https://bundler.io/), [Jekyll](https://jekyllrb.com/), [Liquid](https://shopify.github.io/liquid/), [Minima](https://github.com/jekyll/minima)
 - **Dependency Management:** [npm](https://www.npmjs.com/)
 - **Versioning & Platform:** [Git](https://git-scm.com/), [GitHub](https://github.com/)
 - **Automation:** [GitHub Actions](https://github.com/features/actions)
@@ -47,7 +47,7 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)
 - **Environment Configuration:** Node.js version pinning via `.node-version`, plus Ruby version pinning for the Jekyll/Bundler docs site via `docs/.ruby-version`
 - **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)
-- **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot)
+- **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot), [Claude Code](https://code.claude.com/docs/en/overview)
 
 ## Capability Record
 
