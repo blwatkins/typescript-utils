@@ -61,5 +61,25 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1",
     "vitest": "^4.1.9"
-  }
+  },
+  "keywords": [
+    "typescript",
+    "javascript",
+    "utility",
+    "utilities",
+    "utils",
+    "type-guard",
+    "type-guards",
+    "validation",
+    "validator",
+    "number",
+    "string",
+    "random",
+    "seeded-random",
+    "prng",
+    "pseudorandom",
+    "deterministic",
+    "xoshiro",
+    "esm"
+  ]
 }
