@@ -5,6 +5,11 @@ This repository contains `@blwat/utils`, a growing ESM-first TypeScript utility 
 
 The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
 
+## Companion Instruction Files
+This repository maintains a companion `CLAUDE.md` at the repository root alongside this file.
+The two documents serve overlapping audiences and should stay consistent: when you update guidance in `.github/copilot-instructions.md` that also applies to `CLAUDE.md`, mirror the change there, and vice versa.
+`CLAUDE.md` is intentionally a concise pointer to this file; this file remains the canonical, detailed source of conventions.
+
 ## Tech Stack
 - TypeScript source compiled and bundled for ESM distribution
 - Node.js runtime support aligned with `package.json` engines (`^22.22.0 || >=24`)
