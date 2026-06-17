@@ -88,7 +88,7 @@ export class SeedVersions {
     /**
      * @param {number} index
      * @returns {SeedVersion} - The seed version with the given index.
-     * @throws {Error} - If the index is not a valid seed version index.
+     * @throws {RangeError} - If the index is not a valid seed version index.
      * @since 0.1.0
      */
     static getVersion(index: number): SeedVersion {
