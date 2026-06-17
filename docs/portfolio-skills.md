@@ -1,5 +1,5 @@
 ---
-title: "TypeScript Utilities - Demonstrated Portfolio Skills"
+title: "Demonstrated Portfolio Skills"
 author:
   - Brittni Watkins
   - GitHub Copilot
