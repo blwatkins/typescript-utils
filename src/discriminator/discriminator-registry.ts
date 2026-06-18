@@ -18,14 +18,14 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Discriminable } from './discriminable';
+import { Discriminated } from './discriminated';
 
 /**
- * A type guard function that checks if an input is of a specific {@link Discriminable} type.
+ * A type guard function that checks if an input is of a specific {@link Discriminated} type.
  *
  * @since 0.1.0
  */
-export type TypeGuard<T extends Discriminable> = (input: unknown) => input is T;
+export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
 
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
@@ -34,7 +34,7 @@ export type TypeGuard<T extends Discriminable> = (input: unknown) => input is T;
  */
 export interface DiscriminatorRegistration {
     /**
-     * The discriminator value that identifies the type of a {@link Discriminable} object.
+     * The discriminator value that identifies the type of a {@link Discriminated} object.
      * This value must be unique across all registered discriminators.
      *
      * @readonly
@@ -59,7 +59,7 @@ export interface DiscriminatorRegistration {
 
 /**
  * Static registry for managing discriminators and their associated type guards.
- * Discriminators are used to identify the type of a {@link Discriminable} object and validate it using a registered type guard function.
+ * Discriminators are used to identify the type of a {@link Discriminated} object and validate it using a registered type guard function.
  *
  * @since 0.1.0
  */
@@ -107,7 +107,7 @@ export class DiscriminatorRegistry {
      * @public
      * @since 0.1.0
      */
-    public static register<T extends Discriminable>(registration: DiscriminatorRegistration): TypeGuard<T> {
+    public static register<T extends Discriminated>(registration: DiscriminatorRegistration): TypeGuard<T> {
         if (DiscriminatorRegistry.has(registration.discriminator)) {
             throw new Error(`Discriminator "${registration.discriminator}" is already registered.`);
         }
@@ -134,7 +134,7 @@ export class DiscriminatorRegistry {
      * @private
      */
     static #validate(input: unknown, discriminator: string): boolean {
-        if (!DiscriminatorRegistry.#isDiscriminable(input, discriminator)) {
+        if (!DiscriminatorRegistry.#isDiscriminated(input, discriminator)) {
             return false;
         }
 
@@ -157,9 +157,9 @@ export class DiscriminatorRegistry {
      *
      * @private
      */
-    static #isDiscriminable(input: unknown, discriminator: string): boolean {
+    static #isDiscriminated(input: unknown, discriminator: string): boolean {
         if (input && typeof input === 'object') {
-            return (input as Discriminable).discriminator === discriminator;
+            return (input as Discriminated).discriminator === discriminator;
         }
 
         return false;
