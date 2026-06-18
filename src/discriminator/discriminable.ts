@@ -31,9 +31,8 @@ export const discriminableSchema = Type.Object(
          * The discriminator value that identifies the type of a {@link Discriminable} object.
          * This value must be unique across all registered discriminators.
          *
-         * @type {string}
-         *
          * @since 0.1.0
+         * @type {string}
          */
         discriminator: Type.Readonly(Type.String())
     }
