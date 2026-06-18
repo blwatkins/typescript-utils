@@ -5,6 +5,11 @@ This repository contains `@blwat/utils`, a growing ESM-first TypeScript utility 
 
 The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
 
+## Companion Instruction Files
+This repository maintains a companion `CLAUDE.md` at the repository root alongside this file.
+The two documents serve overlapping audiences and should stay consistent: when you update guidance in `.github/copilot-instructions.md` that also applies to `CLAUDE.md`, mirror the change there, and vice versa.
+`CLAUDE.md` is intentionally a concise pointer to this file; this file remains the canonical, detailed source of conventions.
+
 ## Tech Stack
 - TypeScript source compiled and bundled for ESM distribution
 - Node.js runtime support aligned with `package.json` engines (`^22.22.0 || >=24`)
@@ -19,7 +24,7 @@ Primary development work happens in `src/` and corresponding tests under `test/`
 Shared test fixtures and scenario helpers live under `test/utils`.
 
 ### Development Status
-The package is currently in an alpha release line and exports grouped utility modules from `src/number`, `src/random`, and `src/string`.
+The package is currently in an alpha release line and exports grouped utility modules from `src/discriminator`, `src/number`, `src/random`, and `src/string`.
 
 ### Validation Steps
 - Install dependencies with `npm ci`.
@@ -51,7 +56,7 @@ The package is currently in an alpha release line and exports grouped utility mo
 - GitHub Actions runs CodeQL analysis for `actions`, `javascript-typescript`, and `ruby`.
 - Dependabot is configured for monthly updates to npm dependencies, GitHub Actions workflows, and Bundler dependencies under `docs/`.
 - The npm publish workflow uses npm Trusted Publishing with GitHub OIDC (`id-token: write`) instead of a committed registry token.
-- The package currently declares no runtime dependencies in `package.json`; the toolchain is maintained through `devDependencies`.
+- The package declares `typebox` as a runtime dependency in `package.json`; all other toolchain packages are maintained through `devDependencies`.
 
 ## Development Guidelines
 Keep changes scoped to existing files unless a task explicitly requires scaffolding project code.
@@ -59,10 +64,13 @@ Keep changes scoped to existing files unless a task explicitly requires scaffold
 ### TypeScript Conventions
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
 - Public exports flow through module index files. For example, `src/index.ts` re-exports from `src/number/index.ts`, which re-exports from individual utility files. This pattern is intentional to maintain clear module boundaries and organization in both source code and generated documentation.
-- API documentation entry points stay module-scoped (`src/number/index.ts`, `src/random/index.ts`, `src/string/index.ts`) rather than pointing TypeDoc at the root package entry point.
+- API documentation entry points stay module-scoped rather than pointing TypeDoc at the root package entry point.
 
 #### tsdown Build Output
 This project uses `tsdown` to bundle and emit declaration files. When the output format is `esm`, tsdown emits format-specific file extensions: `.mjs` for the bundle and `.d.mts` for the declaration file, regardless of whether the source files use the `.ts` or `.mts` extension. The `types`, `module`, `main`, and `exports` fields in `package.json` should always reference these `.mjs`/`.d.mts` paths (e.g., `./_dist/index.mjs` and `./_dist/index.d.mts`).
+
+#### JavaScript Consumer Safety
+This package is published as ESM and targets both TypeScript and JavaScript consumers. Retain runtime type guards and input validation even when TypeScript's type system would catch the same issue at compile time. JavaScript callers have no compile-time safety, so runtime checks are necessary for correctness.
 
 #### Static Classes
 Static utility classes must:
@@ -124,7 +132,9 @@ Place annotations in the following order for consistency and readability:
 Include other relevant tags (such as `@template`, `@type`) after the above, as appropriate for the context.
 
 ### File Headers
-All source files must include the MIT License copyright header at the top:
+All source files must include the MIT License copyright header at the top.
+
+**Copyright year convention:** Use the original year the file was authored. If the file is subsequently modified in a later year, expand to a range (e.g., `2024-2026`). Do not change the starting year when editing an existing file.
 
 ```typescript
 /*
