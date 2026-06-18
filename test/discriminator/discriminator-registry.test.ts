@@ -65,5 +65,7 @@ describe('DiscriminatorRegistry', (): void => {
 
     test.todo('DiscriminatorRegistry.register()');
 
+    test.todo('Test registered discriminator validation');
+
     test.todo('Discriminator must be a non-empty string');
 });
