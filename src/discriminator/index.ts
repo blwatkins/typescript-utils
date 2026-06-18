@@ -19,3 +19,4 @@
  */
 
 export * from './discriminable';
+export * from './discriminator-registry';
