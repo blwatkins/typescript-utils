@@ -75,6 +75,7 @@
     "type-guards",
     "validation",
     "validator",
+    "discriminator",
     "number",
     "string",
     "random",
