@@ -6,6 +6,7 @@
   },
 
   "entryPoints": [
+    "./src/discriminator/index.ts",
     "./src/number/index.ts",
     "./src/random/index.ts",
     "./src/string/index.ts"
