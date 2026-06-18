@@ -20,18 +20,21 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { Discriminated, DiscriminatorRegistry } from '../../src';
+import {Discriminated, DiscriminatorRegistry, TypeGuard} from '../../src';
+
+import {buildTestCases, Scenario, TestCase} from "../utils/test-case/test-case";
+import {nonStringInputs} from "../utils/input/string-inputs";
 
 describe('DiscriminatorRegistry', (): void => {
     enum TestDiscriminators {
         TEST = '@blwat/utils:DiscriminatorRegistryTests'
     };
 
-    interface TestOject extends Discriminated {
+    interface TestObject extends Discriminated {
         discriminator: TestDiscriminators.TEST;
     };
 
-    const isTestObject = DiscriminatorRegistry.register({
+    const isTestObject: TypeGuard<TestObject> = DiscriminatorRegistry.register<TestObject>({
         discriminator: TestDiscriminators.TEST,
         validate: (input: unknown): boolean => {
             return typeof input === 'object' && (input as Discriminated).discriminator === TestDiscriminators.TEST;
@@ -48,18 +51,40 @@ describe('DiscriminatorRegistry', (): void => {
     });
 
     describe('has', (): void => {
-        test('unregistered keys should return false', (): void => {
+        test('Unregistered keys should return false', (): void => {
             expect(DiscriminatorRegistry.has('unregistered')).toBe(false);
         });
 
-        test('registered keys should return true', (): void => {
+        test('Registered keys should return true', (): void => {
             expect(DiscriminatorRegistry.has(TestDiscriminators.TEST)).toBe(true);
         });
 
         describe('input validation', (): void => {
-            test.todo('has() input validation');
+            const scenarios: Scenario[] = [
+                {
+                    label: 'non-string discriminators',
+                    inputs: [
+                        ...nonStringInputs
+                    ],
+                    expected: false
+                }
+            ];
 
-            test.todo('has(empty) should always return false');
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(DiscriminatorRegistry.has(testInput as string)).toBe(testExpected);
+                });
+            });
+
+            test('has("") should always return false', (): void => {
+                expect(DiscriminatorRegistry.has('')).toBe(false);
+            });
         });
     });
 
