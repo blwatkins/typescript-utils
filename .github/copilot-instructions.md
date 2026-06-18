@@ -24,7 +24,7 @@ Primary development work happens in `src/` and corresponding tests under `test/`
 Shared test fixtures and scenario helpers live under `test/utils`.
 
 ### Development Status
-The package is currently in an alpha release line and exports grouped utility modules from `src/number`, `src/random`, and `src/string`.
+The package is currently in an alpha release line and exports grouped utility modules from `src/discriminator`, `src/number`, `src/random`, and `src/string`.
 
 ### Validation Steps
 - Install dependencies with `npm ci`.
@@ -56,7 +56,7 @@ The package is currently in an alpha release line and exports grouped utility mo
 - GitHub Actions runs CodeQL analysis for `actions`, `javascript-typescript`, and `ruby`.
 - Dependabot is configured for monthly updates to npm dependencies, GitHub Actions workflows, and Bundler dependencies under `docs/`.
 - The npm publish workflow uses npm Trusted Publishing with GitHub OIDC (`id-token: write`) instead of a committed registry token.
-- The package currently declares no runtime dependencies in `package.json`; the toolchain is maintained through `devDependencies`.
+- The package declares `typebox` as a runtime dependency in `package.json`; all other toolchain packages are maintained through `devDependencies`.
 
 ## Development Guidelines
 Keep changes scoped to existing files unless a task explicitly requires scaffolding project code.
@@ -64,7 +64,7 @@ Keep changes scoped to existing files unless a task explicitly requires scaffold
 ### TypeScript Conventions
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
 - Public exports flow through module index files. For example, `src/index.ts` re-exports from `src/number/index.ts`, which re-exports from individual utility files. This pattern is intentional to maintain clear module boundaries and organization in both source code and generated documentation.
-- API documentation entry points stay module-scoped (`src/number/index.ts`, `src/random/index.ts`, `src/string/index.ts`) rather than pointing TypeDoc at the root package entry point.
+- API documentation entry points stay module-scoped rather than pointing TypeDoc at the root package entry point.
 
 #### tsdown Build Output
 This project uses `tsdown` to bundle and emit declaration files. When the output format is `esm`, tsdown emits format-specific file extensions: `.mjs` for the bundle and `.d.mts` for the declaration file, regardless of whether the source files use the `.ts` or `.mts` extension. The `types`, `module`, `main`, and `exports` fields in `package.json` should always reference these `.mjs`/`.d.mts` paths (e.g., `./_dist/index.mjs` and `./_dist/index.d.mts`).
