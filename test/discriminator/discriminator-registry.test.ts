@@ -18,12 +18,52 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test } from 'vitest';
+import { describe, test, expect } from 'vitest';
+
+import { Discriminated, DiscriminatorRegistry } from '../../src';
 
 describe('DiscriminatorRegistry', (): void => {
-    test.todo('new DiscriminatorRegistry()');
+    enum TestDiscriminators {
+        TEST = '@blwat/utils:DiscriminatorRegistryTests'
+    };
 
-    test.todo('DiscriminatorRegistry.has()');
+    interface TestOject extends Discriminated {
+        discriminator: TestDiscriminators.TEST;
+    };
+
+    const isTestObject = DiscriminatorRegistry.register({
+        discriminator: TestDiscriminators.TEST,
+        validate: (input: unknown): boolean => {
+            return typeof input === 'object' && (input as Discriminated).discriminator === TestDiscriminators.TEST;
+        }
+    });
+
+    describe('new DiscriminatorRegistry()', (): void => {
+        describe('Runtime behavior guards', (): void => {
+            test('Constructor should throw an error when instantiated at runtime', (): void => {
+                const RuntimeConstructor = DiscriminatorRegistry as unknown as new () => DiscriminatorRegistry;
+                expect((): DiscriminatorRegistry => new RuntimeConstructor()).toThrow(Error);
+            });
+        });
+    });
+
+    describe('has', (): void => {
+        test('unregistered keys should return false', (): void => {
+            expect(DiscriminatorRegistry.has('unregistered')).toBe(false);
+        });
+
+        test('registered keys should return true', (): void => {
+            expect(DiscriminatorRegistry.has(TestDiscriminators.TEST)).toBe(true);
+        });
+
+        describe('input validation', (): void => {
+            test.todo('has() input validation');
+
+            test.todo('has(empty) should always return false');
+        });
+    });
 
     test.todo('DiscriminatorRegistry.register()');
+
+    test.todo('Discriminator must be a non-empty string');
 });
