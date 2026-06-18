@@ -30,10 +30,9 @@ export class SeededRandomNumberGenerator {
     /**
      * Internal xoshiro128** state (4 x 32-bit unsigned integers).
      *
-     * @type {[number, number, number, number]}
-     *
      * @private
      * @readonly
+     * @type {[number, number, number, number]}
      */
     readonly #state: [number, number, number, number];
 

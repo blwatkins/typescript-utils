@@ -37,10 +37,9 @@ export interface DiscriminatorRegistration {
      * The discriminator value that identifies the type of a {@link Discriminable} object.
      * This value must be unique across all registered discriminators.
      *
-     * @type {string}
      * @readonly
-     *
      * @since 0.1.0
+     * @type {string}
      */
     readonly discriminator: string;
 
@@ -51,10 +50,9 @@ export interface DiscriminatorRegistration {
      *
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
      *
-     * @type {(input: unknown) => boolean}
      * @readonly
-     *
      * @since 0.1.0
+     * @type {(input: unknown) => boolean}
      */
     readonly validate: (input: unknown) => boolean;
 }
@@ -69,13 +67,15 @@ export class DiscriminatorRegistry {
     /**
      * A map of discriminator values to their corresponding validation functions.
      *
-     * @type {Map<string, (input: unknown) => boolean>}
      * @readonly
+     * @private
+     * @type {Map<string, (input: unknown) => boolean>}
      */
     static readonly #discriminators: Map<string, (input: unknown) => boolean> = new Map<string, (input: unknown) => boolean>();
 
     /**
      * @throws {Error} DiscriminatorRegistry is a static class and cannot be instantiated.
+     *
      * @private
      */
     private constructor() {
@@ -126,8 +126,8 @@ export class DiscriminatorRegistry {
     /**
      * Validates an input against a specific discriminator.
      *
-     * @param input - The input to validate.
-     * @param discriminator - The discriminator value to check.
+     * @param {unknown} input - The input to validate.
+     * @param {string} discriminator - The discriminator value to check.
      *
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
      *
