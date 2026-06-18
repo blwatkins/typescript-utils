@@ -26,6 +26,7 @@
 export class NumberUtility {
     /**
      * @throws {Error} - NumberUtility is a static class and cannot be instantiated.
+     *
      * @private
      */
     private constructor() {
@@ -36,7 +37,10 @@ export class NumberUtility {
      * Is the given input a finite number?
      *
      * @param {unknown} input
+     *
      * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
+     *
+     * @public
      * @since 0.1.0
      */
     public static isFiniteNumber(input: unknown): input is number {
@@ -47,7 +51,10 @@ export class NumberUtility {
      * Is the given input an integer?
      *
      * @param {unknown} input
+     *
      * @returns {input is number} `true` when the input is an integer; `false` otherwise.
+     *
+     * @public
      * @since 0.1.0
      */
     public static isInteger(input: unknown): input is number {
@@ -60,7 +67,10 @@ export class NumberUtility {
      * @param {unknown} input
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
+     *
      * @returns {input is number} `true` if the given input is a positive integer, or zero when `zeroInclusive` is `true`; `false` otherwise.
+     *
+     * @public
      * @since 0.1.0
      */
     public static isPositiveInteger(input: unknown, zeroInclusive?: boolean): input is number {

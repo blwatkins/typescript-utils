@@ -30,6 +30,9 @@ export interface SeedVersion {
     /**
      * A collection of offset values for the FNV-1a hashing algorithm.
      * Each offset value should be a 32-bit unsigned integer.
+     *
+     * @readonly
+     * @since 0.1.0
      */
     readonly offsets: readonly [number, number, number, number];
 }
@@ -60,6 +63,7 @@ const seedVersions: readonly SeedVersion[] = [
 export class SeedVersions {
     /**
      * @throws {Error} - SeedVersions is a static class and cannot be instantiated.
+     *
      * @private
      */
     private constructor() {
@@ -68,6 +72,8 @@ export class SeedVersions {
 
     /**
      * @returns {number} - The total number of seed versions that currently exist.
+     * 
+     * @public
      * @since 0.1.0
      */
     static get size(): number {
@@ -78,7 +84,10 @@ export class SeedVersions {
      * Is the given index a valid seed version?
      *
      * @param {number} index - The index to check.
+     *
      * @returns {boolean}
+     *
+     * @public
      * @since 0.1.0
      */
     static isValidIndex(index: number): boolean {
@@ -86,9 +95,14 @@ export class SeedVersions {
     }
 
     /**
-     * @param {number} index
+     * @param {number} index - The index of the seed version to retrieve.
+     * Must be a valid {@link SeedVersions} index.
+     *
      * @returns {SeedVersion} - The seed version with the given index.
+     *
      * @throws {RangeError} - If the index is not a valid seed version index.
+     *
+     * @public
      * @since 0.1.0
      */
     static getVersion(index: number): SeedVersion {

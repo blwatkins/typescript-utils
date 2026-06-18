@@ -32,6 +32,7 @@ const RegularExpressions = {
 export class StringUtility {
     /**
      * @throws {Error} - StringUtility is a static class and cannot be instantiated.
+     *
      * @private
      */
     private constructor() {
@@ -43,6 +44,7 @@ export class StringUtility {
      *
      * @returns {RegExp} Regular expression pattern for validating single-line lowercase strings.
      *
+     * @public
      * @since 0.1.0
      */
     public static get singleLineLowercaseTrimmedPattern(): RegExp {
@@ -54,6 +56,7 @@ export class StringUtility {
      *
      * @returns {RegExp} Regular expression pattern for validating single-line uppercase strings.
      *
+     * @public
      * @since 0.1.0
      */
     public static get singleLineUppercaseTrimmedPattern(): RegExp {
@@ -65,6 +68,7 @@ export class StringUtility {
      *
      * @returns {RegExp} Regular expression pattern for validating single-line mixed-case strings.
      *
+     * @public
      * @since 0.1.0
      */
     public static get singleLineTrimmedPattern(): RegExp {
@@ -75,7 +79,10 @@ export class StringUtility {
      * Is the given input a string?
      *
      * @param {unknown} input
+     *
      * @returns {input is string}
+     *
+     * @public
      * @since 0.1.0
      */
     public static isString(input: unknown): input is string {
@@ -89,6 +96,9 @@ export class StringUtility {
      * @param {unknown} input
      *
      * @returns {boolean}
+     *
+     * @public
+     * @since 0.1.0
      */
     public static isNonEmptyString(input: unknown): boolean {
         return StringUtility.isString(input) && (input.trim().length > 0);
@@ -102,6 +112,9 @@ export class StringUtility {
      * @param {unknown} input
      *
      * @returns {boolean}
+     *
+     * @public
+     * @since 0.1.0
      */
     public static isSingleLineLowercaseTrimmedString(input: unknown): boolean {
         return StringUtility.isString(input) && (StringUtility.singleLineLowercaseTrimmedPattern.test(input));
@@ -115,6 +128,9 @@ export class StringUtility {
      * @param {unknown} input
      *
      * @returns {boolean}
+     *
+     * @public
+     * @since 0.1.0
      */
     public static isSingleLineUppercaseTrimmedString(input: unknown): boolean {
         return StringUtility.isString(input) && (StringUtility.singleLineUppercaseTrimmedPattern.test(input));
@@ -128,6 +144,9 @@ export class StringUtility {
      * @param {unknown} input
      *
      * @returns {boolean}
+     *
+     * @public
+     * @since 0.1.0
      */
     public static isSingleLineTrimmedString(input: unknown): boolean {
         return StringUtility.isString(input) && (StringUtility.singleLineTrimmedPattern.test(input));

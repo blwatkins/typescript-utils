@@ -39,7 +39,6 @@ export class RandomNumberGeneratorFactory {
      * @throws {Error} - RandomNumberGeneratorFactory is a static class and cannot be instantiated.
      *
      * @private
-     *
      * @since 0.1.0
      */
     private constructor() {
@@ -50,9 +49,9 @@ export class RandomNumberGeneratorFactory {
      * Prime number for FNV-1a hashing algorithm.
      * This number is an algorithmic constant; it must not change.
      *
-     * @private
-     *
      * @returns {number} - 0x01000193
+     *
+     * @private
      */
     static get #fnvPrime(): 0x01000193 {
         return 0x01000193;
@@ -76,6 +75,7 @@ export class RandomNumberGeneratorFactory {
      * @see {@link SeedVersions.size}
      * @see {@link SeedVersions.isValidIndex}
      *
+     * @public
      * @since 0.1.0
      */
     public static build(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
@@ -99,6 +99,7 @@ export class RandomNumberGeneratorFactory {
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
      *
+     * @public
      * @since 0.1.0
      */
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {

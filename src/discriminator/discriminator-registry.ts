@@ -22,14 +22,14 @@ import { Discriminable } from './discriminable';
 
 /**
  * A type guard function that checks if an input is of a specific {@link Discriminable} type.
- * 
+ *
  * @since 0.1.0
  */
 export type TypeGuard<T extends Discriminable> = (input: unknown) => input is T;
 
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
- * 
+ *
  * @since 0.1.0
  */
 export interface DiscriminatorRegistration {
@@ -38,7 +38,8 @@ export interface DiscriminatorRegistration {
      * This value must be unique across all registered discriminators.
      *
      * @type {string}
-     * 
+     * @readonly
+     *
      * @since 0.1.0
      */
     readonly discriminator: string;
@@ -46,11 +47,13 @@ export interface DiscriminatorRegistration {
     /**
      * A method that validates whether an input matches the type associated with the {@link discriminator}.
      *
-     * @type {(input: unknown) => boolean}
-     *
      * @param {unknown} input - The input to validate.
+     *
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
-     * 
+     *
+     * @type {(input: unknown) => boolean}
+     * @readonly
+     *
      * @since 0.1.0
      */
     readonly validate: (input: unknown) => boolean;
@@ -59,7 +62,7 @@ export interface DiscriminatorRegistration {
 /**
  * Static registry for managing discriminators and their associated type guards.
  * Discriminators are used to identify the type of a {@link Discriminable} object and validate it using a registered type guard function.
- * 
+ *
  * @since 0.1.0
  */
 export class DiscriminatorRegistry {
@@ -67,11 +70,13 @@ export class DiscriminatorRegistry {
      * A map of discriminator values to their corresponding validation functions.
      *
      * @type {Map<string, (input: unknown) => boolean>}
+     * @readonly
      */
     static readonly #discriminators: Map<string, (input: unknown) => boolean> = new Map<string, (input: unknown) => boolean>();
 
     /**
      * @throws {Error} DiscriminatorRegistry is a static class and cannot be instantiated.
+     * @private
      */
     private constructor() {
         throw new Error('DiscriminatorRegistry is a static class and cannot be instantiated.');
@@ -82,7 +87,8 @@ export class DiscriminatorRegistry {
      *
      * @param {string} discriminator - The discriminator value to check.
      * @returns {boolean} - `true` if the discriminator is registered, `false` otherwise.
-     * 
+     *
+     * @public
      * @since 0.1.0
      */
     public static has(discriminator: string): boolean {
@@ -94,10 +100,11 @@ export class DiscriminatorRegistry {
      *
      * @param {DiscriminatorRegistration} registration - The registration details for the discriminator.
      * @returns {TypeGuard<T>} - A type guard function for the registered type.
-     * 
+     *
      * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
      * @throws {Error} If the given registration does not have a valid {@link DiscriminatorRegistration.validate} function.
-     * 
+     *
+     * @public
      * @since 0.1.0
      */
     public static register<T extends Discriminable>(registration: DiscriminatorRegistration): TypeGuard<T> {
@@ -123,6 +130,8 @@ export class DiscriminatorRegistry {
      * @param discriminator - The discriminator value to check.
      *
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
+     *
+     * @private
      */
     static #validate(input: unknown, discriminator: string): boolean {
         if (!DiscriminatorRegistry.#isDiscriminable(input, discriminator)) {
@@ -145,6 +154,8 @@ export class DiscriminatorRegistry {
      * @param {string} discriminator - The discriminator value to match.
      *
      * @returns {boolean} - `true` if the input is an object with a discriminator property that matches the given discriminator value, `false` otherwise.
+     *
+     * @private
      */
     static #isDiscriminable(input: unknown, discriminator: string): boolean {
         if (input && typeof input === 'object') {
