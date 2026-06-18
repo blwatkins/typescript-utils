@@ -30,6 +30,6 @@ export const discriminableSchema = Type.Object(
 );
 
 /**
- * Discriminable objects can be categorized by a discriminator value.
+ * Discriminable objects can be type checked by a discriminator value in the discriminator registry.
  */
 export type Discriminable = Static<typeof discriminableSchema>;
