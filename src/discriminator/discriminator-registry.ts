@@ -32,16 +32,16 @@ export interface DiscriminatorRegistration {
     /**
      * The discriminator value that identifies the type of a {@link Discriminable} object.
      * This value must be unique across all registered discriminators.
-     * 
+     *
      * @type {string}
      */
     readonly discriminator: string;
 
     /**
      * A method that validates whether an input matches the type associated with the {@link discriminator}.
-     * 
+     *
      * @type {(input: unknown) => boolean}
-     * 
+     *
      * @param {unknown} input - The input to validate.
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
      */
@@ -55,7 +55,7 @@ export interface DiscriminatorRegistration {
 export class DiscriminatorRegistry {
     /**
      * A map of discriminator values to their corresponding validation functions.
-     * 
+     *
      * @type {Map<string, (input: unknown) => boolean>}
      */
     static readonly #discriminators: Map<string, (input: unknown) => boolean> = new Map<string, (input: unknown) => boolean>();
@@ -69,6 +69,7 @@ export class DiscriminatorRegistry {
 
     /**
      * Checks if a discriminator is already registered.
+     *
      * @param {string} discriminator - The discriminator value to check.
      * @returns {boolean} - `true` if the discriminator is registered, `false` otherwise.
      */
@@ -78,6 +79,7 @@ export class DiscriminatorRegistry {
 
     /**
      * Registers a new discriminator and its associated validation function.
+     *
      * @param {DiscriminatorRegistration} registration - The registration details for the discriminator.
      * @returns {TypeGuard<T>} - A type guard function for the registered type.
      */
@@ -99,10 +101,10 @@ export class DiscriminatorRegistry {
 
     /**
      * Validates an input against a specific discriminator.
-     * 
+     *
      * @param input - The input to validate.
      * @param discriminator - The discriminator value to check.
-     * 
+     *
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
      */
     static #validate(input: unknown, discriminator: string): boolean {
@@ -111,7 +113,7 @@ export class DiscriminatorRegistry {
         }
 
         const validate = DiscriminatorRegistry.#discriminators.get(discriminator);
-        
+
         if (validate) {
             return validate(input);
         }
@@ -121,10 +123,10 @@ export class DiscriminatorRegistry {
 
     /**
      * Is the given input an object with a discriminator property that matches the given discriminator value?
-     * 
+     *
      * @param {unknown} input - The input to check.
      * @param {string} discriminator - The discriminator value to match.
-     * 
+     *
      * @returns {boolean} - `true` if the input is an object with a discriminator property that matches the given discriminator value, `false` otherwise.
      */
     static #isDiscriminable(input: unknown, discriminator: string): boolean {
