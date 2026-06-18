@@ -69,6 +69,9 @@ Keep changes scoped to existing files unless a task explicitly requires scaffold
 #### tsdown Build Output
 This project uses `tsdown` to bundle and emit declaration files. When the output format is `esm`, tsdown emits format-specific file extensions: `.mjs` for the bundle and `.d.mts` for the declaration file, regardless of whether the source files use the `.ts` or `.mts` extension. The `types`, `module`, `main`, and `exports` fields in `package.json` should always reference these `.mjs`/`.d.mts` paths (e.g., `./_dist/index.mjs` and `./_dist/index.d.mts`).
 
+#### JavaScript Consumer Safety
+This package is published as ESM and targets both TypeScript and JavaScript consumers. Retain runtime type guards and input validation even when TypeScript's type system would catch the same issue at compile time. JavaScript callers have no compile-time safety, so runtime checks are necessary for correctness.
+
 #### Static Classes
 Static utility classes must:
 - Have a `private constructor()` that throws an `Error` to prevent instantiation
@@ -129,7 +132,9 @@ Place annotations in the following order for consistency and readability:
 Include other relevant tags (such as `@template`, `@type`) after the above, as appropriate for the context.
 
 ### File Headers
-All source files must include the MIT License copyright header at the top:
+All source files must include the MIT License copyright header at the top.
+
+**Copyright year convention:** Use the original year the file was authored. If the file is subsequently modified in a later year, expand to a range (e.g., `2024-2026`). Do not change the starting year when editing an existing file.
 
 ```typescript
 /*
