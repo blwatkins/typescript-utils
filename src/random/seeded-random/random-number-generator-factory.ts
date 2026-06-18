@@ -165,7 +165,7 @@ export class RandomNumberGeneratorFactory {
      *
      * @see {@link SeedVersions.size}
      * @see {@link SeedVersions.isValidIndex}
-     * 
+     *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
      * @param {number} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same input.
