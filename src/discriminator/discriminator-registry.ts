@@ -22,11 +22,15 @@ import { Discriminable } from './discriminable';
 
 /**
  * A type guard function that checks if an input is of a specific {@link Discriminable} type.
+ * 
+ * @since 0.1.0
  */
 export type TypeGuard<T extends Discriminable> = (input: unknown) => input is T;
 
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
+ * 
+ * @since 0.1.0
  */
 export interface DiscriminatorRegistration {
     /**
@@ -34,6 +38,8 @@ export interface DiscriminatorRegistration {
      * This value must be unique across all registered discriminators.
      *
      * @type {string}
+     * 
+     * @since 0.1.0
      */
     readonly discriminator: string;
 
@@ -44,6 +50,8 @@ export interface DiscriminatorRegistration {
      *
      * @param {unknown} input - The input to validate.
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
+     * 
+     * @since 0.1.0
      */
     readonly validate: (input: unknown) => boolean;
 }
@@ -51,6 +59,8 @@ export interface DiscriminatorRegistration {
 /**
  * Static registry for managing discriminators and their associated type guards.
  * Discriminators are used to identify the type of a {@link Discriminable} object and validate it using a registered type guard function.
+ * 
+ * @since 0.1.0
  */
 export class DiscriminatorRegistry {
     /**
@@ -72,6 +82,8 @@ export class DiscriminatorRegistry {
      *
      * @param {string} discriminator - The discriminator value to check.
      * @returns {boolean} - `true` if the discriminator is registered, `false` otherwise.
+     * 
+     * @since 0.1.0
      */
     public static has(discriminator: string): boolean {
         return DiscriminatorRegistry.#discriminators.has(discriminator);
@@ -82,6 +94,11 @@ export class DiscriminatorRegistry {
      *
      * @param {DiscriminatorRegistration} registration - The registration details for the discriminator.
      * @returns {TypeGuard<T>} - A type guard function for the registered type.
+     * 
+     * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
+     * @throws {Error} If the given registration does not have a valid {@link DiscriminatorRegistration.validate} function.
+     * 
+     * @since 0.1.0
      */
     public static register<T extends Discriminable>(registration: DiscriminatorRegistration): TypeGuard<T> {
         if (DiscriminatorRegistry.has(registration.discriminator)) {
