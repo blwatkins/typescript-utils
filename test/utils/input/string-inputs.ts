@@ -25,19 +25,39 @@ export const nonStringInputs: unknown[] = [
     0,
     1,
     -1,
+    10n,
+    -10n,
+    1.5,
+    -1.5,
+    Number.MAX_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER,
+    Number.MAX_VALUE,
+    Number.MIN_VALUE,
+    Number.EPSILON,
     Number.NaN,
     Infinity,
+    -Infinity,
     true,
     false,
-    {},
-    { key: 'value' },
     [],
     ['value'],
+    [1, 2, 3],
     (): string => 'value',
+    (): number => 10,
+    (): unknown[] => [],
+    (): {} => {
+        return {};
+    },
     Math.random,
+    new Number(10),
     new String('value'),
-    Object('value'),
-    10n
+    new Object(10),
+    new Object('value'),
+    {},
+    { key: 'value' },
+    { key: 10 },
+    { key: [] },
+    { key: {} }
 ];
 
 export const emptyStringInputs: string[] = [
