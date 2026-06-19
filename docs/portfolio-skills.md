@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-17
+modified_date: 2026-06-19
 toc: true
 ---
 
@@ -119,6 +119,7 @@ API docs are generated with TypeDoc, while the documentation site is built from 
 - [docs/index.md](https://github.com/blwatkins/typescript-utils/blob/main/docs/index.md)
 - [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
 - [copilot-instructions.md](https://github.com/blwatkins/typescript-utils/blob/main/.github/copilot-instructions.md)
+- [CLAUDE.md](https://github.com/blwatkins/typescript-utils/blob/main/CLAUDE.md)
 
 ### Security scanning and dependency update automation
 
