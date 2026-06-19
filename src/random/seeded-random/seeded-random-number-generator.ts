@@ -32,6 +32,7 @@ export class SeededRandomNumberGenerator {
      *
      * @private
      * @readonly
+     * @type {[number, number, number, number]}
      */
     readonly #state: [number, number, number, number];
 
@@ -43,6 +44,7 @@ export class SeededRandomNumberGenerator {
      * @throws {RangeError} If each element of state is not a 32-bit unsigned integer.
      * @throws {RangeError} If state does not have at least one element that is greater than 0.
      *
+     * @public
      * @since 0.1.0
      */
     public constructor(state: [number, number, number, number]) {
@@ -56,6 +58,7 @@ export class SeededRandomNumberGenerator {
      *
      * @returns {number} - The next pseudorandom float in the range [0, 1).
      *
+     * @public
      * @since 0.1.0
      */
     public next(): number {
@@ -80,7 +83,9 @@ export class SeededRandomNumberGenerator {
      *
      * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
      * @param {number} k - The number of bits to rotate.
+     *
      * @returns {number}
+     *
      * @private
      */
     static #rotl(x: number, k: number): number {

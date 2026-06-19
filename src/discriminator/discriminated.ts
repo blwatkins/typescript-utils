@@ -18,4 +18,31 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './string-utility';
+import { Type, type Static } from 'typebox';
+
+/**
+ * TypeBox schema for validating that an object implements the {@link Discriminated} type.
+ *
+ * @public
+ * @since 0.1.0
+ */
+export const discriminatedSchema = Type.Object(
+    {
+        /**
+         * The discriminator value that identifies the type of a {@link Discriminated} object.
+         * This value must be unique across all registered discriminators.
+         *
+         * @since 0.1.0
+         * @type {string}
+         */
+        discriminator: Type.Readonly(Type.String())
+    }
+);
+
+/**
+ * Discriminated objects can be type checked using the discriminator registry.
+ *
+ * @public
+ * @since 0.1.0
+ */
+export type Discriminated = Static<typeof discriminatedSchema>;

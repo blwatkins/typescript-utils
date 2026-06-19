@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-16
+modified_date: 2026-06-19
 toc: true
 ---
 
@@ -15,7 +15,7 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, and deterministic seeded pseudorandom number generation. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
+TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
@@ -32,12 +32,12 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 ## Skills and Tooling Inventory
 
 - **Languages:** [TypeScript](https://www.typescriptlang.org/), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Markdown](https://www.markdownguide.org/), [YAML](https://yaml.org/)
-- **Runtime & Libraries:** [Node.js](https://nodejs.org/en)
+- **Runtime & Libraries:** [Node.js](https://nodejs.org/en), [TypeBox](https://sinclairzx81.github.io/typebox/)
 - **Testing:** [Vitest](https://vitest.dev/)
 - **Build / Bundling:** [tsdown](https://tsdown.dev/)
 - **Code Quality:** [ESLint](https://eslint.org/)
 - **Documentation:** [TypeDoc](https://typedoc.org/)
-- **Site Generation:** [Bundler](https://bundler.io/), [Jekyll](https://jekyllrb.com/), [Liquid](https://shopify.github.io/liquid/)
+- **Site Generation:** [Bundler](https://bundler.io/), [Jekyll](https://jekyllrb.com/), [Liquid](https://shopify.github.io/liquid/), [Minima](https://github.com/jekyll/minima)
 - **Dependency Management:** [npm](https://www.npmjs.com/)
 - **Versioning & Platform:** [Git](https://git-scm.com/), [GitHub](https://github.com/)
 - **Automation:** [GitHub Actions](https://github.com/features/actions)
@@ -47,11 +47,12 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)
 - **Environment Configuration:** Node.js version pinning via `.node-version`, plus Ruby version pinning for the Jekyll/Bundler docs site via `docs/.ruby-version`
 - **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)
-- **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot)
+- **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot), [Claude Code](https://code.claude.com/docs/en/overview)
 
 ## Capability Record
 
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
+- Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
 - Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
@@ -80,10 +81,10 @@ The public entry point re-exports domain modules, and each domain module re-expo
 **Evidence:**
 
 - [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
+- [src/discriminator/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/index.ts)
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
-- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -118,6 +119,7 @@ API docs are generated with TypeDoc, while the documentation site is built from 
 - [docs/index.md](https://github.com/blwatkins/typescript-utils/blob/main/docs/index.md)
 - [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
 - [copilot-instructions.md](https://github.com/blwatkins/typescript-utils/blob/main/.github/copilot-instructions.md)
+- [CLAUDE.md](https://github.com/blwatkins/typescript-utils/blob/main/CLAUDE.md)
 
 ### Security scanning and dependency update automation
 

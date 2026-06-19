@@ -47,6 +47,9 @@
     "build": "tsdown",
     "prepack": "npm run build"
   },
+  "dependencies": {
+    "typebox": "^1.2.14"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
@@ -72,6 +75,7 @@
     "type-guards",
     "validation",
     "validator",
+    "discriminator",
     "number",
     "string",
     "random",
