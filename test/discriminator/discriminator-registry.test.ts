@@ -105,6 +105,15 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: false
                 },
                 {
+                    label: 'array inputs',
+                    inputs: [
+                        [],
+                        ['value'],
+                        [1, 2, 3]
+                    ],
+                    expected: false
+                },
+                {
                     label: 'object inputs without discriminator',
                     inputs: [
                         {},
@@ -227,6 +236,15 @@ describe('DiscriminatorRegistry', (): void => {
                     label: 'non-object registration',
                     inputs: [
                         ...nonObjectInputs
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'array registration',
+                    inputs: [
+                        [],
+                        ['value'],
+                        [1, 2, 3]
                     ],
                     expected: TypeError
                 },
