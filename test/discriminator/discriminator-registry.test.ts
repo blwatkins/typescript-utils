@@ -24,20 +24,25 @@ import {Discriminated, DiscriminatorRegistry, TypeGuard} from '../../src';
 
 import {buildTestCases, Scenario, TestCase} from "../utils/test-case/test-case";
 import {nonStringInputs} from "../utils/input/string-inputs";
+import {nonObjectInputs} from "../utils/input/object-inputs";
+import {fail} from "node:assert";
 
 describe('DiscriminatorRegistry', (): void => {
     enum TestDiscriminators {
         TEST = '@blwat/utils:DiscriminatorRegistryTests'
-    };
+    }
 
     interface TestObject extends Discriminated {
         discriminator: TestDiscriminators.TEST;
-    };
+        key: string;
+    }
 
     const isTestObject: TypeGuard<TestObject> = DiscriminatorRegistry.register<TestObject>({
         discriminator: TestDiscriminators.TEST,
         validate: (input: unknown): boolean => {
-            return typeof input === 'object' && (input as Discriminated).discriminator === TestDiscriminators.TEST;
+            return typeof input === 'object'
+                && (input as Discriminated).discriminator === TestDiscriminators.TEST
+                && typeof (input as TestObject).key === 'string';
         }
     });
 
@@ -88,9 +93,118 @@ describe('DiscriminatorRegistry', (): void => {
         });
     });
 
-    test.todo('DiscriminatorRegistry.register()');
+    describe('register', (): void => {
+        describe('Register should return a method that validates the registered Discriminated type', (): void => {
+           const scenarios: Scenario[] = [
+               {
+                   label: 'non-object inputs',
+                   inputs: [
+                       ...nonObjectInputs
+                   ],
+                   expected: false
+               },
+               {
+                   label: 'object inputs without discriminator',
+                   inputs: [
+                       {},
+                       { property: 'value' },
+                       { key: 'value' }
+                   ],
+                   expected: false
+               },
+               {
+                   label: 'object inputs with incorrect discriminator',
+                   inputs: [
+                       { discriminator: '' },
+                       { discriminator: 'invalid' },
+                       { discriminator: 5 },
+                       {
+                           discriminator: 'invalid',
+                           key: 'value',
+                       },
+                   ],
+                   expected: false
+               },
+               {
+                   label: 'object inputs with correct discriminator, but incorrect schema',
+                   inputs: [
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                       },
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                           key: 10
+                       },
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                           key: (): number => 10
+                       },
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                           key: (): string => 'value'
+                       },
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                           property: 'value'
+                       }
+                   ],
+                   expected: false
+               },
+               {
+                   label: 'object inputs with correct schema',
+                   inputs: [
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                           key: 'value'
+                       },
+                       {
+                           discriminator: TestDiscriminators.TEST,
+                           key: ''
+                       }
+                   ],
+                   expected: true
+               }
+           ];
 
-    test.todo('Test registered discriminator validation');
+           describe.each(
+               scenarios
+           )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+               const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+               test.each(
+                   testCases
+               )('%# - input $input should return $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                  expect(isTestObject(testInput)).toBe(testExpected);
+               });
+           });
+        });
+
+        describe('Register should return a method that can act as a type guard for the Discriminated type', (): void => {
+           test('Type guard should narrow the type of the input to the registered Discriminated type', (): void => {
+               const valueA: string = 'valueA';
+               const inputA: unknown = {
+                   discriminator: TestDiscriminators.TEST,
+                   key: valueA
+               };
+
+               if (isTestObject(inputA)) {
+                   expect(inputA.key).toBe(valueA);
+               } else {
+                   fail('Type guard failed to narrow the type of the input to the registered Discriminated type');
+               }
+           });
+
+            test('Type guard should not narrow the type of inputs that do not match the registered Discriminated type', (): void => {
+                const inputA: unknown = {
+                    discriminator: TestDiscriminators.TEST
+                };
+
+                if (isTestObject(inputA)) {
+                    fail('Type guard incorrectly narrowed the type of the input to the registered Discriminated type');
+                }
+            });
+        });
+    });
 
     test.todo('Discriminator must be a non-empty string');
 });
