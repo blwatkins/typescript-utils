@@ -65,6 +65,7 @@ export interface DiscriminatorRegistration {
  * Static registry for managing discriminators and their associated type guards.
  * Discriminators are used to identify the type of a {@link Discriminated} object and validate it using a registered type guard function.
  *
+ * @public
  * @since 0.1.0
  */
 export class DiscriminatorRegistry {
@@ -129,12 +130,12 @@ export class DiscriminatorRegistry {
      *
      * @param {unknown} input - The input to validate.
      *
+     * @returns {void}
+     *
      * @throws {TypeError} If the given input is not an object.
      * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
      * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
      * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
-     *
-     * @returns {void}
      *
      * @private
      */
