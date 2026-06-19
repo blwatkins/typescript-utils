@@ -25,6 +25,7 @@ import { Discriminated } from './discriminated';
 /**
  * A type guard function that checks if an input is of a specific {@link Discriminated} type.
  *
+ * @public
  * @since 0.1.0
  */
 export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
@@ -32,6 +33,7 @@ export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
  *
+ * @public
  * @since 0.1.0
  */
 export interface DiscriminatorRegistration {
@@ -132,10 +134,12 @@ export class DiscriminatorRegistry {
      * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
      * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
+     * @returns {void}
+     *
      * @private
      */
     static #validateRegistration(input: unknown): void {
-        if (!input || typeof input !== 'object') {
+        if (!input || typeof input !== 'object' || Array.isArray(input)) {
             throw new TypeError('Registration must be an object.');
         }
 
