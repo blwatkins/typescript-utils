@@ -134,8 +134,56 @@ export const singleLineLowercaseTrimmedFailureInputs: string[] = [
     'internal   spaces   example'
 ];
 
+export const singleLineUppercaseTrimmedFailureInputs: string[] = [
+    ' EXAMPLE ',
+    '\nEXAMPLE\n',
+    '\tEXAMPLE\t',
+    ' \n\tEXAMPLE\t\n ',
+    ' LEADING WHITESPACE EXAMPLE',
+    '\nLEADING WHITESPACE EXAMPLE',
+    '\tLEADING WHITESPACE EXAMPLE',
+    ' \n\tLEADING WHITESPACE EXAMPLE',
+    'TRAILING WHITESPACE EXAMPLE ',
+    'TRAILING WHITESPACE EXAMPLE\n',
+    'TRAILING WHITESPACE EXAMPLE\t',
+    'TRAILING WHITESPACE EXAMPLE\t\n ',
+    'INTERNAL\nSPACES\nEXAMPLE',
+    'INTERNAL\tSPACES\tEXAMPLE',
+    'INTERNAL\n\nSPACES\n\nEXAMPLE',
+    'INTERNAL\t\tSPACES\t\tEXAMPLE',
+    'INTERNAL\n SPACES\n EXAMPLE',
+    'INTERNAL\t SPACES\t EXAMPLE',
+    'INTERNAL  SPACES  EXAMPLE',
+    'INTERNAL   SPACES   EXAMPLE'
+];
+
+export const singleLineMixedCaseTrimmedFailureInputs: string[] = [
+    ' Example ',
+    '\nExample\n',
+    '\tExample\t',
+    ' \n\tExample\t\n ',
+    ' Leading Whitespace Example',
+    '\nLeading Whitespace Example',
+    '\tLeading Whitespace Example',
+    ' \n\tLeading Whitespace Example',
+    'Trailing Whitespace Example ',
+    'Trailing Whitespace Example\n',
+    'Trailing Whitespace Example\t',
+    'Trailing Whitespace Example\t\n ',
+    'Internal\nSpaces\nExample',
+    'Internal\tSpaces\tExample',
+    'Internal\n\nSpaces\n\nExample',
+    'Internal\t\tSpaces\t\tExample',
+    'Internal\n Spaces\n Example',
+    'Internal\t Spaces\t Example',
+    'Internal  Spaces  Example',
+    'Internal   Spaces   Example'
+];
+
 export const singleLineTrimmedFailureInputs: string[] = [
-    ...singleLineLowercaseTrimmedFailureInputs
+    ...singleLineLowercaseTrimmedFailureInputs,
+    ...singleLineUppercaseTrimmedFailureInputs,
+    ...singleLineMixedCaseTrimmedFailureInputs
 ];
 
 export const nonEmptyStringInputs: string[] = [
@@ -148,7 +196,7 @@ export const nonEmptyStringInputs: string[] = [
     '\u{1F3A8}',
     '🎨',
     'ë',
-    ...singleLineLowercaseTrimmedFailureInputs,
+    ...singleLineTrimmedFailureInputs,
     ...singleLineLowercaseTrimmedInputs,
     ...singleLineUppercaseTrimmedInputs,
     ...singleLineMixedCaseTrimmedInputs
