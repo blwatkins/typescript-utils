@@ -265,6 +265,13 @@ describe('DiscriminatorRegistry', (): void => {
                         ])
                     ],
                     expected: TypeError
+                },
+                {
+                    label: 'duplicate discriminator registration',
+                    inputs: [
+                        ...buildRegistrations([TestDiscriminators.TEST], [(): boolean => false])
+                    ],
+                    expected: Error
                 }
             ];
 
