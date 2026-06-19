@@ -56,7 +56,7 @@ export interface DiscriminatorRegistration {
      * @since 0.1.0
      * @type {(input: unknown) => boolean}
      */
-    readonly validate: (input: unknown) => boolean;
+    readonly validator: (input: unknown) => boolean;
 }
 
 /**
@@ -105,7 +105,7 @@ export class DiscriminatorRegistry {
      *
      * @throws {TypeError} If the given input is not an object.
      * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
-     * @throws {TypeError} If the {@link DiscriminatorRegistration.validate} property is not a function.
+     * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
      * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
      * @public
@@ -113,7 +113,7 @@ export class DiscriminatorRegistry {
      */
     public static register<T extends Discriminated>(registration: DiscriminatorRegistration): TypeGuard<T> {
         DiscriminatorRegistry.#validateRegistration(registration);
-        DiscriminatorRegistry.#discriminators.set(registration.discriminator, registration.validate);
+        DiscriminatorRegistry.#discriminators.set(registration.discriminator, registration.validator);
 
         return (input: unknown): input is T => {
             return DiscriminatorRegistry.#validate(input, registration.discriminator);
@@ -129,7 +129,7 @@ export class DiscriminatorRegistry {
      *
      * @throws {TypeError} If the given input is not an object.
      * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
-     * @throws {TypeError} If the {@link DiscriminatorRegistration.validate} property is not a function.
+     * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
      * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
      * @private
@@ -145,7 +145,7 @@ export class DiscriminatorRegistry {
             throw new TypeError(`Discriminator ${registration.discriminator} must be a non-empty single line trimmed string.`);
         }
 
-        if (typeof registration.validate !== 'function') {
+        if (typeof registration.validator !== 'function') {
             throw new TypeError(`Discriminator ${registration.discriminator} must have a validate function.`);
         }
 
@@ -169,10 +169,10 @@ export class DiscriminatorRegistry {
             return false;
         }
 
-        const validate: ((input: unknown) => boolean) | undefined = DiscriminatorRegistry.#discriminators.get(discriminator);
+        const validator: ((input: unknown) => boolean) | undefined = DiscriminatorRegistry.#discriminators.get(discriminator);
 
-        if (validate) {
-            return validate(input);
+        if (validator) {
+            return validator(input);
         }
 
         return false;
