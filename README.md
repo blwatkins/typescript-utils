@@ -9,7 +9,7 @@ A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utiliti
 The source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
 The full text of the license is included with the project source code.
 
-## Repository Status Badges
+## Project Status Badges
 
 ### [npm](https://www.npmjs.com/package/@blwat/utils)
 ![npm License](https://badgen.net/npm/license/@blwat/utils/alpha)
