@@ -142,15 +142,15 @@ export class DiscriminatorRegistry {
         const registration: DiscriminatorRegistration = input as DiscriminatorRegistration;
 
         if (!StringUtility.isSingleLineTrimmedString(registration.discriminator)) {
-            throw new TypeError(`Discriminator ${registration.discriminator} must be a non-empty single line trimmed string.`);
+            throw new TypeError(`Discriminator '${registration.discriminator}' must be a non-empty single line trimmed string.`);
         }
 
         if (typeof registration.validator !== 'function') {
-            throw new TypeError(`Discriminator ${registration.discriminator} must have a validate function.`);
+            throw new TypeError(`Discriminator '${registration.discriminator}' must have a validator function.`);
         }
 
         if (DiscriminatorRegistry.has(registration.discriminator)) {
-            throw new Error(`Discriminator ${registration.discriminator} is already registered.`);
+            throw new Error(`Discriminator '${registration.discriminator}' is already registered.`);
         }
     }
 
