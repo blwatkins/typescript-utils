@@ -50,7 +50,7 @@ export const nonArrayInputs: unknown[] = [
     (): string => 'value',
     (): number => 10,
     (): unknown[] => [],
-    (): {} => {
+    (): object => {
         return {};
     },
     Math.random,

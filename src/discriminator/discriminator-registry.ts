@@ -18,8 +18,9 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { StringUtility } from '../string';
+
 import { Discriminated } from './discriminated';
-import {StringUtility} from "../string";
 
 /**
  * A type guard function that checks if an input is of a specific {@link Discriminated} type.
