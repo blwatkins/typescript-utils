@@ -21,14 +21,14 @@
 import { Type, type Static } from 'typebox';
 
 /**
- * TypeBox schema for validating that an object implements the {@link Discriminable} type.
+ * TypeBox schema for validating that an object implements the {@link Discriminated} type.
  *
  * @since 0.1.0
  */
-export const discriminableSchema = Type.Object(
+export const discriminatedSchema = Type.Object(
     {
         /**
-         * The discriminator value that identifies the type of a {@link Discriminable} object.
+         * The discriminator value that identifies the type of a {@link Discriminated} object.
          * This value must be unique across all registered discriminators.
          *
          * @since 0.1.0
@@ -39,8 +39,8 @@ export const discriminableSchema = Type.Object(
 );
 
 /**
- * Discriminable objects can be type checked using the discriminator registry.
+ * Discriminated objects can be type checked using the discriminator registry.
  *
  * @since 0.1.0
  */
-export type Discriminable = Static<typeof discriminableSchema>;
+export type Discriminated = Static<typeof discriminatedSchema>;

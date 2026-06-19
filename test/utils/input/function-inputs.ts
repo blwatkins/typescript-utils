@@ -19,7 +19,7 @@
  */
 
 // noinspection JSPrimitiveTypeWrapperUsage
-export const nonArrayInputs: unknown[] = [
+export const nonFunctionInputs: unknown[] = [
     null,
     undefined,
     0,
@@ -47,13 +47,9 @@ export const nonArrayInputs: unknown[] = [
     '5.5',
     '-5',
     '0',
-    (): string => 'value',
-    (): number => 10,
-    (): unknown[] => [],
-    (): object => {
-        return {};
-    },
-    Math.random,
+    [],
+    ['value'],
+    [1, 2, 3],
     new Number(10),
     new String('value'),
     new Object(10),

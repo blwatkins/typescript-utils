@@ -22,25 +22,37 @@
 export const nonNumberInputs: unknown[] = [
     null,
     undefined,
+    10n,
+    -10n,
+    true,
+    false,
     '',
     'string',
     '\n\t',
     '     ',
-    {},
-    { key: 'value' },
-    (): number => 10,
-    Math.random,
-    true,
-    false,
     '5',
     '5.5',
     '-5',
     '0',
-    new Number(10),
-    Object(10),
-    10n,
     [],
-    ['value']
+    ['value'],
+    [1, 2, 3],
+    (): string => 'value',
+    (): number => 10,
+    (): unknown[] => [],
+    (): object => {
+        return {};
+    },
+    Math.random,
+    new Number(10),
+    new String('value'),
+    new Object(10),
+    new Object('value'),
+    {},
+    { key: 'value' },
+    { key: 10 },
+    { key: [] },
+    { key: {} }
 ];
 
 export const nonFiniteNumberInputs: number[] = [

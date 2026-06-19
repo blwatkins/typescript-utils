@@ -18,14 +18,16 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Discriminable } from './discriminable';
+import { StringUtility } from '../string';
+
+import { Discriminated } from './discriminated';
 
 /**
- * A type guard function that checks if an input is of a specific {@link Discriminable} type.
+ * A type guard function that checks if an input is of a specific {@link Discriminated} type.
  *
  * @since 0.1.0
  */
-export type TypeGuard<T extends Discriminable> = (input: unknown) => input is T;
+export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
 
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
@@ -34,7 +36,7 @@ export type TypeGuard<T extends Discriminable> = (input: unknown) => input is T;
  */
 export interface DiscriminatorRegistration {
     /**
-     * The discriminator value that identifies the type of a {@link Discriminable} object.
+     * The discriminator value that identifies the type of a {@link Discriminated} object.
      * This value must be unique across all registered discriminators.
      *
      * @readonly
@@ -54,12 +56,12 @@ export interface DiscriminatorRegistration {
      * @since 0.1.0
      * @type {(input: unknown) => boolean}
      */
-    readonly validate: (input: unknown) => boolean;
+    readonly validator: (input: unknown) => boolean;
 }
 
 /**
  * Static registry for managing discriminators and their associated type guards.
- * Discriminators are used to identify the type of a {@link Discriminable} object and validate it using a registered type guard function.
+ * Discriminators are used to identify the type of a {@link Discriminated} object and validate it using a registered type guard function.
  *
  * @since 0.1.0
  */
@@ -101,26 +103,55 @@ export class DiscriminatorRegistry {
      * @param {DiscriminatorRegistration} registration - The registration details for the discriminator.
      * @returns {TypeGuard<T>} - A type guard function for the registered type.
      *
+     * @throws {TypeError} If the given input is not an object.
+     * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
+     * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
      * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
-     * @throws {Error} If the given registration does not have a valid {@link DiscriminatorRegistration.validate} function.
      *
      * @public
      * @since 0.1.0
      */
-    public static register<T extends Discriminable>(registration: DiscriminatorRegistration): TypeGuard<T> {
-        if (DiscriminatorRegistry.has(registration.discriminator)) {
-            throw new Error(`Discriminator "${registration.discriminator}" is already registered.`);
-        }
-
-        if (typeof registration.validate !== 'function') {
-            throw new Error(`Discriminator "${registration.discriminator}" must have a validate function.`);
-        }
-
-        DiscriminatorRegistry.#discriminators.set(registration.discriminator, registration.validate);
+    public static register<T extends Discriminated>(registration: DiscriminatorRegistration): TypeGuard<T> {
+        DiscriminatorRegistry.#validateRegistration(registration);
+        DiscriminatorRegistry.#discriminators.set(registration.discriminator, registration.validator);
 
         return (input: unknown): input is T => {
             return DiscriminatorRegistry.#validate(input, registration.discriminator);
         };
+    }
+
+    /**
+     * Validates a discriminator registration object to ensure it has the required properties and that the discriminator value is unique.
+     *
+     * @see {@link StringUtility.isSingleLineTrimmedString}
+     *
+     * @param {unknown} input - The input to validate.
+     *
+     * @throws {TypeError} If the given input is not an object.
+     * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
+     * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
+     * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
+     *
+     * @private
+     */
+    static #validateRegistration(input: unknown): void {
+        if (!input || typeof input !== 'object') {
+            throw new TypeError('Registration must be an object.');
+        }
+
+        const registration: DiscriminatorRegistration = input as DiscriminatorRegistration;
+
+        if (!StringUtility.isSingleLineTrimmedString(registration.discriminator)) {
+            throw new TypeError(`Discriminator '${registration.discriminator}' must be a non-empty single line trimmed string.`);
+        }
+
+        if (typeof registration.validator !== 'function') {
+            throw new TypeError(`Discriminator '${registration.discriminator}' must have a validator function.`);
+        }
+
+        if (DiscriminatorRegistry.has(registration.discriminator)) {
+            throw new Error(`Discriminator '${registration.discriminator}' is already registered.`);
+        }
     }
 
     /**
@@ -134,14 +165,14 @@ export class DiscriminatorRegistry {
      * @private
      */
     static #validate(input: unknown, discriminator: string): boolean {
-        if (!DiscriminatorRegistry.#isDiscriminable(input, discriminator)) {
+        if (!DiscriminatorRegistry.#isDiscriminated(input, discriminator)) {
             return false;
         }
 
-        const validate = DiscriminatorRegistry.#discriminators.get(discriminator);
+        const validator: ((input: unknown) => boolean) | undefined = DiscriminatorRegistry.#discriminators.get(discriminator);
 
-        if (validate) {
-            return validate(input);
+        if (validator) {
+            return validator(input);
         }
 
         return false;
@@ -157,9 +188,9 @@ export class DiscriminatorRegistry {
      *
      * @private
      */
-    static #isDiscriminable(input: unknown, discriminator: string): boolean {
+    static #isDiscriminated(input: unknown, discriminator: string): boolean {
         if (input && typeof input === 'object') {
-            return (input as Discriminable).discriminator === discriminator;
+            return (input as Discriminated).discriminator === discriminator;
         }
 
         return false;

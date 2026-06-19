@@ -18,8 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// noinspection JSPrimitiveTypeWrapperUsage
-export const nonArrayInputs: unknown[] = [
+export const nonObjectInputs: unknown[] = [
     null,
     undefined,
     0,
@@ -53,14 +52,5 @@ export const nonArrayInputs: unknown[] = [
     (): object => {
         return {};
     },
-    Math.random,
-    new Number(10),
-    new String('value'),
-    new Object(10),
-    new Object('value'),
-    {},
-    { key: 'value' },
-    { key: 10 },
-    { key: [] },
-    { key: {} }
+    Math.random
 ];
