@@ -21,10 +21,11 @@
 import { fail } from 'node:assert';
 import { describe, test, expect } from 'vitest';
 
-import { Discriminated, DiscriminatorRegistry, TypeGuard } from '../../src';
+import { Discriminated, DiscriminatorRegistration, DiscriminatorRegistry, TypeGuard } from '../../src';
 
+import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
-import { nonStringInputs } from '../utils/input/string-inputs';
+import { emptyStringInputs, nonStringInputs, singleLineTrimmedFailureInputs } from '../utils/input/string-inputs';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('DiscriminatorRegistry', (): void => {
@@ -39,7 +40,7 @@ describe('DiscriminatorRegistry', (): void => {
 
     const isTestObject: TypeGuard<TestObject> = DiscriminatorRegistry.register<TestObject>({
         discriminator: TestDiscriminators.TEST,
-        validate: (input: unknown): boolean => {
+        validator: (input: unknown): boolean => {
             return typeof input === 'object'
                 && (input as Discriminated).discriminator === TestDiscriminators.TEST.valueOf()
                 && typeof (input as TestObject).key === 'string';
@@ -204,7 +205,80 @@ describe('DiscriminatorRegistry', (): void => {
                 }
             });
         });
-    });
 
-    test.todo('Discriminator must be a non-empty string');
+        describe('Input validation', (): void => {
+            function buildRegistrations(discriminators: unknown[], validators: unknown[]): DiscriminatorRegistration[] {
+                const registrations: DiscriminatorRegistration[] = [];
+
+                discriminators.forEach((discriminator: unknown): void => {
+                    validators.forEach((validator: unknown): void => {
+                        registrations.push({
+                            discriminator: discriminator as string,
+                            validator: validator as ((input: unknown) => boolean)
+                        });
+                    });
+                });
+
+                return registrations;
+            }
+
+            const scenarios: Scenario[] = [
+                {
+                    label: 'non-object registration',
+                    inputs: [
+                        ...nonObjectInputs
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'non-string discriminators',
+                    inputs: [
+                        ...buildRegistrations([
+                            ...nonStringInputs
+                        ], [(): boolean => false])
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'empty string discriminators',
+                    inputs: [
+                        ...buildRegistrations([
+                            ...emptyStringInputs
+                        ], [(): boolean => false])
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'multi-line string discriminators',
+                    inputs: [
+                        ...buildRegistrations([
+                            ...singleLineTrimmedFailureInputs
+                        ], [(): boolean => false])
+                    ],
+                    expected: TypeError
+                },
+                {
+                    label: 'non-function validators',
+                    inputs: [
+                        ...buildRegistrations(['test-discriminator'], [
+                            ...nonFunctionInputs
+                        ])
+                    ],
+                    expected: TypeError
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - invalid registration $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): TypeGuard<Discriminated> => DiscriminatorRegistry.register(testInput as DiscriminatorRegistration)).toThrow(testExpected);
+                });
+            });
+        });
+    });
 });

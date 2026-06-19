@@ -134,6 +134,10 @@ export const singleLineLowercaseTrimmedFailureInputs: string[] = [
     'internal   spaces   example'
 ];
 
+export const singleLineTrimmedFailureInputs: string[] = [
+    ...singleLineLowercaseTrimmedFailureInputs
+];
+
 export const nonEmptyStringInputs: string[] = [
     'Hello, World!',
     'string',
