@@ -38,7 +38,7 @@ minima:
   nav_pages:
     - index.md
 
-title: "TypeScript Utilities, by Brittni Watkins"
+title: "TypeScript Utilities"
 description: "A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utilities for everyday development."
 show_downloads: true
 
