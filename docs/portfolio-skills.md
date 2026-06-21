@@ -10,29 +10,28 @@ toc: true
 ---
 
 ## About This Page
-
 This page is a technical record of the skills, tools, and engineering practices represented in the TypeScript Utilities project.
 
 ## Project Overview
-
-TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
+TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The project is maintained at [github.com/blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils) and built with TypeScript, tsdown (ESM bundling), and Vitest for testing. GitHub Actions automates linting, building, testing, and publishing.
 
 ## At a Glance
 
 - **Project Type:** TypeScript utility library package
-- **Primary Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Primary Runtime:** [Node.js](https://nodejs.org/en)
-- **Primary Framework/Library:** Minimal framework-free utility architecture
-- **Build Pipeline:** [tsdown](https://tsdown.dev/)
-- **Quality Controls:** [ESLint](https://eslint.org/) and [GitHub Actions](https://github.com/features/actions)
-- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
-- **Security Analysis:** [CodeQL](https://codeql.github.com/) via GitHub Actions
-- **Documentation Pattern:** [TypeDoc](https://typedoc.org/) output plus manually maintained release docs in `docs/releases/...`
+- **Primary Language:** TypeScript
+- **Primary Runtime:** Node.js
+- **Build Pipeline:** tsdown (ESM)
+- **Quality Controls:** ESLint
+- **Automation:** GitHub Actions
+- **Dependency Automation:** Dependabot
+- **Security Analysis:** CodeQL via GitHub Actions
+- **Documentation Pattern:** TypeDoc and Jekyll (GitHub Pages)
 
 ## Skills and Tooling Inventory
 
 - **Languages:** [TypeScript](https://www.typescriptlang.org/), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Markdown](https://www.markdownguide.org/), [YAML](https://yaml.org/)
-- **Runtime & Libraries:** [Node.js](https://nodejs.org/en), [TypeBox](https://sinclairzx81.github.io/typebox/)
+- **Runtime & Libraries:** [Node.js](https://nodejs.org/en)
+- **Libraries:** [TypeBox](https://sinclairzx81.github.io/typebox/)
 - **Testing:** [Vitest](https://vitest.dev/)
 - **Build / Bundling:** [tsdown](https://tsdown.dev/)
 - **Code Quality:** [ESLint](https://eslint.org/)
@@ -43,7 +42,7 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - **Automation:** [GitHub Actions](https://github.com/features/actions)
 - **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm Package Registry](https://www.npmjs.com/)
 - **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
-- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
+- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates)
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)
 - **Environment Configuration:** Node.js version pinning via `.node-version`, plus Ruby version pinning for the Jekyll/Bundler docs site via `docs/.ruby-version`
 - **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)

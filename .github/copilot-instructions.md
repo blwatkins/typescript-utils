@@ -234,10 +234,11 @@ Generate a Markdown file with these sections in order:
 
    Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
 
-5. **Skills and Tooling Inventory** (categorized lists)
+5. **Skills and Tooling Inventory** (flat bulleted list with bold category labels, e.g., `- **Category:** [Tool](url), [Tool](url)`)
    - Languages
-   - Runtime & Frameworks (or similar category)
-   - Key libraries and middleware
+   - Runtime (or similar category)
+   - Frameworks (or similar category)
+   - Libraries (or similar category)
    - Testing
    - Build / Bundling
    - Code Quality
@@ -250,12 +251,13 @@ Generate a Markdown file with these sections in order:
    - Code Analysis / Security
    - Dependency Automation
    - Development Utilities
-   - Environment Management
+   - Environment Configuration (or similar category)
    - Development Environments
    - AI-Assisted Development
 
    Link each tool/language to its official documentation.
    Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
+   Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
    - 5–10 bullets describing what this project demonstrates
@@ -433,6 +435,7 @@ When reviewing a new page, compare with existing template pages for:
 
 - heading style/casing
 - label style in `At a Glance`
+- label style and format in `Skills and Tooling Inventory` (flat bulleted list with bold category labels)
 - tense and sentence style
 - bullet punctuation consistency
 - naming conventions (`webpack` vs `Webpack`, etc.)
