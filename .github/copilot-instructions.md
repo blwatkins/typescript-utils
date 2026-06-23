@@ -38,6 +38,68 @@ The package is currently in an alpha release line and exports grouped utility mo
 - Build with `npm run build`.
 - Run tests with `npm run test`.
 
+## Pre-Merge and Release Review
+
+Complete the following steps before merging a branch to a release branch or to `main`.
+
+### 1. Validation
+
+Run the full validation suite and confirm everything passes cleanly:
+
+- `npm ci` — install dependencies from the lockfile
+- `npm run lint:all` — both ESLint configurations report no errors
+- `npm run build` — build completes with no errors
+- `npm test` — all Vitest tests pass
+
+### 2. Portfolio Skills Page (`docs/portfolio-skills.md`)
+
+Review `docs/portfolio-skills.md` against the current repository state. If anything changed:
+
+- Update any section where capabilities, tooling, or the skills inventory changed
+- Bump `modified_date` to today; do not change the original `date`
+- Evidence links must always point to the `main` branch
+
+Refer to the "Portfolio Page Generation and Maintenance" section for the full review checklist.
+
+### 3. Instruction File Sync
+
+Verify that `CLAUDE.md` and `.github/copilot-instructions.md` are consistent with each other and reflect the current project state:
+
+- Guidance shared between the two files is mirrored
+- The Development Status section accurately lists all modules exported by the package
+- Any new tooling, conventions, or workflows introduced on the branch are documented
+
+### 4. `package.json` Keywords
+
+Review the `keywords` array in `package.json`:
+
+- Keywords should cover all major utility domains and notable features exported by the package
+- Add new keywords when a new utility domain or notable feature is introduced
+- Remove keywords for capabilities that no longer exist
+
+### 5. GitHub Repository Topics
+
+Verify that the topics on the GitHub repository ([blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils)) reflect the current capabilities. Topics should align with `package.json` keywords where appropriate. Request the current topics to be updated, if necessary. Provide any topic change suggestions to the project maintainers and any accepted changes will be updated manually.
+
+### 6. Branch Changes Code Review
+
+Review all source changes for correctness and convention compliance:
+
+- New source files follow the static class pattern (private constructor, `@throws` on constructor, public static members only)
+- All public/exported members have complete JSDoc per the documentation comment conventions in this file
+- Copyright year headers are present and accurate (see "File Headers" section)
+- `README.md` and `docs/index.md` are in sync for any shared content changes
+- Test coverage is complete and meaningful for all new or changed public API surface
+
+### 7. Release Readiness (for merges to `main`)
+
+When preparing a release merge to `main`:
+
+- Confirm the version in `package.json` is bumped appropriately
+- Ensure release documentation under `docs/releases/` covers the new version
+- Verify `typedoc.json` entry points include any new module-level index files
+- Confirm the npm publish workflow (`npm-publish.yml`) is configured correctly for the release
+
 ## npm Scripts
 
 - `npm run lint:js` - lint repository files with `eslint.config.js.mjs`
