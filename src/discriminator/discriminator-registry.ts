@@ -146,7 +146,7 @@ export class DiscriminatorRegistry {
 
         const registration: DiscriminatorRegistration = input as DiscriminatorRegistration;
 
-        if (!StringUtility.isSingleLineTrimmedString(registration.discriminator)) {
+        if (!StringUtility.isSingleLineTrimmedString((registration as { discriminator: unknown; }).discriminator)) {
             throw new TypeError(`Discriminator '${registration.discriminator}' must be a non-empty single line trimmed string.`);
         }
 
