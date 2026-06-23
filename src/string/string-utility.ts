@@ -95,12 +95,12 @@ export class StringUtility {
      *
      * @param {unknown} input
      *
-     * @returns {boolean}
+     * @returns {input is string}
      *
      * @public
      * @since 0.1.0
      */
-    public static isNonEmptyString(input: unknown): boolean {
+    public static isNonEmptyString(input: unknown): input is string {
         return StringUtility.isString(input) && (input.trim().length > 0);
     }
 
@@ -111,13 +111,13 @@ export class StringUtility {
      *
      * @param {unknown} input
      *
-     * @returns {boolean}
+     * @returns {input is string}
      *
      * @public
      * @since 0.1.0
      */
-    public static isSingleLineLowercaseTrimmedString(input: unknown): boolean {
-        return StringUtility.isString(input) && (StringUtility.singleLineLowercaseTrimmedPattern.test(input));
+    public static isSingleLineLowercaseTrimmedString(input: unknown): input is string {
+        return StringUtility.isString(input) && StringUtility.singleLineLowercaseTrimmedPattern.test(input);
     }
 
     /**
@@ -127,13 +127,13 @@ export class StringUtility {
      *
      * @param {unknown} input
      *
-     * @returns {boolean}
+     * @returns {input is string}
      *
      * @public
      * @since 0.1.0
      */
-    public static isSingleLineUppercaseTrimmedString(input: unknown): boolean {
-        return StringUtility.isString(input) && (StringUtility.singleLineUppercaseTrimmedPattern.test(input));
+    public static isSingleLineUppercaseTrimmedString(input: unknown): input is string {
+        return StringUtility.isString(input) && StringUtility.singleLineUppercaseTrimmedPattern.test(input);
     }
 
     /**
@@ -143,12 +143,12 @@ export class StringUtility {
      *
      * @param {unknown} input
      *
-     * @returns {boolean}
+     * @returns {input is string}
      *
      * @public
      * @since 0.1.0
      */
-    public static isSingleLineTrimmedString(input: unknown): boolean {
-        return StringUtility.isString(input) && (StringUtility.singleLineTrimmedPattern.test(input));
+    public static isSingleLineTrimmedString(input: unknown): input is string {
+        return StringUtility.isString(input) && StringUtility.singleLineTrimmedPattern.test(input);
     }
 }
