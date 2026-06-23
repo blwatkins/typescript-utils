@@ -38,12 +38,12 @@ describe('NumberUtility', (): void => {
     describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [
             {
-                label: 'non-number inputs',
+                label: 'Non-number inputs',
                 inputs: [...nonNumberInputs],
                 expected: false
             },
             {
-                label: 'number inputs',
+                label: 'Number inputs',
                 inputs: [
                     ...positiveNumberInputs,
                     ...negativeNumberInputs,
@@ -73,7 +73,7 @@ describe('NumberUtility', (): void => {
 
             test.each(
                 testCases
-            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
             });
         });

@@ -133,7 +133,10 @@ export const singleLineTrimmedFailureInputsLowercase: string[] = [
     'internal\n spaces\n example',
     'internal\t spaces\t example',
     'internal  spaces  example',
-    'internal   spaces   example'
+    'internal   spaces   example',
+    '\nëë',
+    'ë\në',
+    'ëë\n'
 ];
 
 export const singleLineTrimmedFailureInputsUppercase: string[] = [
@@ -156,7 +159,10 @@ export const singleLineTrimmedFailureInputsUppercase: string[] = [
     'INTERNAL\n SPACES\n EXAMPLE',
     'INTERNAL\t SPACES\t EXAMPLE',
     'INTERNAL  SPACES  EXAMPLE',
-    'INTERNAL   SPACES   EXAMPLE'
+    'INTERNAL   SPACES   EXAMPLE',
+    '\nËË',
+    'Ë\nË',
+    'ËË\n'
 ];
 
 export const singleLineTrimmedFailureInputsMixedCase: string[] = [
@@ -179,7 +185,10 @@ export const singleLineTrimmedFailureInputsMixedCase: string[] = [
     'Internal\n Spaces\n Example',
     'Internal\t Spaces\t Example',
     'Internal  Spaces  Example',
-    'Internal   Spaces   Example'
+    'Internal   Spaces   Example',
+    '\nëË',
+    'ë\nË',
+    'ëË\n'
 ];
 
 export const singleLineTrimmedInputs: string[] = [

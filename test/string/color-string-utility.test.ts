@@ -50,21 +50,21 @@ describe('ColorStringUtility', (): void => {
     describe('isHexColor', (): void => {
         const scenarios: Scenario[] = [
             {
-                label: 'non-string inputs',
+                label: 'Non-string inputs',
                 inputs: [
                     ...nonStringInputs
                 ],
                 expected: false
             },
             {
-                label: 'empty string inputs',
+                label: 'Empty string inputs',
                 inputs: [
                     ...emptyStringInputs
                 ],
                 expected: false
             },
             {
-                label: 'hex color string failure inputs',
+                label: 'Hex color string failure inputs',
                 inputs: [
                     ...hexColorFailureInputs,
                     ...hexColorMixedCaseInputs
@@ -72,7 +72,7 @@ describe('ColorStringUtility', (): void => {
                 expected: false
             },
             {
-                label: 'hex color inputs',
+                label: 'Hex color inputs',
                 inputs: [
                     ...hexColorInputs
                 ],
@@ -87,7 +87,7 @@ describe('ColorStringUtility', (): void => {
 
             test.each(
                 testCases
-            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(ColorStringUtility.isHexColor(testInput)).toBe(testExpected);
             });
         });
@@ -96,21 +96,21 @@ describe('ColorStringUtility', (): void => {
     describe('isHexColorRGB', (): void => {
         const scenarios: Scenario[] = [
             {
-                label: 'non-string inputs',
+                label: 'Non-string inputs',
                 inputs: [
                     ...nonStringInputs
                 ],
                 expected: false
             },
             {
-                label: 'empty string inputs',
+                label: 'Empty string inputs',
                 inputs: [
                     ...emptyStringInputs
                 ],
                 expected: false
             },
             {
-                label: 'hex color string failure inputs',
+                label: 'Hex color string failure inputs',
                 inputs: [
                     ...hexColorFailureInputs,
                     ...hexColorMixedCaseInputs
@@ -144,7 +144,7 @@ describe('ColorStringUtility', (): void => {
 
             test.each(
                 testCases
-            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(ColorStringUtility.isHexColorRGB(testInput)).toBe(testExpected);
             });
         });
@@ -153,21 +153,21 @@ describe('ColorStringUtility', (): void => {
     describe('isHexColorRGBA', (): void => {
         const scenarios: Scenario[] = [
             {
-                label: 'non-string inputs',
+                label: 'Non-string inputs',
                 inputs: [
                     ...nonStringInputs
                 ],
                 expected: false
             },
             {
-                label: 'empty string inputs',
+                label: 'Empty string inputs',
                 inputs: [
                     ...emptyStringInputs
                 ],
                 expected: false
             },
             {
-                label: 'hex color string failure inputs',
+                label: 'Hex color string failure inputs',
                 inputs: [
                     ...hexColorFailureInputs,
                     ...hexColorMixedCaseInputs
@@ -201,7 +201,7 @@ describe('ColorStringUtility', (): void => {
 
             test.each(
                 testCases
-            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(ColorStringUtility.isHexColorRGBA(testInput)).toBe(testExpected);
             });
         });

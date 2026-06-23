@@ -65,10 +65,10 @@ describe('DiscriminatorRegistry', (): void => {
             expect(DiscriminatorRegistry.has(TestDiscriminators.TEST)).toBe(true);
         });
 
-        describe('input validation', (): void => {
+        describe('Input validation', (): void => {
             const scenarios: Scenario[] = [
                 {
-                    label: 'non-string discriminators',
+                    label: 'Non-string discriminators',
                     inputs: [
                         ...nonStringInputs
                     ],
@@ -83,7 +83,7 @@ describe('DiscriminatorRegistry', (): void => {
 
                 test.each(
                     testCases
-                )('%# - input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect(DiscriminatorRegistry.has(testInput as string)).toBe(testExpected);
                 });
             });
@@ -95,17 +95,17 @@ describe('DiscriminatorRegistry', (): void => {
     });
 
     describe('register', (): void => {
-        describe('Register should return a method that validates the registered Discriminated type', (): void => {
+        describe('register() should return a method that validates the registered Discriminated type', (): void => {
             const scenarios: Scenario[] = [
                 {
-                    label: 'non-object inputs',
+                    label: 'Non-object inputs',
                     inputs: [
                         ...nonObjectInputs
                     ],
                     expected: false
                 },
                 {
-                    label: 'array inputs',
+                    label: 'Array inputs',
                     inputs: [
                         [],
                         ['value'],
@@ -114,7 +114,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: false
                 },
                 {
-                    label: 'object inputs without discriminator',
+                    label: 'Object inputs without discriminator',
                     inputs: [
                         {},
                         { property: 'value' },
@@ -123,7 +123,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: false
                 },
                 {
-                    label: 'object inputs with incorrect discriminator',
+                    label: 'Object inputs with incorrect discriminator',
                     inputs: [
                         { discriminator: '' },
                         { discriminator: 'invalid' },
@@ -136,7 +136,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: false
                 },
                 {
-                    label: 'object inputs with correct discriminator, but incorrect schema',
+                    label: 'Object inputs with correct discriminator, but incorrect schema',
                     inputs: [
                         {
                             discriminator: TestDiscriminators.TEST
@@ -161,7 +161,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: false
                 },
                 {
-                    label: 'object inputs with correct schema',
+                    label: 'Object inputs with correct schema',
                     inputs: [
                         {
                             discriminator: TestDiscriminators.TEST,
@@ -183,7 +183,7 @@ describe('DiscriminatorRegistry', (): void => {
 
                 test.each(
                     testCases
-                )('%# - input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect(isTestObject(testInput)).toBe(testExpected);
                 });
             });
@@ -233,14 +233,14 @@ describe('DiscriminatorRegistry', (): void => {
 
             const scenarios: Scenario[] = [
                 {
-                    label: 'non-object registration',
+                    label: 'Non-object registration',
                     inputs: [
                         ...nonObjectInputs
                     ],
                     expected: TypeError
                 },
                 {
-                    label: 'array registration',
+                    label: 'Array registration',
                     inputs: [
                         [],
                         ['value'],
@@ -249,7 +249,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: TypeError
                 },
                 {
-                    label: 'non-string discriminators',
+                    label: 'Non-string discriminators',
                     inputs: [
                         ...buildRegistrations([
                             ...nonStringInputs
@@ -258,7 +258,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: TypeError
                 },
                 {
-                    label: 'empty string discriminators',
+                    label: 'Empty string discriminators',
                     inputs: [
                         ...buildRegistrations([
                             ...emptyStringInputs
@@ -267,7 +267,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: TypeError
                 },
                 {
-                    label: 'multi-line string discriminators',
+                    label: 'Multi-line string discriminators',
                     inputs: [
                         ...buildRegistrations([
                             ...singleLineTrimmedFailureInputs
@@ -276,7 +276,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: TypeError
                 },
                 {
-                    label: 'non-function validators',
+                    label: 'Non-function validators',
                     inputs: [
                         ...buildRegistrations(['test-discriminator'], [
                             ...nonFunctionInputs
@@ -285,7 +285,7 @@ describe('DiscriminatorRegistry', (): void => {
                     expected: TypeError
                 },
                 {
-                    label: 'duplicate discriminator registration',
+                    label: 'Duplicate discriminator registration',
                     inputs: [
                         ...buildRegistrations([TestDiscriminators.TEST], [(): boolean => false])
                     ],
@@ -300,7 +300,7 @@ describe('DiscriminatorRegistry', (): void => {
 
                 test.each(
                     testCases
-                )('%# - invalid registration $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Invalid registration $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): TypeGuard<Discriminated> => DiscriminatorRegistry.register(testInput as DiscriminatorRegistration)).toThrow(testExpected);
                 });
             });
@@ -308,7 +308,7 @@ describe('DiscriminatorRegistry', (): void => {
     });
 
     describe('validate', (): void => {
-        test('validate returns false for unregistered discriminator', (): void => {
+        test('validate() returns false for unregistered discriminator', (): void => {
             const input = {
                 discriminator: 'unregistered'
             };

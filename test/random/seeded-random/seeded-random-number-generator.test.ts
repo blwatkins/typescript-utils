@@ -27,17 +27,17 @@ import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-c
 
 describe('SeededRandomNumberGenerator', () => {
     describe('new SeededRandomNumberGenerator()', () => {
-        describe('input validation', (): void => {
+        describe('Input validation', (): void => {
             const scenarios: Scenario[] = [
                 {
-                    label: 'non-array inputs',
+                    label: 'Non-array inputs',
                     inputs: [
                         ...nonArrayInputs
                     ],
                     expected: TypeError
                 },
                 {
-                    label: 'array inputs with incorrect length',
+                    label: 'Array inputs with incorrect length',
                     inputs: [
                         [],
                         [1],
@@ -48,7 +48,7 @@ describe('SeededRandomNumberGenerator', () => {
                     expected: TypeError
                 },
                 {
-                    label: 'array inputs with non-integer elements',
+                    label: 'Array inputs with non-integer elements',
                     inputs: [
                         [1.5, 0, 0, 0],
                         [0, 1.5, 0, 0],
@@ -58,7 +58,7 @@ describe('SeededRandomNumberGenerator', () => {
                     expected: RangeError
                 },
                 {
-                    label: 'array inputs greater than 0xFFFFFFFF (max 32-bit unsigned integer)',
+                    label: 'Array inputs greater than 0xFFFFFFFF (max 32-bit unsigned integer)',
                     inputs: [
                         [(0xFFFFFFFF + 1), 0, 0, 0],
                         [0, (0xFFFFFFFF + 1), 0, 0],
@@ -68,7 +68,7 @@ describe('SeededRandomNumberGenerator', () => {
                     expected: RangeError
                 },
                 {
-                    label: 'array inputs with negative elements',
+                    label: 'Array inputs with negative elements',
                     inputs: [
                         [-1, 0, 0, 0],
                         [0, -1, 0, 0],
@@ -78,7 +78,7 @@ describe('SeededRandomNumberGenerator', () => {
                     expected: RangeError
                 },
                 {
-                    label: 'array input with zero state (all elements are 0)',
+                    label: 'Array input with zero state (all elements are 0)',
                     inputs: [[0, 0, 0, 0]],
                     expected: RangeError
                 }
@@ -91,19 +91,19 @@ describe('SeededRandomNumberGenerator', () => {
 
                 test.each(
                     testCases
-                )('%# - invalid state $input should throw an error $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Invalid state $input should throw an error $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): SeededRandomNumberGenerator => new SeededRandomNumberGenerator(testInput as [number, number, number, number])).toThrow(testExpected);
                 });
             });
         });
 
-        describe('valid state', (): void => {
+        describe('Valid state', (): void => {
             test.each([
                 { state: [1, 0, 0, 0] },
                 { state: [0, 1, 0, 0] },
                 { state: [0, 0, 1, 0] },
                 { state: [0, 0, 0, 1] }
-            ])('%# - state %o should construct successfully', ({ state }: { state: number[]; }): void => {
+            ])('%# - State %o should construct successfully', ({ state }: { state: number[]; }): void => {
                 expect((): SeededRandomNumberGenerator => new SeededRandomNumberGenerator(state as [number, number, number, number])).not.toThrow();
             });
         });
