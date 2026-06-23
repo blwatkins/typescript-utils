@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-19
+modified_date: 2026-06-22
 toc: true
 ---
 
@@ -85,6 +85,7 @@ The public entry point re-exports domain modules, and each domain module re-expo
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
+- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -105,6 +106,8 @@ The project uses Vitest for repeatable unit testing, with scripts wired into loc
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
+- [test/string/color-string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/color-string-utility.test.ts)
+- [test/utils/input/color-string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/color-string-inputs.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
