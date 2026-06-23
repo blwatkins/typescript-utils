@@ -18,6 +18,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { hexColorFailureInputs, hexColorInputs, hexColorMixedCaseInputs } from './color-string-inputs';
+
 // noinspection JSPrimitiveTypeWrapperUsage
 export const nonStringInputs: unknown[] = [
     null,
@@ -74,7 +76,7 @@ export const emptyStringInputs: string[] = [
     ' \n\t '
 ];
 
-export const numberAndSymbolTrimmedInputs: string[] = [
+export const singleLineTrimmedInputsNumsAndSymbols: string[] = [
     '\u{1F3A8}',
     '\u{1F3A8} \u{1F3A8}',
     '🎨',
@@ -84,7 +86,7 @@ export const numberAndSymbolTrimmedInputs: string[] = [
     '!@#$%^&*()-_+=~`"\'/\\|,.<>?;:'
 ];
 
-export const singleLineMixedCaseTrimmedInputs: string[] = [
+export const singleLineTrimmedInputsMixedCase: string[] = [
     'Example',
     'ëË',
     'ë Ë',
@@ -93,7 +95,7 @@ export const singleLineMixedCaseTrimmedInputs: string[] = [
     'this IS an Example sEnTeNcE!'
 ];
 
-export const singleLineLowercaseTrimmedInputs: string[] = [
+export const singleLineTrimmedInputsLowercase: string[] = [
     'example',
     'ë',
     'ë ë',
@@ -102,7 +104,7 @@ export const singleLineLowercaseTrimmedInputs: string[] = [
     'this is an example sentence!'
 ];
 
-export const singleLineUppercaseTrimmedInputs: string[] = [
+export const singleLineTrimmedInputsUppercase: string[] = [
     'EXAMPLE',
     'Ë',
     'Ë Ë',
@@ -111,7 +113,7 @@ export const singleLineUppercaseTrimmedInputs: string[] = [
     'THIS IS AN EXAMPLE SENTENCE!'
 ];
 
-export const singleLineLowercaseTrimmedFailureInputs: string[] = [
+export const singleLineTrimmedFailureInputsLowercase: string[] = [
     ' example ',
     '\nexample\n',
     '\texample\t',
@@ -134,7 +136,7 @@ export const singleLineLowercaseTrimmedFailureInputs: string[] = [
     'internal   spaces   example'
 ];
 
-export const singleLineUppercaseTrimmedFailureInputs: string[] = [
+export const singleLineTrimmedFailureInputsUppercase: string[] = [
     ' EXAMPLE ',
     '\nEXAMPLE\n',
     '\tEXAMPLE\t',
@@ -157,7 +159,7 @@ export const singleLineUppercaseTrimmedFailureInputs: string[] = [
     'INTERNAL   SPACES   EXAMPLE'
 ];
 
-export const singleLineMixedCaseTrimmedFailureInputs: string[] = [
+export const singleLineTrimmedFailureInputsMixedCase: string[] = [
     ' Example ',
     '\nExample\n',
     '\tExample\t',
@@ -180,10 +182,17 @@ export const singleLineMixedCaseTrimmedFailureInputs: string[] = [
     'Internal   Spaces   Example'
 ];
 
+export const singleLineTrimmedInputs: string[] = [
+    ...singleLineTrimmedInputsLowercase,
+    ...singleLineTrimmedInputsUppercase,
+    ...singleLineTrimmedInputsMixedCase,
+    ...singleLineTrimmedInputsNumsAndSymbols
+];
+
 export const singleLineTrimmedFailureInputs: string[] = [
-    ...singleLineLowercaseTrimmedFailureInputs,
-    ...singleLineUppercaseTrimmedFailureInputs,
-    ...singleLineMixedCaseTrimmedFailureInputs
+    ...singleLineTrimmedFailureInputsLowercase,
+    ...singleLineTrimmedFailureInputsUppercase,
+    ...singleLineTrimmedFailureInputsMixedCase
 ];
 
 export const nonEmptyStringInputs: string[] = [
@@ -197,7 +206,8 @@ export const nonEmptyStringInputs: string[] = [
     '🎨',
     'ë',
     ...singleLineTrimmedFailureInputs,
-    ...singleLineLowercaseTrimmedInputs,
-    ...singleLineUppercaseTrimmedInputs,
-    ...singleLineMixedCaseTrimmedInputs
+    ...singleLineTrimmedInputs,
+    ...hexColorInputs,
+    ...hexColorMixedCaseInputs,
+    ...hexColorFailureInputs
 ];

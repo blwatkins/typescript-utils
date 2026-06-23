@@ -119,8 +119,33 @@ export class DiscriminatorRegistry {
         DiscriminatorRegistry.#discriminators.set(registration.discriminator, registration.validator);
 
         return (input: unknown): input is T => {
-            return DiscriminatorRegistry.#validate(input, registration.discriminator);
+            return DiscriminatorRegistry.validate(input, registration.discriminator);
         };
+    }
+
+    /**
+     * Validates an input against a specific discriminator.
+     *
+     * @param {unknown} input - The input to validate.
+     * @param {string} discriminator - The discriminator value to check.
+     *
+     * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static validate(input: unknown, discriminator: string): boolean {
+        if (!DiscriminatorRegistry.#isDiscriminated(input, discriminator)) {
+            return false;
+        }
+
+        const validator: ((input: unknown) => boolean) | undefined = DiscriminatorRegistry.#discriminators.get(discriminator);
+
+        if (validator) {
+            return validator(input);
+        }
+
+        return false;
     }
 
     /**
@@ -144,43 +169,19 @@ export class DiscriminatorRegistry {
             throw new TypeError('Registration must be an object.');
         }
 
-        const registration: DiscriminatorRegistration = input as DiscriminatorRegistration;
+        const record = input as Record<string, unknown>;
 
-        if (!StringUtility.isSingleLineTrimmedString(registration.discriminator)) {
-            throw new TypeError(`Discriminator '${registration.discriminator}' must be a non-empty single line trimmed string.`);
+        if (!StringUtility.isSingleLineTrimmedString(record['discriminator'])) {
+            throw new TypeError(`Discriminator '${record['discriminator'] as string}' must be a non-empty single line trimmed string.`);
         }
 
-        if (typeof registration.validator !== 'function') {
-            throw new TypeError(`Discriminator '${registration.discriminator}' must have a validator function.`);
+        if (typeof record['validator'] !== 'function') {
+            throw new TypeError(`Discriminator '${record['discriminator']}' must have a validator function.`);
         }
 
-        if (DiscriminatorRegistry.has(registration.discriminator)) {
-            throw new Error(`Discriminator '${registration.discriminator}' is already registered.`);
+        if (DiscriminatorRegistry.has(record['discriminator'])) {
+            throw new Error(`Discriminator '${record['discriminator']}' is already registered.`);
         }
-    }
-
-    /**
-     * Validates an input against a specific discriminator.
-     *
-     * @param {unknown} input - The input to validate.
-     * @param {string} discriminator - The discriminator value to check.
-     *
-     * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
-     *
-     * @private
-     */
-    static #validate(input: unknown, discriminator: string): boolean {
-        if (!DiscriminatorRegistry.#isDiscriminated(input, discriminator)) {
-            return false;
-        }
-
-        const validator: ((input: unknown) => boolean) | undefined = DiscriminatorRegistry.#discriminators.get(discriminator);
-
-        if (validator) {
-            return validator(input);
-        }
-
-        return false;
     }
 
     /**

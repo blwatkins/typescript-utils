@@ -26,11 +26,11 @@ import {
     emptyStringInputs,
     nonEmptyStringInputs,
     nonStringInputs,
-    numberAndSymbolTrimmedInputs,
-    singleLineLowercaseTrimmedFailureInputs,
-    singleLineLowercaseTrimmedInputs,
-    singleLineMixedCaseTrimmedInputs,
-    singleLineUppercaseTrimmedInputs
+    singleLineTrimmedInputsNumsAndSymbols,
+    singleLineTrimmedFailureInputsLowercase,
+    singleLineTrimmedInputsLowercase,
+    singleLineTrimmedInputsMixedCase,
+    singleLineTrimmedInputsUppercase
 } from '../utils/input/string-inputs';
 
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
@@ -87,24 +87,24 @@ describe('StringUtility', (): void => {
             {
                 label: 'Incorrect case inputs',
                 inputs: [
-                    ...singleLineUppercaseTrimmedInputs,
-                    ...singleLineMixedCaseTrimmedInputs
+                    ...singleLineTrimmedInputsUppercase,
+                    ...singleLineTrimmedInputsMixedCase
                 ],
                 expected: false
             },
             {
                 label: 'Whitespace failure inputs',
-                inputs: [...singleLineLowercaseTrimmedFailureInputs],
+                inputs: [...singleLineTrimmedFailureInputsLowercase],
                 expected: false
             },
             {
                 label: 'Single line lowercase trimmed inputs',
-                inputs: [...singleLineLowercaseTrimmedInputs],
+                inputs: [...singleLineTrimmedInputsLowercase],
                 expected: true
             },
             {
                 label: 'Number and symbol trimmed inputs',
-                inputs: [...numberAndSymbolTrimmedInputs],
+                inputs: [...singleLineTrimmedInputsNumsAndSymbols],
                 expected: true
             }
         ];

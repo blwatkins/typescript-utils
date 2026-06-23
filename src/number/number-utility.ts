@@ -67,18 +67,19 @@ export class NumberUtility {
      * @param {unknown} input
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
+     * Default value is `false`.
      *
      * @returns {input is number} `true` if the given input is a positive integer, or zero when `zeroInclusive` is `true`; `false` otherwise.
      *
      * @public
      * @since 0.1.0
      */
-    public static isPositiveInteger(input: unknown, zeroInclusive?: boolean): input is number {
+    public static isPositiveInteger(input: unknown, zeroInclusive: boolean = false): input is number {
         if (!NumberUtility.isInteger(input)) {
             return false;
         }
 
-        if (zeroInclusive === true) {
+        if (zeroInclusive) {
             return input >= 0;
         }
 
