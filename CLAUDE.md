@@ -48,5 +48,5 @@ Before merging a branch, complete these review steps (full details in the "Pre-M
 3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
 5. **GitHub repository topics** — align with `package.json` keywords
-6. **Branch code review** — static class conventions, JSDoc completeness, copyright headers, README/docs sync, test coverage
+6. **Branch code review** — convention compliance (static class pattern, JSDoc completeness, copyright headers, README/docs sync, test coverage) and code quality (correctness, API consistency, efficiency, backward compatibility, reuse/DRY, runtime safety)
 7. **Release readiness** (for merges to `main`) — version bump, release docs, TypeDoc entry points, publish workflow

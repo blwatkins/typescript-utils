@@ -83,13 +83,24 @@ Verify that the topics on the GitHub repository ([blwatkins/typescript-utils](ht
 
 ### 6. Branch Changes Code Review
 
-Review all source changes for correctness and convention compliance:
+Review all source changes for convention compliance and code quality.
+
+#### Convention Compliance
 
 - New source files follow the static class pattern (private constructor, `@throws` on constructor, public static members only)
 - All public/exported members have complete JSDoc per the documentation comment conventions in this file
 - Copyright year headers are present and accurate (see "File Headers" section)
 - `README.md` and `docs/index.md` are in sync for any shared content changes
 - Test coverage is complete and meaningful for all new or changed public API surface
+
+#### Code Quality
+
+- **Correctness** — implementations behave exactly as documented; edge cases are handled; patterns (e.g., regex) match precisely what they claim to match
+- **API consistency** — new methods and classes follow the naming conventions and structural patterns of existing ones; the public surface is intuitive alongside what is already exported
+- **Efficiency** — utility functions avoid unnecessary computation (e.g., no redundant regex compilation, no unnecessary copies or iterations)
+- **Backward compatibility** — no unintentional breaking changes to the published API; any intentional breaking changes are reflected in the version bump
+- **Reuse and DRY** — new utilities delegate to existing ones where appropriate rather than duplicating logic
+- **Runtime safety** — see the "JavaScript Consumer Safety" section for the requirement to retain runtime type guards for JavaScript consumers
 
 ### 7. Release Readiness (for merges to `main`)
 
