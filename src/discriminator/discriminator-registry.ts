@@ -144,18 +144,18 @@ export class DiscriminatorRegistry {
             throw new TypeError('Registration must be an object.');
         }
 
-        const registration: DiscriminatorRegistration = input as DiscriminatorRegistration;
+        const record = input as Record<string, unknown>;
 
-        if (!StringUtility.isSingleLineTrimmedString((registration as { discriminator: unknown; }).discriminator)) {
-            throw new TypeError(`Discriminator '${registration.discriminator}' must be a non-empty single line trimmed string.`);
+        if (!StringUtility.isSingleLineTrimmedString(record['discriminator'])) {
+            throw new TypeError(`Discriminator '${record['discriminator']}' must be a non-empty single line trimmed string.`);
         }
 
-        if (typeof registration.validator !== 'function') {
-            throw new TypeError(`Discriminator '${registration.discriminator}' must have a validator function.`);
+        if (typeof record['validator'] !== 'function') {
+            throw new TypeError(`Discriminator '${record['discriminator']}' must have a validator function.`);
         }
 
-        if (DiscriminatorRegistry.has(registration.discriminator)) {
-            throw new Error(`Discriminator '${registration.discriminator}' is already registered.`);
+        if (DiscriminatorRegistry.has(record['discriminator'] as string)) {
+            throw new Error(`Discriminator '${record['discriminator']}' is already registered.`);
         }
     }
 
