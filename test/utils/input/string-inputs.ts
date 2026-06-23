@@ -18,9 +18,9 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// noinspection JSPrimitiveTypeWrapperUsage
-import {hexColorFailureInputs, hexColorInputs, hexColorMixedCaseInputs} from "./color-string-inputs";
+import { hexColorFailureInputs, hexColorInputs, hexColorMixedCaseInputs } from './color-string-inputs';
 
+// noinspection JSPrimitiveTypeWrapperUsage
 export const nonStringInputs: unknown[] = [
     null,
     undefined,

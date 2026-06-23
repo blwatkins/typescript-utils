@@ -199,10 +199,10 @@ export const hexColorFailureInputs: string[] = [
     '#987654\n',
     '#AAAAAA    ',
     '#F\nFFFFF',
-    '#ABC\aDEF',
+    '\n\t#ABCDEF',
     '#1\tA2B3C',
     '#aaa\n\taaa',
     '#ffffff\n\t',
     '    #abcdef',
-    '#1a2b3c    ',
+    '#1a2b3c    '
 ];
