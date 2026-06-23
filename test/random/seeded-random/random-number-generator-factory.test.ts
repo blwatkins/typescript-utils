@@ -88,7 +88,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
     });
 
     describe('build', (): void => {
-        describe('build with valid inputs', (): void => {
+        describe('build() with valid inputs', (): void => {
             test.each(
                 scenarios
             )('%# - $label',
@@ -102,8 +102,8 @@ describe('RandomNumberGeneratorFactory', (): void => {
             );
         });
 
-        describe('sequence distinctness contracts', (): void => {
-            test('changing seed changes sequence', (): void => {
+        describe('Sequence distinctness contracts', (): void => {
+            test('Changing seed changes sequence', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed);
                 const rngB: SeededRandomNumberGenerator = callBuild(alternateAsciiSeed);
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
@@ -111,7 +111,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(a).not.toEqual(b);
             });
 
-            test('changing namespace changes sequence', (): void => {
+            test('Changing namespace changes sequence', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace);
                 const rngB: SeededRandomNumberGenerator = callBuild(asciiSeed, alternateAsciiNamespace);
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
@@ -119,7 +119,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(a).not.toEqual(b);
             });
 
-            test('changing valid version changes sequence for same seed and namespace', (): void => {
+            test('Changing valid version changes sequence for same seed and namespace', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace, 0);
                 const rngB: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace, 1);
                 const v0: number[] = buildActualSequence(rngA, sequenceLength);
@@ -128,31 +128,31 @@ describe('RandomNumberGeneratorFactory', (): void => {
             });
         });
 
-        describe('input validation', (): void => {
-            describe('invalid seed inputs', (): void => {
+        describe('Input validation', (): void => {
+            describe('Invalid seed inputs', (): void => {
                 test.each(
                     nonStringInputs
-                )('%# - invalid seed %o should throw a TypeError', (seed: unknown): void => {
+                )('%# - Invalid seed %o should throw a TypeError', (seed: unknown): void => {
                     expect((): void => {
                         RandomNumberGeneratorFactory.build(seed as string);
                     }).toThrow(TypeError);
                 });
             });
 
-            describe('invalid namespace inputs', (): void => {
+            describe('Invalid namespace inputs', (): void => {
                 test.each(
                     nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-                )('%# - invalid namespace %o should throw a TypeError', (namespace: unknown): void => {
+                )('%# - Invalid namespace %o should throw a TypeError', (namespace: unknown): void => {
                     expect((): void => {
                         RandomNumberGeneratorFactory.build('', namespace as string);
                     }).toThrow(TypeError);
                 });
             });
 
-            describe('invalid version inputs', (): void => {
+            describe('Invalid version inputs', (): void => {
                 const testScenarios: Scenario[] = [
                     {
-                        label: 'non-number, non-finite, and float versions',
+                        label: 'Non-number, non-finite, and float versions',
                         inputs: [
                             ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
                             ...nonFiniteNumberInputs,
@@ -161,7 +161,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         expected: TypeError
                     },
                     {
-                        label: 'out-of-range integer versions',
+                        label: 'Out-of-range integer versions',
                         inputs: [
                             ...negativeIntegerInputs,
                             SeedVersions.size,
@@ -192,7 +192,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
     });
 
     describe('asyncBuild', (): void => {
-        describe('asyncBuild with valid inputs', (): void => {
+        describe('asyncBuild() with valid inputs', (): void => {
             test.each(
                 asyncScenarios
             )('%# - $label',
@@ -206,8 +206,8 @@ describe('RandomNumberGeneratorFactory', (): void => {
             );
         });
 
-        describe('sequence distinctness contracts', (): void => {
-            test('changing seed changes sequence', async (): Promise<void> => {
+        describe('Sequence distinctness contracts', (): void => {
+            test('Changing seed changes sequence', async (): Promise<void> => {
                 const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed);
                 const rngB: SeededRandomNumberGenerator = await callAsyncBuild(alternateAsciiSeed);
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
@@ -215,7 +215,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(a).not.toEqual(b);
             });
 
-            test('changing namespace changes sequence', async (): Promise<void> => {
+            test('Changing namespace changes sequence', async (): Promise<void> => {
                 const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, asciiNamespace);
                 const rngB: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, alternateAsciiNamespace);
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
@@ -224,19 +224,19 @@ describe('RandomNumberGeneratorFactory', (): void => {
             });
         });
 
-        describe('input validation', (): void => {
-            describe('invalid seed inputs', (): void => {
+        describe('Input validation', (): void => {
+            describe('Invalid seed inputs', (): void => {
                 test.each(
                     nonStringInputs
-                )('%# - invalid seed %o should throw a TypeError', async (seed: unknown): Promise<void> => {
+                )('%# - Invalid seed %o should throw a TypeError', async (seed: unknown): Promise<void> => {
                     await expect(RandomNumberGeneratorFactory.asyncBuild(seed as string)).rejects.toThrow(TypeError);
                 });
             });
 
-            describe('invalid namespace inputs', (): void => {
+            describe('Invalid namespace inputs', (): void => {
                 test.each(
                     nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-                )('%# - invalid namespace %o should throw a TypeError', async (namespace: unknown): Promise<void> => {
+                )('%# - Invalid namespace %o should throw a TypeError', async (namespace: unknown): Promise<void> => {
                     await expect(RandomNumberGeneratorFactory.asyncBuild('', namespace as string)).rejects.toThrow(TypeError);
                 });
             });

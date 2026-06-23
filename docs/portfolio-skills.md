@@ -5,15 +5,17 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-21
+modified_date: 2026-06-22
 toc: true
 ---
 
 ## About This Page
+
 This page is a technical record of the skills, tools, and engineering practices represented in the TypeScript Utilities project.
 
 ## Project Overview
-TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The project is maintained at [github.com/blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils) and built with TypeScript, tsdown (ESM bundling), and Vitest for testing. GitHub Actions automates linting, building, testing, and publishing.
+
+TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
@@ -84,6 +86,7 @@ The public entry point re-exports domain modules, and each domain module re-expo
 - [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
+- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -104,6 +107,8 @@ The project uses Vitest for repeatable unit testing, with scripts wired into loc
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
+- [test/string/color-string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/color-string-utility.test.ts)
+- [test/utils/input/color-string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/color-string-inputs.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 

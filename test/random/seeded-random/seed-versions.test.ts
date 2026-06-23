@@ -62,7 +62,7 @@ describe('SeedVersions', () => {
     });
 
     describe('size', () => {
-        test(`SeedVersions.size should be ${expectedSeedVersions.length}`, () => {
+        test(`Size should be ${expectedSeedVersions.length}`, () => {
             expect(SeedVersions.size).toBe(expectedSeedVersions.length);
         });
     });
@@ -99,7 +99,7 @@ describe('SeedVersions', () => {
 
             test.each(
                 testCases
-            )('%# - $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect(SeedVersions.isValidIndex(testInput as number)).toBe(testExpected);
             });
         });
@@ -112,7 +112,7 @@ describe('SeedVersions', () => {
             expect(SeedVersions.getVersion(index)).toEqual(expectedSeedVersions[index]);
         });
 
-        describe('input validation', (): void => {
+        describe('Input validation', (): void => {
             test.each([
                 ...nonNumberInputs,
                 expectedSeedVersions.length,
