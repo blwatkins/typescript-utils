@@ -306,4 +306,14 @@ describe('DiscriminatorRegistry', (): void => {
             });
         });
     });
+
+    describe('validate', (): void => {
+        test('validate returns false for unregistered discriminator', (): void => {
+            const input = {
+                discriminator: 'unregistered'
+            };
+
+            expect(DiscriminatorRegistry.validate(input, 'unregistered')).toBe(false);
+        });
+    });
 });
