@@ -24,7 +24,7 @@ const regularExpressions = {
     hexColorPattern: /^(#[A-F0-9]{6}(?:[A-F0-9]{2})?|#[a-f0-9]{6}(?:[a-f0-9]{2})?)$/,
     hexColorPatternRGB: /^(#[A-F0-9]{6}|#[a-f0-9]{6})$/,
     hexColorPatternRGBA: /^(#[A-F0-9]{8}|#[a-f0-9]{8})$/
-}
+};
 
 /**
  * Static properties and methods for validating formatted color strings.
