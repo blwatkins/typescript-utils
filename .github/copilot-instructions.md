@@ -102,6 +102,11 @@ Review all source changes for convention compliance and code quality.
 - **Reuse and DRY** — new utilities delegate to existing ones where appropriate rather than duplicating logic
 - **Runtime safety** — see the "JavaScript Consumer Safety" section for the requirement to retain runtime type guards for JavaScript consumers
 
+#### Consistency and Pattern Observation
+
+- **Cross-source consistency** — Compare all changed code, inline comments, and documentation (JSDoc, README, `docs/`) against each other and against implicit patterns visible in the rest of the codebase. Flag any deviation from an established pattern even if that pattern has not been explicitly documented in this file (e.g., consistent phrasing in JSDoc summaries, a structural idiom repeated across utility classes, a naming convention used throughout tests).
+- **Implicit pattern detection** — When a consistent pattern is observed in the codebase that is not yet captured in this file, call it out explicitly and ask the maintainer whether it should be documented in the appropriate section of `.github/copilot-instructions.md`.
+
 ### 7. Release Readiness (for merges to `main`)
 
 When preparing a release merge to `main`:
