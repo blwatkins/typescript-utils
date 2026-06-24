@@ -129,7 +129,7 @@ export class Random {
         return elements[Random.randomInt(0, elements.length)];
     }
 
-    public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type  {
+    public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type {
         return elements[0].value;
     }
 

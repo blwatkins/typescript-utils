@@ -30,7 +30,7 @@ export class WeightedElementUtility {
     static readonly #isGenericWeightedElement: TypeGuard<WeightedElement<unknown>> = DiscriminatorRegistry.register<WeightedElement<unknown>>({
         discriminator: Discriminators.WeightedElement,
         validator: (input: unknown): input is WeightedElement<unknown> => {
-            return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input)
+            return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
         }
     });
 
@@ -47,8 +47,8 @@ export class WeightedElementUtility {
         return weightedElement;
     }
 
-    public static buildWeightedList<Type>(elements: { value: Type, weight: number }[]): WeightedList<Type> {
-        const weightedElements: WeightedElement<Type>[] = elements.map((element: { value: Type, weight: number }): WeightedElement<Type> => {
+    public static buildWeightedList<Type>(elements: { value: Type; weight: number; }[]): WeightedList<Type> {
+        const weightedElements: WeightedElement<Type>[] = elements.map((element: { value: Type; weight: number; }): WeightedElement<Type> => {
             return WeightedElementUtility.buildWeightedElement(element);
         });
 
@@ -72,7 +72,7 @@ export class WeightedElementUtility {
             return false;
         }
 
-        const containsWeightedElements: boolean =  input.reduce((accumulator: boolean, element: unknown): boolean => {
+        const containsWeightedElements: boolean = input.reduce((accumulator: boolean, element: unknown): boolean => {
             return accumulator && WeightedElementUtility.isGenericWeightedElement(element);
         }, true);
 
@@ -80,7 +80,7 @@ export class WeightedElementUtility {
             return false;
         }
 
-        const weightSum: number = input.reduce((sum: number, element: WeightedElement<unknown>): number => sum + element.weight, 0);
+        const weightSum: number = input.reduce((sum: number, element: unknown): number => sum + (element as WeightedElement<unknown>).weight, 0);
         const precisionSum: number = Number.parseFloat(weightSum.toFixed(4));
         return precisionSum === 1;
     }

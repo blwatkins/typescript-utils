@@ -41,9 +41,9 @@ export const weightedElementSchema = Type.Generic(
 );
 
 export interface WeightedElement<Type> {
-    readonly value: Type,
-    readonly weight: number,
-    readonly discriminator: Discriminators.WeightedElement
+    readonly value: Type;
+    readonly weight: number;
+    readonly discriminator: Discriminators.WeightedElement;
 }
 
 export type WeightedList<Type> = WeightedElement<Type>[];
