@@ -18,6 +18,5 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export enum Discriminators {
-    WeightedElement = '@blwat/utils:WeightedElement'
-}
+export * from './weighted-element';
+export * from './weighted-element-utility';

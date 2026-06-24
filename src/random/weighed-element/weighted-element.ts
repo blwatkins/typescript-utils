@@ -18,6 +18,32 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export enum Discriminators {
-    WeightedElement = '@blwat/utils:WeightedElement'
+import { Type } from 'typebox';
+
+import { Discriminators, discriminatedSchema } from '../../discriminator';
+
+export const weightedElementSchema = Type.Generic(
+    [Type.Parameter('T')],
+    Type.Intersect([
+        discriminatedSchema,
+        Type.Object(
+            {
+                value: Type.Readonly(Type.Ref('T')),
+                weight: Type.Readonly(Type.Number({
+                    minimum: 0,
+                    maximum: 1
+                })),
+                discriminator: Type.Literal(Discriminators.WeightedElement)
+            },
+            { additionalProperties: false }
+        )
+    ])
+);
+
+export interface WeightedElement<Type> {
+    readonly value: Type,
+    readonly weight: number,
+    readonly discriminator: Discriminators.WeightedElement
 }
+
+export type WeightedList<Type> = WeightedElement<Type>[];
