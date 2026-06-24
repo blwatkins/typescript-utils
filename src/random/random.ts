@@ -19,6 +19,7 @@
  */
 
 import { NumberUtility } from '../number';
+import { WeightedList } from './weighted-element';
 
 /**
  * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
@@ -126,6 +127,10 @@ export class Random {
     public static randomElement<Type>(elements: Type[]): Type {
         Random.#validateElements(elements);
         return elements[Random.randomInt(0, elements.length)];
+    }
+
+    public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type  {
+        return elements[0].value;
     }
 
     /**
