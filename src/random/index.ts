@@ -19,3 +19,5 @@
  */
 
 export * from './seeded-random';
+
+export * from './random';
