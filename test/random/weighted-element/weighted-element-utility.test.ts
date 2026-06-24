@@ -18,3 +18,20 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { describe, test } from 'vitest';
+
+describe('WeightedElementUtility', (): void => {
+    test.todo('new WeightedElementUtility()');
+
+    test.todo('buildWeightedElement')
+
+    test.todo('buildWeightedList')
+
+    test.todo('isGenericWeightedElement')
+
+    test.todo('isWeightedElement')
+
+    test.todo('isGenericWeightedList')
+
+    test.todo('isWeightedList')
+});

@@ -27,6 +27,15 @@ import { DiscriminatorRegistry, Discriminators, TypeGuard } from '../../discrimi
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
 
 export class WeightedElementUtility {
+    /**
+     * @throws {Error} - WeightedElementUtility is a static class and cannot be instantiated.
+     *
+     * @private
+     */
+    private constructor() {
+        throw new Error('WeightedElementUtility is a static class and cannot be instantiated.');
+    }
+
     static readonly #isGenericWeightedElement: TypeGuard<WeightedElement<unknown>> = DiscriminatorRegistry.register<WeightedElement<unknown>>({
         discriminator: Discriminators.WeightedElement,
         validator: (input: unknown): input is WeightedElement<unknown> => {
