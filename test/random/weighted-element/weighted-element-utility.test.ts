@@ -21,7 +21,10 @@
 import { describe, test, expect } from 'vitest';
 
 import { WeightedElement, WeightedElementUtility } from '../../../src';
-import {Scenario} from "../../utils/test-case/test-case";
+
+import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
+import { nonObjectInputs } from '../../utils/input/object-inputs';
+import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('WeightedElementUtility', (): void => {
     describe('new WeightedElementUtility()', (): void => {
@@ -44,45 +47,97 @@ describe('WeightedElementUtility', (): void => {
             const scenarios: Scenario[] = [
                 {
                     label: 'Non-object type inputs',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        ...nonObjectInputs
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Array type inputs',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        [],
+                        [1, 2, 3],
+                        ['a', 'b', 'c']
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Object inputs missing value property',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        { weight: 0 },
+                        { weight: 0.5 },
+                        { weight: 1 }
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Object inputs missing weight property',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        { value: 10 },
+                        { value: 'hello' },
+                        {
+                            value: (): number => {
+                                return 100;
+                            }
+                        }
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Object inputs with non-numeric weight property',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        ...nonNumberInputs.map((input) => {
+                            return { value: 'test', weight: input };
+                        })
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Object inputs with non-finite weight property',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        ...nonFiniteNumberInputs.map((input) => {
+                            return { value: 'test', weight: input };
+                        })
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Object inputs with out of range weight property',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        { value: 10, weight: -5 },
+                        { value: 10, weight: -1 },
+                        { value: 10, weight: -0.1 },
+                        { value: 10, weight: -Number.EPSILON },
+                        { value: 10, weight: 1 + Number.EPSILON },
+                        { value: 10, weight: 1.1 },
+                        { value: 10, weight: 5 }
+                    ],
+                    expected: TypeError
                 },
                 {
                     label: 'Object inputs with additional properties',
-                    inputs: [],
-                    expected: null
+                    inputs: [
+                        { value: 'hello', weight: 0, name: 'bob' },
+                        { value: 'hello', weight: 0.5, age: 42 },
+                        { value: 'hello', weight: 1, day: 7 }
+                    ],
+                    expected: TypeError
                 }
             ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        WeightedElementUtility.buildWeightedElement(testInput as { value: unknown; weight: number; });
+                    }).toThrow(testExpected);
+                });
+            });
         });
     });
 
