@@ -20,11 +20,12 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { WeightedElement, WeightedElementUtility } from '../../../src';
+import { WeightedElement, WeightedElementUtility, WeightedList } from '../../../src';
 
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
+import { nonArrayInputs } from '../../utils/input/array-inputs';
 
 describe('WeightedElementUtility', (): void => {
     describe('new WeightedElementUtility()', (): void => {
@@ -141,11 +142,114 @@ describe('WeightedElementUtility', (): void => {
         });
     });
 
-    test.todo('buildWeightedElement');
+    describe('buildWeightedList', (): void => {
+        test('buildWeightedList() should return a typed weighted list', (): void => {
+            const list: WeightedList<string> = WeightedElementUtility.buildWeightedList([
+                { value: 'test value 1', weight: 0.5 },
+                { value: 'test value 2', weight: 0.5 }
+            ]);
 
-    test.todo('buildWeightedList');
+            expect(WeightedElementUtility.isWeightedList(list, (input: unknown): input is string => typeof input === 'string')).toBe(true);
+        });
+
+        const scenarios: Scenario[] = [
+            {
+                label: 'Non-array type inputs',
+                inputs: [
+                    ...nonArrayInputs
+                ],
+                expected: TypeError
+            },
+            {
+                label: 'Empty array input',
+                inputs: [
+                    []
+                ],
+                expected: TypeError
+            },
+            {
+                label: 'Incorrect type array input',
+                inputs: [
+                    [1, 2, 3],
+                    ['a', 'b', 'c'],
+                    [
+                        { weight: 1 }
+                    ],
+                    [
+                        { value: 'hello' }
+                    ],
+                    [
+                        { value: 'hello', weight: 'three' }
+                    ],
+                    [
+                        { value: 'hello', weight: NaN }
+                    ],
+                    [
+                        { value: 'hello', weight: Infinity }
+                    ],
+                    [
+                        { value: 10, weight: -0.1 }
+                    ],
+                    [
+                        { value: 'hello', weight: 1, name: 'bob' }
+                    ]
+                ],
+                expected: TypeError
+            },
+            {
+                label: 'Weight sum is not equal to one',
+                inputs: [
+                    [
+                        { value: 'test 1', weight: 0.5 },
+                        { value: 'test 2', weight: 0.5 },
+                        { value: 'test 3', weight: 0.0001 }
+                    ],
+                    [
+                        { value: 'test 1', weight: 0.5 },
+                        { value: 'test 2', weight: 0.5 - 0.0001 }
+                    ],
+                    [
+                        { value: 'test 1', weight: 0.5 },
+                        { value: 'test 2', weight: 0.5 + 0.0001 }
+                    ],
+                    [
+                        { value: 'test 1', weight: 0 }
+                    ],
+                    [
+                        { value: 'test 1', weight: 1 - 0.0001 }
+                    ],
+                    [
+                        { value: 'test 1', weight: 1 },
+                        { value: 'test 2', weight: 1 }
+                    ],
+                    [
+                        [
+                            { value: 'test 1', weight: 1 },
+                            { value: 'test 2', weight: 0.0001 }
+                        ]
+                    ]
+                ],
+                expected: TypeError
+            }
+        ];
+
+        describe.each(
+            scenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+            test.each(
+                testCases
+            )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect((): void => {
+                    WeightedElementUtility.buildWeightedList(testInput as { value: unknown; weight: number; }[]);
+                }).toThrow(testExpected);
+            });
+        });
+    });
 
     test.todo('isGenericWeightedElement');
+    test.todo('Test that TypeBox type and interface type are equivalent/compatible');
 
     test.todo('isWeightedElement');
 

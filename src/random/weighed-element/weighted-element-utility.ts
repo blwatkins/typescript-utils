@@ -56,14 +56,13 @@ export class WeightedElementUtility {
     }
 
     public static buildWeightedList<Type>(elements: { value: Type; weight: number; }[]): WeightedList<Type> {
+        WeightedElementUtility.#validateBuildWeightedListInput(elements);
+
         const weightedElements: WeightedElement<Type>[] = elements.map((element: { value: Type; weight: number; }): WeightedElement<Type> => {
             return WeightedElementUtility.buildWeightedElement(element);
         });
 
-        if (!WeightedElementUtility.isGenericWeightedList(weightedElements)) {
-            throw new TypeError('Input does not match schema requirements for weighted list');
-        }
-
+        WeightedElementUtility.#validateWeightedList(weightedElements);
         return weightedElements;
     }
 
@@ -117,9 +116,21 @@ export class WeightedElementUtility {
         }
     }
 
+    static #validateBuildWeightedListInput(input: unknown): void {
+        if (!input || !Array.isArray(input) || input.length === 0) {
+            throw new TypeError('Input must be an non-empty array');
+        }
+    }
+
     static #validateWeightedElement(element: unknown): void {
         if (!WeightedElementUtility.isGenericWeightedElement(element)) {
             throw new TypeError(`Element does not match schema requirements for weighted element`);
+        }
+    }
+
+    static #validateWeightedList(list: unknown): void {
+        if (!WeightedElementUtility.isGenericWeightedList(list)) {
+            throw new TypeError('Input does not match schema requirements for weighted list');
         }
     }
 }
