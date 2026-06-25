@@ -18,20 +18,83 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test } from 'vitest';
+import { describe, test, expect } from 'vitest';
+
+import { WeightedElement, WeightedElementUtility } from '../../../src';
+import {Scenario} from "../../utils/test-case/test-case";
 
 describe('WeightedElementUtility', (): void => {
-    test.todo('new WeightedElementUtility()');
+    describe('new WeightedElementUtility()', (): void => {
+        describe('Runtime behavior guards', (): void => {
+            test('Constructor should throw an error when instantiated at runtime', (): void => {
+                const RuntimeConstructor = WeightedElementUtility as unknown as new () => WeightedElementUtility;
+                expect((): WeightedElementUtility => new RuntimeConstructor()).toThrow(Error);
+            });
+        });
+    });
 
-    test.todo('buildWeightedElement')
+    describe('buildWeightedElement', (): void => {
+        test('buildWeightedElement() should return a typed weighed element', (): void => {
+            const element: WeightedElement<string> = WeightedElementUtility.buildWeightedElement({ value: 'test value', weight: 0.5 });
 
-    test.todo('buildWeightedList')
+            expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is string => typeof input === 'string')).toBe(true);
+        });
 
-    test.todo('isGenericWeightedElement')
+        describe('Input validation', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-object type inputs',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Array type inputs',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Object inputs missing value property',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Object inputs missing weight property',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Object inputs with non-numeric weight property',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Object inputs with non-finite weight property',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Object inputs with out of range weight property',
+                    inputs: [],
+                    expected: null
+                },
+                {
+                    label: 'Object inputs with additional properties',
+                    inputs: [],
+                    expected: null
+                }
+            ];
+        });
+    });
 
-    test.todo('isWeightedElement')
+    test.todo('buildWeightedElement');
 
-    test.todo('isGenericWeightedList')
+    test.todo('buildWeightedList');
 
-    test.todo('isWeightedList')
+    test.todo('isGenericWeightedElement');
+
+    test.todo('isWeightedElement');
+
+    test.todo('isGenericWeightedList');
+
+    test.todo('isWeightedList');
 });

@@ -44,13 +44,17 @@ export class WeightedElementUtility {
     });
 
     public static buildWeightedElement<Type>(input: { value: Type; weight: number; }): WeightedElement<Type> {
+        if (!input || typeof input !== 'object' || Array.isArray(input)) {
+            throw new TypeError(`Input (${input}) must be an object`);
+        }
+
         const weightedElement = {
             ...input,
             discriminator: Discriminators.WeightedElement
         };
 
         if (!WeightedElementUtility.isGenericWeightedElement(weightedElement)) {
-            throw new TypeError('Input does not match schema requirements for weighted element value and weight');
+            throw new TypeError(`Element ${weightedElement} does not match schema requirements for weighted element value and weight`);
         }
 
         return weightedElement;
@@ -73,6 +77,10 @@ export class WeightedElementUtility {
     }
 
     public static isWeightedElement<Type>(input: unknown, valueTypeGuard: (value: unknown) => value is Type): input is WeightedElement<Type> {
+        if (typeof valueTypeGuard !== 'function') {
+            throw new TypeError('Value type guard must be a function');
+        }
+
         return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
     }
 
@@ -95,6 +103,10 @@ export class WeightedElementUtility {
     }
 
     public static isWeightedList<Type>(input: unknown, valueTypeGuard: (value: unknown) => value is Type): input is WeightedList<Type> {
+        if (typeof valueTypeGuard !== 'function') {
+            throw new TypeError('Value type guard must be a function');
+        }
+
         if (!WeightedElementUtility.isGenericWeightedList(input)) {
             return false;
         }
