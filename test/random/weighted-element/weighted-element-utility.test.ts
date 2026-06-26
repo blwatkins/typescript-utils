@@ -18,14 +18,15 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, expectTypeOf } from 'vitest';
 
-import { WeightedElement, WeightedElementUtility, WeightedList } from '../../../src';
+import {WeightedElement, weightedElementSchema, WeightedElementUtility, WeightedList} from '../../../src';
 
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
+import {Static, Type} from "typebox";
 
 describe('WeightedElementUtility', (): void => {
     describe('new WeightedElementUtility()', (): void => {
@@ -248,8 +249,27 @@ describe('WeightedElementUtility', (): void => {
         });
     });
 
-    test.todo('isGenericWeightedElement');
-    test.todo('Test that TypeBox type and interface type are equivalent/compatible');
+    describe('isGenericWeightedElement()', (): void => {
+        describe('weightedElementSchema and WeightedElement interface should be equivalent', (): void => {
+            test('String type', (): void => {
+                const stringSchema = Type.Call(weightedElementSchema, [Type.String()]);
+                type StringStatic = Static<typeof stringSchema>;
+                expectTypeOf<StringStatic>().toExtend<WeightedElement<string>>();
+                expectTypeOf<WeightedElement<string>>().toExtend<StringStatic>();
+            });
+
+            test('Number type', (): void => {
+                const numberSchema = Type.Call(weightedElementSchema, [Type.Number()]);
+                type NumberStatic = Static<typeof numberSchema>;
+                expectTypeOf<NumberStatic>().toExtend<WeightedElement<number>>();
+                expectTypeOf<WeightedElement<number>>().toExtend<NumberStatic>();
+            });
+        });
+
+        describe('Input validation', (): void => {
+            test.todo('isGenericWeightedElement input validation');
+        });
+    });
 
     test.todo('isWeightedElement');
 
