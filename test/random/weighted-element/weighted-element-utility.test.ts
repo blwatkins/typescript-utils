@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test, expect, expectTypeOf } from 'vitest';
+import {describe, expect, expectTypeOf, test} from 'vitest';
 
 import {
     Discriminators,
@@ -28,12 +28,12 @@ import {
     WeightedList
 } from '../../../src';
 
-import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
-import { nonObjectInputs } from '../../utils/input/object-inputs';
-import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
-import { nonArrayInputs } from '../../utils/input/array-inputs';
-import { Static, Type } from 'typebox';
-import { nonFunctionInputs } from '../../utils/input/function-inputs';
+import {nonFiniteNumberInputs, nonNumberInputs} from '../../utils/input/number-inputs';
+import {nonObjectInputs} from '../../utils/input/object-inputs';
+import {buildTestCases, Scenario, TestCase} from '../../utils/test-case/test-case';
+import {nonArrayInputs} from '../../utils/input/array-inputs';
+import {Static, Type} from 'typebox';
+import {nonFunctionInputs} from '../../utils/input/function-inputs';
 
 describe('WeightedElementUtility', (): void => {
     describe('new WeightedElementUtility()', (): void => {
@@ -429,7 +429,91 @@ describe('WeightedElementUtility', (): void => {
         });
     });
 
-    test.todo('isGenericWeightedList');
+    describe('isGenericWeightedList', (): void => {
+        describe('Input validation', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-array type inputs',
+                    inputs: [
+                        ...nonArrayInputs
+                    ],
+                    expected: false
+                },
+                {
+                    label: 'Empty array inputs',
+                    inputs: [
+                        []
+                    ],
+                    expected: false
+                },
+                {
+                    label: 'Array inputs do not contain weighted elements',
+                    inputs: [
+                        [1, 2, 3],
+                        ['a', 'b', 'c']
+                    ],
+                    expected: false
+                },
+                {
+                    label: 'Array inputs contain weighted elements and other type',
+                    inputs: [
+                        [
+                            { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                            500
+                        ],
+                        [
+                            { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                            'string value'
+                        ],
+                        [
+                            { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                            { key: 'value' }
+                        ],
+                        [
+                            { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                            { key: 'value', discriminator: Discriminators.WeightedElement },
+                        ]
+                    ],
+                    expected: false
+                },
+                {
+                    label: 'Weighted elements weight sum is not equal to 1',
+                    inputs: [
+                        [
+                            { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0, discriminator: Discriminators.WeightedElement },
+                        ],
+                        [
+                            { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                        ],
+                        [
+                            { value: 'hello', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                            { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
+                            { value: 'howdy', weight: 0.0001, discriminator: Discriminators.WeightedElement },
+                        ]
+                    ],
+                    expected: false
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(WeightedElementUtility.isGenericWeightedList(testInput)).toBe(testExpected);
+                });
+            });
+        });
+    });
 
     test.todo('isWeightedList');
 });
