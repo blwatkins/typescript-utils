@@ -33,6 +33,7 @@ import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { Static, Type } from 'typebox';
+import { nonFunctionInputs } from '../../utils/input/function-inputs';
 
 describe('WeightedElementUtility', (): void => {
     describe('new WeightedElementUtility()', (): void => {
@@ -49,6 +50,7 @@ describe('WeightedElementUtility', (): void => {
             const element: WeightedElement<string> = WeightedElementUtility.buildWeightedElement({ value: 'test value', weight: 0.5 });
 
             expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is string => typeof input === 'string')).toBe(true);
+            expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is number => typeof input === 'number')).toBe(false);
         });
 
         describe('Input validation', (): void => {
@@ -157,6 +159,7 @@ describe('WeightedElementUtility', (): void => {
             ]);
 
             expect(WeightedElementUtility.isWeightedList(list, (input: unknown): input is string => typeof input === 'string')).toBe(true);
+            expect(WeightedElementUtility.isWeightedList(list, (input: unknown): input is number => typeof input === 'number')).toBe(false);
         });
 
         const scenarios: Scenario[] = [
@@ -398,7 +401,33 @@ describe('WeightedElementUtility', (): void => {
         });
     });
 
-    test.todo('isWeightedElement');
+    describe('isWeightedElement', (): void => {
+        describe('Input validation', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-function type inputs',
+                    inputs: [
+                        ...nonFunctionInputs
+                    ],
+                    expected: TypeError
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        WeightedElementUtility.isWeightedElement({}, testInput as ((value: unknown) => value is unknown));
+                    }).toThrow(testExpected);
+                });
+            });
+        });
+    });
 
     test.todo('isGenericWeightedList');
 
