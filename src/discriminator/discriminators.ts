@@ -29,5 +29,5 @@ export enum Discriminators {
      *
      * @since 0.1.0
      */
-     WeightedElement = '@blwat/utils:WeightedElement'
+    WeightedElement = '@blwat/utils:WeightedElement'
 }

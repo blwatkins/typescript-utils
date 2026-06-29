@@ -19,8 +19,8 @@
  */
 
 import { NumberUtility } from '../number';
-import { WeightedList } from './weighed-element/weighted-element';
-import {WeightedElementUtility} from "./weighed-element";
+
+import { WeightedElementUtility, WeightedList } from './weighed-element';
 
 /**
  * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
