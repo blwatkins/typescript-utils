@@ -26,6 +26,11 @@ import { DiscriminatorRegistry, Discriminators, TypeGuard } from '../../discrimi
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
 
+/**
+ * Static methods and properties for building and validating {@link WeightedElement} and {@link WeightedList} objects.
+ *
+ * @since 0.1.0
+ */
 export class WeightedElementUtility {
     /**
      * @throws {Error} - WeightedElementUtility is a static class and cannot be instantiated.
@@ -36,6 +41,15 @@ export class WeightedElementUtility {
         throw new Error('WeightedElementUtility is a static class and cannot be instantiated.');
     }
 
+    /**
+     * A type guard for {@link WeightedElement} objects.
+     *
+     * @param input - The input to check.
+     *
+     * @returns {boolean} `true` if the input is a {@link WeightedElement}, `false` otherwise.
+     *
+     * @private
+     */
     static readonly #isGenericWeightedElement: TypeGuard<WeightedElement<unknown>> = DiscriminatorRegistry.register<WeightedElement<unknown>>({
         discriminator: Discriminators.WeightedElement,
         validator: (input: unknown): input is WeightedElement<unknown> => {
@@ -43,6 +57,16 @@ export class WeightedElementUtility {
         }
     });
 
+    /**
+     * Builds a {@link WeightedElement} object with a value of the given type.
+     *
+     * @param {{ value: Type; weight: number; }} input - The input to build the {@link WeightedElement} from.
+     *
+     * @returns {WeightedElement<Type>} A {@link WeightedElement} object with a value of the given type.
+     *
+     * @public
+     * @since 0.1.0
+     */
     public static buildWeightedElement<Type>(input: { value: Type; weight: number; }): WeightedElement<Type> {
         WeightedElementUtility.#validateBuildWeightedElementInput(input);
 
@@ -55,6 +79,17 @@ export class WeightedElementUtility {
         return weightedElement;
     }
 
+    /**
+     * Builds a {@link WeightedList} object from the given elements list.
+     *
+     * @param {{ value: Type; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
+     * Each element will be converted into a {@link WeightedElement} using {@link WeightedElementUtility.buildWeightedElement}.
+     *
+     * @returns {WeightedList<Type>} A {@link WeightedList} object containing the given elements.
+     *
+     * @public
+     * @since 0.1.0
+     */
     public static buildWeightedList<Type>(elements: { value: Type; weight: number; }[]): WeightedList<Type> {
         WeightedElementUtility.#validateBuildWeightedListInput(elements);
 
