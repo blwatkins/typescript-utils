@@ -105,5 +105,9 @@ export interface WeightedElement<Type> {
 
 /**
  * Type alias for a list of {@link WeightedElement} objects.
+ *
+ * @see {weightedElementSchema}
+ *
+ * @since 0.1.0
  */
 export type WeightedList<Type> = WeightedElement<Type>[];

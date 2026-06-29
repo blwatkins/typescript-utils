@@ -140,6 +140,9 @@ export class Random {
      *
      * @throws {TypeError} - When the given list is not a valid {@link WeightedList}.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     *
+     * @public
+     * @since 0.1.0
      */
     public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type {
         WeightedElementUtility.validateWeightedList(elements);
