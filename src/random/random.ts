@@ -20,6 +20,7 @@
 
 import { NumberUtility } from '../number';
 import { WeightedList } from './weighed-element/weighted-element';
+import {WeightedElementUtility} from "./weighed-element";
 
 /**
  * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
@@ -129,8 +130,30 @@ export class Random {
         return elements[Random.randomInt(0, elements.length)];
     }
 
+    /**
+     * @see {@link WeightedElementUtility.isGenericWeightedList}
+     * @see {@link WeightedElementUtility.isGenericWeightedElement}
+     *
+     * @param {WeightedList} elements - The {@link WeightedList} to select a random element from.
+     *
+     * @returns {Type} A random element from the given {@link WeightedList}, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
+     *
+     * @throws {TypeError} - When the given list is not a valid {@link WeightedList}.
+     * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     */
     public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type {
-        return elements[0].value;
+        WeightedElementUtility.validateWeightedList(elements);
+        const r: number = Random.random();
+        let cumulativeWeight: number = 0;
+
+        for (const element of elements) {
+            cumulativeWeight += element.weight;
+            if (r < cumulativeWeight) {
+                return element.value;
+            }
+        }
+
+        return elements[elements.length - 1].value;
     }
 
     /**

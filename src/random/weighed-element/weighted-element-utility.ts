@@ -66,8 +66,8 @@ export class WeightedElementUtility {
      *
      * @returns {WeightedElement<Type>} A {@link WeightedElement} object with a value of the given type.
      *
-     * @throws {TypeError} - If the given input is not an object.
-     * @throws {TypeError} - If the given input does not result in a valid {@link WeightedElement}.
+     * @throws {TypeError} - When the given input is not an object.
+     * @throws {TypeError} - When the given input does not result in a valid {@link WeightedElement}.
      * See {@link weightedElementSchema} for the requirements of a valid {@link WeightedElement}.
      *
      * @public
@@ -93,8 +93,8 @@ export class WeightedElementUtility {
      *
      * @returns {WeightedList<Type>} A {@link WeightedList} object containing the given elements.
      *
-     * @throws {TypeError} - If the given elements are not a non-empty array.
-     * @throws {TypeError} - If the given elements do not result in a valid {@link WeightedList}.
+     * @throws {TypeError} - When the given elements are not a non-empty array.
+     * @throws {TypeError} - When the given elements do not result in a valid {@link WeightedList}.
      *
      * @public
      * @since 0.1.0
@@ -106,7 +106,7 @@ export class WeightedElementUtility {
             return WeightedElementUtility.buildWeightedElement(element);
         });
 
-        WeightedElementUtility.#validateWeightedList(weightedElements);
+        WeightedElementUtility.validateWeightedList(weightedElements);
         return weightedElements;
     }
 
@@ -135,7 +135,7 @@ export class WeightedElementUtility {
      *
      * @returns {input is WeightedElement<Type>} - `true` if the given input is a {@link WeightedElement} object with a value of the correct type; `false` otherwise.
      *
-     * @throws {TypeError} - If the given `valueTypeGuard` is not a function.
+     * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
      *
      * @public
      * @since 0.1.0
@@ -193,7 +193,7 @@ export class WeightedElementUtility {
      * @returns {input is WeightedList<Type>} - `true` if the given input is a {@link WeightedList} object with elements of the correct type; `false` otherwise.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
-     * @throws {TypeError} - If the given `valueTypeGuard` is not a function.
+     * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
      *
      * @public
      * @since 0.1.0
@@ -213,13 +213,34 @@ export class WeightedElementUtility {
     }
 
     /**
+     * Validate that an object is a valid {@link WeightedList}.
+     * This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
+     *
+     * @see {@link WeightedElementUtility.isGenericWeightedList}
+     *
+     * @param {unknown} list - The list to validate.
+     *
+     * @returns {void}
+     *
+     * @throws {TypeError} - When the given list is not a valid {@link WeightedList}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    static validateWeightedList(list: unknown): void {
+        if (!WeightedElementUtility.isGenericWeightedList(list)) {
+            throw new TypeError('Input does not match schema requirements for weighted list');
+        }
+    }
+
+    /**
      * Validate the input of {@link WeightedElement.buildWeightedElement}.
      *
      * @param {unknown} input - The input to validate.
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given input is not an object.
+     * @throws {TypeError} - When the given input is not an object.
      *
      * @private
      */
@@ -236,7 +257,7 @@ export class WeightedElementUtility {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given input is not a non-empty array.
+     * @throws {TypeError} - When the given input is not a non-empty array.
      *
      * @private
      */
@@ -256,33 +277,13 @@ export class WeightedElementUtility {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given element is not a valid {@link WeightedElement}.
+     * @throws {TypeError} - When the given element is not a valid {@link WeightedElement}.
      *
      * @private
      */
     static #validateWeightedElement(element: unknown): void {
         if (!WeightedElementUtility.isGenericWeightedElement(element)) {
             throw new TypeError(`Element does not match schema requirements for weighted element`);
-        }
-    }
-
-    /**
-     * Validate that an object is a valid {@link WeightedList}.
-     * This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
-     *
-     * @see {@link WeightedElementUtility.isGenericWeightedList}
-     *
-     * @param {unknown} list - The list to validate.
-     *
-     * @returns {void}
-     *
-     * @throws {TypeError} - If the given list is not a valid {@link WeightedList}.
-     *
-     * @private
-     */
-    static #validateWeightedList(list: unknown): void {
-        if (!WeightedElementUtility.isGenericWeightedList(list)) {
-            throw new TypeError('Input does not match schema requirements for weighted list');
         }
     }
 }
