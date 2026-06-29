@@ -55,7 +55,7 @@ export class Random {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given rand is not a function.
+     * @throws {TypeError} - If the given `rand` is not a function.
      *
      * @public
      * @since 0.1.0
