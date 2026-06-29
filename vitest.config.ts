@@ -33,6 +33,11 @@ export default defineConfig({
             '_doc/**',
             'docs/**'
         ],
+        typecheck: {
+            enabled: true,
+            tsconfig: './tsconfig.vitest.json',
+            include: ['test/**/*.{test,spec}.{ts,mts,cts,tsx}']
+        },
         coverage: {
             provider: 'v8',
             reporter: ['text', 'lcov', 'json', 'json-summary', 'clover', 'html'],

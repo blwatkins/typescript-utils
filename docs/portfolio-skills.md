@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-22
+modified_date: 2026-06-29
 toc: true
 ---
 
@@ -15,24 +15,25 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
+TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
 - **Project Type:** TypeScript utility library package
-- **Primary Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Primary Runtime:** [Node.js](https://nodejs.org/en)
-- **Primary Framework/Library:** Minimal framework-free utility architecture
-- **Build Pipeline:** [tsdown](https://tsdown.dev/)
-- **Quality Controls:** [ESLint](https://eslint.org/) and [GitHub Actions](https://github.com/features/actions)
-- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
-- **Security Analysis:** [CodeQL](https://codeql.github.com/) via GitHub Actions
-- **Documentation Pattern:** [TypeDoc](https://typedoc.org/) output plus manually maintained release docs in `docs/releases/...`
+- **Primary Language:** TypeScript
+- **Primary Runtime:** Node.js
+- **Build Pipeline:** tsdown (ESM)
+- **Quality Controls:** ESLint
+- **Automation:** GitHub Actions
+- **Dependency Automation:** Dependabot
+- **Security Analysis:** CodeQL via GitHub Actions
+- **Documentation Pattern:** TypeDoc and Jekyll (GitHub Pages)
 
 ## Skills and Tooling Inventory
 
 - **Languages:** [TypeScript](https://www.typescriptlang.org/), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Markdown](https://www.markdownguide.org/), [YAML](https://yaml.org/)
-- **Runtime & Libraries:** [Node.js](https://nodejs.org/en), [TypeBox](https://sinclairzx81.github.io/typebox/)
+- **Runtime & Libraries:** [Node.js](https://nodejs.org/en)
+- **Libraries:** [TypeBox](https://sinclairzx81.github.io/typebox/)
 - **Testing:** [Vitest](https://vitest.dev/)
 - **Build / Bundling:** [tsdown](https://tsdown.dev/)
 - **Code Quality:** [ESLint](https://eslint.org/)
@@ -43,7 +44,7 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 - **Automation:** [GitHub Actions](https://github.com/features/actions)
 - **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm Package Registry](https://www.npmjs.com/)
 - **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
-- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-version-updates)
+- **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates)
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)
 - **Environment Configuration:** Node.js version pinning via `.node-version`, plus Ruby version pinning for the Jekyll/Bundler docs site via `docs/.ruby-version`
 - **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)
@@ -53,6 +54,8 @@ TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility pack
 
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
+- Provides a static `Random` class for generating random numbers, booleans, and selecting random elements from arrays, with a configurable underlying random function to enable use with seeded generators or custom sources.
+- Provides typed weighted random selection via `WeightedElementUtility` and `WeightedList`, using discriminator-validated element objects and a cumulative-weight selection strategy, enabling non-uniform random sampling from explicit probability distributions.
 - Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
@@ -137,5 +140,6 @@ Security analysis is automated with a dedicated CodeQL workflow covering Actions
 ## Current Gaps / Future Improvements
 
 - The package is currently in an alpha release line; additional utility domains and API surface are still being developed.
+- Unit tests for the `Random` class are not yet implemented; the test file exists as a placeholder pending a future change set.
 - Tests currently focus on unit-level utility behavior; higher-level integration or consumer-facing examples are not yet part of the verification strategy.
 - Release documentation under `docs/releases/...` is maintained manually, which can increase maintenance overhead as release volume grows.

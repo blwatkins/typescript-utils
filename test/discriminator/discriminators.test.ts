@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,6 +18,14 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminated';
-export * from './discriminator-registry';
-export * from './discriminators';
+import { describe, test, expect } from 'vitest';
+
+import { Discriminators } from '../../src';
+
+describe('Discriminators', (): void => {
+    test('All discriminators should be unique', (): void => {
+        const discriminatorsArray: Discriminators[] = Array.from(Object.values(Discriminators));
+        const uniqueDiscriminators = new Set(discriminatorsArray);
+        expect(uniqueDiscriminators.size).toBe(discriminatorsArray.length);
+    });
+});
