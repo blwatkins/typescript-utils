@@ -22,17 +22,44 @@ import { Type } from 'typebox';
 
 import { Discriminators, discriminatedSchema } from '../../discriminator';
 
+/**
+ * TypeBox schema to validate a {@link WeightedElement} object.
+ *
+ * @since 0.1.0
+ */
 export const weightedElementSchema = Type.Generic(
     [Type.Parameter('T')],
     Type.Intersect([
         discriminatedSchema,
         Type.Object(
             {
+                /**
+                 * The value to be selected from the weighted list.
+                 *
+                 * @readonly
+                 */
                 value: Type.Readonly(Type.Ref('T')),
+
+                /**
+                 * The probability weight of the element.
+                 * Should be a number between 0 and 1, inclusive.
+                 *
+                 * @type {number}
+                 *
+                 * @readonly
+                 */
                 weight: Type.Readonly(Type.Number({
                     minimum: 0,
                     maximum: 1
                 })),
+
+                /**
+                 * The discriminator for the weighted element.
+                 *
+                 * @type {Discriminators.WeightedElement}
+                 *
+                 * @readonly
+                 */
                 discriminator: Type.Literal(Discriminators.WeightedElement)
             },
             { additionalProperties: false }
@@ -40,10 +67,43 @@ export const weightedElementSchema = Type.Generic(
     ])
 );
 
+/**
+ * Interface for a weighted element, which can be used for non-uniform random selection from a list.
+ *
+ * @since 0.1.0
+ */
 export interface WeightedElement<Type> {
+    /**
+     * The value to be selected from the weighted list.
+     *
+     * @readonly
+     * @since 0.1.0
+     */
     readonly value: Type;
+
+    /**
+     * The probability weight of the element.
+     * Should be a number between 0 and 1, inclusive.
+     *
+     * @type {number}
+     *
+     * @readonly
+     * @since 0.1.0
+     */
     readonly weight: number;
+
+    /**
+     * The discriminator for the weighted element.
+     *
+     * @type {Discriminators.WeightedElement}
+     *
+     * @readonly
+     * @since 0.1.0
+     */
     readonly discriminator: Discriminators.WeightedElement;
 }
 
+/**
+ * Type alias for a list of {@link WeightedElement} objects.
+ */
 export type WeightedList<Type> = WeightedElement<Type>[];
