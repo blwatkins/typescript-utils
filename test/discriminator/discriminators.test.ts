@@ -18,6 +18,14 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { test } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
-test.todo('All discriminators should be unique');
+import { Discriminators } from '../../src';
+
+describe('Discriminators', (): void => {
+    test('All discriminators should be unique', (): void => {
+        const discriminatorsArray: Discriminators[] = Array.from(Object.values(Discriminators));
+        const uniqueDiscriminators = new Set(discriminatorsArray);
+        expect(uniqueDiscriminators.size).toBe(discriminatorsArray.length);
+    });
+});
