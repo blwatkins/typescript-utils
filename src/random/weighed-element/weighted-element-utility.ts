@@ -44,7 +44,7 @@ export class WeightedElementUtility {
     /**
      * A type guard for {@link WeightedElement} objects.
      *
-     * @param input - The input to check.
+     * @param {unknown} input - The input to check.
      *
      * @returns {boolean} `true` if the input is a {@link WeightedElement}, `false` otherwise.
      *
@@ -152,7 +152,7 @@ export class WeightedElementUtility {
      * Is the given input a {@link WeightedList} object?
      * This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      *
-     * @see {WeightedElementUtility.isGenericWeightedElement}
+     * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
      *
@@ -227,7 +227,7 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    static validateWeightedList(list: unknown): void {
+    public static validateWeightedList(list: unknown): void {
         if (!WeightedElementUtility.isGenericWeightedList(list)) {
             throw new TypeError('Input does not match schema requirements for weighted list');
         }

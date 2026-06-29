@@ -187,6 +187,7 @@ Static utility classes must:
 When writing or reviewing code, follow these documentation standards for maximum compatibility:
 
 - **Use `@returns` instead of `@return`**: Always use `@returns` in documentation comments for compatibility with documentation generators.
+- **Use `{@link ...}` syntax in `@see` tags**: Always use `{@link ClassName.method}` (or `{@link symbol}`) inside `@see` tags. Do not use bare `{ClassName.method}` without `@link`.
 - **Use `@param {type} name` format**: Always specify parameter types with the format `@param {type} name` (e.g., `@param {string} hex`) rather than `@param name {type}`.
 - **Always specify return types with `@returns`**: Include a type indicator in every `@returns` annotation (e.g., `@returns {boolean}`).
 - **Document void returns with `@returns {void}`**: For methods that do not return a value, explicitly use `@returns {void}`.

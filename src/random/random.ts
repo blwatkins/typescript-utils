@@ -53,6 +53,8 @@ export class Random {
      *
      * @param {() => number} rand - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
+     * @returns {void}
+     *
      * @throws {TypeError} - If the given rand is not a function.
      *
      * @public
