@@ -260,20 +260,29 @@ describe('WeightedElementUtility', (): void => {
 
     describe('isGenericWeightedElement()', (): void => {
         describe('weightedElementSchema and WeightedElement interface should be equivalent', (): void => {
+            const numberSchema = Type.Call(weightedElementSchema, [Type.Number()]);
+            type NumberStatic = Static<typeof numberSchema>;
+            const stringSchema = Type.Call(weightedElementSchema, [Type.String()]);
+            type StringStatic = Static<typeof stringSchema>;
+
             test('String type', (): void => {
-                const stringSchema = Type.Call(weightedElementSchema, [Type.String()]);
-                type StringStatic = Static<typeof stringSchema>;
                 expect(stringSchema).toBeDefined();
+
                 expectTypeOf<StringStatic>().toExtend<WeightedElement<string>>();
                 expectTypeOf<WeightedElement<string>>().toExtend<StringStatic>();
+
+                expectTypeOf<NumberStatic>().not.toExtend<WeightedElement<string>>();
+                expectTypeOf<WeightedElement<string>>().not.toExtend<NumberStatic>();
             });
 
             test('Number type', (): void => {
-                const numberSchema = Type.Call(weightedElementSchema, [Type.Number()]);
-                type NumberStatic = Static<typeof numberSchema>;
                 expect(numberSchema).toBeDefined();
+
                 expectTypeOf<NumberStatic>().toExtend<WeightedElement<number>>();
                 expectTypeOf<WeightedElement<number>>().toExtend<NumberStatic>();
+
+                expectTypeOf<StringStatic>().not.toExtend<WeightedElement<number>>();
+                expectTypeOf<WeightedElement<number>>().not.toExtend<StringStatic>();
             });
         });
 
