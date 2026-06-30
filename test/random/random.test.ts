@@ -33,12 +33,22 @@ describe('Random', (): void => {
         for (const num of numbers) {
             expectTypeOf(num).toBeNumber();
             expect(num).not.toBeNaN();
-            expect(num).toBeGreaterThanOrEqual(min);
-            expect(num).toBeLessThan(max);
+
+            if (min !== max) {
+                expect(num).toBeGreaterThanOrEqual(min);
+                expect(num).toBeLessThan(max);
+            } else {
+                expect(num).toBe(min);
+            }
         }
 
         const numbersSet: Set<number> = new Set<number>(numbers);
-        expect(numbersSet.size).toBe(numbers.length);
+
+        if (min !== max) {
+            expect(numbersSet.size).toBe(numbers.length);
+        } else {
+            expect(numbersSet.size).toBe(1);
+        }
     }
 
     describe('new Random()', (): void => {
@@ -135,7 +145,13 @@ describe('Random', (): void => {
                 { min: 100, max: 500 },
                 { min: -1, max: 0 },
                 { min: -50, max: 0 },
-                { min: -500, max: -100 }
+                { min: -500, max: -100 },
+                { min: 0.5, max: 0.75 },
+                { min: 0, max: 0.5 },
+                { min: -0.5, max: 0 },
+                { min: -0.75, max: -0.5 },
+                { min: -100, max: 100 },
+                { min: -0.5, max: 0.5 }
             ])('randomFloat($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
                 const numbers: number[] = [];
 
@@ -148,7 +164,25 @@ describe('Random', (): void => {
             });
         });
 
-        test.todo('randomFloat should return min when min and max are equal');
+        describe('randomFloat should return min when min and max are equal', (): void => {
+            test.each([
+                { min: 0, max: 0 },
+                { min: 1, max: 1 },
+                { min: 10, max: 10 },
+                { min: -10, max: -10 },
+                { min: 0.5, max: 0.5 },
+                { min: -0.5, max: -0.5 }
+            ])('randomFloat($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
+                const numbers: number[] = [];
+
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    const r: number = Random.randomFloat(min, max);
+                    numbers.push(r);
+                }
+
+                validateRandomFloatValues(numbers, min, max);
+            });
+        });
 
         test.todo('Input validation');
     });
