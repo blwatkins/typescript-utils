@@ -84,6 +84,10 @@ export class Random {
      *
      * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive).
      *
+     * @throws {TypeError} When `min` is not a finite number.
+     * @throws {TypeError} When `max` is not a finite number.
+     * @throws {RangeError} When `min` is not less than or equal `max`.
+     *
      * @public
      * @since 0.1.0
      */
@@ -98,12 +102,35 @@ export class Random {
      *
      * @returns {number} A random integer in the range [min, max) (min inclusive, max exclusive).
      *
+     * @throws {TypeError} When `min` is not a finite number.
+     * @throws {TypeError} When `max` is not a finite number.
+     * @throws {RangeError} When `min` is not less than or equal `max`.
+     *
      * @public
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
         Random.#validateRange(min, max);
         return Math.floor(Random.randomFloat(min, max));
+    }
+
+    /**
+     * @see {@link Random.randomInt}
+     *
+     * @param {number} min - The minimum value (inclusive).
+     * @param {number} max - The maximum value (exclusive).
+     *
+     * @returns {number} A random integer in the range [min, max) (min inclusive, max exclusive).
+     *
+     * @throws {TypeError} When `min` is not a finite number.
+     * @throws {TypeError} When `max` is not a finite number.
+     * @throws {RangeError} When `min` is not less than or equal `max`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomInteger(min: number, max: number): number {
+        return Random.randomInt(min, max);
     }
 
     /**
