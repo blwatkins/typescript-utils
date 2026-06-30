@@ -18,6 +18,51 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { test } from 'vitest';
+import { describe, test, afterEach, expect } from 'vitest';
 
-test.todo('Random');
+import { Random } from '../../src';
+
+describe('Random', (): void => {
+    const testRepeatTotal: number = 20;
+
+    afterEach((): void => {
+        Random.randomNumberGenerator = Math.random;
+    });
+
+    describe('new Random()', (): void => {
+        describe('Runtime behavior guards', (): void => {
+            test('Constructor should throw an error when instantiated at runtime', (): void => {
+                const RuntimeConstructor = Random as unknown as new () => Random;
+                expect((): Random => new RuntimeConstructor()).toThrow(Error);
+            });
+        });
+    });
+
+    describe('Random.randomNumberGenerator', (): void => {
+        describe('Setting random number generator should impact the values returned by all other methods', (): void => {
+            test('random', (): void => {
+                const expected: number = 1.5;
+
+                Random.randomNumberGenerator = (): number => {
+                    return expected;
+                }
+
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    expect(Random.random()).toBe(expected);
+                }
+            });
+
+            test.todo('randomFloat');
+
+            test.todo('randomInt');
+        });
+
+        describe('Setting random number generator with a seeded pseudorandom number generator', (): void => {
+            test.todo('Setting random number generator with a seeded pseudorandom number generator');
+        });
+
+        describe('Input validation', (): void => {
+            test.todo('Input validation');
+        });
+    });
+});

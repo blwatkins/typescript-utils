@@ -37,7 +37,7 @@ export class Random {
      * @type {() => number}
      * @private
      */
-    static #rand: () => number = Math.random;
+    static #rng: () => number = Math.random;
 
     /**
      * @throws {Error} - Random is a static class and cannot be instantiated.
@@ -51,21 +51,21 @@ export class Random {
     /**
      * Set the primary function used to generate random numbers.
      *
-     * @param {() => number} rand - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
+     * @param {() => number} rng - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given `rand` is not a function.
+     * @throws {TypeError} - If the given random number generator is not a function.
      *
      * @public
      * @since 0.1.0
      */
-    public static set rand(rand: () => number) {
-        if (typeof rand !== 'function') {
-            throw new TypeError('rand must be a function');
+    public static set randomNumberGenerator(rng: () => number) {
+        if (typeof rng !== 'function') {
+            throw new TypeError('rng must be a function');
         }
 
-        Random.#rand = rand;
+        Random.#rng = rng;
     }
 
     /**
@@ -75,7 +75,7 @@ export class Random {
      * @since 0.1.0
      */
     public static random(): number {
-        return Random.#rand();
+        return Random.#rng();
     }
 
     /**
