@@ -52,6 +52,18 @@ describe('Random', (): void => {
                 }
             });
 
+            test('randomFloat', (): void => {
+                const expected: number = 2;
+
+                Random.randomNumberGenerator = (): number => {
+                    return expected;
+                }
+
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    expect(Random.randomFloat(0, 1)).toBe(expected);
+                }
+            });
+
             test.todo('randomFloat');
 
             test.todo('randomInt');
