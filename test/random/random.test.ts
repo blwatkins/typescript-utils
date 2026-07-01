@@ -186,4 +186,12 @@ describe('Random', (): void => {
 
         test.todo('Input validation');
     });
+
+    describe('randomInt', (): void => {
+       test.todo('randomInt');
+    });
+
+    describe('randomInteger',  (): void => {
+       test.todo('randomInteger');
+    });
 });
