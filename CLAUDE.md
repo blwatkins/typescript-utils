@@ -14,7 +14,7 @@ Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilo
 
 ## Project Summary
 
-A growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
+A growing ESM-first TypeScript utility package for reusable number, random, string, and discriminator type-guard helpers.
 
 ## Common Commands
 
