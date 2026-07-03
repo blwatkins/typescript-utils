@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-19
+modified_date: 2026-07-02
 toc: true
 ---
 
@@ -15,7 +15,7 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwat/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
+TypeScript Utilities (`@blwatkins/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
@@ -129,7 +129,7 @@ Security analysis is automated with a dedicated CodeQL workflow covering Actions
 
 - [codeql.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/codeql.yml)
 - [dependabot.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/dependabot.yml)
-- [npm-publish.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-publish.yml)
+- [package-publish.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/package-publish.yml)
 
 ## Current Gaps / Future Improvements
 

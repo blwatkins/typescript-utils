@@ -84,13 +84,4 @@ export class NumberUtility {
 
         return input > 0;
     }
-
-    /* ---------- DEPRECATED METHODS ---------- */
-    /**
-     * @deprecated To be removed in v0.1.0-alpha.2.
-     * Replaced by {@link NumberUtility.isFiniteNumber}.
-     */
-    public static isNumber(input: unknown): input is number {
-        return typeof input === 'number' && !isNaN(input);
-    }
 }
