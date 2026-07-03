@@ -50,6 +50,7 @@ jobs:
         with:
           node-version: '24.x'
           registry-url: https://npm.pkg.github.com
+          scope: '@blwatkins'
       - run: npm ci
       - run: npm publish --tag ${{ github.event.inputs.release_tag }}
         env:
