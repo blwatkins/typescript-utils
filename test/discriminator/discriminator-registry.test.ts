@@ -30,7 +30,7 @@ import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case
 
 describe('DiscriminatorRegistry', (): void => {
     enum TestDiscriminators {
-        TEST = '@blwat/utils:DiscriminatorRegistryTests'
+        TEST = '@blwatkins/utils:DiscriminatorRegistryTests'
     }
 
     interface TestObject extends Discriminated {
