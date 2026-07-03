@@ -1,4 +1,4 @@
-name: npm Package Publish
+name: npm and GitHub Package Publish
 
 on:
   workflow_dispatch:
@@ -37,3 +37,20 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish --access public --tag ${{ github.event.inputs.release_tag }}
+
+  publish-github:
+    permissions:
+      contents: read
+      packages: write
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.3
+      - uses: actions/setup-node@v6.4.0
+        with:
+          node-version: '24.x'
+          registry-url: https://npm.pkg.github.com
+      - run: npm ci
+      - run: npm publish --access public --tag ${{ github.event.inputs.release_tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
