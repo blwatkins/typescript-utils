@@ -25,7 +25,7 @@ export default defineConfig({
         index: './src/index.ts'
     },
     outDir: './_dist',
-    globalName: 'blwatUtils',
+    globalName: 'blwatkinsUtils',
     sourcemap: false,
     clean: true,
     dts: true,
