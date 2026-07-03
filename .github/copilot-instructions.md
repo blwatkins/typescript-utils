@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwat/utils`, a growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
+This repository contains `@blwatkins/utils`, a growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
 
 The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
 
@@ -135,7 +135,7 @@ When preparing a release merge to `main`:
 |---|---|---|---|
 | `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
 | `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
-| `npm-publish.yml` | npm Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm; requires `release_tag` input and uses `id-token: write` trusted publishing permissions |
+| `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm and GitHub Packages; requires `release_tag` input and uses `id-token: write` trusted publishing permissions for the npm publish job |
 | `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
 
 ## Security and Dependency Management

@@ -19,33 +19,33 @@ The full text of the license is included with the project source code.
 
 ## Project Status Badges
 
-### [npm](https://www.npmjs.com/package/@blwat/utils)
+### [npm](https://www.npmjs.com/package/@blwatkins/utils)
 
-![npm License](https://badgen.net/npm/license/@blwat/utils/alpha)
-![npm Version](https://badgen.net/npm/v/@blwat/utils)
-![npm @alpha Version](https://badgen.net/npm/v/@blwat/utils/alpha)
-![npm Types](https://badgen.net/npm/types/@blwat/utils)
-![npm Node Version](https://badgen.net/npm/node/@blwat/utils)
-![npm Weekly Downloads](https://badgen.net/npm/dw/@blwat/utils)
-![npm Total Downloads](https://badgen.net/npm/dt/@blwat/utils)
-![npm Last Update](https://img.shields.io/npm/last-update/%40blwat%2Futils)
-![npm Unpacked Size](https://img.shields.io/npm/unpacked-size/%40blwat%2Futils)
+![npm License](https://badgen.net/npm/license/@blwatkins/utils/alpha)
+![npm Version](https://badgen.net/npm/v/@blwatkins/utils)
+![npm @alpha Version](https://badgen.net/npm/v/@blwatkins/utils/alpha)
+![npm Types](https://badgen.net/npm/types/@blwatkins/utils)
+![npm Node Version](https://badgen.net/npm/node/@blwatkins/utils)
+![npm Weekly Downloads](https://badgen.net/npm/dw/@blwatkins/utils)
+![npm Total Downloads](https://badgen.net/npm/dt/@blwatkins/utils)
+![npm Last Update](https://img.shields.io/npm/last-update/%40blwatkins%2Futils)
+![npm Unpacked Size](https://img.shields.io/npm/unpacked-size/%40blwatkins%2Futils)
 
-### [Socket](https://socket.dev/npm/package/@blwat/utils)
+### [Socket](https://socket.dev/npm/package/@blwatkins/utils)
 
-![Socket Score](https://badge.socket.dev/npm/package/@blwat/utils)
+![Socket Score](https://badge.socket.dev/npm/package/@blwatkins/utils)
 
-### [Bundlephobia](https://bundlephobia.com/package/@blwat/utils)
+### [Bundlephobia](https://bundlephobia.com/package/@blwatkins/utils)
 
-![Bundlephobia Tree Shaking](https://badgen.net/bundlephobia/tree-shaking/@blwat/utils)
-![Bundlephobia Dependency Count](https://badgen.net/bundlephobia/dependency-count/@blwat/utils)
-![Bundlephobia Minified](https://badgen.net/bundlephobia/min/@blwat/utils)
-![Bundlephobia Minified + gzip](https://badgen.net/bundlephobia/minzip/@blwat/utils)
+![Bundlephobia Tree Shaking](https://badgen.net/bundlephobia/tree-shaking/@blwatkins/utils)
+![Bundlephobia Dependency Count](https://badgen.net/bundlephobia/dependency-count/@blwatkins/utils)
+![Bundlephobia Minified](https://badgen.net/bundlephobia/min/@blwatkins/utils)
+![Bundlephobia Minified + gzip](https://badgen.net/bundlephobia/minzip/@blwatkins/utils)
 
-### [Package Phobia](https://packagephobia.com/result?p=%40blwat%2Futils)
+### [Package Phobia](https://packagephobia.com/result?p=%40blwatkins%2Futils)
 
-![Package Phobia Install Size](https://badgen.net/packagephobia/install/@blwat/utils)
-![Package Phobia Publish Size](https://badgen.net/packagephobia/publish/@blwat/utils)
+![Package Phobia Install Size](https://badgen.net/packagephobia/install/@blwatkins/utils)
+![Package Phobia Publish Size](https://badgen.net/packagephobia/publish/@blwatkins/utils)
 
 ### [GitHub](https://github.com/blwatkins/typescript-utils)
 

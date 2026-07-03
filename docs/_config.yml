@@ -20,6 +20,9 @@ minima:
   hide_site_feed_link: true
   show_excerpts: false
   social_links:
+    - title: "@blwatkins/utils"
+      icon: npm
+      url: "https://www.npmjs.com/package/@blwatkins/utils"
     - title: "Source Code"
       icon: git-alt
       url: "https://github.com/blwatkins/typescript-utils"
