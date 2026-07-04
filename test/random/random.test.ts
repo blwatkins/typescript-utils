@@ -101,6 +101,16 @@ describe('Random', (): void => {
         }
     }
 
+    function validateRandomElements(selected: unknown[], input: unknown[], type: string): void {
+        for (const element of selected) {
+            expect(typeof element).toBe(type);
+            expect(element).toBeOneOf(input);
+        }
+
+        const elementSet: Set<unknown> = new Set<unknown>(selected);
+        expect(elementSet.size).toBe(input.length);
+    }
+
     describe('new Random()', (): void => {
         describe('Runtime behavior guards', (): void => {
             test('Constructor should throw an error when instantiated at runtime', (): void => {
@@ -386,6 +396,48 @@ describe('Random', (): void => {
             }
 
             validateRandomBooleans(booleans, true);
+        });
+
+        test.todo('Input validation');
+    });
+
+    describe('randomElement', (): void => {
+        describe('randomElement should return an element from the given list with the proper element type', (): void => {
+            test.each([
+                {
+                    input: [1, 2, 3, 4, 5],
+                    type: 'number'
+                },
+                {
+                    input: [1.1, 2.2, 3.3, 4.4, 5.5],
+                    type: 'number'
+                },
+                {
+                    input: [1],
+                    type: 'number'
+                },
+                {
+                    input: ['it', 'was', 'the', 'best', 'of', 'times'],
+                    type: 'string'
+                },
+                {
+                    input: ['see', 'spot', 'run'],
+                    type: 'string'
+                },
+                {
+                    input: ['hello'],
+                    type: 'string'
+                }
+            ])('randomElement($input) should return an element from ($input)', ({ input, type }: { input: unknown[]; type: string }): void => {
+               const selected: unknown[] = [];
+               const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
+
+               for (let i: number = 0; i < repeatTotal; i++) {
+                   selected.push(Random.randomElement(input));
+               }
+
+               validateRandomElements(selected, input, type);
+            });
         });
 
         test.todo('Input validation');
