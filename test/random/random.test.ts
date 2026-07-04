@@ -215,8 +215,8 @@ describe('Random', (): void => {
         test.todo('Input validation');
     });
 
-    describe('randomInt', (): void => {
-        describe('randomInt should return a number between the given min and max', (): void => {
+    describe('randomInt and randomInteger', (): void => {
+        describe('randomInt and randomInteger should return a number between the given min and max', (): void => {
             test.each([
                 { min: 0, max: 1 },
                 { min: 0, max: 50 },
@@ -225,19 +225,21 @@ describe('Random', (): void => {
                 { min: -50, max: 0 },
                 { min: -500, max: -100 },
                 { min: -100, max: 100 }
-            ])('randomInt($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
+            ])('randomInt($min, $max) and randomInteger($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
+                const intNumbers: number[] = [];
+                const integerNumbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomInt(min, max);
-                    numbers.push(r);
+                    intNumbers.push(Random.randomInt(min, max));
+                    integerNumbers.push(Random.randomInteger(min, max));
                 }
 
-                validateRandomIntValues(numbers, min, max);
+                validateRandomIntValues(intNumbers, min, max);
+                validateRandomIntValues(integerNumbers, min, max);
             });
         });
 
-        describe('randomInt should return a number between Math.floor(min) and Math.floor(max) when the given min and max are float number types', (): void => {
+        describe('randomInt and randomInteger should return a number between Math.floor(min) and Math.floor(max) when the given min and max are float number types', (): void => {
             test.each([
                 { min: 0.33, max: 1.5 },
                 { min: 0.5, max: 50.34 },
@@ -252,57 +254,63 @@ describe('Random', (): void => {
                 { min: -3.75, max: -0.5 },
                 { min: -100.777, max: 100.222 },
                 { min: -0.5, max: 0.5 }
-            ])('randomInt($min, $max) should return a number between Math.floor($min) and Math.floor($max)', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
+            ])('randomInt($min, $max) and randomInteger($min, $max) should return a number between Math.floor($min) and Math.floor($max)', ({ min, max }: { min: number; max: number; }): void => {
+                const intNumbers: number[] = [];
+                const integerNumbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomInt(min, max);
-                    numbers.push(r);
+                    intNumbers.push(Random.randomInt(min, max));
+                    integerNumbers.push(Random.randomInteger(min, max));
                 }
 
-                validateRandomIntValues(numbers, min, max);
+                validateRandomIntValues(intNumbers, min, max);
+                validateRandomIntValues(integerNumbers, min, max);
             });
         });
 
-        describe('randomInt should return min when min and max are equal', (): void => {
+        describe('randomInt and randomInteger should return min when min and max are equal', (): void => {
             test.each([
                 { min: 0, max: 0 },
                 { min: 1, max: 1 },
                 { min: -1, max: -1 },
                 { min: 10, max: 10 },
                 { min: -10, max: -10 },
-            ])('randomInt($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
+            ])('randomInt($min, $max) and randomInteger($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
+                const intNumbers: number[] = [];
+                const integerNumbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomInt(min, max);
-                    numbers.push(r);
+                    intNumbers.push(Random.randomInt(min, max));
+                    integerNumbers.push(Random.randomInteger(min, max));
                 }
 
-                validateRandomIntValues(numbers, min, max);
+                validateRandomIntValues(intNumbers, min, max);
+                validateRandomIntValues(integerNumbers, min, max);
             });
         });
 
-        describe('randomInt should return Math.floor(min) when min and max are equal and float number types', (): void => {
+        describe('randomInt and randomInteger should return Math.floor(min) when min and max are equal and float number types', (): void => {
             test.each([
                 { min: 1.8, max: 1.8 },
                 { min: 10.5, max: 10.5 },
                 { min: -10.5, max: -10.5 },
                 { min: 0.5, max: 0.5 },
                 { min: -0.5, max: -0.5 }
-            ])('randomInt($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
+            ])('randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
+                const intNumbers: number[] = [];
+                const integerNumbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomInt(min, max);
-                    numbers.push(r);
+                    intNumbers.push(Random.randomInt(min, max));
+                    integerNumbers.push(Random.randomInteger(min, max));
                 }
 
-                validateRandomIntValues(numbers, min, max);
+                validateRandomIntValues(intNumbers, min, max);
+                validateRandomIntValues(integerNumbers, min, max);
             });
         });
 
-        describe('randomInt should return Math.floor(min) when Math.floor(min) and Math.floor(max) are equal', (): void => {
+        describe('randomInt and randomInteger should return Math.floor(min) when Math.floor(min) and Math.floor(max) are equal', (): void => {
             test.each([
                 { min: 1.5, max: 1.89 },
                 { min: 10.01, max: 10.99 },
@@ -310,22 +318,20 @@ describe('Random', (): void => {
                 { min: -10.4, max: -10.25 },
                 { min: 0.5, max: 0.75 },
                 { min: -0.99, max: -0.999 }
-            ])('randomInt($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
+            ])('randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
+                const intNumbers: number[] = [];
+                const integerNumbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomInt(min, max);
-                    numbers.push(r);
+                    intNumbers.push(Random.randomInt(min, max));
+                    integerNumbers.push(Random.randomInteger(min, max));
                 }
 
-                validateRandomIntValues(numbers, min, max);
+                validateRandomIntValues(intNumbers, min, max);
+                validateRandomIntValues(integerNumbers, min, max);
             });
         });
 
         test.todo('Input validation');
-    });
-
-    describe('randomInteger', (): void => {
-        test.todo('randomInteger');
     });
 });
