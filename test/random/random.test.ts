@@ -79,6 +79,28 @@ describe('Random', (): void => {
         }
     }
 
+    function validateRandomBooleans(booleans: boolean[], expectedValue?: boolean): void {
+        for (const bool of booleans) {
+            expectTypeOf(bool).toBeBoolean();
+
+            if (expectedValue === undefined) {
+                expect(bool).toBeOneOf([true, false]);
+            } else if (expectedValue) {
+                expect(bool).toBe(true);
+            } else {
+                expect(bool).toBe(false);
+            }
+        }
+
+        const booleanSet: Set<boolean> = new Set<boolean>(booleans);
+
+        if (expectedValue === undefined) {
+            expect(booleanSet.size).toBe(2);
+        } else {
+            expect(booleanSet.size).toBe(1);
+        }
+    }
+
     describe('new Random()', (): void => {
         describe('Runtime behavior guards', (): void => {
             test('Constructor should throw an error when instantiated at runtime', (): void => {
@@ -330,6 +352,40 @@ describe('Random', (): void => {
                 validateRandomIntValues(intNumbers, min, max);
                 validateRandomIntValues(integerNumbers, min, max);
             });
+        });
+
+        test.todo('Input validation');
+    });
+
+    describe('randomBoolean', (): void => {
+        test('randomBoolean should only return true or false', (): void => {
+            const booleans: boolean[] = [];
+
+            for (let i: number = 0; i < testRepeatTotal; i++) {
+                booleans.push(Random.randomBoolean());
+            }
+
+            validateRandomBooleans(booleans);
+        });
+
+        test('randomBoolean(0) should always return false', (): void => {
+            const booleans: boolean[] = [];
+
+            for (let i: number = 0; i < testRepeatTotal; i++) {
+                booleans.push(Random.randomBoolean(0));
+            }
+
+            validateRandomBooleans(booleans, false);
+        });
+
+        test('randomBoolean(1) should always return true', (): void => {
+            const booleans: boolean[] = [];
+
+            for (let i: number = 0; i < testRepeatTotal; i++) {
+                booleans.push(Random.randomBoolean(1));
+            }
+
+            validateRandomBooleans(booleans, true);
         });
 
         test.todo('Input validation');
