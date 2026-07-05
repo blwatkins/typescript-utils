@@ -20,7 +20,7 @@
 
 import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 
-import { Random } from '../../src';
+import {Random, WeightedElementUtility, WeightedList} from '../../src';
 
 describe('Random', (): void => {
     const testRepeatTotal: number = 20;
@@ -437,6 +437,158 @@ describe('Random', (): void => {
                }
 
                validateRandomElements(selected, input, type);
+            });
+        });
+
+        test.todo('Input validation');
+    });
+
+    describe('randomWeightedElement', (): void => {
+        describe('randomWeightedElement should return an element from the given list with the proper element type', (): void => {
+            test.each([
+                {
+                    input: [
+                        { value: 1, weight: 0.25 },
+                        { value: 2, weight: 0.25 },
+                        { value: 3, weight: 0.25 },
+                        { value: 4, weight: 0.25 }
+                    ],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.5 },
+                        { value: 2, weight: 0.2 },
+                        { value: 3, weight: 0.2 },
+                        { value: 4, weight: 0.1 }
+                    ],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1.1, weight: 0.25 },
+                        { value: 2.2, weight: 0.25 },
+                        { value: 3.3, weight: 0.25 },
+                        { value: 4.4, weight: 0.25 }
+                    ],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1, weight: 1 }
+                    ],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 'it', weight: 0.25 },
+                        { value: 'was', weight: 0.25 },
+                        { value: 'the', weight: 0.25 },
+                        { value: 'best', weight: 0.25 }
+                    ],
+                    type: 'string'
+                },
+                {
+                    input: [
+                        { value: 'see', weight: 0.33 },
+                        { value: 'spot', weight: 0.33 },
+                        { value: 'run', weight: 0.34 }
+                    ],
+                    type: 'string'
+                },
+                {
+                    input: [
+                        { value: 'hello', weight: 1 }
+                    ],
+                    type: 'string'
+                }
+            ])('randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number }[]; type: string }): void => {
+                const selected: unknown[] = [];
+                const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
+                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
+                const expectedElements: unknown[] = input.map((item: { value: unknown; weight: number}): unknown => item.value);
+
+                for (let i: number = 0; i < repeatTotal; i++) {
+                    selected.push(Random.randomWeightedElement(weightedElements));
+                }
+
+                validateRandomElements(selected, expectedElements, type);
+            });
+        });
+
+        describe('randomWeightedElement should not return an element from the given list if the weight is zero', (): void => {
+            test.each([
+                {
+                    input: [
+                        { value: 1, weight: 0.25 },
+                        { value: 2, weight: 0 },
+                        { value: 3, weight: 0.25 },
+                        { value: 4, weight: 0.25 },
+                        { value: 5, weight: 0.25 }
+                    ],
+                    expected: [1, 3, 4, 5],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.5 },
+                        { value: 2, weight: 0 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0.2 }
+                    ],
+                    expected: [1, 3, 4],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0 },
+                        { value: 2, weight: 0.3 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0.4 }
+                    ],
+                    expected: [2, 3, 4],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.4 },
+                        { value: 2, weight: 0.3 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0 }
+                    ],
+                    expected: [1, 2, 3],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 1.1, weight: 0 },
+                        { value: 2.2, weight: 0.25 },
+                        { value: 3.3, weight: 0.25 },
+                        { value: 4.4, weight: 0.5 }
+                    ],
+                    expected: [2.2, 3.3, 4.4],
+                    type: 'number'
+                },
+                {
+                    input: [
+                        { value: 'it', weight: 0.2 },
+                        { value: 'was', weight: 0.4 },
+                        { value: 'the', weight: 0 },
+                        { value: 'best', weight: 0.4 }
+                    ],
+                    expected: ['it', 'was', 'best'],
+                    type: 'string'
+                }
+            ])('randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number }[]; expected: unknown[]; type: string }): void => {
+                const selected: unknown[] = [];
+                const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
+                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
+
+                for (let i: number = 0; i < repeatTotal; i++) {
+                    selected.push(Random.randomWeightedElement(weightedElements));
+                }
+
+                validateRandomElements(selected, expected, type);
             });
         });
 
