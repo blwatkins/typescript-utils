@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-06-29
+modified_date: 2026-07-05
 toc: true
 ---
 
@@ -22,7 +22,7 @@ TypeScript Utilities (`@blwatkins/utils`) is a growing, domain-agnostic utility 
 - **Project Type:** TypeScript utility library package
 - **Primary Language:** TypeScript
 - **Primary Runtime:** Node.js
-- **Build Pipeline:** tsdown (ESM)
+- **Build Pipeline:** tsdown
 - **Quality Controls:** ESLint
 - **Automation:** GitHub Actions
 - **Dependency Automation:** Dependabot
