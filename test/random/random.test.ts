@@ -33,6 +33,8 @@ import {
     asciiSeed, getExpectedAsyncSequence,
     getExpectedSequence
 } from "../utils/test-case/scenarios/random-number-generator-factory-scenarios";
+import {nonFiniteNumberInputs, nonNumberInputs} from "../utils/input/number-inputs";
+import {buildTestCases, Scenario, TestCase} from "../utils/test-case/test-case";
 
 describe('Random', (): void => {
     const testRepeatTotal: number = 50;
@@ -292,8 +294,6 @@ describe('Random', (): void => {
                 validateRandomFloatValues(numbers, min, max);
             });
         });
-
-        test.todo('Input validation');
     });
 
     describe('randomInt and randomInteger', (): void => {
@@ -413,31 +413,6 @@ describe('Random', (): void => {
                 validateRandomIntValues(integerNumbers, min, max);
             });
         });
-
-        describe('randomInt and randomInteger should return Math.floor(min) when min > max, but Math.floor(min) and Math.floor(max) are equal', (): void => {
-            test.each([
-                { min: 1.89, max: 1.5 },
-                { min: 10.99, max: 10.01 },
-                { min: 10.999, max: 10.001 },
-                { min: -10.25, max: -10.4 },
-                { min: 0.75, max: 0.5 },
-                { min: 0.999, max: 0.99 },
-                { min: -0.99, max: -0.999 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
-                const intNumbers: number[] = [];
-                const integerNumbers: number[] = [];
-
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    intNumbers.push(Random.randomInt(min, max));
-                    integerNumbers.push(Random.randomInteger(min, max));
-                }
-
-                validateRandomIntValues(intNumbers, min, max);
-                validateRandomIntValues(integerNumbers, min, max);
-            });
-        });
-
-        test.todo('Input validation');
     });
 
     describe('randomBoolean', (): void => {
@@ -789,5 +764,46 @@ describe('Random', (): void => {
         });
 
         test.todo('Input validation');
+    });
+
+    describe('Input validation', (): void => {
+       describe('Min and max range validation', (): void => {
+          describe('Min parameter must be a finite number', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-number inputs',
+                    inputs: [...nonNumberInputs],
+                    expected: TypeError
+                },
+                {
+                    label: 'Non-finite number inputs',
+                    inputs: [...nonFiniteNumberInputs],
+                    expected: TypeError
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - min ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        Random.randomFloat(testInput as number, Number.MAX_SAFE_INTEGER);
+                    }).toThrow(testExpected);
+
+                    expect((): void => {
+                        Random.randomInt(testInput as number, Number.MAX_SAFE_INTEGER);
+                    }).toThrow(testExpected);
+
+                    expect((): void => {
+                        Random.randomInteger(testInput as number, Number.MAX_SAFE_INTEGER);
+                    }).toThrow(testExpected);
+                });
+            });
+          });
+       });
     });
 });

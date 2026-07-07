@@ -110,9 +110,9 @@ export class Random {
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
+        Random.#validateRange(min, max);
         const floorMin: number = Math.floor(min);
         const floorMax: number = Math.floor(max);
-        Random.#validateRange(floorMin, floorMax);
         return Math.floor(Random.randomFloat(floorMin, floorMax));
     }
 
