@@ -20,11 +20,22 @@
 
 import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 
-import { Random, WeightedElementUtility, WeightedList } from '../../src';
+import {
+    Random,
+    RandomNumberGeneratorFactory,
+    SeededRandomNumberGenerator,
+    WeightedElementUtility,
+    WeightedList
+} from '../../src';
 import { nonFunctionInputs } from "../utils/input/function-inputs";
+import {
+    asciiNamespace,
+    asciiSeed, getExpectedAsyncSequence,
+    getExpectedSequence
+} from "../utils/test-case/scenarios/random-number-generator-factory-scenarios";
 
 describe('Random', (): void => {
-    const testRepeatTotal: number = 25;
+    const testRepeatTotal: number = 50;
 
     afterEach((): void => {
         Random.randomNumberGenerator = Math.random;
@@ -174,8 +185,37 @@ describe('Random', (): void => {
             });
         });
 
-        describe('Setting random number generator with a seeded pseudorandom number generator', (): void => {
-            test.todo('Setting random number generator with a seeded pseudorandom number generator');
+        describe('Setting random number generator with a seeded pseudorandom number generator should return the correct sequence of values', (): void => {
+            const seed: string = asciiSeed;
+            const namespace: string = asciiNamespace;
+
+            test('With RandomNumberGeneratorFactory.build', (): void => {
+                const rng: SeededRandomNumberGenerator = RandomNumberGeneratorFactory.build(seed, namespace);
+                const expected: number[] = getExpectedSequence(seed, namespace);
+
+                Random.randomNumberGenerator = rng.next.bind(rng);
+                const selected: number[] = [];
+
+                for (let i: number = 0; i < expected.length; i++) {
+                    selected.push(Random.random());
+                }
+
+                expect(selected).toEqual(expected);
+            });
+
+            test('With RandomNumberGeneratorFactory.asyncBuild', async (): Promise<void> => {
+                const rng: SeededRandomNumberGenerator = await RandomNumberGeneratorFactory.asyncBuild(seed, namespace);
+                const expected: number[] = getExpectedAsyncSequence(seed, namespace);
+
+                Random.randomNumberGenerator = rng.next.bind(rng);
+                const selected: number[] = [];
+
+                for (let i: number = 0; i < expected.length; i++) {
+                    selected.push(Random.random());
+                }
+
+                expect(selected).toEqual(expected);
+            });
         });
 
         describe('Input validation', (): void => {

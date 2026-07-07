@@ -119,13 +119,13 @@ function buildKey(seed: string, namespace?: string): string {
     }
 }
 
-function getExpectedSequence(seed: string, namespace?: string, version?: number): number[] {
+export function getExpectedSequence(seed: string, namespace?: string, version?: number): number[] {
     const key: string = buildKey(seed, namespace);
     const index: number = version ?? 0;
     return sequences[key][index];
 }
 
-function getExpectedAsyncSequence(seed: string, namespace?: string): number[] {
+export function getExpectedAsyncSequence(seed: string, namespace?: string): number[] {
     const key: string = buildKey(seed, namespace);
     return asyncSequences[key];
 }
