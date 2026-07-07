@@ -20,10 +20,10 @@
 
 import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 
-import {Random, WeightedElementUtility, WeightedList} from '../../src';
+import { Random, WeightedElementUtility, WeightedList } from '../../src';
 
 describe('Random', (): void => {
-    const testRepeatTotal: number = 20;
+    const testRepeatTotal: number = 25;
 
     afterEach((): void => {
         Random.randomNumberGenerator = Math.random;
@@ -212,7 +212,7 @@ describe('Random', (): void => {
                 { min: -0.75, max: -0.5 },
                 { min: -100, max: 100 },
                 { min: -0.5, max: 0.5 }
-            ])('randomFloat($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomFloat($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
                 const numbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
@@ -232,7 +232,7 @@ describe('Random', (): void => {
                 { min: -10, max: -10 },
                 { min: 0.5, max: 0.5 },
                 { min: -0.5, max: -0.5 }
-            ])('randomFloat($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomFloat($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
                 const numbers: number[] = [];
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
@@ -257,7 +257,7 @@ describe('Random', (): void => {
                 { min: -50, max: 0 },
                 { min: -500, max: -100 },
                 { min: -100, max: 100 }
-            ])('randomInt($min, $max) and randomInteger($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return a number between $min and $max', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
 
@@ -286,7 +286,7 @@ describe('Random', (): void => {
                 { min: -3.75, max: -0.5 },
                 { min: -100.777, max: 100.222 },
                 { min: -0.5, max: 0.5 }
-            ])('randomInt($min, $max) and randomInteger($min, $max) should return a number between Math.floor($min) and Math.floor($max)', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return a number between Math.floor($min) and Math.floor($max)', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
 
@@ -307,7 +307,7 @@ describe('Random', (): void => {
                 { min: -1, max: -1 },
                 { min: 10, max: 10 },
                 { min: -10, max: -10 },
-            ])('randomInt($min, $max) and randomInteger($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
 
@@ -328,7 +328,7 @@ describe('Random', (): void => {
                 { min: -10.5, max: -10.5 },
                 { min: 0.5, max: 0.5 },
                 { min: -0.5, max: -0.5 }
-            ])('randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
 
@@ -350,7 +350,7 @@ describe('Random', (): void => {
                 { min: -10.4, max: -10.25 },
                 { min: 0.5, max: 0.75 },
                 { min: -0.99, max: -0.999 }
-            ])('randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
 
@@ -428,7 +428,7 @@ describe('Random', (): void => {
                     input: ['hello'],
                     type: 'string'
                 }
-            ])('randomElement($input) should return an element from ($input)', ({ input, type }: { input: unknown[]; type: string }): void => {
+            ])('%# - randomElement($input) should return an element from ($input)', ({ input, type }: { input: unknown[]; type: string }): void => {
                const selected: unknown[] = [];
                const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
 
@@ -502,7 +502,7 @@ describe('Random', (): void => {
                     ],
                     type: 'string'
                 }
-            ])('randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number }[]; type: string }): void => {
+            ])('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number }[]; type: string }): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
                 const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
@@ -579,9 +579,9 @@ describe('Random', (): void => {
                     expected: ['it', 'was', 'best'],
                     type: 'string'
                 }
-            ])('randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number }[]; expected: unknown[]; type: string }): void => {
+            ])('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number }[]; expected: unknown[]; type: string }): void => {
                 const selected: unknown[] = [];
-                const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
+                const repeatTotal: number = Math.max(testRepeatTotal, input.length * 10);
                 const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
 
                 for (let i: number = 0; i < repeatTotal; i++) {
@@ -589,6 +589,228 @@ describe('Random', (): void => {
                 }
 
                 validateRandomElements(selected, expected, type);
+            });
+        });
+
+        describe('randomWeightedElement should return elements[0] if the rng function returns a negative number', (): void => {
+            test.each([
+                {
+                    input: [
+                        { value: 1, weight: 0.25 },
+                        { value: 2, weight: 0.25 },
+                        { value: 3, weight: 0.25 },
+                        { value: 4, weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.5 },
+                        { value: 2, weight: 0.2 },
+                        { value: 3, weight: 0.2 },
+                        { value: 4, weight: 0.1 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1.1, weight: 0.25 },
+                        { value: 2.2, weight: 0.25 },
+                        { value: 3.3, weight: 0.25 },
+                        { value: 4.4, weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 1 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'it', weight: 0.25 },
+                        { value: 'was', weight: 0.25 },
+                        { value: 'the', weight: 0.25 },
+                        { value: 'best', weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'see', weight: 0.33 },
+                        { value: 'spot', weight: 0.33 },
+                        { value: 'run', weight: 0.34 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'hello', weight: 1 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.25 },
+                        { value: 2, weight: 0 },
+                        { value: 3, weight: 0.25 },
+                        { value: 4, weight: 0.25 },
+                        { value: 5, weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.5 },
+                        { value: 2, weight: 0 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0.2 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0 },
+                        { value: 2, weight: 0.3 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0.4 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.4 },
+                        { value: 2, weight: 0.3 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1.1, weight: 0 },
+                        { value: 2.2, weight: 0.25 },
+                        { value: 3.3, weight: 0.25 },
+                        { value: 4.4, weight: 0.5 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'it', weight: 0.2 },
+                        { value: 'was', weight: 0.4 },
+                        { value: 'the', weight: 0 },
+                        { value: 'best', weight: 0.4 }
+                    ]
+                }
+            ])('%# - randomWeightedElement($input) should return elements[0] if the rng function returns a negative number', ({ input }: { input: { value: unknown; weight: number }[] }): void => {
+                Random.randomNumberGenerator = (): number => {
+                    return -0.1;
+                }
+
+                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
+                const selected: unknown = Random.randomWeightedElement(weightedElements);
+                expect(selected).toBe(input[0].value);
+            });
+        });
+
+        describe('randomWeightedElement should return elements[length - 1] if the rng function returns a number greater than 1', (): void => {
+            test.each([
+                {
+                    input: [
+                        { value: 1, weight: 0.25 },
+                        { value: 2, weight: 0.25 },
+                        { value: 3, weight: 0.25 },
+                        { value: 4, weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.5 },
+                        { value: 2, weight: 0.2 },
+                        { value: 3, weight: 0.2 },
+                        { value: 4, weight: 0.1 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1.1, weight: 0.25 },
+                        { value: 2.2, weight: 0.25 },
+                        { value: 3.3, weight: 0.25 },
+                        { value: 4.4, weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 1 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'it', weight: 0.25 },
+                        { value: 'was', weight: 0.25 },
+                        { value: 'the', weight: 0.25 },
+                        { value: 'best', weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'see', weight: 0.33 },
+                        { value: 'spot', weight: 0.33 },
+                        { value: 'run', weight: 0.34 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'hello', weight: 1 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.25 },
+                        { value: 2, weight: 0 },
+                        { value: 3, weight: 0.25 },
+                        { value: 4, weight: 0.25 },
+                        { value: 5, weight: 0.25 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.5 },
+                        { value: 2, weight: 0 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0.2 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0 },
+                        { value: 2, weight: 0.3 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0.4 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1, weight: 0.4 },
+                        { value: 2, weight: 0.3 },
+                        { value: 3, weight: 0.3 },
+                        { value: 4, weight: 0 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 1.1, weight: 0 },
+                        { value: 2.2, weight: 0.25 },
+                        { value: 3.3, weight: 0.25 },
+                        { value: 4.4, weight: 0.5 }
+                    ]
+                },
+                {
+                    input: [
+                        { value: 'it', weight: 0.2 },
+                        { value: 'was', weight: 0.4 },
+                        { value: 'the', weight: 0 },
+                        { value: 'best', weight: 0.4 }
+                    ]
+                }
+            ])('%# - randomWeightedElement($input) should return elements[length - 1] if the rng function returns a number greater than 1', ({ input }: { input: { value: unknown; weight: number }[] }): void => {
+                Random.randomNumberGenerator = (): number => {
+                    return 1.1;
+                }
+
+                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
+                const selected: unknown = Random.randomWeightedElement(weightedElements);
+                expect(selected).toBe(input[input.length - 1].value);
             });
         });
 
