@@ -62,7 +62,7 @@ export class Random {
      */
     public static set randomNumberGenerator(rng: () => number) {
         if (typeof rng !== 'function') {
-            throw new TypeError('rng must be a function');
+            throw new TypeError('Random number generator must be a function');
         }
 
         Random.#rng = rng;

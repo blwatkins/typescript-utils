@@ -21,6 +21,7 @@
 import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 
 import { Random, WeightedElementUtility, WeightedList } from '../../src';
+import { nonFunctionInputs } from "../utils/input/function-inputs";
 
 describe('Random', (): void => {
     const testRepeatTotal: number = 25;
@@ -178,7 +179,15 @@ describe('Random', (): void => {
         });
 
         describe('Input validation', (): void => {
-            test.todo('Input validation');
+            describe('randomNumberGenerator must be a function', (): void => {
+                test.each(
+                    nonFunctionInputs
+                )('%# - Random.randomNumberGenerator = %o should throw a TypeError', (input: unknown): void => {
+                    expect((): void => {
+                        Random.randomNumberGenerator = input as (() => number);
+                    }).toThrow(TypeError);
+                });
+            });
         });
     });
 
