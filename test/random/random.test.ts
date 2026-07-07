@@ -592,8 +592,8 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomWeightedElement should return elements[0] if the rng function returns a negative number', (): void => {
-            test.each([
+        describe('randomWeightedElement should return a fallback element if the randomNumberGenerator returns a number outside the range of 0 to 1', (): void => {
+            describe.each([
                 {
                     input: [
                         { value: 1, weight: 0.25 },
@@ -692,125 +692,26 @@ describe('Random', (): void => {
                         { value: 'best', weight: 0.4 }
                     ]
                 }
-            ])('%# - randomWeightedElement($input) should return elements[0] if the rng function returns a negative number', ({ input }: { input: { value: unknown; weight: number }[] }): void => {
-                Random.randomNumberGenerator = (): number => {
-                    return -0.1;
-                }
+            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: { input: { value: unknown; weight: number }[] }): void => {
+                test('Should return elements[0] if the rng function returns a negative number', (): void => {
+                    Random.randomNumberGenerator = (): number => {
+                        return -0.1;
+                    }
 
-                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
-                const selected: unknown = Random.randomWeightedElement(weightedElements);
-                expect(selected).toBe(input[0].value);
-            });
-        });
+                    const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
+                    const selected: unknown = Random.randomWeightedElement(weightedElements);
+                    expect(selected).toBe(input[0].value);
+                });
 
-        describe('randomWeightedElement should return elements[length - 1] if the rng function returns a number greater than 1', (): void => {
-            test.each([
-                {
-                    input: [
-                        { value: 1, weight: 0.25 },
-                        { value: 2, weight: 0.25 },
-                        { value: 3, weight: 0.25 },
-                        { value: 4, weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.5 },
-                        { value: 2, weight: 0.2 },
-                        { value: 3, weight: 0.2 },
-                        { value: 4, weight: 0.1 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1.1, weight: 0.25 },
-                        { value: 2.2, weight: 0.25 },
-                        { value: 3.3, weight: 0.25 },
-                        { value: 4.4, weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 1 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'it', weight: 0.25 },
-                        { value: 'was', weight: 0.25 },
-                        { value: 'the', weight: 0.25 },
-                        { value: 'best', weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'see', weight: 0.33 },
-                        { value: 'spot', weight: 0.33 },
-                        { value: 'run', weight: 0.34 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'hello', weight: 1 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.25 },
-                        { value: 2, weight: 0 },
-                        { value: 3, weight: 0.25 },
-                        { value: 4, weight: 0.25 },
-                        { value: 5, weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.5 },
-                        { value: 2, weight: 0 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0.2 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0 },
-                        { value: 2, weight: 0.3 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0.4 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.4 },
-                        { value: 2, weight: 0.3 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1.1, weight: 0 },
-                        { value: 2.2, weight: 0.25 },
-                        { value: 3.3, weight: 0.25 },
-                        { value: 4.4, weight: 0.5 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'it', weight: 0.2 },
-                        { value: 'was', weight: 0.4 },
-                        { value: 'the', weight: 0 },
-                        { value: 'best', weight: 0.4 }
-                    ]
-                }
-            ])('%# - randomWeightedElement($input) should return elements[length - 1] if the rng function returns a number greater than 1', ({ input }: { input: { value: unknown; weight: number }[] }): void => {
-                Random.randomNumberGenerator = (): number => {
-                    return 1.1;
-                }
+                test('Should return elements[length - 1] if the rng function returns a number greater than 1', (): void => {
+                    Random.randomNumberGenerator = (): number => {
+                        return 1.1;
+                    }
 
-                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
-                const selected: unknown = Random.randomWeightedElement(weightedElements);
-                expect(selected).toBe(input[input.length - 1].value);
+                    const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
+                    const selected: unknown = Random.randomWeightedElement(weightedElements);
+                    expect(selected).toBe(input[input.length - 1].value);
+                });
             });
         });
 
