@@ -27,14 +27,16 @@ import {
     WeightedElementUtility,
     WeightedList
 } from '../../src';
-import { nonFunctionInputs } from "../utils/input/function-inputs";
+
+import { nonFunctionInputs } from '../utils/input/function-inputs';
+import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
+import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
+
 import {
     asciiNamespace,
     asciiSeed, getExpectedAsyncSequence,
     getExpectedSequence
-} from "../utils/test-case/scenarios/random-number-generator-factory-scenarios";
-import {nonFiniteNumberInputs, nonNumberInputs} from "../utils/input/number-inputs";
-import {buildTestCases, Scenario, TestCase} from "../utils/test-case/test-case";
+} from '../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('Random', (): void => {
     const testRepeatTotal: number = 50;
@@ -194,11 +196,12 @@ describe('Random', (): void => {
             test('With RandomNumberGeneratorFactory.build', (): void => {
                 const rng: SeededRandomNumberGenerator = RandomNumberGeneratorFactory.build(seed, namespace);
                 const expected: number[] = getExpectedSequence(seed, namespace);
+                const repeatTotal: number = expected.length;
 
                 Random.randomNumberGenerator = rng.next.bind(rng);
                 const selected: number[] = [];
 
-                for (let i: number = 0; i < expected.length; i++) {
+                for (let i: number = 0; i < repeatTotal; i++) {
                     selected.push(Random.random());
                 }
 
@@ -208,11 +211,12 @@ describe('Random', (): void => {
             test('With RandomNumberGeneratorFactory.asyncBuild', async (): Promise<void> => {
                 const rng: SeededRandomNumberGenerator = await RandomNumberGeneratorFactory.asyncBuild(seed, namespace);
                 const expected: number[] = getExpectedAsyncSequence(seed, namespace);
+                const repeatTotal: number = expected.length;
 
                 Random.randomNumberGenerator = rng.next.bind(rng);
                 const selected: number[] = [];
 
-                for (let i: number = 0; i < expected.length; i++) {
+                for (let i: number = 0; i < repeatTotal; i++) {
                     selected.push(Random.random());
                 }
 
@@ -355,7 +359,7 @@ describe('Random', (): void => {
                 { min: 1, max: 1 },
                 { min: -1, max: -1 },
                 { min: 10, max: 10 },
-                { min: -10, max: -10 },
+                { min: -10, max: -10 }
             ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
@@ -476,15 +480,15 @@ describe('Random', (): void => {
                     input: ['hello'],
                     type: 'string'
                 }
-            ])('%# - randomElement($input) should return an element from ($input)', ({ input, type }: { input: unknown[]; type: string }): void => {
-               const selected: unknown[] = [];
-               const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
+            ])('%# - randomElement($input) should return an element from ($input)', ({ input, type }: { input: unknown[]; type: string; }): void => {
+                const selected: unknown[] = [];
+                const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
 
-               for (let i: number = 0; i < repeatTotal; i++) {
-                   selected.push(Random.randomElement(input));
-               }
+                for (let i: number = 0; i < repeatTotal; i++) {
+                    selected.push(Random.randomElement(input));
+                }
 
-               validateRandomElements(selected, input, type);
+                validateRandomElements(selected, input, type);
             });
         });
 
@@ -550,11 +554,11 @@ describe('Random', (): void => {
                     ],
                     type: 'string'
                 }
-            ])('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number }[]; type: string }): void => {
+            ])('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number; }[]; type: string; }): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
                 const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
-                const expectedElements: unknown[] = input.map((item: { value: unknown; weight: number}): unknown => item.value);
+                const expectedElements: unknown[] = input.map((item: { value: unknown; weight: number; }): unknown => item.value);
 
                 for (let i: number = 0; i < repeatTotal; i++) {
                     selected.push(Random.randomWeightedElement(weightedElements));
@@ -627,7 +631,7 @@ describe('Random', (): void => {
                     expected: ['it', 'was', 'best'],
                     type: 'string'
                 }
-            ])('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number }[]; expected: unknown[]; type: string }): void => {
+            ])('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number; }[]; expected: unknown[]; type: string; }): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 10);
                 const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
@@ -740,11 +744,11 @@ describe('Random', (): void => {
                         { value: 'best', weight: 0.4 }
                     ]
                 }
-            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: { input: { value: unknown; weight: number }[] }): void => {
+            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: { input: { value: unknown; weight: number; }[]; }): void => {
                 test('Should return elements[0] if the rng function returns a negative number', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return -0.1;
-                    }
+                    };
 
                     const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
                     const selected: unknown = Random.randomWeightedElement(weightedElements);
@@ -754,7 +758,7 @@ describe('Random', (): void => {
                 test('Should return elements[length - 1] if the rng function returns a number greater than 1', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return 1.1;
-                    }
+                    };
 
                     const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
                     const selected: unknown = Random.randomWeightedElement(weightedElements);
@@ -767,43 +771,63 @@ describe('Random', (): void => {
     });
 
     describe('Input validation', (): void => {
-       describe('Min and max range validation', (): void => {
-          describe('Min parameter must be a finite number', (): void => {
-            const scenarios: Scenario[] = [
-                {
-                    label: 'Non-number inputs',
-                    inputs: [...nonNumberInputs],
-                    expected: TypeError
-                },
-                {
-                    label: 'Non-finite number inputs',
-                    inputs: [...nonFiniteNumberInputs],
-                    expected: TypeError
-                }
-            ];
+        describe('Min and max range validation', (): void => {
+            describe('Min and max parameters must be a finite number', (): void => {
+                const scenarios: Scenario[] = [
+                    {
+                        label: 'Non-number inputs',
+                        inputs: [...nonNumberInputs],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'Non-finite number inputs',
+                        inputs: [...nonFiniteNumberInputs],
+                        expected: TypeError
+                    }
+                ];
 
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+                describe.each(
+                    scenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                test.each(
-                    testCases
-                )('%# - min ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect((): void => {
-                        Random.randomFloat(testInput as number, Number.MAX_SAFE_INTEGER);
-                    }).toThrow(testExpected);
+                    describe('Min parameter validation', (): void => {
+                        test.each(
+                            testCases
+                        )('%# - Min ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                Random.randomFloat(testInput as number, Number.MAX_SAFE_INTEGER);
+                            }).toThrow(testExpected);
 
-                    expect((): void => {
-                        Random.randomInt(testInput as number, Number.MAX_SAFE_INTEGER);
-                    }).toThrow(testExpected);
+                            expect((): void => {
+                                Random.randomInt(testInput as number, Number.MAX_SAFE_INTEGER);
+                            }).toThrow(testExpected);
 
-                    expect((): void => {
-                        Random.randomInteger(testInput as number, Number.MAX_SAFE_INTEGER);
-                    }).toThrow(testExpected);
+                            expect((): void => {
+                                Random.randomInteger(testInput as number, Number.MAX_SAFE_INTEGER);
+                            }).toThrow(testExpected);
+                        });
+                    });
+
+                    describe('Max parameter validation', (): void => {
+                        test.each(
+                            testCases
+                        )('%# - Max ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                Random.randomFloat(Number.MIN_SAFE_INTEGER, testInput as number);
+                            }).toThrow(testExpected);
+
+                            expect((): void => {
+                                Random.randomInt(Number.MIN_SAFE_INTEGER, testInput as number);
+                            }).toThrow(testExpected);
+
+                            expect((): void => {
+                                Random.randomInteger(Number.MIN_SAFE_INTEGER, testInput as number);
+                            }).toThrow(testExpected);
+                        });
+                    });
                 });
             });
-          });
-       });
+        });
     });
 });
