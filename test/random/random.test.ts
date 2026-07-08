@@ -451,7 +451,44 @@ describe('Random', (): void => {
         });
 
         describe('Chance of true validation', (): void => {
-            test.todo('validate');
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-number type inputs',
+                    inputs: [...nonNumberInputs.filter((input: unknown): boolean => input !== undefined)],
+                    expected: TypeError
+                },
+                {
+                    label: 'Non-finite number inputs',
+                    inputs: [...nonFiniteNumberInputs],
+                    expected: TypeError
+                },
+                {
+                    label: 'Out of range finite number inputs',
+                    inputs: [
+                        -Number.EPSILON,
+                        1 + Number.EPSILON,
+                        Number.MIN_SAFE_INTEGER,
+                        Number.MAX_SAFE_INTEGER,
+                        -1,
+                        2,
+                        -10,
+                        10
+                    ],
+                    expected: RangeError
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - randomBoolean($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(() => Random.randomBoolean(testInput as number)).toThrow(testExpected);
+                });
+            });
         });
     });
 
@@ -768,11 +805,9 @@ describe('Random', (): void => {
                 });
             });
         });
-
-        test.todo('Input validation');
     });
 
-    describe('Input validation', (): void => {
+    describe('Range input validation', (): void => {
         describe('Min and max range validation', (): void => {
             describe('Min and max parameters must be a finite number', (): void => {
                 const scenarios: Scenario[] = [
