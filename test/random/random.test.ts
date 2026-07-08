@@ -450,7 +450,9 @@ describe('Random', (): void => {
             validateRandomBooleans(booleans, true);
         });
 
-        test.todo('Input validation');
+        describe('Chance of true validation', (): void => {
+            test.todo('validate');
+        });
     });
 
     describe('randomElement', (): void => {
@@ -823,6 +825,85 @@ describe('Random', (): void => {
 
                             expect((): void => {
                                 Random.randomInteger(Number.MIN_SAFE_INTEGER, testInput as number);
+                            }).toThrow(testExpected);
+                        });
+                    });
+                });
+            });
+
+            describe('Min must be less than max', (): void => {
+                const scenarios: Scenario[] = [
+                    {
+                        label: 'Integer min and max',
+                        inputs: [
+                            { min: 0, max: -1 },
+                            { min: 10, max: 9 },
+                            { min: 10, max: 0 },
+                            { min: 10, max: 1 },
+                            { min: 10, max: -10 },
+                            { min: -10, max: -11 },
+                            { min: -10, max: -20 }
+                        ],
+                        expected: RangeError
+                    },
+                    {
+                        label: 'Float min and max',
+                        inputs: [
+                            { min: 0.123, max: -1.123 },
+                            { min: 10.123, max: 9.123 },
+                            { min: 10.123, max: 0.123 },
+                            { min: 10.123, max: 1.123 },
+                            { min: 10.123, max: -10.123 },
+                            { min: -10.123, max: -11.123 },
+                            { min: -10.123, max: -20.123 }
+                        ],
+                        expected: RangeError
+                    },
+                    {
+                        label: 'Float min and max with equal floors',
+                        inputs: [
+                            { min: 0.456, max: 0.123 },
+                            { min: 10.456, max: 10.1234 },
+                            { min: -10.123, max: -10.456 }
+                        ],
+                        expected: RangeError
+                    }
+                ];
+
+                describe.each(
+                    scenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    describe('randomFloat', (): void => {
+                        test.each(
+                            testCases
+                        )('%# - randomFloat with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            const { min, max} = testInput as { min: number; max: number };
+                            expect((): void => {
+                                Random.randomFloat(min, max);
+                            }).toThrow(testExpected);
+                        });
+                    });
+
+                    describe('randomInt', (): void => {
+                        test.each(
+                            testCases
+                        )('%# - randomInt with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            const { min, max} = testInput as { min: number; max: number };
+                            expect((): void => {
+                                Random.randomInt(min, max);
+                            }).toThrow(testExpected);
+                        });
+                    });
+
+                    describe('randomInteger', (): void => {
+                        test.each(
+                            testCases
+                        )('%# - randomInteger with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            const { min, max} = testInput as { min: number; max: number };
+                            expect((): void => {
+                                Random.randomInteger(min, max);
                             }).toThrow(testExpected);
                         });
                     });
