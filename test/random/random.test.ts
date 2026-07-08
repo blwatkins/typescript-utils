@@ -879,7 +879,7 @@ describe('Random', (): void => {
                         test.each(
                             testCases
                         )('%# - randomFloat with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            const { min, max} = testInput as { min: number; max: number };
+                            const { min, max } = testInput as { min: number; max: number; };
                             expect((): void => {
                                 Random.randomFloat(min, max);
                             }).toThrow(testExpected);
@@ -890,7 +890,7 @@ describe('Random', (): void => {
                         test.each(
                             testCases
                         )('%# - randomInt with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            const { min, max} = testInput as { min: number; max: number };
+                            const { min, max } = testInput as { min: number; max: number; };
                             expect((): void => {
                                 Random.randomInt(min, max);
                             }).toThrow(testExpected);
@@ -901,7 +901,7 @@ describe('Random', (): void => {
                         test.each(
                             testCases
                         )('%# - randomInteger with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            const { min, max} = testInput as { min: number; max: number };
+                            const { min, max } = testInput as { min: number; max: number; };
                             expect((): void => {
                                 Random.randomInteger(min, max);
                             }).toThrow(testExpected);
