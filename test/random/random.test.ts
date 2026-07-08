@@ -37,6 +37,7 @@ import {
     asciiSeed, getExpectedAsyncSequence,
     getExpectedSequence
 } from '../utils/test-case/scenarios/random-number-generator-factory-scenarios';
+import { nonArrayInputs } from '../utils/input/array-inputs';
 
 describe('Random', (): void => {
     const testRepeatTotal: number = 50;
@@ -531,7 +532,38 @@ describe('Random', (): void => {
             });
         });
 
-        test.todo('Input validation');
+        describe('Input validation', (): void => {
+            describe('Input must be a non-empty array', (): void => {
+                const scenarios: Scenario[] = [
+                    {
+                        label: 'Non-array type inputs',
+                        inputs: [...nonArrayInputs],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'Empty array input',
+                        inputs: [
+                            []
+                        ],
+                        expected: TypeError
+                    }
+                ];
+
+                describe.each(
+                    scenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    test.each(
+                        testCases
+                    )('%# - randomElement($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            Random.randomElement(testInput as unknown[]);
+                        }).toThrow(testExpected);
+                    });
+                });
+            });
+        });
     });
 
     describe('randomWeightedElement', (): void => {
