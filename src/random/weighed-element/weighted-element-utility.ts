@@ -251,7 +251,7 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Validate the input of {@link WeightedElement.buildWeightedList}.
+     * Validate the input of {@link WeightedElementUtility.buildWeightedList}.
      *
      * @param {unknown} input - The input to validate.
      *
