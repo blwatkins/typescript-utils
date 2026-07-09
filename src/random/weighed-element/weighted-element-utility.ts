@@ -207,9 +207,9 @@ export class WeightedElementUtility {
             return false;
         }
 
-        return input.reduce((accumulator: boolean, element: unknown): boolean => {
-            return accumulator && WeightedElementUtility.isWeightedElement(element, valueTypeGuard);
-        }, true);
+        return input.every((element: unknown): boolean => {
+            return WeightedElementUtility.isWeightedElement(element, valueTypeGuard);
+        });
     }
 
     /**
