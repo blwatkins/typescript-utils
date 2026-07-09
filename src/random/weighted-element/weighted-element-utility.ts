@@ -48,6 +48,7 @@ export class WeightedElementUtility {
      *
      * @returns {boolean} `true` if the input is a {@link WeightedElement}, `false` otherwise.
      *
+     * @readonly
      * @private
      */
     static readonly #isGenericWeightedElement: TypeGuard<WeightedElement<unknown>> = DiscriminatorRegistry.register<WeightedElement<unknown>>({

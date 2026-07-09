@@ -94,8 +94,8 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 **Evidence:**
 
 - [src/random/random.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/random.ts)
-- [src/random/weighed-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighed-element/weighted-element.ts)
-- [src/random/weighed-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighed-element/weighted-element-utility.ts)
+- [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
+- [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
 
 ### Strict typing and lint enforcement model
 

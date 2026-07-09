@@ -44,9 +44,8 @@ export const weightedElementSchema = Type.Generic(
                  * The probability weight of the element.
                  * Should be a number between 0 and 1, inclusive.
                  *
-                 * @type {number}
-                 *
                  * @readonly
+                 * @type {number}
                  */
                 weight: Type.Readonly(Type.Number({
                     minimum: 0,
@@ -56,9 +55,8 @@ export const weightedElementSchema = Type.Generic(
                 /**
                  * The discriminator for the weighted element.
                  *
-                 * @type {Discriminators.WeightedElement}
-                 *
                  * @readonly
+                 * @type {Discriminators.WeightedElement}
                  */
                 discriminator: Type.Literal(Discriminators.WeightedElement)
             },
@@ -85,20 +83,18 @@ export interface WeightedElement<TValue> {
      * The probability weight of the element.
      * Should be a number between 0 and 1, inclusive.
      *
-     * @type {number}
-     *
      * @readonly
      * @since 0.1.0
+     * @type {number}
      */
     readonly weight: number;
 
     /**
      * The discriminator for the weighted element.
      *
-     * @type {Discriminators.WeightedElement}
-     *
      * @readonly
      * @since 0.1.0
+     * @type {Discriminators.WeightedElement}
      */
     readonly discriminator: Discriminators.WeightedElement;
 }
