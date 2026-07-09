@@ -222,7 +222,7 @@ export class Random {
         }
 
         if (min > max) {
-            throw new RangeError(`min (${min}) must be less than max (${max})`);
+            throw new RangeError(`min (${min}) must be less than or equal to max (${max})`);
         }
     }
 
