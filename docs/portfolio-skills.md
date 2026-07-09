@@ -5,7 +5,7 @@ author:
   - GitHub Copilot
 layout: post
 date: 2026-05-27
-modified_date: 2026-07-05
+modified_date: 2026-07-08
 toc: true
 ---
 
@@ -90,6 +90,17 @@ The public entry point re-exports domain modules, and each domain module re-expo
 - [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
 - [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
+### Random number generation and weighted element selection
+
+The `Random` class centralizes random number, boolean, and array-element selection behind a swappable random number source (defaulting to `Math.random`), enabling deterministic testing and drop-in use of the package's own seeded pseudorandom number generator. `WeightedElementUtility` builds on the discriminator registry to validate `WeightedElement` and `WeightedList` objects at runtime and performs non-uniform random selection using a cumulative-weight strategy.
+
+**Evidence:**
+
+- [src/random/random.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/random.ts)
+- [src/random/weighed-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighed-element/weighted-element.ts)
+- [src/random/weighed-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighed-element/weighted-element-utility.ts)
+- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
+
 ### Strict typing and lint enforcement model
 
 TypeScript is configured with strict checks, including implicit-type and unused-code protections, to enforce predictable typing behavior. JavaScript and TypeScript lint configurations apply recommended and stricter rule sets for syntax safety and style consistency.
@@ -102,15 +113,16 @@ TypeScript is configured with strict checks, including implicit-type and unused-
 
 ### Test strategy and CI verification gates
 
-The project uses Vitest for repeatable unit testing, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
+The project uses Vitest for repeatable unit testing, including compile-time type checking of test files, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
 
 **Evidence:**
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
+- [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
+- [tsconfig.vitest.json](https://github.com/blwatkins/typescript-utils/blob/main/tsconfig.vitest.json)
+- [test/random/weighted-element/weighted-element-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/weighted-element/weighted-element-utility.test.ts)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
-- [test/string/color-string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/color-string-utility.test.ts)
-- [test/utils/input/color-string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/color-string-inputs.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
@@ -140,6 +152,5 @@ Security analysis is automated with a dedicated CodeQL workflow covering Actions
 ## Current Gaps / Future Improvements
 
 - The package is currently in an alpha release line; additional utility domains and API surface are still being developed.
-- Unit tests for the `Random` class are not yet implemented; the test file exists as a placeholder pending a future change set.
 - Tests currently focus on unit-level utility behavior; higher-level integration or consumer-facing examples are not yet part of the verification strategy.
 - Release documentation under `docs/releases/...` is maintained manually, which can increase maintenance overhead as release volume grows.
