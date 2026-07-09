@@ -26,6 +26,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 
 Primary development work happens in `src/` and corresponding tests under `test/`.
 Shared test fixtures and scenario helpers live under `test/utils`.
+Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
 
 ### Development Status
 
@@ -114,7 +115,7 @@ When preparing a release merge to `main`:
 - Confirm the version in `package.json` is bumped appropriately
 - Ensure release documentation under `docs/releases/` covers the new version
 - Verify `typedoc.json` entry points include any new module-level index files
-- Confirm the npm publish workflow (`npm-publish.yml`) is configured correctly for the release
+- Confirm the npm publish workflow (`package-publish.yml`) is configured correctly for the release
 
 ## npm Scripts
 
@@ -133,10 +134,10 @@ When preparing a release merge to `main`:
 
 | Workflow file | Name | Trigger | Description |
 |---|---|---|---|
-| `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
+| `codeql.yml` | CodeQL | Push/PR to `main` and `release/**`, manual, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
 | `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
 | `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm and GitHub Packages; requires `release_tag` input and uses `id-token: write` trusted publishing permissions for the npm publish job |
-| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
+| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main` and `release/**`, manual | Runs lint, build, and tests across supported Node.js versions |
 
 ## Security and Dependency Management
 

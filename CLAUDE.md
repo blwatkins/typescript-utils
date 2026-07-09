@@ -27,7 +27,7 @@ A growing ESM-first TypeScript utility package for reusable number, random, stri
 
 ## Generated Output Directories (not committed)
 
-`_dist/` (build), `_coverage/` (coverage), and `_doc/` (TypeDoc) are generated and gitignored.
+`_dist/` (build), `_compiled/` (TypeScript `outDir`), `_coverage/` (coverage), and `_doc/` (TypeDoc) are generated and gitignored.
 Note that the `docs/` Jekyll site separately includes committed sample documentation.
 
 ## Documentation Notes
