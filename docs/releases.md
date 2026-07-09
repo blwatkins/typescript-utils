@@ -1,10 +1,10 @@
 ---
+title: "Releases"
 layout: post
 author:
   - Brittni Watkins
 date: 2026-05-18
-modified_date: 2026-07-02
-title: "Releases"
+modified_date: 2026-07-08
 tags:
   - releases
 toc: true

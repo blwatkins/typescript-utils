@@ -1,10 +1,10 @@
 ---
-title: "TypeScript Utilities - Resources and References"
+title: "Resources and References"
+layout: post
 author:
   - Brittni Watkins
-layout: post
 date: 2026-06-05
-modified_date: 2026-06-29
+modified_date: 2026-07-08
 toc: true
 ---
 
@@ -12,6 +12,7 @@ toc: true
 
 ### JavaScript
 
+- [MDN Web Docs - Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
 - [MDN Web Docs - Number.isFinite()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite)
 - [MDN Web Docs - Number.isInteger()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger)
 
