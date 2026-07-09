@@ -81,4 +81,4 @@ Thank you for giving me the tools, resources, opportunities, support, and inspir
 
 ----
 
-Copyright &copy; 2024-2026 Brittni Watkins.
+Copyright &copy; 2022-2026 Brittni Watkins.
