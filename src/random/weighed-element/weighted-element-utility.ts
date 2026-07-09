@@ -263,7 +263,7 @@ export class WeightedElementUtility {
      */
     static #validateBuildWeightedListInput(input: unknown): void {
         if (!input || !Array.isArray(input) || input.length === 0) {
-            throw new TypeError('Input must be an non-empty array');
+            throw new TypeError('Input must be a non-empty array');
         }
     }
 
