@@ -144,7 +144,8 @@ export class Random {
     }
 
     /**
-     * @param {number} chanceOfTrue - The probability of returning true (between 0 and 1).
+     * @param {number} chanceOfTrue - The probability of returning `true` (between 0 and 1).
+     * Default value is `0.5`.
      *
      * @returns {boolean} A random boolean value.
      *
