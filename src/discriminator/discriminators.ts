@@ -18,6 +18,16 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminated';
-export * from './discriminator-registry';
-export * from './discriminators';
+/**
+ * Valid discriminators for package types and interfaces.
+ *
+ * @since 0.1.0
+ */
+export enum Discriminators {
+    /**
+     * Discriminator value for the WeightedElement interface.
+     *
+     * @since 0.1.0
+     */
+    WeightedElement = '@blwatkins/utils:WeightedElement'
+}

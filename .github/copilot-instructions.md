@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwatkins/utils`, a growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
+This repository contains `@blwatkins/utils`, a growing ESM-first TypeScript utility package for reusable number, random, string, and discriminator type-guard helpers.
 
 The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
 
@@ -26,6 +26,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 
 Primary development work happens in `src/` and corresponding tests under `test/`.
 Shared test fixtures and scenario helpers live under `test/utils`.
+Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
 
 ### Development Status
 
@@ -102,6 +103,11 @@ Review all source changes for convention compliance and code quality.
 - **Reuse and DRY** — new utilities delegate to existing ones where appropriate rather than duplicating logic
 - **Runtime safety** — see the "JavaScript Consumer Safety" section for the requirement to retain runtime type guards for JavaScript consumers
 
+#### Consistency and Pattern Observation
+
+- **Cross-source consistency** — Compare all changed code, inline comments, and documentation (JSDoc, README, `docs/`) against each other and against implicit patterns visible in the rest of the codebase. Flag any deviation from an established pattern even if that pattern has not been explicitly documented in this file (e.g., consistent phrasing in JSDoc summaries, a structural idiom repeated across utility classes, a naming convention used throughout tests).
+- **Implicit pattern detection** — When a consistent pattern is observed in the codebase that is not yet captured in this file, call it out explicitly and ask the maintainer whether it should be documented in the appropriate section of `.github/copilot-instructions.md`.
+
 ### 7. Release Readiness (for merges to `main`)
 
 When preparing a release merge to `main`:
@@ -109,7 +115,7 @@ When preparing a release merge to `main`:
 - Confirm the version in `package.json` is bumped appropriately
 - Ensure release documentation under `docs/releases/` covers the new version
 - Verify `typedoc.json` entry points include any new module-level index files
-- Confirm the npm publish workflow (`npm-publish.yml`) is configured correctly for the release
+- Confirm the npm publish workflow (`package-publish.yml`) is configured correctly for the release
 
 ## npm Scripts
 
@@ -128,10 +134,10 @@ When preparing a release merge to `main`:
 
 | Workflow file | Name | Trigger | Description |
 |---|---|---|---|
-| `codeql.yml` | CodeQL | Push/PR to `main`, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
+| `codeql.yml` | CodeQL | Push/PR to `main` and `release/**`, manual, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
 | `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
 | `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm and GitHub Packages; requires `release_tag` input and uses `id-token: write` trusted publishing permissions for the npm publish job |
-| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main`, manual | Runs lint, build, and tests across supported Node.js versions |
+| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main` and `release/**`, manual | Runs lint, build, and tests across supported Node.js versions |
 
 ## Security and Dependency Management
 
@@ -182,6 +188,7 @@ Static utility classes must:
 When writing or reviewing code, follow these documentation standards for maximum compatibility:
 
 - **Use `@returns` instead of `@return`**: Always use `@returns` in documentation comments for compatibility with documentation generators.
+- **Use `{@link ...}` syntax in `@see` tags**: Always use `{@link ClassName.method}` (or `{@link symbol}`) inside `@see` tags. Do not use bare `{ClassName.method}` without `@link`.
 - **Use `@param {type} name` format**: Always specify parameter types with the format `@param {type} name` (e.g., `@param {string} hex`) rather than `@param name {type}`.
 - **Always specify return types with `@returns`**: Include a type indicator in every `@returns` annotation (e.g., `@returns {boolean}`).
 - **Document void returns with `@returns {void}`**: For methods that do not return a value, explicitly use `@returns {void}`.
@@ -334,10 +341,11 @@ Generate a Markdown file with these sections in order:
 
    Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
 
-5. **Skills and Tooling Inventory** (categorized lists)
+5. **Skills and Tooling Inventory** (flat bulleted list with bold category labels, e.g., `- **Category:** [Tool](url), [Tool](url)`)
    - Languages
-   - Runtime & Frameworks (or similar category)
-   - Key libraries and middleware
+   - Runtime (or similar category)
+   - Frameworks (or similar category)
+   - Libraries (or similar category)
    - Testing
    - Build / Bundling
    - Code Quality
@@ -350,12 +358,13 @@ Generate a Markdown file with these sections in order:
    - Code Analysis / Security
    - Dependency Automation
    - Development Utilities
-   - Environment Management
+   - Environment Configuration (or similar category)
    - Development Environments
    - AI-Assisted Development
 
    Link each tool/language to its official documentation.
    Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
+   Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
    - 5–10 bullets describing what this project demonstrates
@@ -546,6 +555,7 @@ When reviewing a new page, compare with existing template pages for:
 
 - heading style/casing
 - label style in `At a Glance`
+- label style and format in `Skills and Tooling Inventory` (flat bulleted list with bold category labels)
 - tense and sentence style
 - bullet punctuation consistency
 - naming conventions (`webpack` vs `Webpack`, etc.)

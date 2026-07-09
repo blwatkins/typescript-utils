@@ -14,7 +14,7 @@ Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilo
 
 ## Project Summary
 
-A growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
+A growing ESM-first TypeScript utility package for reusable number, random, string, and discriminator type-guard helpers.
 
 ## Common Commands
 
@@ -27,7 +27,7 @@ A growing ESM-first TypeScript utility package for reusable number, random, and 
 
 ## Generated Output Directories (not committed)
 
-`_dist/` (build), `_coverage/` (coverage), and `_doc/` (TypeDoc) are generated and gitignored.
+`_dist/` (build), `_compiled/` (TypeScript `outDir`), `_coverage/` (coverage), and `_doc/` (TypeDoc) are generated and gitignored.
 Note that the `docs/` Jekyll site separately includes committed sample documentation.
 
 ## Documentation Notes
@@ -48,5 +48,5 @@ Before merging a branch, complete these review steps (full details in the "Pre-M
 3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
 5. **GitHub repository topics** — align with `package.json` keywords
-6. **Branch code review** — convention compliance (static class pattern, JSDoc completeness, copyright headers, README/docs sync, test coverage) and code quality (correctness, API consistency, efficiency, backward compatibility, reuse/DRY, runtime safety)
+6. **Branch code review** — convention compliance (static class pattern, JSDoc completeness, copyright headers, README/docs sync, test coverage), code quality (correctness, API consistency, efficiency, backward compatibility, reuse/DRY, runtime safety), and consistency (cross-source consistency across code/comments/docs, implicit pattern detection with maintainer notification)
 7. **Release readiness** (for merges to `main`) — version bump, release docs, TypeDoc entry points, publish workflow
