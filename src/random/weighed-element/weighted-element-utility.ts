@@ -167,9 +167,9 @@ export class WeightedElementUtility {
             return false;
         }
 
-        const containsWeightedElements: boolean = input.reduce((accumulator: boolean, element: unknown): boolean => {
-            return accumulator && WeightedElementUtility.isGenericWeightedElement(element);
-        }, true);
+        const containsWeightedElements: boolean = input.every((element: unknown): boolean => {
+            return WeightedElementUtility.isGenericWeightedElement(element);
+        });
 
         if (!containsWeightedElements) {
             return false;
