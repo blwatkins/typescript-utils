@@ -144,7 +144,8 @@ export class Random {
     }
 
     /**
-     * @param {number} chanceOfTrue - The probability of returning true (between 0 and 1).
+     * @param {number} chanceOfTrue - The probability of returning `true` (between 0 and 1).
+     * Default value is `0.5`.
      *
      * @returns {boolean} A random boolean value.
      *
@@ -222,7 +223,7 @@ export class Random {
         }
 
         if (min > max) {
-            throw new RangeError(`min (${min}) must be less than max (${max})`);
+            throw new RangeError(`min (${min}) must be less than or equal to max (${max})`);
         }
     }
 

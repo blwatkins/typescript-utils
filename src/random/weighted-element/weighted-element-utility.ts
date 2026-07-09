@@ -234,7 +234,7 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Validate the input of {@link WeightedElement.buildWeightedElement}.
+     * Validate the input of {@link WeightedElementUtility.buildWeightedElement}.
      *
      * @param {unknown} input - The input to validate.
      *
@@ -251,7 +251,7 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Validate the input of {@link WeightedElement.buildWeightedList}.
+     * Validate the input of {@link WeightedElementUtility.buildWeightedList}.
      *
      * @param {unknown} input - The input to validate.
      *
@@ -263,7 +263,7 @@ export class WeightedElementUtility {
      */
     static #validateBuildWeightedListInput(input: unknown): void {
         if (!input || !Array.isArray(input) || input.length === 0) {
-            throw new TypeError('Input must be an non-empty array');
+            throw new TypeError('Input must be a non-empty array');
         }
     }
 
