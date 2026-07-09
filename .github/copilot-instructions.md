@@ -177,6 +177,8 @@ Static utility classes must:
 
 - Prefer `if`/`else` blocks over ternary operators for conditional logic.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
+- Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
+- Variable and constant names do not need to encode their type or role in a suffix (e.g., `Pattern`) unless doing so is necessary to clarify the data they hold; surrounding context is often sufficient (e.g., `regularExpressions.hexColor` versus the public `hexColorPattern` getter that exposes it).
 
 #### Formatting Rules
 
