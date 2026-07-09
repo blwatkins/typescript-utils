@@ -21,9 +21,9 @@
 import { StringUtility } from './string-utility';
 
 const regularExpressions = {
-    hexColorPattern: /^(#[A-F0-9]{6}(?:[A-F0-9]{2})?|#[a-f0-9]{6}(?:[a-f0-9]{2})?)$/,
-    hexColorPatternRGB: /^(#[A-F0-9]{6}|#[a-f0-9]{6})$/,
-    hexColorPatternRGBA: /^(#[A-F0-9]{8}|#[a-f0-9]{8})$/
+    hexColor: /^(#[A-F0-9]{6}(?:[A-F0-9]{2})?|#[a-f0-9]{6}(?:[a-f0-9]{2})?)$/,
+    hexColorRGB: /^(#[A-F0-9]{6}|#[a-f0-9]{6})$/,
+    hexColorRGBA: /^(#[A-F0-9]{8}|#[a-f0-9]{8})$/
 };
 
 /**
@@ -49,7 +49,7 @@ export class ColorStringUtility {
      * @since 0.1.0
      */
     public static get hexColorPattern(): RegExp {
-        return regularExpressions.hexColorPattern;
+        return regularExpressions.hexColor;
     }
 
     /**
@@ -60,7 +60,7 @@ export class ColorStringUtility {
      * @since 0.1.0
      */
     public static get hexColorPatternRGB(): RegExp {
-        return regularExpressions.hexColorPatternRGB;
+        return regularExpressions.hexColorRGB;
     }
 
     /**
@@ -71,7 +71,7 @@ export class ColorStringUtility {
      * @since 0.1.0
      */
     public static get hexColorPatternRGBA(): RegExp {
-        return regularExpressions.hexColorPatternRGBA;
+        return regularExpressions.hexColorRGBA;
     }
 
     /**

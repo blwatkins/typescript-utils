@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const RegularExpressions = {
+const regularExpressions = {
     singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
     singleLineUppercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Ll})(?!.* {2})[^\t\r\n]+$/u,
     singleLineTrimmed: /^(?!\s)(?!.*\s$)(?!.* {2})[^\t\r\n]+$/
@@ -48,7 +48,7 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static get singleLineLowercaseTrimmedPattern(): RegExp {
-        return RegularExpressions.singleLineLowercaseTrimmed;
+        return regularExpressions.singleLineLowercaseTrimmed;
     }
 
     /**
@@ -60,7 +60,7 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static get singleLineUppercaseTrimmedPattern(): RegExp {
-        return RegularExpressions.singleLineUppercaseTrimmed;
+        return regularExpressions.singleLineUppercaseTrimmed;
     }
 
     /**
@@ -72,7 +72,7 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static get singleLineTrimmedPattern(): RegExp {
-        return RegularExpressions.singleLineTrimmed;
+        return regularExpressions.singleLineTrimmed;
     }
 
     /**
