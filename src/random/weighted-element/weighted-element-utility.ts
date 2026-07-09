@@ -63,9 +63,9 @@ export class WeightedElementUtility {
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
-     * @param {{ value: Type; weight: number; }} input - The input to build the {@link WeightedElement} from.
+     * @param {{ value: TValue; weight: number; }} input - The input to build the {@link WeightedElement} from.
      *
-     * @returns {WeightedElement<Type>} A {@link WeightedElement} object with a value of the given type.
+     * @returns {WeightedElement<TValue>} A {@link WeightedElement} object with a value of the given type.
      *
      * @throws {TypeError} - When the given input is not an object.
      * @throws {TypeError} - When the given input does not result in a valid {@link WeightedElement}.
@@ -74,7 +74,7 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    public static buildWeightedElement<Type>(input: { value: Type; weight: number; }): WeightedElement<Type> {
+    public static buildWeightedElement<TValue>(input: { value: TValue; weight: number; }): WeightedElement<TValue> {
         WeightedElementUtility.#validateBuildWeightedElementInput(input);
 
         const weightedElement = {
@@ -89,10 +89,10 @@ export class WeightedElementUtility {
     /**
      * Builds a {@link WeightedList} object from the given elements list.
      *
-     * @param {{ value: Type; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
+     * @param {{ value: TValue; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
      * Each element will be converted into a {@link WeightedElement} using {@link WeightedElementUtility.buildWeightedElement}.
      *
-     * @returns {WeightedList<Type>} A {@link WeightedList} object containing the given elements.
+     * @returns {WeightedList<TValue>} A {@link WeightedList} object containing the given elements.
      *
      * @throws {TypeError} - When the given elements are not a non-empty array.
      * @throws {TypeError} - When the given elements do not result in a valid {@link WeightedList}.
@@ -100,10 +100,10 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    public static buildWeightedList<Type>(elements: { value: Type; weight: number; }[]): WeightedList<Type> {
+    public static buildWeightedList<TValue>(elements: { value: TValue; weight: number; }[]): WeightedList<TValue> {
         WeightedElementUtility.#validateBuildWeightedListInput(elements);
 
-        const weightedElements: WeightedElement<Type>[] = elements.map((element: { value: Type; weight: number; }): WeightedElement<Type> => {
+        const weightedElements: WeightedElement<TValue>[] = elements.map((element: { value: TValue; weight: number; }): WeightedElement<TValue> => {
             return WeightedElementUtility.buildWeightedElement(element);
         });
 
@@ -134,14 +134,14 @@ export class WeightedElementUtility {
      * This method should return `true` if the value is of the expected type, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
      *
-     * @returns {input is WeightedElement<Type>} - `true` if the given input is a {@link WeightedElement} object with a value of the correct type; `false` otherwise.
+     * @returns {input is WeightedElement<TValue>} - `true` if the given input is a {@link WeightedElement} object with a value of the correct type; `false` otherwise.
      *
      * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
      *
      * @public
      * @since 0.1.0
      */
-    public static isWeightedElement<Type>(input: unknown, valueTypeGuard: (value: unknown) => value is Type): input is WeightedElement<Type> {
+    public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
         if (typeof valueTypeGuard !== 'function') {
             throw new TypeError('Value type guard must be a function');
         }
@@ -191,7 +191,7 @@ export class WeightedElementUtility {
      * This method should return `true` if the value is of the expected type, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedList}.
      *
-     * @returns {input is WeightedList<Type>} - `true` if the given input is a {@link WeightedList} object with elements of the correct type; `false` otherwise.
+     * @returns {input is WeightedList<TValue>} - `true` if the given input is a {@link WeightedList} object with elements of the correct type; `false` otherwise.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
@@ -199,7 +199,7 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    public static isWeightedList<Type>(input: unknown, valueTypeGuard: (value: unknown) => value is Type): input is WeightedList<Type> {
+    public static isWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedList<TValue> {
         if (typeof valueTypeGuard !== 'function') {
             throw new TypeError('Value type guard must be a function');
         }
