@@ -117,7 +117,7 @@ export class RandomNumberGeneratorFactory {
      * @param {unknown} seed - Seed to validate.
      * Should be a string.
      * @param {unknown} namespace - Namespace to validate.
-     * Should be undefined  or a string.
+     * Should be undefined or a string.
      * @param {unknown} version - Version to validate.
      * Should be undefined or an integer that is also a valid {@link SeedVersions} index.
      *
