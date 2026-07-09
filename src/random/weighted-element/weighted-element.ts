@@ -72,14 +72,14 @@ export const weightedElementSchema = Type.Generic(
  *
  * @since 0.1.0
  */
-export interface WeightedElement<Type> {
+export interface WeightedElement<TValue> {
     /**
      * The value to be selected from the weighted list.
      *
      * @readonly
      * @since 0.1.0
      */
-    readonly value: Type;
+    readonly value: TValue;
 
     /**
      * The probability weight of the element.
@@ -110,4 +110,4 @@ export interface WeightedElement<Type> {
  *
  * @since 0.1.0
  */
-export type WeightedList<Type> = WeightedElement<Type>[];
+export type WeightedList<TValue> = WeightedElement<TValue>[];

@@ -19,6 +19,6 @@
  */
 
 export * from './seeded-random';
-export * from './weighed-element';
+export * from './weighted-element';
 
 export * from './random';
