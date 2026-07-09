@@ -110,11 +110,16 @@ export class RandomNumberGeneratorFactory {
     }
 
     /**
+     * Validate seed, namespace, and version inputs.
+     *
      * @see {@link SeedVersions.isValidIndex}
      *
-     * @param {string} seed - seed to validate
-     * @param {string|undefined} namespace - namespace to validate
-     * @param {number|undefined} version - version to validate
+     * @param {unknown} seed - Seed to validate.
+     * Should be a string.
+     * @param {unknown} namespace - Namespace to validate.
+     * Should be undefined or a string.
+     * @param {unknown} version - Version to validate.
+     * Should be undefined or an integer that is also a valid {@link SeedVersions} index.
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
@@ -123,7 +128,7 @@ export class RandomNumberGeneratorFactory {
      *
      * @private
      */
-    static #validateBuildInputs(seed: string, namespace?: string, version?: number): void {
+    static #validateBuildInputs(seed: unknown, namespace?: unknown, version?: unknown): void {
         if (!StringUtility.isString(seed)) {
             throw new TypeError('Seed must be a string.');
         }

@@ -20,3 +20,4 @@
 
 export * from './discriminated';
 export * from './discriminator-registry';
+export * from './discriminators';
