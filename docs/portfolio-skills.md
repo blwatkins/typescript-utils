@@ -1,9 +1,10 @@
 ---
 title: "Demonstrated Portfolio Skills"
+layout: post
 author:
   - Brittni Watkins
+  - Claude Code
   - GitHub Copilot
-layout: post
 date: 2026-05-27
 modified_date: 2026-07-08
 toc: true
@@ -84,11 +85,7 @@ The public entry point re-exports domain modules, and each domain module re-expo
 **Evidence:**
 
 - [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
-- [src/discriminator/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/index.ts)
-- [src/number/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
-- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
-- [src/string/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/index.ts)
 
 ### Random number generation and weighted element selection
 
@@ -99,7 +96,6 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 - [src/random/random.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/random.ts)
 - [src/random/weighed-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighed-element/weighted-element.ts)
 - [src/random/weighed-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighed-element/weighted-element-utility.ts)
-- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -119,9 +115,6 @@ The project uses Vitest for repeatable unit testing, including compile-time type
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
-- [tsconfig.vitest.json](https://github.com/blwatkins/typescript-utils/blob/main/tsconfig.vitest.json)
-- [test/random/weighted-element/weighted-element-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/weighted-element/weighted-element-utility.test.ts)
-- [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
@@ -136,8 +129,6 @@ API docs are generated with TypeDoc, while the documentation site is built from 
 - [gh-pages-jekyll.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/gh-pages-jekyll.yml)
 - [docs/index.md](https://github.com/blwatkins/typescript-utils/blob/main/docs/index.md)
 - [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
-- [copilot-instructions.md](https://github.com/blwatkins/typescript-utils/blob/main/.github/copilot-instructions.md)
-- [CLAUDE.md](https://github.com/blwatkins/typescript-utils/blob/main/CLAUDE.md)
 
 ### Security scanning and dependency update automation
 
