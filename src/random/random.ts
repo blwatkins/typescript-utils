@@ -37,7 +37,7 @@ export class Random {
      * @type {() => number}
      * @private
      */
-    static #rand: () => number = Math.random;
+    static #rng: () => number = Math.random;
 
     /**
      * @throws {Error} - Random is a static class and cannot be instantiated.
@@ -51,21 +51,21 @@ export class Random {
     /**
      * Set the primary function used to generate random numbers.
      *
-     * @param {() => number} rand - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
+     * @param {() => number} rng - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given `rand` is not a function.
+     * @throws {TypeError} - If the given random number generator is not a function.
      *
      * @public
      * @since 0.1.0
      */
-    public static set rand(rand: () => number) {
-        if (typeof rand !== 'function') {
-            throw new TypeError('rand must be a function');
+    public static set randomNumberGenerator(rng: () => number) {
+        if (typeof rng !== 'function') {
+            throw new TypeError('Random number generator must be a function');
         }
 
-        Random.#rand = rand;
+        Random.#rng = rng;
     }
 
     /**
@@ -75,7 +75,7 @@ export class Random {
      * @since 0.1.0
      */
     public static random(): number {
-        return Random.#rand();
+        return Random.#rng();
     }
 
     /**
@@ -83,6 +83,10 @@ export class Random {
      * @param {number} max - The maximum value (exclusive).
      *
      * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive).
+     *
+     * @throws {TypeError} When `min` is not a finite number.
+     * @throws {TypeError} When `max` is not a finite number.
+     * @throws {RangeError} When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
@@ -93,17 +97,50 @@ export class Random {
     }
 
     /**
-     * @param {number} min - The minimum value (inclusive).
-     * @param {number} max - The maximum value (exclusive).
+     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
      *
-     * @returns {number} A random integer in the range [min, max) (min inclusive, max exclusive).
+     * @param {number} min - The minimum value (inclusive).
+     * Non-integer values are rounded down with `Math.floor`.
+     * @param {number} max - The maximum value (exclusive).
+     * Non-integer values are rounded down with `Math.floor`.
+     *
+     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     *
+     * @throws {TypeError} When `min` is not a finite number.
+     * @throws {TypeError} When `max` is not a finite number.
+     * @throws {RangeError} When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
         Random.#validateRange(min, max);
-        return Math.floor(Random.randomFloat(min, max));
+        const floorMin: number = Math.floor(min);
+        const floorMax: number = Math.floor(max);
+        return Math.floor(Random.randomFloat(floorMin, floorMax));
+    }
+
+    /**
+     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
+     *
+     * @see {@link Random.randomInt}
+     *
+     * @param {number} min - The minimum value (inclusive).
+     * Non-integer values are rounded down with `Math.floor`.
+     * @param {number} max - The maximum value (exclusive).
+     * Non-integer values are rounded down with `Math.floor`.
+     *
+     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     *
+     * @throws {TypeError} When `min` is not a finite number.
+     * @throws {TypeError} When `max` is not a finite number.
+     * @throws {RangeError} When `min` is not less than or equal `max`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomInteger(min: number, max: number): number {
+        return Random.randomInt(min, max);
     }
 
     /**

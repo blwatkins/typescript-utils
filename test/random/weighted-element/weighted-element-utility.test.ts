@@ -142,7 +142,7 @@ describe('WeightedElementUtility', (): void => {
 
                 test.each(
                     testCases
-                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): void => {
                         WeightedElementUtility.buildWeightedElement(testInput as { value: unknown; weight: number; });
                     }).toThrow(testExpected);
@@ -250,7 +250,7 @@ describe('WeightedElementUtility', (): void => {
 
             test.each(
                 testCases
-            )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect((): void => {
                     WeightedElementUtility.buildWeightedList(testInput as { value: unknown; weight: number; }[]);
                 }).toThrow(testExpected);
@@ -403,7 +403,7 @@ describe('WeightedElementUtility', (): void => {
 
                 test.each(
                     testCases
-                )('Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect(WeightedElementUtility.isGenericWeightedElement(testInput)).toBe(testExpected);
                 });
             });
@@ -429,7 +429,7 @@ describe('WeightedElementUtility', (): void => {
 
                 test.each(
                     testCases
-                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): void => {
                         WeightedElementUtility.isWeightedElement({}, testInput as ((value: unknown) => value is unknown));
                     }).toThrow(testExpected);
@@ -517,7 +517,7 @@ describe('WeightedElementUtility', (): void => {
 
                 test.each(
                     testCases
-                )('Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect(WeightedElementUtility.isGenericWeightedList(testInput)).toBe(testExpected);
                 });
             });
@@ -544,7 +544,7 @@ describe('WeightedElementUtility', (): void => {
 
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
                             WeightedElementUtility.isWeightedList([{ value: 'test', weight: 1, discriminator: Discriminators.WeightedElement }], testInput as ((value: unknown) => value is unknown));
                         }).toThrow(testExpected);

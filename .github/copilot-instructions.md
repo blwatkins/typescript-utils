@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwatkins/utils`, a growing ESM-first TypeScript utility package for reusable number, random, and string helpers.
+This repository contains `@blwatkins/utils`, a growing ESM-first TypeScript utility package for reusable number, random, string, and discriminator type-guard helpers.
 
 The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
 

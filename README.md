@@ -7,6 +7,11 @@ A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utiliti
 - [Latest Release](https://blwatkins.github.io/typescript-utils/doc/index.html)
 - [Documentation by Version Number](https://blwatkins.github.io/typescript-utils/releases.html)
 
+## History and Origins
+
+Development for this project originally began in March 2022, when I started creating utility classes in JavaScript to use across my personal algorithmic generative art projects.
+Over the years, the utilities have been refined, expanded, updated, and organized into a series of cohesive libraries that can be used in a variety of projects.
+
 ## License
 
 The source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
