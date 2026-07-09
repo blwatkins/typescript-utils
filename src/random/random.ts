@@ -97,10 +97,14 @@ export class Random {
     }
 
     /**
-     * @param {number} min - The minimum value (inclusive).
-     * @param {number} max - The maximum value (exclusive).
+     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
      *
-     * @returns {number} A random integer in the range [min, max) (min inclusive, max exclusive).
+     * @param {number} min - The minimum value (inclusive).
+     * Non-integer values are rounded down with `Math.floor`.
+     * @param {number} max - The maximum value (exclusive).
+     * Non-integer values are rounded down with `Math.floor`.
+     *
+     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
      *
      * @throws {TypeError} When `min` is not a finite number.
      * @throws {TypeError} When `max` is not a finite number.
@@ -117,12 +121,16 @@ export class Random {
     }
 
     /**
+     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
+     *
      * @see {@link Random.randomInt}
      *
      * @param {number} min - The minimum value (inclusive).
+     * Non-integer values are rounded down with `Math.floor`.
      * @param {number} max - The maximum value (exclusive).
+     * Non-integer values are rounded down with `Math.floor`.
      *
-     * @returns {number} A random integer in the range [min, max) (min inclusive, max exclusive).
+     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
      *
      * @throws {TypeError} When `min` is not a finite number.
      * @throws {TypeError} When `max` is not a finite number.
