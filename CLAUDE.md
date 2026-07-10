@@ -15,7 +15,7 @@ Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilo
 
 ## Project Summary
 
-A growing toolkit of reusable TypeScript and JavaScript utilities for numbers, strings, random number generation, and discriminator type-guard helpers, published to npm.
+A growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry, published to npm.
 
 ## Common Commands
 
