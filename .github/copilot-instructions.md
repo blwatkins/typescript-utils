@@ -90,9 +90,8 @@ Review all source changes for convention compliance and code quality.
 
 #### Convention Compliance
 
-- New source files follow the static class pattern (private constructor, `@throws` on constructor, public static members only)
-- All public/exported members have complete JSDoc per the documentation comment conventions in this file
-- Copyright year headers are present and accurate (see "File Headers" section)
+- All source code files should follow the conventions listed in the ["Development Guidelines" section](#development-guidelines) of this file.
+- Copyright year headers are present and accurate (see ["File Headers" section](#file-headers)).
 - `README.md` and `docs/index.md` are in sync for any shared content changes
 - Test coverage is complete and meaningful for all new or changed public API surface
 
@@ -193,49 +192,22 @@ Static utility classes must:
 
 ### Documentation Comment Preferences
 
-When writing or reviewing code, follow these documentation standards for maximum compatibility:
+Most documentation comment conventions are enforced automatically by `eslint.config.ts.mjs`.
 
-- **Use `@returns` instead of `@return`**: Always use `@returns` in documentation comments for compatibility with documentation generators.
-- **Use `{@link ...}` syntax in `@see` tags**: Always use `{@link ClassName.method}` (or `{@link symbol}`) inside `@see` tags. Do not use bare `{ClassName.method}` without `@link`.
-- **Use `@param {type} name` format**: Always specify parameter types with the format `@param {type} name` (e.g., `@param {string} hex`) rather than `@param name {type}`.
-- **Always specify return types with `@returns`**: Include a type indicator in every `@returns` annotation (e.g., `@returns {boolean}`).
-- **Document void returns with `@returns {void}`**: For methods that do not return a value, explicitly use `@returns {void}`.
-- **Use `@returns` for getter methods**: Prefer `@returns` for getter documentation.
-- **Document version with `@since`**: Add `@since` to all public/exported members.
-- **Annotate abstract members with `@abstract`**: Use `@abstract` for all abstract classes, methods, and properties.
-- **Annotate readonly members with `@readonly`**: Use `@readonly` for all readonly members.
-- **Annotate private members with `@private`**: Use `@private` for all private members.
-- **Annotate protected members with `@protected`**: Use `@protected` for all protected members.
-- **Annotate overrides with `@override`**: Use `@override` for all methods that override parent class methods.
-- **Enclose boolean values in backticks**: Always use backticks for `true` and `false` in documentation comments.
-- **Use consistent tense and voice**: Write documentation in the present tense and active voice for clarity.
-- **Document exceptions with `@throws`**: Use `@throws` to document any errors or exceptions a function may throw.
-- **Document default parameter values**: Indicate default values for parameters in the `@param` annotation.
-- **Document all exported symbols**: Ensure every exported class, function, interface, type, enum, and constant has a documentation comment.
-- **Separate annotation groups with blank lines**: Add a blank line between groups of TSDoc annotations, unless consecutive tags do not include additional information, such as `@private`, `@protected`, `@public`, or `@override`.
+Do not weaken or remove these ESLint rules to work around a violation; fix the documentation comment instead.
+If a legitimate case requires deviating from one of these rules, discuss the specific rule override with the maintainer rather than silently suppressing it.
 
-**Annotation Order:**
-Place annotations in the following order for consistency and readability:
+#### Documentation Comment Preferences
 
-1. `@remarks`
-1. `@see`
-1. `@param`
-1. `@returns`
-1. `@throws`
-1. `@default`
-1. `@example`
-1. `@type`
-1. `@readonly`
-1. `@private`
-1. `@protected`
-1. `@public`
-1. `@abstract`
-1. `@override`
-1. `@deprecated`
-1. `@since`
-1. `@category`
+These still require manual review since no ESLint rule can check them automatically:
 
-Include other relevant tags after the above, as appropriate for the context.
+- **Use `{@link ...}` syntax in `@see` tags:** Always use `{@link ClassName.method}` (or `{@link symbol}`) inside `@see` tags. Do not use bare `{ClassName.method}` without `@link`.
+- **Document version with `@since`:** Add `@since` to all public/exported members.
+- **Enclose boolean values in backticks:** Always use backticks for `true` and `false` in documentation comments.
+- **Use consistent tense and voice:** Write documentation in the present tense and active voice for clarity.
+- **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value (e.g., `Random.#rng` defaulting to `Math.random`), state the default via `@default` (e.g., `@default Math.random`).
+- **Document default parameter values:** Indicate default values for parameters in the `@param` annotation.
+- **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 
 ### File Headers
 
