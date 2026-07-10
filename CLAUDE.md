@@ -9,12 +9,13 @@ This document is a concise map; `.github/copilot-instructions.md` is the source 
 
 ## Keep These Two Files in Sync
 
-This repository maintains both `CLAUDE.md` and `.github/copilot-instructions.md`. When you update guidance in one file that also applies to the other, mirror the change so the two stay consistent.
+This repository maintains both `CLAUDE.md` and `.github/copilot-instructions.md`.
+When you update guidance in one file that also applies to the other, mirror the change so the two stay consistent.
 Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilot-instructions.md`, and vice versa.
 
 ## Project Summary
 
-A growing ESM-first TypeScript utility package for reusable number, random, string, and discriminator type-guard helpers.
+A growing toolkit of reusable TypeScript and JavaScript utilities for numbers, strings, random number generation, and discriminator type-guard helpers, published to npm.
 
 ## Common Commands
 
@@ -28,7 +29,6 @@ A growing ESM-first TypeScript utility package for reusable number, random, stri
 ## Generated Output Directories (not committed)
 
 `_dist/` (build), `_compiled/` (TypeScript `outDir`), `_coverage/` (coverage), and `_doc/` (TypeDoc) are generated and gitignored.
-Note that the `docs/` Jekyll site separately includes committed sample documentation.
 
 ## Documentation Notes
 
@@ -41,7 +41,7 @@ Note that the `docs/` Jekyll site separately includes committed sample documenta
 
 ## Pre-Merge and Release Review
 
-Before merging a branch, complete these review steps (full details in the "Pre-Merge and Release Review" section of [`.github/copilot-instructions.md`](./.github/copilot-instructions.md)):
+Before merging a branch, complete these review steps (full details in the ["Pre-Merge and Release Review" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#pre-merge-and-release-review)):
 
 1. **Validation** — `npm ci`, `npm run lint:all`, `npm run build`, `npm test` all pass
 2. **Portfolio skills page** — review `docs/portfolio-skills.md` for accuracy; update `modified_date` if content changes
