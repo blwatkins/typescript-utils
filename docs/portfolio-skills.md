@@ -33,7 +33,7 @@ TypeScript Utilities (`@blwatkins/utils`) is a growing, domain-agnostic utility 
 ## Skills and Tooling Inventory
 
 - **Languages:** [TypeScript](https://www.typescriptlang.org/), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Markdown](https://www.markdownguide.org/), [YAML](https://yaml.org/)
-- **Runtime & Libraries:** [Node.js](https://nodejs.org/en)
+- **Runtime:** [Node.js](https://nodejs.org/en)
 - **Libraries:** [TypeBox](https://sinclairzx81.github.io/typebox/)
 - **Testing:** [Vitest](https://vitest.dev/)
 - **Build / Bundling:** [tsdown](https://tsdown.dev/)
