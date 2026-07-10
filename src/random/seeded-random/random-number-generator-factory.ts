@@ -121,6 +121,8 @@ export class RandomNumberGeneratorFactory {
      * @param {unknown} version - Version to validate.
      * Should be undefined or an integer that is also a valid {@link SeedVersions} index.
      *
+     * @returns {void}
+     *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
      * @throws {TypeError} - When the given version is not an integer.
@@ -213,7 +215,7 @@ export class RandomNumberGeneratorFactory {
      *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
      *
-     * @returns {[number, number, number, number]}
+     * @returns {Promise<[number, number, number, number]>}
      *
      * @throws {TypeError} - When the given input is not a string.
      *

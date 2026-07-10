@@ -30,9 +30,9 @@ export class SeededRandomNumberGenerator {
     /**
      * Internal xoshiro128** state (4 x 32-bit unsigned integers).
      *
-     * @private
-     * @readonly
      * @type {[number, number, number, number]}
+     * @readonly
+     * @private
      */
     readonly #state: [number, number, number, number];
 
@@ -106,7 +106,9 @@ export class SeededRandomNumberGenerator {
     /**
      * Validate that state is an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @param {[number, number, number, number]} state - The state to validate.
+     * @param {number[]} state - The state to validate.
+     *
+     * @returns {void}
      *
      * @throws {TypeError} If state is not an array with 4 elements.
      * @throws {RangeError} If each element of state is not a 32-bit unsigned integer

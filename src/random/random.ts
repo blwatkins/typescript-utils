@@ -207,6 +207,8 @@ export class Random {
      * @param {unknown} min - Minimum value to validate. Should be a finite number less than or equal to the given max.
      * @param {unknown} max - Maximum value to validate. Should be a finite number greater than or equal to the given min.
      *
+     * @returns {void}
+     *
      * @throws {TypeError} - When the given min is not a finite number.
      * @throws {TypeError} - When the given max is not a finite number.
      * @throws {RangeError} - When the given min is not less than or equal to the given max.
@@ -230,7 +232,9 @@ export class Random {
     /**
      * Validate chanceOfTrue input for random boolean generation.
      *
-     * @param {unknown} chanceOfTrue - Chance of returning true. Should be a finite number between 0 and 1 (inclusive).
+     * @param {unknown} chanceOfTrue - Chance of returning `true`. Should be a finite number between 0 and 1 (inclusive).
+     *
+     * @returns {void}
      *
      * @throws {TypeError} - When the given chanceOfTrue is not a finite number.
      * @throws {RangeError} - When the given chanceOfTrue is not between 0 and 1 (inclusive).
@@ -251,6 +255,8 @@ export class Random {
      * Validate elements input for random element selection.
      *
      * @param {unknown} elements - Elements to select from. Should be a non-empty array.
+     *
+     * @returns {void}
      *
      * @throws {TypeError} - When the given elements is not a non-empty array.
      *

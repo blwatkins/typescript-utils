@@ -41,9 +41,9 @@ export interface DiscriminatorRegistration {
      * The discriminator value that identifies the type of a {@link Discriminated} object.
      * This value must be unique across all registered discriminators.
      *
+     * @type {string}
      * @readonly
      * @since 0.1.0
-     * @type {string}
      */
     readonly discriminator: string;
 
@@ -54,9 +54,9 @@ export interface DiscriminatorRegistration {
      *
      * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
      *
+     * @type {(input: unknown) => boolean}
      * @readonly
      * @since 0.1.0
-     * @type {(input: unknown) => boolean}
      */
     readonly validator: (input: unknown) => boolean;
 }
@@ -72,9 +72,9 @@ export class DiscriminatorRegistry {
     /**
      * A map of discriminator values to their corresponding validation functions.
      *
+     * @type {Map<string, (input: unknown) => boolean>}
      * @readonly
      * @private
-     * @type {Map<string, (input: unknown) => boolean>}
      */
     static readonly #discriminators: Map<string, (input: unknown) => boolean> = new Map<string, (input: unknown) => boolean>();
 
@@ -91,6 +91,7 @@ export class DiscriminatorRegistry {
      * Checks if a discriminator is already registered.
      *
      * @param {string} discriminator - The discriminator value to check.
+     *
      * @returns {boolean} - `true` if the discriminator is registered, `false` otherwise.
      *
      * @public
@@ -104,6 +105,7 @@ export class DiscriminatorRegistry {
      * Registers a new discriminator and its associated validation function.
      *
      * @param {DiscriminatorRegistration} registration - The registration details for the discriminator.
+     *
      * @returns {TypeGuard<T>} - A type guard function for the registered type.
      *
      * @throws {TypeError} If the given input is not an object.
