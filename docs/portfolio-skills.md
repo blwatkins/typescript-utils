@@ -44,7 +44,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - **Dependency Management:** [npm](https://www.npmjs.com/)
 - **Versioning & Platform:** [Git](https://git-scm.com/), [GitHub](https://github.com/)
 - **Automation:** [GitHub Actions](https://github.com/features/actions)
-- **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm Package Registry](https://www.npmjs.com/)
+- **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm package registry](https://www.npmjs.com/), [GitHub package registry](https://docs.github.com/en/packages)
 - **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
 - **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates)
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)

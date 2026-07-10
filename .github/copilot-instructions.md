@@ -20,7 +20,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 - **Documentation:** TypeDoc (output to `_doc/`)
 - **Dependencies:** `typebox` (runtime/production dependency)
 - **Site Generation:** Jekyll
-- **Hosting & Deployment:** GitHub Pages and npm package registry
+- **Hosting & Deployment:** GitHub Pages, npm package registry, and GitHub package registry
 
 ## Development and Validation
 
