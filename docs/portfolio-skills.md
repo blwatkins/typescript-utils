@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-08
+modified_date: 2026-07-10
 toc: true
 ---
 
@@ -91,6 +91,28 @@ This keeps the package API small while still allowing clear internal organizatio
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
 - [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
 
+### String and number type-guard utilities
+
+`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty and single-line trimmed string checks and positive-integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
+`ColorStringUtility` builds on `StringUtility` to validate hex color string formats (`#RRGGBB` and `#RRGGBBAA`).
+
+**Evidence:**
+
+- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
+- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
+- [src/string/color-string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/color-string-utility.ts)
+
+### Discriminator-based type guard registry
+
+`DiscriminatorRegistry` maintains a static map of unique discriminator values to validator functions, returning a reusable `TypeGuard<T>` for each registration and enforcing discriminator shape and uniqueness at registration time.
+The `Discriminated` type and its TypeBox schema define the minimal shape required for a registry-validated object, and `Discriminators` centralizes the discriminator string constants used across the package, such as the one backing `WeightedElement`.
+
+**Evidence:**
+
+- [src/discriminator/discriminator-registry.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminator-registry.ts)
+- [src/discriminator/discriminated.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminated.ts)
+- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
+
 ### Random number generation and weighted element selection
 
 The `Random` class centralizes random number, boolean, and array-element selection behind a swappable random number source (defaulting to `Math.random`), enabling deterministic testing and drop-in use of the package's own seeded pseudorandom number generator.
@@ -101,6 +123,16 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 - [src/random/random.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/random.ts)
 - [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
 - [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
+
+### Deterministic seeded pseudorandom number generation
+
+`SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state to produce a reproducible, uniformly distributed sequence of floats.
+`RandomNumberGeneratorFactory` derives that initial state from a string seed (with an optional namespace and version) using either a synchronous FNV-1a hash or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
+
+**Evidence:**
+
+- [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
+- [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
 
 ### Strict typing and lint enforcement model
 
@@ -113,18 +145,25 @@ JavaScript and TypeScript lint configurations apply recommended and stricter rul
 - [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.js.mjs)
 - [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
 
-### Test strategy and CI verification gates
+### Test strategy and scenario-driven fixtures
 
-The project uses Vitest for repeatable unit testing, including compile-time type checking of test files, with scripts wired into local and CI workflows.
-The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted.
+The project uses Vitest for repeatable unit testing, including compile-time type checking of test files.
 Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
 
 **Evidence:**
 
-- [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
+
+### CI verification gates
+
+Lint, build, and test scripts are wired into local and CI workflows via `package.json`.
+The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted.
+
+**Evidence:**
+
+- [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
 ### Documentation generation and GitHub Pages publishing path
