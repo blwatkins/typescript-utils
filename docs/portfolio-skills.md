@@ -127,7 +127,7 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 ### Deterministic seeded pseudorandom number generation
 
 `SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state to produce a reproducible, uniformly distributed sequence of floats.
-`RandomNumberGeneratorFactory` derives that initial state from a string seed (with an optional namespace and version) using either a synchronous FNV-1a hash or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
+`RandomNumberGeneratorFactory` derives that initial state from a string seed and optional namespace, using either a synchronous FNV-1a hash (with an optional version selecting the hashing offsets) or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
 
 **Evidence:**
 
