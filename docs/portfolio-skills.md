@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-08
+modified_date: 2026-07-10
 toc: true
 ---
 
@@ -16,7 +16,8 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwatkins/utils`) is a growing, domain-agnostic utility package that provides reusable helpers for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry. The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
+TypeScript Utilities (`@blwatkins/utils`) is a growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
+The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
 
@@ -33,7 +34,7 @@ TypeScript Utilities (`@blwatkins/utils`) is a growing, domain-agnostic utility 
 ## Skills and Tooling Inventory
 
 - **Languages:** [TypeScript](https://www.typescriptlang.org/), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Markdown](https://www.markdownguide.org/), [YAML](https://yaml.org/)
-- **Runtime & Libraries:** [Node.js](https://nodejs.org/en)
+- **Runtime:** [Node.js](https://nodejs.org/en)
 - **Libraries:** [TypeBox](https://sinclairzx81.github.io/typebox/)
 - **Testing:** [Vitest](https://vitest.dev/)
 - **Build / Bundling:** [tsdown](https://tsdown.dev/)
@@ -43,7 +44,7 @@ TypeScript Utilities (`@blwatkins/utils`) is a growing, domain-agnostic utility 
 - **Dependency Management:** [npm](https://www.npmjs.com/)
 - **Versioning & Platform:** [Git](https://git-scm.com/), [GitHub](https://github.com/)
 - **Automation:** [GitHub Actions](https://github.com/features/actions)
-- **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm Package Registry](https://www.npmjs.com/)
+- **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm package registry](https://www.npmjs.com/), [GitHub package registry](https://docs.github.com/en/packages)
 - **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
 - **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates)
 - **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)
@@ -71,7 +72,8 @@ Each technical claim below is backed by a source link to the corresponding imple
 
 ### ESM package contract and artifact layout
 
-The package is configured as ESM and publishes built artifacts from `_dist`, including declaration files and a scoped export map. The build pipeline generates those outputs from `src/index.ts` using tsdown.
+The package is configured as ESM and publishes built artifacts from `_dist`, including declaration files and a scoped export map.
+The build pipeline generates those outputs from `src/index.ts` using tsdown.
 
 **Evidence:**
 
@@ -80,16 +82,41 @@ The package is configured as ESM and publishes built artifacts from `_dist`, inc
 
 ### Utility module composition and re-export boundaries
 
-The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes. This keeps the package API small while still allowing clear internal organization by domain.
+The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes.
+This keeps the package API small while still allowing clear internal organization by domain.
 
 **Evidence:**
 
 - [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
 - [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
+- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
+
+### String and number type-guard utilities
+
+`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty and single-line trimmed string checks and positive-integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
+`ColorStringUtility` builds on `StringUtility` to validate hex color string formats (`#RRGGBB` and `#RRGGBBAA`).
+
+**Evidence:**
+
+- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
+- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
+- [src/string/color-string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/color-string-utility.ts)
+
+### Discriminator-based type guard registry
+
+`DiscriminatorRegistry` maintains a static map of unique discriminator values to validator functions, returning a reusable `TypeGuard<T>` for each registration and enforcing discriminator shape and uniqueness at registration time.
+The `Discriminated` type and its TypeBox schema define the minimal shape required for a registry-validated object, and `Discriminators` centralizes the discriminator string constants used across the package, such as the one backing `WeightedElement`.
+
+**Evidence:**
+
+- [src/discriminator/discriminator-registry.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminator-registry.ts)
+- [src/discriminator/discriminated.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminated.ts)
+- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
 
 ### Random number generation and weighted element selection
 
-The `Random` class centralizes random number, boolean, and array-element selection behind a swappable random number source (defaulting to `Math.random`), enabling deterministic testing and drop-in use of the package's own seeded pseudorandom number generator. `WeightedElementUtility` builds on the discriminator registry to validate `WeightedElement` and `WeightedList` objects at runtime and performs non-uniform random selection using a cumulative-weight strategy.
+The `Random` class centralizes random number, boolean, and array-element selection behind a swappable random number source (defaulting to `Math.random`), enabling deterministic testing and drop-in use of the package's own seeded pseudorandom number generator.
+`WeightedElementUtility` builds on the discriminator registry to validate `WeightedElement` and `WeightedList` objects at runtime and performs non-uniform random selection using a cumulative-weight strategy.
 
 **Evidence:**
 
@@ -97,9 +124,20 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 - [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
 - [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
 
+### Deterministic seeded pseudorandom number generation
+
+`SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state to produce a reproducible, uniformly distributed sequence of floats.
+`RandomNumberGeneratorFactory` derives that initial state from a string seed and optional namespace, using either a synchronous FNV-1a hash (with an optional version selecting the hashing offsets) or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
+
+**Evidence:**
+
+- [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
+- [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
+
 ### Strict typing and lint enforcement model
 
-TypeScript is configured with strict checks, including implicit-type and unused-code protections, to enforce predictable typing behavior. JavaScript and TypeScript lint configurations apply recommended and stricter rule sets for syntax safety and style consistency.
+TypeScript is configured with strict checks, including implicit-type and unused-code protections, to enforce predictable typing behavior.
+JavaScript and TypeScript lint configurations apply recommended and stricter rule sets for syntax safety and style consistency.
 
 **Evidence:**
 
@@ -107,21 +145,31 @@ TypeScript is configured with strict checks, including implicit-type and unused-
 - [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.js.mjs)
 - [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
 
-### Test strategy and CI verification gates
+### Test strategy and scenario-driven fixtures
 
-The project uses Vitest for repeatable unit testing, including compile-time type checking of test files, with scripts wired into local and CI workflows. The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted. Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
+The project uses Vitest for repeatable unit testing, including compile-time type checking of test files.
+Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
+
+**Evidence:**
+
+- [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
+- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
+- [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
+
+### CI verification gates
+
+Lint, build, and test scripts are wired into local and CI workflows via `package.json`.
+The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted.
 
 **Evidence:**
 
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
-- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
-- [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
 ### Documentation generation and GitHub Pages publishing path
 
-API docs are generated with TypeDoc, while the documentation site is built from `docs/` using a Jekyll workflow and deployed to GitHub Pages. Release-specific docs are stored under a versioned directory structure in `docs/releases/...`.
+API docs are generated with TypeDoc, while the documentation site is built from `docs/` using a Jekyll workflow and deployed to GitHub Pages.
+Release-specific docs are stored under a versioned directory structure in `docs/releases/...`.
 
 **Evidence:**
 
@@ -132,7 +180,8 @@ API docs are generated with TypeDoc, while the documentation site is built from 
 
 ### Security scanning and dependency update automation
 
-Security analysis is automated with a dedicated CodeQL workflow covering Actions and repository code languages. Dependency updates are automated with Dependabot for npm, GitHub Actions, and Bundler ecosystems, and package publishing uses trusted publishing permissions.
+Security analysis is automated with a dedicated CodeQL workflow covering Actions and repository code languages.
+Dependency updates are automated with Dependabot for npm, GitHub Actions, and Bundler ecosystems, and package publishing uses trusted publishing permissions.
 
 **Evidence:**
 

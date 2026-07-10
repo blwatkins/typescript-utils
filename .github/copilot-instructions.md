@@ -2,9 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwatkins/utils`, a growing ESM-first TypeScript utility package for reusable number, random, string, and discriminator type-guard helpers.
-
-The package source is maintained in `src/`, bundled to `_dist/` with `tsdown`, and documented through TypeDoc output plus manually maintained GitHub Pages release docs under `docs/`.
+This repository contains `@blwatkins/utils`, a growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
 
 ## Companion Instruction Files
 
@@ -14,13 +12,15 @@ The two documents serve overlapping audiences and should stay consistent: when y
 
 ## Tech Stack
 
-- TypeScript source compiled and bundled for ESM distribution
-- Node.js runtime support aligned with `package.json` engines (`^22.22.0 || >=24`)
-- `tsdown` for package builds and declaration output
-- `Vitest` for unit testing
-- `ESLint` for JavaScript and TypeScript linting
-- `TypeDoc` for API documentation generation
-- Jekyll-based `docs/` site content for published project and release documentation
+- **Language:** TypeScript (targeting ES2022)
+- **Runtime:** Node.js (^22.22.0 || >=24)
+- **Package manager:** npm
+- **Build:** tsdown (ESM output to `_dist/`)
+- **Test:** Vitest (coverage via V8, output to `_coverage/`)
+- **Documentation:** TypeDoc (output to `_doc/`)
+- **Dependencies:** `typebox` (runtime/production dependency)
+- **Site Generation:** Jekyll
+- **Hosting & Deployment:** GitHub Pages, npm package registry, and GitHub package registry
 
 ## Development and Validation
 
@@ -37,7 +37,11 @@ The package is currently in an alpha release line and exports grouped utility mo
 - Install dependencies with `npm ci`.
 - Run lint checks with `npm run lint:all`.
 - Build with `npm run build`.
-- Run tests with `npm run test`.
+- Run tests with `npm test`.
+
+### Link Verification During Review
+
+As part of pull request review, verify that repository and package links (for example in `README.md`, `package.json`, or other project metadata) match the current repository and package coordinates.
 
 ## Pre-Merge and Release Review
 
@@ -45,12 +49,7 @@ Complete the following steps before merging a branch to a release branch or to `
 
 ### 1. Validation
 
-Run the full validation suite and confirm everything passes cleanly:
-
-- `npm ci` — install dependencies from the lockfile
-- `npm run lint:all` — both ESLint configurations report no errors
-- `npm run build` — build completes with no errors
-- `npm test` — all Vitest tests pass
+Run the full [Validation Steps](#validation-steps) and confirm everything passes cleanly:
 
 ### 2. Portfolio Skills Page (`docs/portfolio-skills.md`)
 
@@ -60,7 +59,7 @@ Review `docs/portfolio-skills.md` against the current repository state. If anyth
 - Bump `modified_date` to today; do not change the original `date`
 - Evidence links must always point to the `main` branch
 
-Refer to the "Portfolio Page Generation and Maintenance" section for the full review checklist.
+Refer to the ["Portfolio Page Generation and Maintenance" section](#portfolio-page-generation-and-maintenance) for the full review checklist.
 
 ### 3. Instruction File Sync
 
@@ -80,7 +79,10 @@ Review the `keywords` array in `package.json`:
 
 ### 5. GitHub Repository Topics
 
-Verify that the topics on the GitHub repository ([blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils)) reflect the current capabilities. Topics should align with `package.json` keywords where appropriate. Request the current topics to be updated, if necessary. Provide any topic change suggestions to the project maintainers and any accepted changes will be updated manually.
+Verify that the topics on the GitHub repository ([blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils)) reflect the current capabilities.
+Topics should align with `package.json` keywords where appropriate.
+Request the current topics to be updated, if necessary.
+Provide any topic change suggestions to the project maintainers and any accepted changes will be updated manually.
 
 ### 6. Branch Changes Code Review
 
@@ -144,7 +146,6 @@ When preparing a release merge to `main`:
 - GitHub Actions runs CodeQL analysis for `actions`, `javascript-typescript`, and `ruby`.
 - Dependabot is configured for monthly updates to npm dependencies, GitHub Actions workflows, and Bundler dependencies under `docs/`.
 - The npm publish workflow uses npm Trusted Publishing with GitHub OIDC (`id-token: write`) instead of a committed registry token.
-- The package declares `typebox` as a runtime dependency in `package.json`; all other toolchain packages are maintained through `devDependencies`.
 
 ## Development Guidelines
 
@@ -155,14 +156,19 @@ Keep changes scoped to existing files unless a task explicitly requires scaffold
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
 - Public exports flow through module index files. For example, `src/index.ts` re-exports from `src/number/index.ts`, which re-exports from individual utility files. This pattern is intentional to maintain clear module boundaries and organization in both source code and generated documentation.
 - API documentation entry points stay module-scoped rather than pointing TypeDoc at the root package entry point.
+- The project uses strict TypeScript settings (`strict`, `noImplicitAny`, `noUnusedLocals`, etc.) targeting ES2022 with `moduleResolution: bundler`.
 
 #### tsdown Build Output
 
-This project uses `tsdown` to bundle and emit declaration files. When the output format is `esm`, tsdown emits format-specific file extensions: `.mjs` for the bundle and `.d.mts` for the declaration file, regardless of whether the source files use the `.ts` or `.mts` extension. The `types`, `module`, `main`, and `exports` fields in `package.json` should always reference these `.mjs`/`.d.mts` paths (e.g., `./_dist/index.mjs` and `./_dist/index.d.mts`).
+This project uses `tsdown` to bundle and emit declaration files.
+When the output format is `esm`, tsdown emits format-specific file extensions: `.mjs` for the bundle and `.d.mts` for the declaration file, regardless of whether the source files use the `.ts` or `.mts` extension.
+The `types`, `module`, `main`, and `exports` fields in `package.json` should always reference these `.mjs`/`.d.mts` paths (e.g., `./_dist/index.mjs` and `./_dist/index.d.mts`).
 
 #### JavaScript Consumer Safety
 
-This package is published as ESM and targets both TypeScript and JavaScript consumers. Retain runtime type guards and input validation even when TypeScript's type system would catch the same issue at compile time. JavaScript callers have no compile-time safety, so runtime checks are necessary for correctness.
+This package is published as ESM and targets both TypeScript and JavaScript consumers.
+Retain runtime type guards and input validation even when TypeScript's type system would catch the same issue at compile time.
+JavaScript callers have no compile-time safety, so runtime checks are necessary for correctness.
 
 #### Static Classes
 
@@ -218,6 +224,7 @@ Place annotations in the following order for consistency and readability:
 1. `@throws`
 1. `@default`
 1. `@example`
+1. `@type`
 1. `@readonly`
 1. `@private`
 1. `@protected`
@@ -228,7 +235,7 @@ Place annotations in the following order for consistency and readability:
 1. `@since`
 1. `@category`
 
-Include other relevant tags (such as `@template`, `@type`) after the above, as appropriate for the context.
+Include other relevant tags after the above, as appropriate for the context.
 
 ### File Headers
 
@@ -260,17 +267,40 @@ All source files must include the MIT License copyright header at the top.
 
 ## Directory Structure
 
-- `src/` - package source code
-- `test/` - Vitest test suites
-- `test/utils` - Shared test fixtures and scenario helpers for use across test suites
-- `docs/` - GitHub Pages site content and manually maintained release documentation
-- `_dist/` - build output generated by `npm run build`
-- `_doc/` - TypeDoc output generated by `npm run docs`
-- `.github/workflows/` - CI, publishing, documentation, and analysis workflows
+```
+src/
+  discriminator/          # Discriminated type-guard utilities and registry
+  number/                 # Number utilities
+  random/                 # Random number generation utilities
+    seeded-random/        # Seeded random number generator utilities
+    weighted-element/     # Weighted element selection utilities
+  string/                 # String utilities
+  index.ts                # Package entry point (re-exports all modules)
+test/                     # Vitest test suites (mirrors src/ module structure)
+  discriminator/          # Tests for the discriminator module
+  number/                 # Tests for the number module
+  random/                 # Tests for the random module
+    seeded-random/        # Tests for the seeded-random module
+    weighted-element/     # Tests for the weighted-element module
+  string/                 # Tests for the string module
+  utils/                  # Shared test fixtures and scenario helpers for use across test suites
+    input/                # Shared test input fixtures
+    test-case/            # Shared test-case helpers
+      scenarios/          # Reusable test-case scenario definitions
+docs/                     # GitHub Pages site content and manually maintained release documentation
+.github/
+  workflows/              # CI, publishing, documentation, and analysis workflows
+_dist/                    # Build output - generated by tsdown (not committed)
+_compiled/                # TypeScript outDir output - generated by tsc (not committed)
+_coverage/                # Coverage output - generated by Vitest (not committed)
+_doc/                     # Documentation output - generated by TypeDoc (not committed)
+```
 
 ## Documentation and GitHub Pages
 
-- `README.md` and `docs/index.md` should stay in sync for shared content, but they are not expected to be identical. Expected differences include Jekyll front matter, file-specific introductory or heading sections, footer or copyright text, and internal link differences. Any addition, removal, or update to shared sections must be applied consistently to both files.
+`README.md` and `docs/index.md` should stay in sync for shared content, but they are not expected to be identical.
+Expected differences include Jekyll front matter, file-specific introductory or heading sections, footer or copyright text, and internal link differences.
+Any addition, removal, or update to shared sections must be applied consistently to both files.
 
 ### TypeDoc Configuration
 
@@ -284,7 +314,9 @@ All source files must include the MIT License copyright header at the top.
 
 ### Jekyll Build
 
-- The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths. For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site. Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
+The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths.
+For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site.
+Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
 
 ## Portfolio Page Generation and Maintenance
 
@@ -386,7 +418,7 @@ Generate a Markdown file with these sections in order:
      - If claiming "output to directory X", link config/build files, not just example files
      - If claiming "TypeScript configuration", link `tsconfig.*`, ESLint config, or build config files, not just `.ts` source files
      - If describing current project behavior, prefer evidence that reflects the current runtime/configured implementation path, not only an illustrative or older example
-     - If a claim spans multiple concerns, link all relevant files needed to support it
+     - If a claim spans multiple concerns, link relevant files needed to support it
    - Focus on implementation facts and engineering intent, not promotional phrasing
 
 8. **Current Gaps / Future Improvements** (bulleted list)
