@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.2",
   "license": "MIT",
   "private": false,
-  "description": "A growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.",
+  "description": "A toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.",
   "author": {
     "name": "Brittni Watkins",
     "url": "https://blwatkins.github.io/"

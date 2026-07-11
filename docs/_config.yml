@@ -42,7 +42,7 @@ minima:
     - index.md
 
 title: "TypeScript Utilities"
-description: "A growing toolkit of reusable, domain-agnostic TypeScript and JavaScript utilities for everyday development."
+description: "A toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry."
 show_downloads: true
 
 sass:
