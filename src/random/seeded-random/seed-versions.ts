@@ -73,7 +73,7 @@ export class SeedVersions {
     }
 
     /**
-     * The numer of seed versions.
+     * The number of seed versions.
      *
      * @returns {number} - The total number of seed versions that currently exist.
      *
