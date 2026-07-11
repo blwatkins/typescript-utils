@@ -77,7 +77,7 @@ export class ColorStringUtility {
     /**
      * Is the given input a string matching the {@link ColorStringUtility.hexColorPattern} pattern?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
      * @returns {input is string} `true` if the given input matches the {@link ColorStringUtility.hexColorPattern} pattern; `false` otherwise.
      *
@@ -91,7 +91,7 @@ export class ColorStringUtility {
     /**
      * Is the given input a string matching the {@link ColorStringUtility.hexColorPatternRGB} pattern?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
      * @returns {input is string} `true` if the given input matches the {@link ColorStringUtility.hexColorPatternRGB} pattern; `false` otherwise.
      *
@@ -105,7 +105,7 @@ export class ColorStringUtility {
     /**
      * Is the given input a string matching the {@link ColorStringUtility.hexColorPatternRGBA} pattern?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
      * @returns {input is string} `true` if the given input matches the {@link ColorStringUtility.hexColorPatternRGBA} pattern; `false` otherwise.
      *

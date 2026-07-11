@@ -85,7 +85,7 @@ export class SeedVersions {
      *
      * @param {number} index - The index to check.
      *
-     * @returns {boolean}
+     * @returns {boolean} - `true` if the given index is a valid seed version; `false` otherwise.
      *
      * @public
      * @since 0.1.0

@@ -84,7 +84,7 @@ export class SeededRandomNumberGenerator {
      * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
      * @param {number} k - The number of bits to rotate.
      *
-     * @returns {number}
+     * @returns {number} - The rotated 32-bit unsigned integer.
      *
      * @private
      */

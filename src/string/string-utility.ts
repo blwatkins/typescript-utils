@@ -78,9 +78,9 @@ export class StringUtility {
     /**
      * Is the given input a string?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -93,9 +93,9 @@ export class StringUtility {
      * Is the given input a non-empty string?
      * Non-empty strings must contain at least one non-whitespace character.
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a non-empty string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -109,9 +109,9 @@ export class StringUtility {
      *
      * @see {@link StringUtility.singleLineLowercaseTrimmedPattern}
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a single-line lowercase string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -125,9 +125,9 @@ export class StringUtility {
      *
      * @see {@link StringUtility.singleLineUppercaseTrimmedPattern}
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a single-line uppercase string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -141,9 +141,9 @@ export class StringUtility {
      *
      * @see {@link StringUtility.singleLineTrimmedPattern}
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a single-line string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
