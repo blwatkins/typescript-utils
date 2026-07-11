@@ -36,6 +36,8 @@ const textEncoder: TextEncoder = new TextEncoder();
  */
 export class RandomNumberGeneratorFactory {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - RandomNumberGeneratorFactory is a static class and cannot be instantiated.
      *
      * @private
@@ -58,6 +60,8 @@ export class RandomNumberGeneratorFactory {
     }
 
     /**
+     * Build a {@link SeededRandomNumberGenerator} object with the given seed, namespace, and version.
+     *
      * @see {@link SeedVersions.size}
      * @see {@link SeedVersions.isValidIndex}
      *
@@ -66,7 +70,7 @@ export class RandomNumberGeneratorFactory {
      * @param {number|undefined} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
      *
-     * @returns {SeededRandomNumberGenerator} - A {@link SeededRandomNumberGenerator} object with the given seed, namespace, and version.
+     * @returns {SeededRandomNumberGenerator} - A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
@@ -84,13 +88,15 @@ export class RandomNumberGeneratorFactory {
     }
 
     /**
+     * Build a {@link SeededRandomNumberGenerator} object with the given seed and namespace from an asynchronous hashing algorithm.
+     *
      * @remarks This method relies on the Web Crypto API via `crypto.subtle`.
      * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string|undefined} namespace - Namespace to create different sequences from the same seed.
      *
-     * @returns {Promise<SeededRandomNumberGenerator>} - A {@link SeededRandomNumberGenerator} object with the given seed and namespace from an asynchronous hashing algorithm.
+     * @returns {Promise<SeededRandomNumberGenerator>} - A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.

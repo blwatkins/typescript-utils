@@ -25,6 +25,8 @@
  */
 export class NumberUtility {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - NumberUtility is a static class and cannot be instantiated.
      *
      * @private

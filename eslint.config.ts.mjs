@@ -283,6 +283,8 @@ export default defineConfig([
 
             'jsdoc/reject-function-type': 'error',
 
+            'jsdoc/require-description': 'error',
+
             'jsdoc/require-jsdoc': 'error',
 
             'jsdoc/require-param': 'error',

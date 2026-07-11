@@ -79,6 +79,8 @@ export class DiscriminatorRegistry {
     static readonly #discriminators: Map<string, (input: unknown) => boolean> = new Map<string, (input: unknown) => boolean>();
 
     /**
+     * Private constructor.
+     *
      * @throws {Error} DiscriminatorRegistry is a static class and cannot be instantiated.
      *
      * @private

@@ -37,6 +37,8 @@ export class SeededRandomNumberGenerator {
     readonly #state: [number, number, number, number];
 
     /**
+     * {@link SeededRandomNumberGenerator} constructor.
+     *
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
@@ -53,6 +55,8 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
+     * Get the next number in the seeded sequence.
+     *
      * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
      * Successive calls produce an independent, uniformly distributed sequence.
      *

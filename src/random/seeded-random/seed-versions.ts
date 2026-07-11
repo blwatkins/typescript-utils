@@ -62,6 +62,8 @@ const seedVersions: readonly SeedVersion[] = [
  */
 export class SeedVersions {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - SeedVersions is a static class and cannot be instantiated.
      *
      * @private
@@ -71,6 +73,8 @@ export class SeedVersions {
     }
 
     /**
+     * The numer of seed versions.
+     *
      * @returns {number} - The total number of seed versions that currently exist.
      *
      * @public
@@ -95,6 +99,8 @@ export class SeedVersions {
     }
 
     /**
+     * Get a {@link SeedVersion} object.
+     *
      * @param {number} index - The index of the seed version to retrieve.
      * Must be a valid {@link SeedVersions} index.
      *

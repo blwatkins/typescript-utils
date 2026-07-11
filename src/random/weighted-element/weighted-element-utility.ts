@@ -33,6 +33,8 @@ import { WeightedElement, WeightedList, weightedElementSchema } from './weighted
  */
 export class WeightedElementUtility {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - WeightedElementUtility is a static class and cannot be instantiated.
      *
      * @private
