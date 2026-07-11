@@ -15,9 +15,9 @@ The two documents serve overlapping audiences and should stay consistent: when y
 - **Language:** TypeScript (targeting ES2022)
 - **Runtime:** Node.js (^22.22.0 || >=24)
 - **Package manager:** npm
-- **Build:** tsdown (ESM output to `_dist/`)
-- **Test:** Vitest (coverage via V8, output to `_coverage/`)
-- **Documentation:** TypeDoc (output to `_doc/`)
+- **Build:** tsdown (ESM output)
+- **Test:** Vitest (coverage via V8)
+- **Documentation:** TypeDoc
 - **Dependencies:** `typebox` (runtime/production dependency)
 - **Site Generation:** Jekyll
 - **Hosting & Deployment:** GitHub Pages, npm package registry, and GitHub package registry
@@ -34,10 +34,7 @@ The package is currently in an alpha release line and exports grouped utility mo
 
 ### Validation Steps
 
-- Install dependencies with `npm ci`.
-- Run lint checks with `npm run lint:all`.
-- Build with `npm run build`.
-- Run tests with `npm test`.
+Run in order: `npm ci`, `npm run lint:all`, `npm run build`, `npm test`. See the ["npm Scripts" section](#npm-scripts) for details on each command.
 
 ### Link Verification During Review
 
@@ -144,9 +141,8 @@ When preparing a release merge to `main`:
 
 ## Security and Dependency Management
 
-- GitHub Actions runs CodeQL analysis for `actions`, `javascript-typescript`, and `ruby`.
 - Dependabot is configured for monthly updates to npm dependencies, GitHub Actions workflows, and Bundler dependencies under `docs/`.
-- The npm publish workflow uses npm Trusted Publishing with GitHub OIDC (`id-token: write`) instead of a committed registry token.
+- See the [GitHub Actions CI](#github-actions-ci) table for CodeQL analysis scope and npm publish authentication details.
 
 ## Development Guidelines
 
