@@ -42,7 +42,7 @@ export class StringUtility {
     }
 
     /**
-     * Get the {@link RegExp} constant for single-line lowercase strings.
+     * Get the regular expression for single-line lowercase strings.
      *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
@@ -56,7 +56,7 @@ export class StringUtility {
     }
 
     /**
-     * Get the {@link RegExp} constant for single-line uppercase strings.
+     * Get the regular expression for single-line uppercase strings.
      *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
@@ -70,7 +70,7 @@ export class StringUtility {
     }
 
     /**
-     * Get the {@link RegExp} constant for single-line mixed-case strings.
+     * Get the regular expression for single-line mixed-case strings.
      *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *

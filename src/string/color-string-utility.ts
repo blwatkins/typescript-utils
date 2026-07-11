@@ -44,7 +44,7 @@ export class ColorStringUtility {
     }
 
     /**
-     * Get the {@link RegExp} constant for hex colors.
+     * Get the regular expression for hex colors.
      *
      * @returns {RegExp} Regular expression pattern for validating hex color strings in the format `#RRGGBB` or `#RRGGBBAA`.
      * Case must be consistent in hex color strings: either all lowercase or all uppercase.
@@ -57,7 +57,7 @@ export class ColorStringUtility {
     }
 
     /**
-     * Get the {@link RegExp} constant for hex colors in RGB format.
+     * Get the regular expression for hex colors in RGB format.
      *
      * @returns {RegExp} Regular expression pattern for validating hex color strings in the format `#RRGGBB`.
      * Case must be consistent in hex color strings: either all lowercase or all uppercase.
@@ -70,7 +70,7 @@ export class ColorStringUtility {
     }
 
     /**
-     * Get the {@link RegExp} constant for hex colors in RGBA format.
+     * Get the regular expression for hex colors in RGBA format.
      *
      * @returns {RegExp} Regular expression pattern for validating hex color strings in the format `#RRGGBBAA`.
      * Case must be consistent in hex color strings: either all lowercase or all uppercase.
