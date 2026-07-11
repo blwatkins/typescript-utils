@@ -252,44 +252,61 @@ export default defineConfig([
             jsdoc.configs['flat/recommended-typescript']
         ],
         rules: {
-            'jsdoc/no-types': 'off',
+            'jsdoc/check-access': 'error',
 
-            'jsdoc/require-param-description': 'error',
+            'jsdoc/check-alignment': 'error',
 
-            'jsdoc/require-returns-description': 'error',
-
-            'jsdoc/tag-lines': ['error', 'any', {
-                startLines: null,
-                endLines: null
-            }],
+            'jsdoc/check-param-names': 'error',
 
             'jsdoc/check-tag-names': ['error', {
                 typed: false,
                 definedTags: ['since', 'category']
             }],
 
-            'jsdoc/require-param-type': 'error',
+            'jsdoc/check-types': 'error',
 
-            'jsdoc/require-returns-type': 'error',
+            'jsdoc/empty-tags': 'error',
+
+            'jsdoc/escape-inline-tags': 'error',
+
+            'jsdoc/implements-on-classes': 'error',
+
+            'jsdoc/multiline-blocks': 'error',
+
+            'jsdoc/no-defaults': 'error',
+
+            'jsdoc/no-multi-asterisks': 'error',
+
+            'jsdoc/no-types': 'off',
+
+            'jsdoc/reject-any-type': 'error',
+
+            'jsdoc/reject-function-type': 'error',
 
             'jsdoc/require-jsdoc': 'error',
 
             'jsdoc/require-param': 'error',
 
-            'jsdoc/require-returns-check': 'error',
+            'jsdoc/require-param-description': 'error',
 
-            'jsdoc/valid-types': 'error',
+            'jsdoc/require-param-name': 'error',
 
-            'jsdoc/check-param-names': 'error',
+            'jsdoc/require-param-type': 'error',
 
             'jsdoc/require-returns': ['error', {
                 forceRequireReturn: true,
                 forceReturnsWithAsync: true
             }],
 
-            'jsdoc/require-throws-type': 'error',
+            'jsdoc/require-returns-check': 'error',
+
+            'jsdoc/require-returns-description': 'error',
+
+            'jsdoc/require-returns-type': 'error',
 
             'jsdoc/require-throws': 'error',
+
+            'jsdoc/require-throws-type': 'error',
 
             'jsdoc/sort-tags': ['error', {
                 tagSequence: [
@@ -300,34 +317,31 @@ export default defineConfig([
                     { tags: ['throws'] },
                     { tags: ['default'] },
                     { tags: ['example'] },
-                    { tags: [
-                        'type',
-                        'readonly',
-                        'private',
-                        'protected',
-                        'public',
-                        'abstract',
-                        'override',
-                        'deprecated',
-                        'since',
-                        'category'
-                    ]}
+                    { tags:
+                            [
+                                'type',
+                                'readonly',
+                                'private',
+                                'protected',
+                                'public',
+                                'abstract',
+                                'override',
+                                'deprecated',
+                                'since',
+                                'category'
+                            ]
+                    }
                 ]
             }],
 
-            'jsdoc/check-access': 'error',
-            'jsdoc/check-alignment': 'error',
-            'jsdoc/check-types': 'error',
-            'jsdoc/empty-tags': 'error',
-            'jsdoc/escape-inline-tags': 'error',
-            'jsdoc/implements-on-classes': 'error',
-            'jsdoc/multiline-blocks': 'error',
-            'jsdoc/no-defaults': 'error',
-            'jsdoc/no-multi-asterisks': 'error',
-            'jsdoc/reject-any-type': 'error',
-            'jsdoc/reject-function-type': 'error',
-            'jsdoc/require-param-name': 'error',
-            'jsdoc/ts-no-empty-object-type': 'error'
+            'jsdoc/tag-lines': ['error', 'any', {
+                startLines: null,
+                endLines: null
+            }],
+
+            'jsdoc/ts-no-empty-object-type': 'error',
+
+            'jsdoc/valid-types': 'error'
         }
     }
 ]);
