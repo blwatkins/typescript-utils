@@ -16,7 +16,7 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwatkins/utils`) is a growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
+TypeScript Utilities (`@blwatkins/utils`) is a toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
 The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance

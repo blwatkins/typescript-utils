@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwatkins/utils`, a growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
+This repository contains `@blwatkins/utils`, a toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
 
 ## Companion Instruction Files
 

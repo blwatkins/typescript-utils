@@ -5,7 +5,7 @@ layout: page
 
 ## About This Project
 
-A growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
+A toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
 
 ## Documentation
 
