@@ -217,7 +217,7 @@ Complete the following steps before merging a branch to a release branch or to `
 
 ### 1. Validation
 
-Run the full [Validation Steps](#validation-steps) and confirm everything passes cleanly:
+Run the full [Validation Steps](#validation-steps) and confirm everything passes cleanly.
 
 ### 2. Portfolio Skills Page (`docs/portfolio-skills.md`)
 
