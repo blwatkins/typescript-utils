@@ -53,7 +53,9 @@ Run the full [Validation Steps](#validation-steps) and confirm everything passes
 
 ### 2. Portfolio Skills Page (`docs/portfolio-skills.md`)
 
-Review `docs/portfolio-skills.md` against the current repository state. If anything changed:
+Review `docs/portfolio-skills.md` against the current repository state.
+
+If anything changed, do the following:
 
 - Update any section where capabilities, tooling, or the skills inventory changed
 - Bump `modified_date` to today; do not change the original `date`
@@ -84,9 +86,9 @@ Topics should align with `package.json` keywords where appropriate.
 Request the current topics to be updated, if necessary.
 Provide any topic change suggestions to the project maintainers and any accepted changes will be updated manually.
 
-### 6. Branch Changes Code Review
+### 6. Branch Code Review
 
-Review all source changes for convention compliance and code quality.
+Review all branch changes for convention compliance and code quality.
 
 #### Convention Compliance
 
@@ -178,14 +180,14 @@ Static utility classes must:
 
 ## Code Style
 
-#### Code Style Preferences and Conventions
+### Code Style Preferences and Conventions
 
 - Prefer `if`/`else` blocks over ternary operators for conditional logic.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 - Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
 - Variable and constant names do not need to encode their type or role in a suffix (e.g., `Pattern`) unless doing so is necessary to clarify the data they hold; surrounding context is often sufficient (e.g., `regularExpressions.hexColor` versus the public `hexColorPattern` getter that exposes it).
 
-#### Formatting Rules
+### Formatting Rules
 
 - Keep formatting compatible with the repository ESLint configurations in `eslint.config.js.mjs` and `eslint.config.ts.mjs`.
 - Do not introduce formatting-only tooling or workflow changes unless the task explicitly requires them.
@@ -197,9 +199,9 @@ Most documentation comment conventions are enforced automatically by `eslint.con
 Do not weaken or remove these ESLint rules to work around a violation; fix the documentation comment instead.
 If a legitimate case requires deviating from one of these rules, discuss the specific rule override with the maintainer rather than silently suppressing it.
 
-#### Documentation Comment Preferences
+#### Manual Review for Documentation Comment Preferences
 
-These still require manual review since no ESLint rule can check them automatically:
+The following preferences require manual review since no ESLint rule can check them automatically:
 
 - **Use `{@link ...}` syntax in `@see` tags:** Always use `{@link ClassName.method}` (or `{@link symbol}`) inside `@see` tags. Do not use bare `{ClassName.method}` without `@link`.
 - **Document version with `@since`:** Add `@since` to all public/exported members.
@@ -485,11 +487,11 @@ Key Technologies: PyTorch, pre-trained models, Docker, GitHub Actions
 
 Then paste the full template prompt with these values filled in.
 
-## Portfolio Skills Page Review Instructions
+### Portfolio Skills Page Review Instructions
 
 Use the following standards for Copilot code review and any agentic Copilot sessions reviewing changes to `docs/portfolio-skills.md`.
 
-### Reusable Summary for This Portfolio Page Pattern
+#### Reusable Summary for This Portfolio Page Pattern
 
 These pages follow a strong, repeatable structure:
 
@@ -502,9 +504,9 @@ These pages follow a strong, repeatable structure:
 
 The core standard is: **every technical claim should be durable and traceable to source evidence**.
 
-### What to Verify When Reviewing `docs/portfolio-skills.md`
+#### What to Verify When Reviewing `docs/portfolio-skills.md`
 
-#### 1) Structure and completeness
+##### 1) Structure and completeness
 
 Ensure the page includes the required front matter and these sections (or equivalents):
 
@@ -518,7 +520,7 @@ Ensure the page includes the required front matter and these sections (or equiva
 
 Why: this keeps pages consistent and easy to compare across projects.
 
-#### 2) Claim quality (accuracy + durability)
+##### 2) Claim quality (accuracy + durability)
 
 Check that claims are:
 
@@ -532,7 +534,7 @@ Good pattern:
 Risky pattern:
 - hardcoding exact versions/cadences unless you plan frequent updates
 
-#### 3) Evidence alignment (most important review item)
+##### 3) Evidence alignment (most important review item)
 
 For each claim in technical notes, verify linked evidence **directly supports** it. Evidence does not need to enumerate every implementation instance in the repository. A representative selection that successfully demonstrates the claim is sufficient.
 
@@ -543,7 +545,7 @@ Also check whether the linked evidence is **representative of the project's curr
 
 This is a common high-impact review issue.
 
-#### 4) Portfolio tone calibration
+##### 4) Portfolio tone calibration
 
 Look for balance between:
 
@@ -555,7 +557,7 @@ Avoid:
 - overly promotional language
 - absolute claims not backed by links
 
-#### 5) Consistency across pages
+##### 5) Consistency across pages
 
 When reviewing a new page, compare with existing template pages for:
 
@@ -568,7 +570,7 @@ When reviewing a new page, compare with existing template pages for:
 
 Consistency boosts professionalism at portfolio scale.
 
-#### 6) Gaps section quality
+##### 6) Gaps section quality
 
 A strong `Current Gaps / Future Improvements` section is:
 
@@ -582,7 +584,7 @@ Common high-value bullets:
 - intentionally minimal architecture scope
 - deployment/docs not yet covered (if true)
 
-### Quick Review Checklist
+#### Quick Review Checklist
 
 Reuse the earlier template usage checklist as the canonical baseline review list. Use this section only for additional review-specific checks:
 
@@ -593,7 +595,7 @@ Reuse the earlier template usage checklist as the canonical baseline review list
 - [ ] Final read feels evidence-based, concise, and professional
 ```
 
-### Common Pitfalls to Catch Early
+#### Common Pitfalls to Catch Early
 
 - Claim/evidence mismatch (most frequent)
 - Hardcoded version/cadence details that will drift
@@ -603,7 +605,7 @@ Reuse the earlier template usage checklist as the canonical baseline review list
 - Evidence is technically relevant but not representative of the current runtime/configured implementation
 - Mixed category labels in tooling inventory that blur automation, deployment, security, and dependency management
 
-### One-Sentence Review Standard
+#### One-Sentence Review Standard
 
 When you review the next page, use this rule:
 
