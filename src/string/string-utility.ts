@@ -31,6 +31,8 @@ const regularExpressions = {
  */
 export class StringUtility {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - StringUtility is a static class and cannot be instantiated.
      *
      * @private
@@ -40,6 +42,8 @@ export class StringUtility {
     }
 
     /**
+     * Get the regular expression for single-line lowercase strings.
+     *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
      * @returns {RegExp} Regular expression pattern for validating single-line lowercase strings.
@@ -52,6 +56,8 @@ export class StringUtility {
     }
 
     /**
+     * Get the regular expression for single-line uppercase strings.
+     *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
      * @returns {RegExp} Regular expression pattern for validating single-line uppercase strings.
@@ -64,6 +70,8 @@ export class StringUtility {
     }
 
     /**
+     * Get the regular expression for single-line mixed-case strings.
+     *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
      * @returns {RegExp} Regular expression pattern for validating single-line mixed-case strings.
@@ -78,9 +86,9 @@ export class StringUtility {
     /**
      * Is the given input a string?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -93,9 +101,9 @@ export class StringUtility {
      * Is the given input a non-empty string?
      * Non-empty strings must contain at least one non-whitespace character.
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a non-empty string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -109,9 +117,9 @@ export class StringUtility {
      *
      * @see {@link StringUtility.singleLineLowercaseTrimmedPattern}
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a single-line lowercase string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -125,9 +133,9 @@ export class StringUtility {
      *
      * @see {@link StringUtility.singleLineUppercaseTrimmedPattern}
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a single-line uppercase string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -141,9 +149,9 @@ export class StringUtility {
      *
      * @see {@link StringUtility.singleLineTrimmedPattern}
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
-     * @returns {input is string}
+     * @returns {input is string} - `true` if the given input is a single-line string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0

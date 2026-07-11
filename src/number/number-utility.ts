@@ -25,6 +25,8 @@
  */
 export class NumberUtility {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - NumberUtility is a static class and cannot be instantiated.
      *
      * @private
@@ -36,7 +38,7 @@ export class NumberUtility {
     /**
      * Is the given input a finite number?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
      * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
      *
@@ -50,7 +52,7 @@ export class NumberUtility {
     /**
      * Is the given input an integer?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      *
      * @returns {input is number} `true` when the input is an integer; `false` otherwise.
      *
@@ -64,7 +66,7 @@ export class NumberUtility {
     /**
      * Is the given input a positive integer?
      *
-     * @param {unknown} input
+     * @param {unknown} input - The input to check.
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
      * Default value is `false`.

@@ -33,6 +33,8 @@ import { WeightedElement, WeightedList, weightedElementSchema } from './weighted
  */
 export class WeightedElementUtility {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - WeightedElementUtility is a static class and cannot be instantiated.
      *
      * @private
@@ -64,6 +66,8 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {{ value: TValue; weight: number; }} input - The input to build the {@link WeightedElement} from.
+     * @param {TValue} input.value - The value to be selected from the weighted list.
+     * @param {number} input.weight - The probability weight of the element. Should be a number between 0 and 1, inclusive.
      *
      * @returns {WeightedElement<TValue>} A {@link WeightedElement} object with a value of the given type.
      *

@@ -40,6 +40,8 @@ export class Random {
     static #rng: () => number = Math.random;
 
     /**
+     * Private constructor.
+     *
      * @throws {Error} - Random is a static class and cannot be instantiated.
      *
      * @private
@@ -69,6 +71,8 @@ export class Random {
     }
 
     /**
+     * Get a random number.
+     *
      * @returns {number} A random number in the range [0, 1) (zero inclusive, one exclusive).
      *
      * @public
@@ -79,6 +83,8 @@ export class Random {
     }
 
     /**
+     * Get a random floating-point number within the given range.
+     *
      * @param {number} min - The minimum value (inclusive).
      * @param {number} max - The maximum value (exclusive).
      *
@@ -97,6 +103,7 @@ export class Random {
     }
 
     /**
+     * Get a random integer within the given range.
      * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
      *
      * @param {number} min - The minimum value (inclusive).
@@ -121,6 +128,7 @@ export class Random {
     }
 
     /**
+     * Get a random integer within the given range.
      * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
      *
      * @see {@link Random.randomInt}
@@ -144,6 +152,8 @@ export class Random {
     }
 
     /**
+     * Get a random boolean.
+     *
      * @param {number} chanceOfTrue - The probability of returning `true` (between 0 and 1).
      * Default value is `0.5`.
      *
@@ -158,6 +168,8 @@ export class Random {
     }
 
     /**
+     * Get a random element from the given array.
+     *
      * @param {Type[]} elements - An array of elements to choose from.
      *
      * @returns {Type} A random element from the array.
@@ -171,6 +183,8 @@ export class Random {
     }
 
     /**
+     * Get a random element from the given {@link WeightedList}.
+     *
      * @see {@link WeightedElementUtility.isGenericWeightedList}
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
@@ -207,6 +221,8 @@ export class Random {
      * @param {unknown} min - Minimum value to validate. Should be a finite number less than or equal to the given max.
      * @param {unknown} max - Maximum value to validate. Should be a finite number greater than or equal to the given min.
      *
+     * @returns {void}
+     *
      * @throws {TypeError} - When the given min is not a finite number.
      * @throws {TypeError} - When the given max is not a finite number.
      * @throws {RangeError} - When the given min is not less than or equal to the given max.
@@ -230,7 +246,9 @@ export class Random {
     /**
      * Validate chanceOfTrue input for random boolean generation.
      *
-     * @param {unknown} chanceOfTrue - Chance of returning true. Should be a finite number between 0 and 1 (inclusive).
+     * @param {unknown} chanceOfTrue - Chance of returning `true`. Should be a finite number between 0 and 1 (inclusive).
+     *
+     * @returns {void}
      *
      * @throws {TypeError} - When the given chanceOfTrue is not a finite number.
      * @throws {RangeError} - When the given chanceOfTrue is not between 0 and 1 (inclusive).
@@ -251,6 +269,8 @@ export class Random {
      * Validate elements input for random element selection.
      *
      * @param {unknown} elements - Elements to select from. Should be a non-empty array.
+     *
+     * @returns {void}
      *
      * @throws {TypeError} - When the given elements is not a non-empty array.
      *
