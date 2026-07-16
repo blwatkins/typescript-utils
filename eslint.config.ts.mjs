@@ -223,6 +223,8 @@ export default defineConfig([
 
             '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
 
+            '@typescript-eslint/no-deprecated': 'warn',
+
             '@typescript-eslint/no-dynamic-delete': 'error',
 
             '@typescript-eslint/no-explicit-any': 'error',
@@ -319,6 +321,7 @@ export default defineConfig([
                     { tags: ['throws'] },
                     { tags: ['default'] },
                     { tags: ['example'] },
+                    { tags: ['deprecated'] },
                     { tags:
                             [
                                 'type',
@@ -328,7 +331,6 @@ export default defineConfig([
                                 'public',
                                 'abstract',
                                 'override',
-                                'deprecated',
                                 'since',
                                 'category'
                             ]

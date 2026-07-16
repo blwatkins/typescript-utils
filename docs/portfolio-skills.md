@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-10
+modified_date: 2026-07-15
 toc: true
 ---
 
@@ -94,13 +94,11 @@ This keeps the package API small while still allowing clear internal organizatio
 ### String and number type-guard utilities
 
 `StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty and single-line trimmed string checks and positive-integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
-`ColorStringUtility` builds on `StringUtility` to validate hex color string formats (`#RRGGBB` and `#RRGGBBAA`).
 
 **Evidence:**
 
 - [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
 - [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
-- [src/string/color-string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/color-string-utility.ts)
 
 ### Discriminator-based type guard registry
 

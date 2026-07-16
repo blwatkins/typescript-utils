@@ -29,6 +29,8 @@ const regularExpressions = {
 /**
  * Static properties and methods for validating formatted color strings.
  *
+ * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
+ *
  * @since 0.1.0
  */
 export class ColorStringUtility {
@@ -36,6 +38,8 @@ export class ColorStringUtility {
      * Private constructor.
      *
      * @throws {Error} - ColorStringUtility is a static class and cannot be instantiated.
+     *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
      *
      * @private
      */
@@ -48,6 +52,8 @@ export class ColorStringUtility {
      *
      * @returns {RegExp} Regular expression pattern for validating hex color strings in the format `#RRGGBB` or `#RRGGBBAA`.
      * Case must be consistent in hex color strings: either all lowercase or all uppercase.
+     *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
      *
      * @public
      * @since 0.1.0
@@ -62,6 +68,8 @@ export class ColorStringUtility {
      * @returns {RegExp} Regular expression pattern for validating hex color strings in the format `#RRGGBB`.
      * Case must be consistent in hex color strings: either all lowercase or all uppercase.
      *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
+     *
      * @public
      * @since 0.1.0
      */
@@ -74,6 +82,8 @@ export class ColorStringUtility {
      *
      * @returns {RegExp} Regular expression pattern for validating hex color strings in the format `#RRGGBBAA`.
      * Case must be consistent in hex color strings: either all lowercase or all uppercase.
+     *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
      *
      * @public
      * @since 0.1.0
@@ -89,6 +99,8 @@ export class ColorStringUtility {
      *
      * @returns {input is string} `true` if the given input matches the {@link ColorStringUtility.hexColorPattern} pattern; `false` otherwise.
      *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
+     *
      * @public
      * @since 0.1.0
      */
@@ -103,6 +115,8 @@ export class ColorStringUtility {
      *
      * @returns {input is string} `true` if the given input matches the {@link ColorStringUtility.hexColorPatternRGB} pattern; `false` otherwise.
      *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
+     *
      * @public
      * @since 0.1.0
      */
@@ -116,6 +130,8 @@ export class ColorStringUtility {
      * @param {unknown} input - The input to check.
      *
      * @returns {input is string} `true` if the given input matches the {@link ColorStringUtility.hexColorPatternRGBA} pattern; `false` otherwise.
+     *
+     * @deprecated - Moved to `@blwatkins/color-utils` package. Will be removed in `v0.1.0-alpha.3`.
      *
      * @public
      * @since 0.1.0
