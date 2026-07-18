@@ -53,7 +53,7 @@ export class MathUtility {
      * @since 0.1.0
      */
     public static constrain(value: number, min: number, max: number): number {
-        if (!(Number.isFinite(value) && Number.isFinite(min) && Number.isFinite(max))) {
+        if (!(NumberUtility.isFiniteNumber(value) && NumberUtility.isFiniteNumber(min) && NumberUtility.isFiniteNumber(max))) {
             throw new TypeError('All arguments must be finite numbers.');
         }
 
