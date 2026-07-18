@@ -20,7 +20,7 @@ Discriminators are used to identify the type of a <a href="../types/discriminato
 <h4 class="tsd-anchor-link" id="since">Since<a href="#since" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/d5c5f63a5199133fc71fd8f2f98e2b0bcc230dd3/src/discriminator/discriminator-registry.ts#L71">discriminator/discriminator-registry.ts:71</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17b31d7d00f7cb543df86b43bcbb6e3f69eb8f28/src/discriminator/discriminator-registry.ts#L71">discriminator/discriminator-registry.ts:71</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -58,7 +58,7 @@ Discriminators are used to identify the type of a <a href="../types/discriminato
 <h4 class="tsd-anchor-link" id="since-1">Since<a href="#since-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/d5c5f63a5199133fc71fd8f2f98e2b0bcc230dd3/src/discriminator/discriminator-registry.ts#L102">discriminator/discriminator-registry.ts:102</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17b31d7d00f7cb543df86b43bcbb6e3f69eb8f28/src/discriminator/discriminator-registry.ts#L102">discriminator/discriminator-registry.ts:102</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="register"><code class="tsd-tag">Static</code><span>register</span><a href="#register" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -83,22 +83,30 @@ Discriminators are used to identify the type of a <a href="../types/discriminato
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>If the given input is not an object.</p>
+<h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li>When the given input is not an object.</li>
+</ul>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-1">Throws<a href="#throws-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>If the <a href="../interfaces/discriminator.DiscriminatorRegistration.html#discriminator" class="tsd-kind-property">DiscriminatorRegistration.discriminator</a> is not a non-empty single line trimmed string.</p>
+<h4 class="tsd-anchor-link" id="throws-1">Throws<a href="#throws-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li>When the <a href="../interfaces/discriminator.DiscriminatorRegistration.html#discriminator" class="tsd-kind-property">DiscriminatorRegistration.discriminator</a> is not a non-empty single line trimmed string.</li>
+</ul>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-2">Throws<a href="#throws-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>If the <a href="../interfaces/discriminator.DiscriminatorRegistration.html#validator" class="tsd-kind-property">DiscriminatorRegistration.validator</a> property is not a function.</p>
+<h4 class="tsd-anchor-link" id="throws-2">Throws<a href="#throws-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li>When the <a href="../interfaces/discriminator.DiscriminatorRegistration.html#validator" class="tsd-kind-property">DiscriminatorRegistration.validator</a> property is not a function.</li>
+</ul>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-3">Throws<a href="#throws-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>If the <a href="../interfaces/discriminator.DiscriminatorRegistration.html#discriminator" class="tsd-kind-property">DiscriminatorRegistration.discriminator</a> is already registered.</p>
+<h4 class="tsd-anchor-link" id="throws-3">Throws<a href="#throws-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li>When the <a href="../interfaces/discriminator.DiscriminatorRegistration.html#discriminator" class="tsd-kind-property">DiscriminatorRegistration.discriminator</a> is already registered.</li>
+</ul>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-2">Since<a href="#since-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/d5c5f63a5199133fc71fd8f2f98e2b0bcc230dd3/src/discriminator/discriminator-registry.ts#L121">discriminator/discriminator-registry.ts:121</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17b31d7d00f7cb543df86b43bcbb6e3f69eb8f28/src/discriminator/discriminator-registry.ts#L121">discriminator/discriminator-registry.ts:121</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="validate"><code class="tsd-tag">Static</code><span>validate</span><a href="#validate" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -125,7 +133,7 @@ Discriminators are used to identify the type of a <a href="../types/discriminato
 <h4 class="tsd-anchor-link" id="since-3">Since<a href="#since-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/d5c5f63a5199133fc71fd8f2f98e2b0bcc230dd3/src/discriminator/discriminator-registry.ts#L141">discriminator/discriminator-registry.ts:141</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17b31d7d00f7cb543df86b43bcbb6e3f69eb8f28/src/discriminator/discriminator-registry.ts#L141">discriminator/discriminator-registry.ts:141</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
