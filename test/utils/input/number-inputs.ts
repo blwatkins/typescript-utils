@@ -95,11 +95,24 @@ export const negativeIntegerInputs: number[] = [
     -1000.0
 ];
 
+export const positiveIntegerInputs: number[] = [
+    Number.MAX_VALUE,
+    Number.MAX_SAFE_INTEGER,
+    1,
+    10,
+    100,
+    1000,
+    1000.0
+];
+
+export const integerInputs: number[] = [
+    ...negativeIntegerInputs,
+    ...positiveIntegerInputs
+];
+
 export const positiveNumberInputs: number[] = [
     ...positiveFloatInputs,
-    10,
-    Number.MAX_VALUE,
-    Number.MAX_SAFE_INTEGER
+    ...positiveIntegerInputs
 ];
 
 export const negativeNumberInputs: number[] = [
