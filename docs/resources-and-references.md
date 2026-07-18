@@ -4,7 +4,7 @@ layout: post
 author:
   - Brittni Watkins
 date: 2026-06-05
-modified_date: 2026-07-17
+modified_date: 2026-07-18
 toc: true
 ---
 
@@ -13,6 +13,7 @@ toc: true
 ### JavaScript
 
 - [MDN Web Docs - Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
+- [MDN Web Docs - Number.EPSILON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON)
 - [MDN Web Docs - Number.isFinite()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite)
 - [MDN Web Docs - Number.isInteger()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger)
 
