@@ -35,7 +35,7 @@ describe('MathUtility', (): void => {
     });
 
     describe('constrain', (): void => {
-        describe('constrain should return the proper value', (): void => {
+        describe('constrain should return the proper value for finite number arguments', (): void => {
             test.each([
                 { value: 5, min: 0, max: 10, expected: 5 },
                 { value: 2, min: 1, max: 3, expected: 2 },
