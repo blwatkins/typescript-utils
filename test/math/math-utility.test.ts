@@ -59,69 +59,69 @@ describe('MathUtility', (): void => {
                 { value: Number.MIN_SAFE_INTEGER, min: 5, max: 500, expected: 5 },
                 { value: 5, min: 0, max: Number.MAX_SAFE_INTEGER, expected: 5 },
                 { value: 5, min: Number.MIN_SAFE_INTEGER, max: 10, expected: 5 }
-            ])('%# - constrain($value, $min, $max) should return $expected', ({value, min, max, expected}): void => {
+            ])('%# - constrain($value, $min, $max) should return $expected', ({ value, min, max, expected }): void => {
                 expect(MathUtility.constrain(value, min, max)).toBe(expected);
             });
         });
 
         describe('Input validation', (): void => {
-           describe('All parameters must be finite numbers', (): void => {
-               const scenarios: Scenario[] = [
-                   {
-                       label: 'Non-number inputs',
-                       inputs: [...nonNumberInputs],
-                       expected: TypeError
-                   },
-                   {
-                       label: 'Non-finite number inputs',
-                       inputs: [...nonFiniteNumberInputs],
-                       expected: TypeError
-                   }
-               ];
+            describe('All parameters must be finite numbers', (): void => {
+                const scenarios: Scenario[] = [
+                    {
+                        label: 'Non-number inputs',
+                        inputs: [...nonNumberInputs],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'Non-finite number inputs',
+                        inputs: [...nonFiniteNumberInputs],
+                        expected: TypeError
+                    }
+                ];
 
-               describe.each(
-                   scenarios
-               )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                   const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-                   const defaultValue: number = 5;
-                   const defaultMin: number = 0;
-                   const defaultMax: number = 10;
+                describe.each(
+                    scenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+                    const defaultValue: number = 5;
+                    const defaultMin: number = 0;
+                    const defaultMax: number = 10;
 
-                   describe('value parameter', (): void => {
-                       test.each(
-                           testCases
-                       )(`%# - constrain($input, ${defaultMin}, ${defaultMax}) should throw $expected`, ({ input: testInput, expected: testExpected}: TestCase): void => {
-                           expect((): void => {
-                               MathUtility.constrain(testInput as number, defaultMin, defaultMax);
-                           }).toThrow(testExpected);
-                       });
-                   });
+                    describe('value parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - constrain($input, ${defaultMin}, ${defaultMax}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.constrain(testInput as number, defaultMin, defaultMax);
+                            }).toThrow(testExpected);
+                        });
+                    });
 
-                   describe('min parameter', (): void => {
-                       test.each(
-                           testCases
-                       )(`%# - constrain(${defaultValue}, $input, ${defaultMax}) should throw $expected`, ({ input: testInput, expected: testExpected}: TestCase): void => {
-                           expect((): void => {
-                               MathUtility.constrain(defaultValue, testInput as number, defaultMax);
-                           }).toThrow(testExpected);
-                       });
-                   });
+                    describe('min parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - constrain(${defaultValue}, $input, ${defaultMax}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.constrain(defaultValue, testInput as number, defaultMax);
+                            }).toThrow(testExpected);
+                        });
+                    });
 
-                   describe('max parameter', (): void => {
-                       test.each(
-                           testCases
-                       )(`%# - constrain(${defaultValue}, ${defaultMin}, $input) should throw $expected`, ({ input: testInput, expected: testExpected}: TestCase): void => {
-                           expect((): void => {
-                               MathUtility.constrain(defaultValue, defaultMin, testInput as number);
-                           }).toThrow(testExpected);
-                       });
-                   });
-               });
-           });
+                    describe('max parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - constrain(${defaultValue}, ${defaultMin}, $input) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.constrain(defaultValue, defaultMin, testInput as number);
+                            }).toThrow(testExpected);
+                        });
+                    });
+                });
+            });
 
-           describe('Minimum constraint must be less than or equal to maximum constraint', (): void => {
+            describe('Minimum constraint must be less than or equal to maximum constraint', (): void => {
                 test.todo('min <= max');
-           });
+            });
         });
     });
 
