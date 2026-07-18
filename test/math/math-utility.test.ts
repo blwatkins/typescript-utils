@@ -19,6 +19,7 @@
  */
 
 import { describe, test, expect } from 'vitest';
+
 import { MathUtility } from '../../src';
 
 describe('MathUtility', (): void => {
