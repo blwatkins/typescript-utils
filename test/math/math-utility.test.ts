@@ -35,4 +35,8 @@ describe('MathUtility', (): void => {
     describe('constrain', (): void => {
         test.todo('constrain unit tests');
     });
+
+    describe('toFlatIndex', (): void => {
+        test.todo('toFlatIndex unit tests');
+    });
 });
