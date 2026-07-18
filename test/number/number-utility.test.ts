@@ -22,7 +22,18 @@ import { describe, test, expect } from 'vitest';
 
 import { NumberUtility } from '../../src';
 
-import { negativeNumberInputs, nonNumberInputs, positiveNumberInputs, zeroInputs } from '../utils/input/number-inputs';
+import {
+    floatInputs,
+    integerInputs,
+    negativeIntegerInputs,
+    negativeNumberInputs,
+    nonFiniteNumberInputs,
+    nonNumberInputs,
+    positiveIntegerInputs,
+    positiveNumberInputs,
+    zeroInputs
+} from '../utils/input/number-inputs';
+
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('NumberUtility', (): void => {
@@ -43,6 +54,11 @@ describe('NumberUtility', (): void => {
                 expected: false
             },
             {
+                label: 'Non-finite number inputs',
+                inputs: [...nonFiniteNumberInputs],
+                expected: false
+            },
+            {
                 label: 'Number inputs',
                 inputs: [
                     ...positiveNumberInputs,
@@ -50,19 +66,6 @@ describe('NumberUtility', (): void => {
                     ...zeroInputs
                 ],
                 expected: true
-            },
-            {
-                label: 'NaN',
-                inputs: [NaN],
-                expected: false
-            },
-            {
-                label: 'Infinity',
-                inputs: [
-                    Infinity,
-                    -Infinity
-                ],
-                expected: false
             }
         ];
 
@@ -79,7 +82,109 @@ describe('NumberUtility', (): void => {
         });
     });
 
-    test.todo('NumberUtility.isInteger');
+    describe('isInteger', (): void => {
+        const scenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: [...nonNumberInputs],
+                expected: false
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: [...nonFiniteNumberInputs],
+                expected: false
+            },
+            {
+                label: 'Float inputs',
+                inputs: [
+                    ...floatInputs
+                ],
+                expected: false
+            },
+            {
+                label: 'Zero inputs',
+                inputs: [
+                    ...zeroInputs
+                ],
+                expected: true
+            },
+            {
+                label: 'Integer inputs',
+                inputs: [
+                    ...integerInputs
+                ],
+                expected: true
+            }
+        ];
 
-    test.todo('NumberUtility.isPositiveInteger');
+        describe.each(
+            scenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+            test.each(
+                testCases
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(NumberUtility.isInteger(testInput)).toBe(testExpected);
+            });
+        });
+    });
+
+    describe('isPositiveInteger', (): void => {
+        describe('isPositiveInteger should return the same expected value for non-zero inputs', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-number inputs',
+                    inputs: [...nonNumberInputs],
+                    expected: false
+                },
+                {
+                    label: 'Non-finite number inputs',
+                    inputs: [...nonFiniteNumberInputs],
+                    expected: false
+                },
+                {
+                    label: 'Float inputs',
+                    inputs: [
+                        ...floatInputs
+                    ],
+                    expected: false
+                },
+                {
+                    label: 'Negative integer inputs',
+                    inputs: [
+                        ...negativeIntegerInputs
+                    ],
+                    expected: false
+                },
+                {
+                    label: 'Positive integer inputs',
+                    inputs: [
+                        ...positiveIntegerInputs
+                    ],
+                    expected: true
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(NumberUtility.isPositiveInteger(testInput)).toBe(testExpected);
+                    expect(NumberUtility.isPositiveInteger(testInput, false)).toBe(testExpected);
+                    expect(NumberUtility.isPositiveInteger(testInput, true)).toBe(testExpected);
+                });
+            });
+        });
+
+        test('isPositiveInteger should return the proper value for zero input', (): void => {
+            expect(NumberUtility.isPositiveInteger(0)).toBe(false);
+            expect(NumberUtility.isPositiveInteger(0, false)).toBe(false);
+            expect(NumberUtility.isPositiveInteger(0, true)).toBe(true);
+        });
+    });
 });
