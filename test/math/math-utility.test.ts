@@ -21,8 +21,8 @@
 import { describe, test, expect } from 'vitest';
 
 import { MathUtility } from '../../src';
-import {buildTestCases, Scenario, TestCase} from "../utils/test-case/test-case";
-import {nonFiniteNumberInputs, nonNumberInputs} from "../utils/input/number-inputs";
+import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
+import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
 
 describe('MathUtility', (): void => {
     describe('new MathUtility()', (): void => {
