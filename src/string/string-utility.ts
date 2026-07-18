@@ -74,7 +74,7 @@ export class StringUtility {
      *
      * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
-     * @returns {RegExp} Regular expression pattern for validating single-line mixed-case strings.
+     * @returns {RegExp} - Regular expression pattern for validating single-line mixed-case strings.
      *
      * @public
      * @since 0.1.0
