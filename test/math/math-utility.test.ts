@@ -22,7 +22,7 @@ import { describe, test, expect } from 'vitest';
 
 import { MathUtility } from '../../src';
 import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
-import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
+import { floatInputs, negativeIntegerInputs, nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
 
 describe('MathUtility', (): void => {
     describe('new MathUtility()', (): void => {
@@ -59,7 +59,7 @@ describe('MathUtility', (): void => {
                 { value: Number.MIN_SAFE_INTEGER, min: 5, max: 500, expected: 5 },
                 { value: 5, min: 0, max: Number.MAX_SAFE_INTEGER, expected: 5 },
                 { value: 5, min: Number.MIN_SAFE_INTEGER, max: 10, expected: 5 }
-            ])('%# - constrain($value, $min, $max) should return $expected', ({ value, min, max, expected }): void => {
+            ])('%# - constrain($value, $min, $max) should return $expected', ({ value, min, max, expected }: { value: number; min: number; max: number; expected: number; }): void => {
                 expect(MathUtility.constrain(value, min, max)).toBe(expected);
             });
         });
@@ -126,7 +126,7 @@ describe('MathUtility', (): void => {
                     { min: 0, max: -1 },
                     { min: 1, max: -1 },
                     { min: 1, max: 0 }
-                ])(`contrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }): void => {
+                ])(`contrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }: { min: number; max: number; }): void => {
                     expect((): void => {
                         MathUtility.constrain(defaultValue, min, max);
                     }).toThrow(RangeError);
@@ -136,6 +136,95 @@ describe('MathUtility', (): void => {
     });
 
     describe('toFlatIndex', (): void => {
-        test.todo('toFlatIndex unit tests');
+        describe('toFlatIndex should return the proper index for positive arguments', (): void => {
+            test.todo('toFlatIndex unit tests');
+            // test.each([
+            //
+            // ])('', (): void => {
+            //
+            // });
+        });
+
+        describe('Input validation', (): void => {
+            test.todo('Input validation - positive integer');
+            test.todo('Input validation - valid index');
+
+            describe('All parameters must be positive integers', (): void => {
+                test.todo('Rows and columns cannot be zero');
+
+                const scenarios: Scenario[] = [
+                    {
+                        label: 'Non-number inputs',
+                        inputs: [...nonNumberInputs],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'Non-finite number inputs',
+                        inputs: [...nonFiniteNumberInputs],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'Float number inputs',
+                        inputs: [...floatInputs],
+                        expected: TypeError
+                    },
+                    {
+                        label: 'Negative integer inputs',
+                        inputs: [...negativeIntegerInputs],
+                        expected: TypeError
+                    }
+                ];
+
+                describe.each(
+                    scenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+                    const defaultX: number = 0;
+                    const defaultY: number = 0;
+                    const defaultColumns: number = 1;
+                    const defaultRows: number = 1;
+
+                    describe('x parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - toFlatIndex($input, ${defaultY}, ${defaultColumns}, ${defaultRows}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.toFlatIndex(testInput as number, defaultY, defaultColumns, defaultRows);
+                            }).toThrow(testExpected);
+                        });
+                    });
+
+                    describe('y parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - toFlatIndex(${defaultX}, $input, ${defaultColumns}, ${defaultRows}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.toFlatIndex(defaultX, testInput as number, defaultColumns, defaultRows);
+                            }).toThrow(testExpected);
+                        });
+                    });
+
+                    describe('columns parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - toFlatIndex(${defaultX}, ${defaultY}, $input, ${defaultRows}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.toFlatIndex(defaultX, defaultY, testInput as number, defaultRows);
+                            }).toThrow(testExpected);
+                        });
+                    });
+
+                    describe('rows parameter', (): void => {
+                        test.each(
+                            testCases
+                        )(`%# - toFlatIndex(${defaultX}, ${defaultY}, ${defaultColumns}, $input) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
+                            expect((): void => {
+                                MathUtility.toFlatIndex(defaultX, defaultY, defaultColumns, testInput as number);
+                            }).toThrow(testExpected);
+                        });
+                    });
+                });
+            });
+        });
     });
 });
