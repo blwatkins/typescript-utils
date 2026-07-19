@@ -146,7 +146,6 @@ describe('MathUtility', (): void => {
         });
 
         describe('Input validation', (): void => {
-            test.todo('Input validation - positive integer');
             test.todo('Input validation - valid index');
 
             describe('All parameters must be positive integers', (): void => {
