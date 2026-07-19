@@ -120,7 +120,17 @@ describe('MathUtility', (): void => {
             });
 
             describe('Minimum constraint must be less than or equal to maximum constraint', (): void => {
-                test.todo('min <= max');
+                const defaultValue: number = 0;
+
+                test.each([
+                    { min: 0, max: -1 },
+                    { min: 1, max: -1 },
+                    { min: 1, max: 0 }
+                ])(`contrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }): void => {
+                    expect((): void => {
+                        MathUtility.constrain(defaultValue, min, max);
+                    }).toThrow(RangeError);
+                });
             });
         });
     });
