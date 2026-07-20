@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwatkins/utils`, a toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
+This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
 
 ## Companion Instruction Files
 
@@ -49,6 +49,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 ```
 src/
   discriminator/          # Discriminated type-guard utilities and registry
+  math/                   # Math utilities
   number/                 # Number utilities
   random/                 # Random number generation utilities
     seeded-random/        # Seeded random number generator utilities
@@ -57,6 +58,7 @@ src/
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
   discriminator/          # Tests for the discriminator module
+  math/                   # Tests for the math module
   number/                 # Tests for the number module
   random/                 # Tests for the random module
     seeded-random/        # Tests for the seeded-random module

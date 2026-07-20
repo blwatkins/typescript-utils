@@ -106,7 +106,7 @@ export class SeedVersions {
      *
      * @returns {SeedVersion} - The seed version with the given index.
      *
-     * @throws {RangeError} - If the index is not a valid seed version index.
+     * @throws {RangeError} - When the index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0

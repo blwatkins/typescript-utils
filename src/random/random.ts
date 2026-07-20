@@ -57,7 +57,7 @@ export class Random {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - If the given random number generator is not a function.
+     * @throws {TypeError} - When the given random number generator is not a function.
      *
      * @public
      * @since 0.1.0
@@ -73,7 +73,7 @@ export class Random {
     /**
      * Get a random number.
      *
-     * @returns {number} A random number in the range [0, 1) (zero inclusive, one exclusive).
+     * @returns {number} - A random number in the range [0, 1) (zero inclusive, one exclusive).
      *
      * @public
      * @since 0.1.0
@@ -88,11 +88,11 @@ export class Random {
      * @param {number} min - The minimum value (inclusive).
      * @param {number} max - The maximum value (exclusive).
      *
-     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive).
+     * @returns {number} - A random floating-point number in the range [min, max) (min inclusive, max exclusive).
      *
-     * @throws {TypeError} When `min` is not a finite number.
-     * @throws {TypeError} When `max` is not a finite number.
-     * @throws {RangeError} When `min` is not less than or equal `max`.
+     * @throws {TypeError} - When `min` is not a finite number.
+     * @throws {TypeError} - When `max` is not a finite number.
+     * @throws {RangeError} - When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
@@ -111,11 +111,11 @@ export class Random {
      * @param {number} max - The maximum value (exclusive).
      * Non-integer values are rounded down with `Math.floor`.
      *
-     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     * @returns {number} - A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
      *
-     * @throws {TypeError} When `min` is not a finite number.
-     * @throws {TypeError} When `max` is not a finite number.
-     * @throws {RangeError} When `min` is not less than or equal `max`.
+     * @throws {TypeError} - When `min` is not a finite number.
+     * @throws {TypeError} - When `max` is not a finite number.
+     * @throws {RangeError} - When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
@@ -138,11 +138,11 @@ export class Random {
      * @param {number} max - The maximum value (exclusive).
      * Non-integer values are rounded down with `Math.floor`.
      *
-     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     * @returns {number} - A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
      *
-     * @throws {TypeError} When `min` is not a finite number.
-     * @throws {TypeError} When `max` is not a finite number.
-     * @throws {RangeError} When `min` is not less than or equal `max`.
+     * @throws {TypeError} - When `min` is not a finite number.
+     * @throws {TypeError} - When `max` is not a finite number.
+     * @throws {RangeError} - When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
@@ -157,7 +157,7 @@ export class Random {
      * @param {number} chanceOfTrue - The probability of returning `true` (between 0 and 1).
      * Default value is `0.5`.
      *
-     * @returns {boolean} A random boolean value.
+     * @returns {boolean} - A random boolean value.
      *
      * @public
      * @since 0.1.0
@@ -172,7 +172,7 @@ export class Random {
      *
      * @param {Type[]} elements - An array of elements to choose from.
      *
-     * @returns {Type} A random element from the array.
+     * @returns {Type} - A random element from the array.
      *
      * @public
      * @since 0.1.0
@@ -190,7 +190,7 @@ export class Random {
      *
      * @param {WeightedList} elements - The {@link WeightedList} to select a random element from.
      *
-     * @returns {Type} A random element from the given {@link WeightedList}, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
+     * @returns {Type} - A random element from the given {@link WeightedList}, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
      *
      * @throws {TypeError} - When the given list is not a valid {@link WeightedList}.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.

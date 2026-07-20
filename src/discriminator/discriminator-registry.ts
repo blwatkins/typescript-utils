@@ -81,7 +81,7 @@ export class DiscriminatorRegistry {
     /**
      * Private constructor.
      *
-     * @throws {Error} DiscriminatorRegistry is a static class and cannot be instantiated.
+     * @throws {Error} - DiscriminatorRegistry is a static class and cannot be instantiated.
      *
      * @private
      */
@@ -110,10 +110,10 @@ export class DiscriminatorRegistry {
      *
      * @returns {TypeGuard<T>} - A type guard function for the registered type.
      *
-     * @throws {TypeError} If the given input is not an object.
-     * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
-     * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
-     * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
+     * @throws {TypeError} - When the given input is not an object.
+     * @throws {TypeError} - When the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
+     * @throws {TypeError} - When the {@link DiscriminatorRegistration.validator} property is not a function.
+     * @throws {Error} - When the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
      * @public
      * @since 0.1.0
@@ -161,10 +161,10 @@ export class DiscriminatorRegistry {
      *
      * @returns {void}
      *
-     * @throws {TypeError} If the given input is not an object.
-     * @throws {TypeError} If the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
-     * @throws {TypeError} If the {@link DiscriminatorRegistration.validator} property is not a function.
-     * @throws {Error} If the {@link DiscriminatorRegistration.discriminator} is already registered.
+     * @throws {TypeError} - When the given input is not an object.
+     * @throws {TypeError} - When the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
+     * @throws {TypeError} - When the {@link DiscriminatorRegistration.validator} property is not a function.
+     * @throws {Error} - When the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
      * @private
      */
