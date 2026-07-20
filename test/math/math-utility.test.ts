@@ -126,7 +126,7 @@ describe('MathUtility', (): void => {
                     { min: 0, max: -1 },
                     { min: 1, max: -1 },
                     { min: 1, max: 0 }
-                ])(`%# - contrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }: { min: number; max: number; }): void => {
+                ])(`%# - constrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }: { min: number; max: number; }): void => {
                     expect((): void => {
                         MathUtility.constrain(defaultValue, min, max);
                     }).toThrow(RangeError);
