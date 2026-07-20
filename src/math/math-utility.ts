@@ -94,13 +94,10 @@ export class MathUtility {
             throw new TypeError('columns and rows must be positive integers greater than 0.');
         }
 
-        const index: number = (y * columns) + x;
-        const arrayLength: number = columns * rows;
-
-        if (index >= arrayLength) {
-            throw new RangeError(`Calculated index (${index}) is out of bounds for array length (${arrayLength})`);
+        if (x >= columns || y >= rows) {
+            throw new RangeError(`2D index (${x}, ${y}) is out of bounds for array dimensions (${columns}, ${rows})`);
         }
 
-        return index;
+        return ((y * columns) + x);
     }
 }
