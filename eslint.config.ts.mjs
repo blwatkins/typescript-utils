@@ -23,6 +23,7 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import esX from 'eslint-plugin-es-x';
+import jsdoc from 'eslint-plugin-jsdoc';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
@@ -222,6 +223,8 @@ export default defineConfig([
 
             '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
 
+            '@typescript-eslint/no-deprecated': 'warn',
+
             '@typescript-eslint/no-dynamic-delete': 'error',
 
             '@typescript-eslint/no-explicit-any': 'error',
@@ -240,6 +243,109 @@ export default defineConfig([
                 allowNumber: true,
                 allowBoolean: true
             }]
+        }
+    },
+    {
+        files: ['src/**/*.ts'],
+        plugins: {
+            jsdoc
+        },
+        extends: [
+            jsdoc.configs['flat/recommended-typescript']
+        ],
+        rules: {
+            'jsdoc/check-access': 'error',
+
+            'jsdoc/check-alignment': 'error',
+
+            'jsdoc/check-param-names': 'error',
+
+            'jsdoc/check-tag-names': ['error', {
+                typed: false,
+                definedTags: ['since', 'category']
+            }],
+
+            'jsdoc/check-types': 'error',
+
+            'jsdoc/empty-tags': 'error',
+
+            'jsdoc/escape-inline-tags': 'error',
+
+            'jsdoc/implements-on-classes': 'error',
+
+            'jsdoc/multiline-blocks': 'error',
+
+            'jsdoc/no-defaults': 'error',
+
+            'jsdoc/no-multi-asterisks': 'error',
+
+            'jsdoc/no-types': 'off',
+
+            'jsdoc/reject-any-type': 'error',
+
+            'jsdoc/reject-function-type': 'error',
+
+            'jsdoc/require-description': 'error',
+
+            'jsdoc/require-jsdoc': 'error',
+
+            'jsdoc/require-param': 'error',
+
+            'jsdoc/require-param-description': 'error',
+
+            'jsdoc/require-param-name': 'error',
+
+            'jsdoc/require-param-type': 'error',
+
+            'jsdoc/require-returns': ['error', {
+                forceRequireReturn: true,
+                forceReturnsWithAsync: true
+            }],
+
+            'jsdoc/require-returns-check': 'error',
+
+            'jsdoc/require-returns-description': 'error',
+
+            'jsdoc/require-returns-type': 'error',
+
+            'jsdoc/require-throws': 'error',
+
+            'jsdoc/require-throws-type': 'error',
+
+            'jsdoc/sort-tags': ['error', {
+                tagSequence: [
+                    { tags: ['remarks'] },
+                    { tags: ['see'] },
+                    { tags: ['param'] },
+                    { tags: ['returns'] },
+                    { tags: ['throws'] },
+                    { tags: ['default'] },
+                    { tags: ['example'] },
+                    { tags: ['deprecated'] },
+                    { tags:
+                            [
+                                'type',
+                                'readonly',
+                                'private',
+                                'protected',
+                                'public',
+                                'abstract',
+                                'override',
+                                'since',
+                                'category'
+                            ]
+                    }
+                ]
+            }],
+
+            'jsdoc/tag-lines': ['error', 'any', {
+                startLines: null,
+                endLines: null
+            }],
+
+            'jsdoc/ts-no-empty-object-type': 'error',
+
+            'jsdoc/valid-types': 'error'
         }
     }
 ]);

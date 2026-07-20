@@ -62,6 +62,8 @@ const seedVersions: readonly SeedVersion[] = [
  */
 export class SeedVersions {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - SeedVersions is a static class and cannot be instantiated.
      *
      * @private
@@ -71,6 +73,8 @@ export class SeedVersions {
     }
 
     /**
+     * The number of seed versions.
+     *
      * @returns {number} - The total number of seed versions that currently exist.
      *
      * @public
@@ -85,7 +89,7 @@ export class SeedVersions {
      *
      * @param {number} index - The index to check.
      *
-     * @returns {boolean}
+     * @returns {boolean} - `true` if the given index is a valid seed version; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -95,12 +99,14 @@ export class SeedVersions {
     }
 
     /**
+     * Get a {@link SeedVersion} object.
+     *
      * @param {number} index - The index of the seed version to retrieve.
      * Must be a valid {@link SeedVersions} index.
      *
      * @returns {SeedVersion} - The seed version with the given index.
      *
-     * @throws {RangeError} - If the index is not a valid seed version index.
+     * @throws {RangeError} - When the index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0

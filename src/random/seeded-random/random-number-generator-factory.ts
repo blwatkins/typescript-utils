@@ -36,6 +36,8 @@ const textEncoder: TextEncoder = new TextEncoder();
  */
 export class RandomNumberGeneratorFactory {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - RandomNumberGeneratorFactory is a static class and cannot be instantiated.
      *
      * @private
@@ -68,7 +70,7 @@ export class RandomNumberGeneratorFactory {
      * @param {number|undefined} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
      *
-     * @returns {SeededRandomNumberGenerator}
+     * @returns {SeededRandomNumberGenerator} - A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
@@ -94,7 +96,7 @@ export class RandomNumberGeneratorFactory {
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string|undefined} namespace - Namespace to create different sequences from the same seed.
      *
-     * @returns {Promise<SeededRandomNumberGenerator>}
+     * @returns {Promise<SeededRandomNumberGenerator>} - A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
@@ -120,6 +122,8 @@ export class RandomNumberGeneratorFactory {
      * Should be undefined or a string.
      * @param {unknown} version - Version to validate.
      * Should be undefined or an integer that is also a valid {@link SeedVersions} index.
+     *
+     * @returns {void}
      *
      * @throws {TypeError} - When the given seed is not a string.
      * @throws {TypeError} - When the given namespace is not a string.
@@ -149,10 +153,10 @@ export class RandomNumberGeneratorFactory {
     /**
      * Build the hash algorithm input string from the given seed and namespace.
      *
-     * @param {string} seed
+     * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string|undefined} namespace - Optional namespace to create different sequences from the same seed.
      *
-     * @returns {string}
+     * @returns {string} - The input string for the hash algorithm.
      *
      * @private
      */
@@ -176,7 +180,7 @@ export class RandomNumberGeneratorFactory {
      * Changing the version number will result in a different sequence of random numbers for the same input.
      * Default value is 0.
      *
-     * @returns {[number, number, number, number]}
+     * @returns {[number, number, number, number]} - The initial state array for the random number generator.
      *
      * @throws {TypeError} - When the given input is not a string.
      * @throws {TypeError} - When the given version is not an integer.
@@ -213,7 +217,7 @@ export class RandomNumberGeneratorFactory {
      *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
      *
-     * @returns {[number, number, number, number]}
+     * @returns {Promise<[number, number, number, number]>} - The initial state array for the random number generator.
      *
      * @throws {TypeError} - When the given input is not a string.
      *

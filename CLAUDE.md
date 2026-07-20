@@ -15,16 +15,11 @@ Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilo
 
 ## Project Summary
 
-A growing toolkit of reusable TypeScript and JavaScript utilities for number checks, string checks, random number and element selection (including weighted selection), deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry, published to npm.
+A toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
 
-## Common Commands
+## npm Commands
 
-- `npm ci` — install dependencies from the lockfile.
-- `npm run lint:all` — run both the JavaScript and TypeScript ESLint configurations.
-- `npm run build` — bundle the package to `_dist/` with tsdown.
-- `npm test` — run the Vitest suite once.
-- `npm run test:coverage` — run tests with V8 coverage (output to `_coverage/`).
-- `npm run docs` — generate TypeDoc API documentation to `_doc/`.
+See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#npm-scripts) for the full list of available commands.
 
 ## Generated Output Directories (not committed)
 

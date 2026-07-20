@@ -30,19 +30,21 @@ export class SeededRandomNumberGenerator {
     /**
      * Internal xoshiro128** state (4 x 32-bit unsigned integers).
      *
-     * @private
-     * @readonly
      * @type {[number, number, number, number]}
+     * @readonly
+     * @private
      */
     readonly #state: [number, number, number, number];
 
     /**
+     * {@link SeededRandomNumberGenerator} constructor.
+     *
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @throws {TypeError} If state is not an array with 4 elements.
-     * @throws {RangeError} If each element of state is not a 32-bit unsigned integer.
-     * @throws {RangeError} If state does not have at least one element that is greater than 0.
+     * @throws {TypeError} - When state is not an array with 4 elements.
+     * @throws {RangeError} - When each element of state is not a 32-bit unsigned integer.
+     * @throws {RangeError} - When state does not have at least one element that is greater than 0.
      *
      * @public
      * @since 0.1.0
@@ -53,6 +55,8 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
+     * Get the next number in the seeded sequence.
+     *
      * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
      * Successive calls produce an independent, uniformly distributed sequence.
      *
@@ -84,7 +88,7 @@ export class SeededRandomNumberGenerator {
      * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
      * @param {number} k - The number of bits to rotate.
      *
-     * @returns {number}
+     * @returns {number} - The rotated 32-bit unsigned integer.
      *
      * @private
      */
@@ -95,7 +99,7 @@ export class SeededRandomNumberGenerator {
     /**
      * The maximum valid value in the state array.
      *
-     * @returns {number} 0xFFFFFFFF
+     * @returns {number} - 0xFFFFFFFF
      *
      * @private
      */
@@ -106,11 +110,13 @@ export class SeededRandomNumberGenerator {
     /**
      * Validate that state is an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @param {[number, number, number, number]} state - The state to validate.
+     * @param {number[]} state - The state to validate.
      *
-     * @throws {TypeError} If state is not an array with 4 elements.
-     * @throws {RangeError} If each element of state is not a 32-bit unsigned integer
-     * @throws {RangeError} If state does not have at least one element that is greater than 0.
+     * @returns {void}
+     *
+     * @throws {TypeError} - When state is not an array with 4 elements.
+     * @throws {RangeError} - When each element of state is not a 32-bit unsigned integer
+     * @throws {RangeError} - When state does not have at least one element that is greater than 0.
      *
      * @private
      */

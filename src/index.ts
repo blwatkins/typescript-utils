@@ -19,6 +19,7 @@
  */
 
 export * from './discriminator';
+export * from './math';
 export * from './number';
 export * from './random';
 export * from './string';

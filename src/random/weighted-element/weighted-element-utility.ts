@@ -33,6 +33,8 @@ import { WeightedElement, WeightedList, weightedElementSchema } from './weighted
  */
 export class WeightedElementUtility {
     /**
+     * Private constructor.
+     *
      * @throws {Error} - WeightedElementUtility is a static class and cannot be instantiated.
      *
      * @private
@@ -46,7 +48,7 @@ export class WeightedElementUtility {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {boolean} `true` if the input is a {@link WeightedElement}, `false` otherwise.
+     * @returns {boolean} - `true` if the input is a {@link WeightedElement}, `false` otherwise.
      *
      * @readonly
      * @private
@@ -64,8 +66,10 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {{ value: TValue; weight: number; }} input - The input to build the {@link WeightedElement} from.
+     * @param {TValue} input.value - The value to be selected from the weighted list.
+     * @param {number} input.weight - The probability weight of the element. Should be a number between 0 and 1, inclusive.
      *
-     * @returns {WeightedElement<TValue>} A {@link WeightedElement} object with a value of the given type.
+     * @returns {WeightedElement<TValue>} - A {@link WeightedElement} object with a value of the given type.
      *
      * @throws {TypeError} - When the given input is not an object.
      * @throws {TypeError} - When the given input does not result in a valid {@link WeightedElement}.
@@ -92,7 +96,7 @@ export class WeightedElementUtility {
      * @param {{ value: TValue; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
      * Each element will be converted into a {@link WeightedElement} using {@link WeightedElementUtility.buildWeightedElement}.
      *
-     * @returns {WeightedList<TValue>} A {@link WeightedList} object containing the given elements.
+     * @returns {WeightedList<TValue>} - A {@link WeightedList} object containing the given elements.
      *
      * @throws {TypeError} - When the given elements are not a non-empty array.
      * @throws {TypeError} - When the given elements do not result in a valid {@link WeightedList}.
