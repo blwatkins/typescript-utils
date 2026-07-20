@@ -71,27 +71,6 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 
 Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository.
 
-### ESM package contract and artifact layout
-
-The package is configured as ESM and publishes built artifacts from `_dist`, including declaration files and a scoped export map.
-The build pipeline generates those outputs from `src/index.ts` using tsdown.
-
-**Evidence:**
-
-- [package.json](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [tsdown.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/tsdown.config.ts)
-
-### Utility module composition and re-export boundaries
-
-The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes.
-This keeps the package API small while still allowing clear internal organization by domain.
-
-**Evidence:**
-
-- [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
-- [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
-- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
-
 ### String and number type-guard utilities
 
 `StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
@@ -108,7 +87,6 @@ This keeps the package API small while still allowing clear internal organizatio
 **Evidence:**
 
 - [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
-- [src/math/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/index.ts)
 
 ### Discriminator-based type guard registry
 
@@ -141,6 +119,27 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 
 - [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
 - [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
+
+### ESM package contract and artifact layout
+
+The package is configured as ESM and publishes built artifacts from `_dist`, including declaration files and a scoped export map.
+The build pipeline generates those outputs from `src/index.ts` using tsdown.
+
+**Evidence:**
+
+- [package.json](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
+- [tsdown.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/tsdown.config.ts)
+
+### Utility module composition and re-export boundaries
+
+The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes.
+This keeps the package API small while still allowing clear internal organization by domain.
+
+**Evidence:**
+
+- [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
+- [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
+- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
 
 ### Strict typing and lint enforcement model
 
