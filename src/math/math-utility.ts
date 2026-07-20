@@ -78,7 +78,8 @@ export class MathUtility {
      *
      * @throws {TypeError} - When `x` or `y` are not positive integers or zero.
      * @throws {TypeError} - When `columns` or `rows` are not positive integers greater than 0.
-     * @throws {RangeError} - When the calculated index is out of bounds for the given columns and rows.
+     * @throws {RangeError} - When the total grid size (`columns` * `rows`) exceeds `Number.MAX_SAFE_INTEGER`.
+     * @throws {RangeError} - When the given (x, y) coordinates are out of bounds for the given grid dimensions.
      *
      * @public
      * @since 0.1.0
