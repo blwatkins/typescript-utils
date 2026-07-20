@@ -137,12 +137,21 @@ describe('MathUtility', (): void => {
 
     describe('toFlatIndex', (): void => {
         describe('toFlatIndex should return the proper index for positive arguments', (): void => {
-            test.todo('toFlatIndex unit tests');
-            // test.each([
-            //
-            // ])('', (): void => {
-            //
-            // });
+            test.each([
+                { x: 0, y: 0, columns: 1, rows: 1, expected: 0 },
+                { x: 0, y: 0, columns: 5, rows: 5, expected: 0 },
+                { x: 0, y: 0, columns: 5, rows: 10, expected: 0 },
+                { x: 0, y: 0, columns: 10, rows: 5, expected: 0 },
+                { x: 4, y: 4, columns: 5, rows: 5, expected: ((5 * 5) - 1) },
+                { x: 4, y: 9, columns: 5, rows: 10, expected: ((5 * 10) - 1) },
+                { x: 9, y: 4, columns: 10, rows: 5, expected: ((10 * 5) - 1) },
+                { x: 4, y: 0, columns: 5, rows: 1, expected: 4 },
+                { x: 0, y: 4, columns: 1, rows: 5, expected: 4 },
+                { x: Number.MAX_SAFE_INTEGER - 1, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 1, expected: Number.MAX_SAFE_INTEGER - 1 },
+                { x: 0, y: Number.MAX_SAFE_INTEGER - 1, columns: 1, rows: Number.MAX_SAFE_INTEGER, expected: Number.MAX_SAFE_INTEGER - 1 }
+            ])('%# - toFlatIndex($x, $y, $columns, $rows) should return $expected', ({ x, y, columns, rows, expected }: { x: number; y: number; columns: number; rows: number; expected: number; }): void => {
+                expect(MathUtility.toFlatIndex(x, y, columns, rows)).toBe(expected);
+            });
         });
 
         describe('Input validation', (): void => {
@@ -248,7 +257,7 @@ describe('MathUtility', (): void => {
                     { x: 9, y: 4, columns: 5, rows: 10 }
                 ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw RangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
                     expect((): void => {
-                        MathUtility.toFlatIndex(x ,y , columns, rows);
+                        MathUtility.toFlatIndex(x, y, columns, rows);
                     }).toThrow(RangeError);
                 });
             });
