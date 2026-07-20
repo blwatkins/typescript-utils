@@ -126,7 +126,7 @@ describe('MathUtility', (): void => {
                     { min: 0, max: -1 },
                     { min: 1, max: -1 },
                     { min: 1, max: 0 }
-                ])(`contrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }: { min: number; max: number; }): void => {
+                ])(`%# - contrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }: { min: number; max: number; }): void => {
                     expect((): void => {
                         MathUtility.constrain(defaultValue, min, max);
                     }).toThrow(RangeError);
@@ -146,11 +146,7 @@ describe('MathUtility', (): void => {
         });
 
         describe('Input validation', (): void => {
-            test.todo('Input validation - valid index');
-
             describe('All parameters must be positive integers', (): void => {
-                test.todo('Rows and columns cannot be zero');
-
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-number inputs',
@@ -222,6 +218,38 @@ describe('MathUtility', (): void => {
                             }).toThrow(testExpected);
                         });
                     });
+
+                    test('columns and rows parameters cannot be zero', (): void => {
+                        expect((): void => {
+                            MathUtility.toFlatIndex(defaultX, defaultY, 0, defaultRows);
+                        }).toThrow(TypeError);
+
+                        expect((): void => {
+                            MathUtility.toFlatIndex(defaultX, defaultY, defaultColumns, 0);
+                        }).toThrow(TypeError);
+                    });
+                });
+            });
+
+            describe('toFlatIndex should not accept coordinates outside the valid index range for the given columns and rows', (): void => {
+                test.each([
+                    { x: 1, y: 0, columns: 1, rows: 1 },
+                    { x: 0, y: 1, columns: 1, rows: 1 },
+                    { x: 1, y: 1, columns: 1, rows: 1 },
+                    { x: 2, y: 0, columns: 1, rows: 1 },
+                    { x: 0, y: 2, columns: 1, rows: 1 },
+                    { x: 2, y: 2, columns: 1, rows: 1 },
+                    { x: 5, y: 0, columns: 5, rows: 1 },
+                    { x: 0, y: 5, columns: 1, rows: 5 },
+                    { x: 5, y: 5, columns: 5, rows: 5 },
+                    { x: 5, y: 10, columns: 10, rows: 5 },
+                    { x: 4, y: 9, columns: 10, rows: 5 },
+                    { x: 10, y: 5, columns: 5, rows: 10 },
+                    { x: 9, y: 4, columns: 5, rows: 10 }
+                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw RangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
+                    expect((): void => {
+                        MathUtility.toFlatIndex(x ,y , columns, rows);
+                    }).toThrow(RangeError);
                 });
             });
         });
