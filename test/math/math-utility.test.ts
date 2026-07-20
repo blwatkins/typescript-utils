@@ -261,6 +261,20 @@ describe('MathUtility', (): void => {
                     }).toThrow(RangeError);
                 });
             });
+
+            describe('toFlatIndex should not accept a grid size larger than the maximum safe integer in JavaScript', (): void => {
+                test.each([
+                    { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER + 1, rows: 1 },
+                    { x: 0, y: 0, columns: 1, rows: Number.MAX_SAFE_INTEGER + 1 },
+                    { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 2 },
+                    { x: 0, y: 0, columns: 2, rows: Number.MAX_SAFE_INTEGER },
+                    { x: 0, y: 0, columns: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)), rows: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)) }
+                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw RangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
+                    expect((): void => {
+                        MathUtility.toFlatIndex(x, y, columns, rows);
+                    }).toThrow(RangeError);
+                });
+            });
         });
     });
 });

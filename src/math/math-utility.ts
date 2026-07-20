@@ -46,8 +46,8 @@ export class MathUtility {
      *
      * @returns {number} - `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
      *
-     * @throws {TypeError} - When `value` `min`, `max` are not all finite numbers.
-     * @throws {RangeError} - When `min` is not less than `max`.
+     * @throws {TypeError} - When `value`, `min`, and `max` are not all finite numbers.
+     * @throws {RangeError} - When `min` is not less than or equal to `max`.
      *
      * @public
      * @since 0.1.0
@@ -76,7 +76,7 @@ export class MathUtility {
      *
      * @returns {number} - The one-dimensional index for the given (x, y) coordinates.
      *
-     * @throws {TypeError} - When `x` or `y` are not positive integers.
+     * @throws {TypeError} - When `x` or `y` are not positive integers or zero.
      * @throws {TypeError} - When `columns` or `rows` are not positive integers greater than 0.
      * @throws {RangeError} - When the calculated index is out of bounds for the given columns and rows.
      *
@@ -86,12 +86,16 @@ export class MathUtility {
     public static toFlatIndex(x: number, y: number, columns: number, rows: number): number {
         if (!(NumberUtility.isPositiveInteger(x, true)
             && NumberUtility.isPositiveInteger(y, true))) {
-            throw new TypeError('x and y must be positive integers.');
+            throw new TypeError('x and y must be positive integers or zero.');
         }
 
         if (!(NumberUtility.isPositiveInteger(columns, false)
             && NumberUtility.isPositiveInteger(rows, false))) {
             throw new TypeError('columns and rows must be positive integers greater than 0.');
+        }
+
+        if (columns * rows > Number.MAX_SAFE_INTEGER) {
+            throw new RangeError(`The total size of the given grid (${columns} * ${rows}) exceeds the maximum safe integer value in JavaScript.`);
         }
 
         if (x >= columns || y >= rows) {
