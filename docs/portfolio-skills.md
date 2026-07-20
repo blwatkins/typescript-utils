@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-15
+modified_date: 2026-07-19
 toc: true
 ---
 
@@ -16,7 +16,7 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwatkins/utils`) is a toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.
+TypeScript Utilities (`@blwatkins/utils`) is a toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
 The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
@@ -55,6 +55,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 ## Capability Record
 
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
+- Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
 - Provides a static `Random` class for generating random numbers, booleans, and selecting random elements from arrays, with a configurable underlying random function to enable use with seeded generators or custom sources.
 - Provides typed weighted random selection via `WeightedElementUtility` and `WeightedList`, using discriminator-validated element objects and a cumulative-weight selection strategy, enabling non-uniform random sampling from explicit probability distributions.
@@ -93,12 +94,21 @@ This keeps the package API small while still allowing clear internal organizatio
 
 ### String and number type-guard utilities
 
-`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty and single-line trimmed string checks and positive-integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
+`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
 
 **Evidence:**
 
 - [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
 - [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
+
+### Math utilities
+
+`MathUtility` provides static helpers for numeric operations with explicit validation for number type inputs.
+
+**Evidence:**
+
+- [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
+- [src/math/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/index.ts)
 
 ### Discriminator-based type guard registry
 
