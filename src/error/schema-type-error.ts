@@ -29,7 +29,7 @@ export class SchemaTypeError extends TypeError {
     /**
      * Public constructor.
      *
-     * @param {string | undefined} message - The error message.
+     * @param {string} message - The error message.
      * Default value is {@link SchemaTypeError.defaultMessage}.
      *
      * @public
