@@ -60,7 +60,7 @@ export class SchemaTypeError extends TypeError {
      * @public
      * @since 0.1.0
      */
-    public static get code(): string {
+    public get code(): string {
         return 'ERR_INVALID_ARG_TYPE';
     }
 }
