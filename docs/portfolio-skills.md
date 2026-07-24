@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-19
+modified_date: 2026-07-24
 toc: true
 ---
 
@@ -54,12 +54,13 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 
 ## Capability Record
 
-- Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
-- Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
-- Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
+- Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
 - Provides a static `Random` class for generating random numbers, booleans, and selecting random elements from arrays, with a configurable underlying random function to enable use with seeded generators or custom sources.
 - Provides typed weighted random selection via `WeightedElementUtility` and `WeightedList`, using discriminator-validated element objects and a cumulative-weight selection strategy, enabling non-uniform random sampling from explicit probability distributions.
-- Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
+- Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
+- Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
+- Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
+- Provides custom error types to give schema validation failures a consistent, identifiable error type across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -71,33 +72,15 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 
 Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository.
 
-### String and number type-guard utilities
+### Deterministic seeded pseudorandom number generation
 
-`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
-
-**Evidence:**
-
-- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
-- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
-
-### Math utilities
-
-`MathUtility` provides static helpers for numeric operations with explicit validation for number type inputs.
+`SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state to produce a reproducible, uniformly distributed sequence of floats.
+`RandomNumberGeneratorFactory` derives that initial state from a string seed and optional namespace, using either a synchronous FNV-1a hash (with an optional version selecting the hashing offsets) or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
 
 **Evidence:**
 
-- [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
-
-### Discriminator-based type guard registry
-
-`DiscriminatorRegistry` maintains a static map of unique discriminator values to validator functions, returning a reusable `TypeGuard<T>` for each registration and enforcing discriminator shape and uniqueness at registration time.
-The `Discriminated` type and its TypeBox schema define the minimal shape required for a registry-validated object, and `Discriminators` centralizes the discriminator string constants used across the package, such as the one backing `WeightedElement`.
-
-**Evidence:**
-
-- [src/discriminator/discriminator-registry.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminator-registry.ts)
-- [src/discriminator/discriminated.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminated.ts)
-- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
+- [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
+- [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
 
 ### Random number generation and weighted element selection
 
@@ -110,15 +93,41 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 - [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
 - [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
 
-### Deterministic seeded pseudorandom number generation
+### Math utilities
 
-`SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state to produce a reproducible, uniformly distributed sequence of floats.
-`RandomNumberGeneratorFactory` derives that initial state from a string seed and optional namespace, using either a synchronous FNV-1a hash (with an optional version selecting the hashing offsets) or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
+`MathUtility` provides static helpers for numeric operations with explicit validation for number type inputs.
 
 **Evidence:**
 
-- [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
-- [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
+- [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
+
+### String and number type-guard utilities
+
+`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
+
+**Evidence:**
+
+- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
+- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
+
+### Discriminator-based type guard registry
+
+`DiscriminatorRegistry` maintains a static map of unique discriminator values to validator functions, returning a reusable `TypeGuard<T>` for each registration and enforcing discriminator shape and uniqueness at registration time.
+The `Discriminated` type and its TypeBox schema define the minimal shape required for a registry-validated object, and `Discriminators` centralizes the discriminator string constants used across the package, such as the one backing `WeightedElement`.
+
+**Evidence:**
+
+- [src/discriminator/discriminator-registry.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminator-registry.ts)
+- [src/discriminator/discriminated.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminated.ts)
+- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
+
+### Custom typed errors
+
+Custom error types extend native error types and expose a stable Node.js-style error code to give schema validation failures a consistent, identifiable error type for both TypeScript and JavaScript consumers.
+
+**Evidence:**
+
+- [src/error/schema-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/schema-type-error.ts)
 
 ### ESM package contract and artifact layout
 
