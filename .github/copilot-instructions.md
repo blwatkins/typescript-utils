@@ -91,6 +91,16 @@ Static classes must:
 - Include a JSDoc `@throws` on the constructor documenting the instantiation error
 - Expose public static getters or methods only
 
+### Custom Error Types
+
+Custom error classes must:
+
+- Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
+- Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
+- Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
+- Expose a public static `defaultMessage` getter returning the default error message
+- Expose a public `code` getter returning the appropriate Node.js error code (e.g., `ERR_INVALID_ARG_TYPE`)
+
 ### TypeScript Conventions
 
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
