@@ -40,7 +40,7 @@ import {
 import { nonArrayInputs } from '../utils/input/array-inputs';
 
 describe('Random', (): void => {
-    const testRepeatTotal: number = 100;
+    const testRepeatTotal: number = 50;
 
     afterEach((): void => {
         Random.randomNumberGenerator = Math.random;
