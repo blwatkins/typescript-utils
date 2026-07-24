@@ -1,6 +1,6 @@
 {
   "name": "@blwatkins/utils",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "license": "MIT",
   "private": false,
   "description": "A toolkit of TypeScript and JavaScript utilities for number checks, string checks, random number and element selection, deterministic seeded pseudorandom number generation, and a discriminator-based type guard registry.",
