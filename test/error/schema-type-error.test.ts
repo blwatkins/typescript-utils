@@ -24,22 +24,41 @@ import { SchemaTypeError } from '../../src';
 
 describe('SchemaTypeError', (): void => {
     describe('new SchemaTypeError()', (): void => {
-        test('new SchemaTypeError() should extend TypeError', (): void => {
-            expect(() => {
-                throw new SchemaTypeError();
-            }).toThrow(TypeError);
+        test('new SchemaTypeError() should return an instance of SchemaTypeError', (): void => {
+            expect(new SchemaTypeError()).toBeInstanceOf(SchemaTypeError);
+        });
+
+        test('SchemaTypeError should extend TypeError', (): void => {
+            expect(new SchemaTypeError()).toBeInstanceOf(TypeError);
+        });
+    });
+
+    describe('defaultMessage', (): void => {
+        test('Default message should be the expected default message', (): void => {
+            expect(SchemaTypeError.defaultMessage).toBe('Input does not match schema requirements');
         });
     });
 
     describe('code', (): void => {
-        const expectedCode: 'ERR_INVALID_ARG_TYPE' = 'ERR_INVALID_ARG_TYPE' as const;
+        test('Code should be ERR_INVALID_ARG_TYPE', (): void => {
+            expect(new SchemaTypeError().code).toBe('ERR_INVALID_ARG_TYPE');
+        });
+    });
 
-        test(`Error code should be ${expectedCode}`, (): void => {
-            try {
-                throw new SchemaTypeError();
-            } catch (error) {
-                expect((error as SchemaTypeError).code).to.equal(expectedCode);
-            }
+    describe('name', (): void => {
+        test('Name should be SchemaTypeError', (): void => {
+            expect(new SchemaTypeError().name).toBe('SchemaTypeError');
+        });
+    });
+
+    describe('message', (): void => {
+        test('Message should use the default message when not set', (): void => {
+            expect(new SchemaTypeError().message).toBe(SchemaTypeError.defaultMessage);
+        });
+
+        test('Message should use the given message when set', (): void => {
+            const message: string = 'custom schema failure';
+            expect(new SchemaTypeError(message).message).toBe(message);
         });
     });
 });
