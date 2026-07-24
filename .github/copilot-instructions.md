@@ -49,6 +49,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 ```
 src/
   discriminator/          # Discriminated type-guard utilities and registry
+  error/                  # Custom error types
   math/                   # Math utilities
   number/                 # Number utilities
   random/                 # Random number generation utilities
@@ -58,6 +59,7 @@ src/
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
   discriminator/          # Tests for the discriminator module
+  error/                  # Tests for the error module
   math/                   # Tests for the math module
   number/                 # Tests for the number module
   random/                 # Tests for the random module
