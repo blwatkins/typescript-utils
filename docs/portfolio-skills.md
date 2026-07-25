@@ -60,7 +60,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types to give validation failures consistent, identifiable error types across consuming code.
+- Provides custom error types that extend the most specific native error class for each failure mode, giving validation failures consistent, identifiable types across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -123,13 +123,14 @@ The `Discriminated` type and its TypeBox schema define the minimal shape require
 
 ### Custom typed errors
 
-Custom error types extend native error classes to give validation failures consistent, identifiable error types for both TypeScript and JavaScript consumers.
+Custom error types extend the most specific native error class for each failure mode — `TypeError` for type mismatches, `RangeError` for out-of-range values — so validation failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers.
+Each type sets `name` to its class name and exposes a static `defaultMessage`, and the whole family is verified against a single shared contract test suite.
 
 **Evidence:**
 
 - [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
-- [src/error/schema-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/schema-type-error.ts)
 - [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
+- [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 
 ### ESM package contract and artifact layout
 
