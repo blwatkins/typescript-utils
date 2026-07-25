@@ -60,7 +60,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types that extend the most specific native error class for various failure modes, giving validation failures consistent, identifiable types across consuming code.
+- Provides custom error types that extend the most specific native error class for the failure each one represents, giving runtime failures consistent, identifiable types across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -123,13 +123,12 @@ The `Discriminated` type and its TypeBox schema define the minimal shape require
 
 ### Custom typed errors
 
-Custom error types extend the most specific native error class for various failure modes so validation failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers.
-Each type sets `name` to its class name and exposes a static `defaultMessage`, and the whole family is verified against a single shared contract test suite.
+Custom error types share one contract: each extends the most specific native error class for the failure it represents, sets `name` to its own class name, and exposes a static `defaultMessage`.
+A single shared contract test suite verifies every member of the family, so failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers as new error types are added.
 
 **Evidence:**
 
-- [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
-- [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
+- [src/error directory](https://github.com/blwatkins/typescript-utils/tree/main/src/error)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 
 ### ESM package contract and artifact layout
