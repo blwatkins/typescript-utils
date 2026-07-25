@@ -12,8 +12,8 @@ The two documents serve overlapping audiences and should stay consistent: when y
 
 ## Tech Stack
 
-- **Language:** TypeScript (targeting ES2022)
-- **Runtime:** Node.js (^22.22.0 || >=24)
+- **Language:** TypeScript
+- **Runtime:** Node.js
 - **Package manager:** npm
 - **Build:** tsdown (ESM output)
 - **Test:** Vitest (coverage via V8)
