@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-24
+modified_date: 2026-07-25
 toc: true
 ---
 
@@ -16,7 +16,7 @@ This page is a technical record of the skills, tools, and engineering practices 
 
 ## Project Overview
 
-TypeScript Utilities (`@blwatkins/utils`) is a toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
+TypeScript Utilities (`@blwatkins/utils`) is a toolkit of general-purpose TypeScript and JavaScript utilities, including validation, custom error types, mathematical operations, random number generation, random selection, and type-safe guards.
 The repository is maintained at [blwatkins/typescript-utils](https://github.com/blwatkins/typescript-utils), and it is built with TypeScript and tsdown.
 
 ## At a Glance
@@ -60,7 +60,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types to give schema and type validation failures consistent, identifiable error types across consuming code.
+- Provides custom error types to give schema, primitive-type, and value-range validation failures consistent, identifiable error types across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -123,12 +123,13 @@ The `Discriminated` type and its TypeBox schema define the minimal shape require
 
 ### Custom typed errors
 
-Custom error types extend native error classes to give schema and type validation failures consistent, identifiable error types for both TypeScript and JavaScript consumers.
+Custom error types extend native error classes to give schema, primitive-type, and value-range validation failures consistent, identifiable error types for both TypeScript and JavaScript consumers.
 
 **Evidence:**
 
 - [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
 - [src/error/schema-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/schema-type-error.ts)
+- [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
 
 ### ESM package contract and artifact layout
 

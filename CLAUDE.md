@@ -15,7 +15,7 @@ Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilo
 
 ## Project Summary
 
-A toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
+A toolkit of general-purpose TypeScript and JavaScript utilities, including validation, custom error types, mathematical operations, random number generation, random selection, and type-safe guards.
 
 ## npm Commands
 
