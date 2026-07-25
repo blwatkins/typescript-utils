@@ -37,7 +37,7 @@ export class SeededRandomNumberGenerator {
     readonly #state: [number, number, number, number];
 
     /**
-     * {@link SeededRandomNumberGenerator} constructor.
+     * Public constructor.
      *
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
