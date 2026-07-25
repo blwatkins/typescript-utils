@@ -20,43 +20,39 @@
 
 import { describe, test, expect } from 'vitest';
 
-export function testErrorType(name: string, constructor: new() => unknown, inheritedType: new() => Error /* defaultMessage: string, code: string */): void {
+import { UtilsError } from '../../../src';
+
+export function testErrorType(name: string, ErrorConstructor: new(message?: string) => UtilsError, InheritedErrorType: new() => Error, expectedDefaultMessage: string, expectedCode: string): void {
     describe(`new ${name}()`, (): void => {
-        test(`new ${name}() should return an instance of ${name}`, (): void => {
-            expect(new constructor()).toBeInstanceOf(constructor);
+        test(`new ${name}() should return an instance of ${ErrorConstructor.name}`, (): void => {
+            expect(new ErrorConstructor()).toBeInstanceOf(ErrorConstructor);
         });
 
-        test(`${name} should extend ${inheritedType.name}`, (): void => {
-            expect(new constructor()).toBeInstanceOf(inheritedType);
+        test(`${name} should extend ${InheritedErrorType.name}`, (): void => {
+            expect(new ErrorConstructor()).toBeInstanceOf(InheritedErrorType);
         });
     });
 
-    // describe('defaultMessage', (): void => {
-    //     test('Default message should be the expected default message', (): void => {
-    //         expect(SchemaTypeError.defaultMessage).toBe('Input does not match schema requirements');
-    //     });
-    // });
-    //
-    // describe('code', (): void => {
-    //     test('Code should be ERR_INVALID_ARG_TYPE', (): void => {
-    //         expect(new SchemaTypeError().code).toBe('ERR_INVALID_ARG_TYPE');
-    //     });
-    // });
-    //
-    // describe('name', (): void => {
-    //     test('Name should be SchemaTypeError', (): void => {
-    //         expect(new SchemaTypeError().name).toBe('SchemaTypeError');
-    //     });
-    // });
-    //
-    // describe('message', (): void => {
-    //     test('Message should use the default message when not set', (): void => {
-    //         expect(new SchemaTypeError().message).toBe(SchemaTypeError.defaultMessage);
-    //     });
-    //
-    //     test('Message should use the given message when set', (): void => {
-    //         const message: string = 'custom schema failure';
-    //         expect(new SchemaTypeError(message).message).toBe(message);
-    //     });
-    // });
+    describe('code', (): void => {
+        test(`Error code should be ${expectedCode}`, (): void => {
+            expect(new ErrorConstructor().code).toBe(expectedCode);
+        });
+    });
+
+    describe('name', (): void => {
+        test(`Name should be ${name}`, (): void => {
+            expect(new ErrorConstructor().name).toBe(name);
+        });
+    });
+
+    describe('message', (): void => {
+        test('Message should use the default message when not set', (): void => {
+            expect(new ErrorConstructor().message).toBe(expectedDefaultMessage);
+        });
+
+        test('Message should use the given message when set', (): void => {
+            const message: string = 'TEST FAILURE MESSAGE';
+            expect(new ErrorConstructor(message).message).toBe(message);
+        });
+    });
 }

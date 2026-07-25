@@ -20,20 +20,20 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { SchemaTypeError } from '../../src';
+import { PrimitiveTypeError } from '../../src';
 
 import { testErrorType } from '../utils/error/error-tests';
 
-const name: string = 'SchemaTypeError';
-const defaultMessage: string = 'Input does not match schema requirements';
+const name: string = 'PrimitiveTypeError';
+const defaultMessage: string = 'Input does not match type requirements';
 const code: string = 'ERR_INVALID_ARG_TYPE';
 
 describe(name, (): void => {
-    testErrorType(name, SchemaTypeError, TypeError, defaultMessage, code);
+    testErrorType(name, PrimitiveTypeError, TypeError, defaultMessage, code);
 
     describe('defaultMessage', (): void => {
         test(`Default message should be ${defaultMessage}`, (): void => {
-            expect(SchemaTypeError.defaultMessage).toBe(defaultMessage);
+            expect(PrimitiveTypeError.defaultMessage).toBe(defaultMessage);
         });
     });
 });
