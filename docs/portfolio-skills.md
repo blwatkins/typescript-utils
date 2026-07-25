@@ -58,9 +58,9 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - Provides a static `Random` class for generating random numbers, booleans, and selecting random elements from arrays, with a configurable underlying random function to enable use with seeded generators or custom sources.
 - Provides typed weighted random selection via `WeightedElementUtility` and `WeightedList`, using discriminator-validated element objects and a cumulative-weight selection strategy, enabling non-uniform random sampling from explicit probability distributions.
 - Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
-- Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
+- Implements reusable static utility classes that group common runtime type checks by value domain, improving consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types that extend the most specific native error class for each failure mode, giving validation failures consistent, identifiable types across consuming code.
+- Provides custom error types that extend the most specific native error class for the failure each one represents, giving runtime failures consistent, identifiable types across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -101,9 +101,9 @@ The `Random` class centralizes random number, boolean, and array-element selecti
 
 - [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
 
-### String and number type-guard utilities
+### Static type-guard utilities
 
-`StringUtility` and `NumberUtility` provide static runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
+Static utility classes provide runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
 
 **Evidence:**
 
@@ -123,13 +123,14 @@ The `Discriminated` type and its TypeBox schema define the minimal shape require
 
 ### Custom typed errors
 
-Custom error types extend the most specific native error class for each failure mode — `TypeError` for type mismatches, `RangeError` for out-of-range values — so validation failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers.
-Each type sets `name` to its class name and exposes a static `defaultMessage`, and the whole family is verified against a single shared contract test suite.
+Custom error types share one contract: each extends the most specific native error class for the failure it represents, sets `name` to its own class name, and exposes a static `defaultMessage`.
+A single shared contract test suite verifies every member of the family, so failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers as new error types are added.
 
 **Evidence:**
 
 - [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
 - [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
+- [src/error/static-instance-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/static-instance-error.ts)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 
 ### ESM package contract and artifact layout
@@ -172,8 +173,12 @@ Shared test input fixtures, scenario builders, and reusable contract test suites
 **Evidence:**
 
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
+- [test/error/schema-type-error.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/error/schema-type-error.test.ts)
+- [test/random/seeded-random/random-number-generator-factory.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/random-number-generator-factory.test.ts)
+- [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
+- [test/utils/static/static-class-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/static/static-class-tests.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 
 ### CI verification gates
@@ -201,7 +206,7 @@ Release-specific docs are stored under a versioned directory structure in `docs/
 ### Security scanning and dependency update automation
 
 Security analysis is automated with a dedicated CodeQL workflow covering Actions and repository code languages.
-Dependency updates are automated with Dependabot for npm, GitHub Actions, and Bundler ecosystems, and package publishing uses trusted publishing permissions.
+Dependency updates are automated with Dependabot across the project's configured package ecosystems, and package publishing uses trusted publishing permissions.
 
 **Evidence:**
 
@@ -211,6 +216,6 @@ Dependency updates are automated with Dependabot for npm, GitHub Actions, and Bu
 
 ## Current Gaps / Future Improvements
 
-- The package is currently in an alpha release line; additional utility domains and API surface are still being developed.
+- The public API surface is still expanding and additional utility domains are planned; `package.json` is the authoritative signal of current release maturity.
 - Tests currently focus on unit-level utility behavior; higher-level integration or consumer-facing examples are not yet part of the verification strategy.
 - Release documentation under `docs/releases/...` is maintained manually, which can increase maintenance overhead as release volume grows.

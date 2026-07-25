@@ -18,7 +18,36 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './primitive-type-error';
-export * from './schema-type-error';
-export * from './static-instance-error';
-export * from './value-range-error';
+/**
+ * An error thrown when the constructor of a static class is called.
+ * This error is typically used in constructors for classes that only contain static properties and methods.
+ *
+ * @since 0.1.0
+ */
+export class StaticInstanceError extends TypeError {
+    /**
+     * Public constructor.
+     *
+     * @param {string} message - The error message.
+     * Default value is {@link StaticInstanceError.defaultMessage}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public constructor(message: string = StaticInstanceError.defaultMessage) {
+        super(message);
+        this.name = 'StaticInstanceError';
+    }
+
+    /**
+     * Get the default error message.
+     *
+     * @returns {string} - The default error message for {@link StaticInstanceError}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get defaultMessage(): string {
+        return 'This class is static and cannot be instantiated';
+    }
+}

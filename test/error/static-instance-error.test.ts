@@ -18,7 +18,15 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './primitive-type-error';
-export * from './schema-type-error';
-export * from './static-instance-error';
-export * from './value-range-error';
+import { describe } from 'vitest';
+
+import { StaticInstanceError } from '../../src';
+
+import { testErrorType } from '../utils/error/error-tests';
+
+const name: string = 'StaticInstanceError';
+const defaultMessage: string = 'This class is static and cannot be instantiated';
+
+describe(name, (): void => {
+    testErrorType(name, StaticInstanceError, TypeError, defaultMessage);
+});
