@@ -28,18 +28,22 @@ import {
     WeightedList
 } from '../../src';
 
+import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
-import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 import {
     asciiNamespace,
     asciiSeed, getExpectedAsyncSequence,
     getExpectedSequence
 } from '../utils/test-case/scenarios/random-number-generator-factory-scenarios';
-import { nonArrayInputs } from '../utils/input/array-inputs';
+
+import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
 
 describe('Random', (): void => {
+    testStaticClassConstructor('Random', Random as unknown as new () => unknown, Error);
+
     const testRepeatTotal: number = 50;
 
     afterEach((): void => {
@@ -127,15 +131,6 @@ describe('Random', (): void => {
         const elementSet: Set<unknown> = new Set<unknown>(selected);
         expect(elementSet.size).toBe(input.length);
     }
-
-    describe('new Random()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = Random as unknown as new () => Random;
-                expect((): Random => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
 
     describe('randomNumberGenerator', (): void => {
         describe('Setting random number generator should impact the values returned by all other methods', (): void => {

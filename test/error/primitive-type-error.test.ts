@@ -20,13 +20,13 @@
 
 import { describe } from 'vitest';
 
-import { SchemaTypeError } from '../../src';
+import { PrimitiveTypeError } from '../../src';
 
 import { testErrorType } from '../utils/error/error-tests';
 
-const name: string = 'SchemaTypeError';
-const defaultMessage: string = 'Input does not match schema requirements';
+const name: string = 'PrimitiveTypeError';
+const defaultMessage: string = 'Input does not match primitive type requirements';
 
 describe(name, (): void => {
-    testErrorType(name, SchemaTypeError, TypeError, defaultMessage);
+    testErrorType(name, PrimitiveTypeError, TypeError, defaultMessage);
 });

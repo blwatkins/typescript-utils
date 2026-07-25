@@ -22,7 +22,6 @@
  * An error thrown when an input does not match the shape or schema of the expected data structure.
  * This error is typically used in validation or assertion scenarios where the input data does not conform to the expected schema.
  *
- * @public
  * @since 0.1.0
  */
 export class SchemaTypeError extends TypeError {
@@ -50,17 +49,5 @@ export class SchemaTypeError extends TypeError {
      */
     public static get defaultMessage(): string {
         return 'Input does not match schema requirements';
-    }
-
-    /**
-     * Get the Node.js error code.
-     *
-     * @returns {string} - The Node.js error code for {@link SchemaTypeError}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public get code(): string {
-        return 'ERR_INVALID_ARG_TYPE';
     }
 }

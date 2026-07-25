@@ -60,7 +60,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types to give schema validation failures a consistent, identifiable error type across consuming code.
+- Provides custom error types to give schema and type validation failures consistent, identifiable error types across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -123,10 +123,11 @@ The `Discriminated` type and its TypeBox schema define the minimal shape require
 
 ### Custom typed errors
 
-Custom error types extend native error types and expose a stable Node.js-style error code to give schema validation failures a consistent, identifiable error type for both TypeScript and JavaScript consumers.
+Custom error types extend native error classes to give schema and type validation failures consistent, identifiable error types for both TypeScript and JavaScript consumers.
 
 **Evidence:**
 
+- [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
 - [src/error/schema-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/schema-type-error.ts)
 
 ### ESM package contract and artifact layout
@@ -164,12 +165,13 @@ JavaScript and TypeScript lint configurations apply recommended and stricter rul
 ### Test strategy and scenario-driven fixtures
 
 The project uses Vitest for repeatable unit testing, including compile-time type checking of test files.
-Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
+Shared test input fixtures, scenario builders, and reusable contract test suites in `test/utils` support scenario-driven testing and consistent validation of cross-cutting behavior across modules.
 
 **Evidence:**
 
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
+- [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 
 ### CI verification gates

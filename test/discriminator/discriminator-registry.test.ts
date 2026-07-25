@@ -26,9 +26,12 @@ import { Discriminated, DiscriminatorRegistration, DiscriminatorRegistry, TypeGu
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
 import { emptyStringInputs, nonStringInputs, singleLineTrimmedFailureInputs } from '../utils/input/string-inputs';
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('DiscriminatorRegistry', (): void => {
+    testStaticClassConstructor('DiscriminatorRegistry', DiscriminatorRegistry as unknown as new () => unknown, Error);
+
     enum TestDiscriminators {
         TEST = '@blwatkins/utils:DiscriminatorRegistryTests'
     }
@@ -45,15 +48,6 @@ describe('DiscriminatorRegistry', (): void => {
                 && (input as Discriminated).discriminator === TestDiscriminators.TEST.valueOf()
                 && typeof (input as TestObject).key === 'string';
         }
-    });
-
-    describe('new DiscriminatorRegistry()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = DiscriminatorRegistry as unknown as new () => DiscriminatorRegistry;
-                expect((): DiscriminatorRegistry => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
     });
 
     describe('has', (): void => {

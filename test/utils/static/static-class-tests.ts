@@ -18,15 +18,14 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
-import { SchemaTypeError } from '../../src';
-
-import { testErrorType } from '../utils/error/error-tests';
-
-const name: string = 'SchemaTypeError';
-const defaultMessage: string = 'Input does not match schema requirements';
-
-describe(name, (): void => {
-    testErrorType(name, SchemaTypeError, TypeError, defaultMessage);
-});
+export function testStaticClassConstructor(name: string, Constructor: new() => unknown, ErrorType: new() => Error): void {
+    describe(`new ${name}()`, (): void => {
+        describe('Runtime behavior guards', (): void => {
+            test(`Constructor should throw ${ErrorType.name} when instantiated at runtime`, (): void => {
+                expect((): unknown => new Constructor()).toThrow(ErrorType);
+            });
+        });
+    });
+}

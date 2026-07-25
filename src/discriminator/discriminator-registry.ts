@@ -25,7 +25,6 @@ import { Discriminated } from './discriminated';
 /**
  * A type guard function that checks if an input is of a specific {@link Discriminated} type.
  *
- * @public
  * @since 0.1.0
  */
 export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
@@ -33,7 +32,6 @@ export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
  *
- * @public
  * @since 0.1.0
  */
 export interface DiscriminatorRegistration {
@@ -65,7 +63,6 @@ export interface DiscriminatorRegistration {
  * Static registry for managing discriminators and their associated type guards.
  * Discriminators are used to identify the type of a {@link Discriminated} object and validate it using a registered type guard function.
  *
- * @public
  * @since 0.1.0
  */
 export class DiscriminatorRegistry {
