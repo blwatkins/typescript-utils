@@ -33,6 +33,7 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
   described in the "Portfolio Page Generation and Maintenance" section of
   `.github/copilot-instructions.md`.
 - Release documentation under `docs/releases/` is maintained manually.
+- Markdown indentation rules for all repository `.md` files are in the ["Markdown Formatting" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#markdown-formatting).
 
 ## Pre-Merge and Release Review
 
