@@ -378,87 +378,87 @@ Key Technologies: [list 3-5 core tech choices]
 Generate a Markdown file with these sections in order:
 
 1. **Front Matter** (Jekyll metadata):
-  - title: "[PROJECT_NAME] - Demonstrated Portfolio Skills"
-  - layout: post
-  - date: [CREATION_DATE in YYYY-MM-DD]
-  - modified_date: [TODAY_DATE in YYYY-MM-DD]
-  - toc: true
+   - title: "[PROJECT_NAME] - Demonstrated Portfolio Skills"
+   - layout: post
+   - date: [CREATION_DATE in YYYY-MM-DD]
+   - modified_date: [TODAY_DATE in YYYY-MM-DD]
+   - toc: true
 
 2. **About This Page**
-  - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
+   - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
 
 3. **Project Overview** (2–3 sentences)
-  - What is this project and what does it help you build?
-  - Link to the GitHub repository
-  - Mention 2–3 key technologies
+   - What is this project and what does it help you build?
+   - Link to the GitHub repository
+   - Mention 2–3 key technologies
 
 4. **At a Glance** (bulleted list)
-  - Project Type
-  - Primary Language
-  - Primary Runtime
-  - Primary Framework/Library (if applicable)
-  - Rendering Library/Engine (if applicable)
-  - Build Pipeline (if applicable)
-  - Quality Controls (if applicable)
-  - Automation (if applicable)
-  - Dependency Automation (if applicable)
-  - Security Analysis (if applicable)
-  - Documentation Pattern (if applicable)
+   - Project Type
+   - Primary Language
+   - Primary Runtime
+   - Primary Framework/Library (if applicable)
+   - Rendering Library/Engine (if applicable)
+   - Build Pipeline (if applicable)
+   - Quality Controls (if applicable)
+   - Automation (if applicable)
+   - Dependency Automation (if applicable)
+   - Security Analysis (if applicable)
+   - Documentation Pattern (if applicable)
 
 Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
 
 5. **Skills and Tooling Inventory** (flat bulleted list with bold category labels, e.g., `- **Category:** [Tool](url), [Tool](url)`)
-  - Languages
-  - Runtime (or similar category)
-  - Frameworks (or similar category)
-  - Libraries (or similar category)
-  - Testing
-  - Build / Bundling
-  - Code Quality
-  - Documentation
-  - Site Generation
-  - Dependency Management
-  - Versioning & Platform
-  - Automation
-  - Hosting & Deployment
-  - Code Analysis / Security
-  - Dependency Automation
-  - Development Utilities
-  - Environment Configuration (or similar category)
-  - Development Environments
-  - AI-Assisted Development
+   - Languages
+   - Runtime (or similar category)
+   - Frameworks (or similar category)
+   - Libraries (or similar category)
+   - Testing
+   - Build / Bundling
+   - Code Quality
+   - Documentation
+   - Site Generation
+   - Dependency Management
+   - Versioning & Platform
+   - Automation
+   - Hosting & Deployment
+   - Code Analysis / Security
+   - Dependency Automation
+   - Development Utilities
+   - Environment Configuration (or similar category)
+   - Development Environments
+   - AI-Assisted Development
 
 Link each tool/language to its official documentation.
 Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
 Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
-  - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
-  - Each label must exactly match the heading of its `Detailed Technical Notes` subsection, so the two sections map one to one
-  - Each bullet should connect implementation to engineering value
-  - Use language like "...to improve [benefit]" or "...enabling [outcome]"
-  - Avoid just listing tech names
-  - Keep statements durable; avoid time-sensitive details
+   - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
+   - Each label must exactly match the heading of its `Detailed Technical Notes` subsection, so the two sections map one to one
+   - Each bullet should connect implementation to engineering value
+   - Use language like "...to improve [benefit]" or "...enabling [outcome]"
+   - Avoid just listing tech names
+   - Keep statements durable; avoid time-sensitive details
 
 7. **Detailed Technical Notes** (subsections with evidence)
-  - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
-  - Create one subsection per `Capability Record` bullet, 5–7 total, in the same order, with headings that exactly match the bullet labels
-  - Each subsection contains:
-    - 1–2 claim sentences
-    - An "Evidence:" section with direct GitHub links to source files
-  - **Critical rule:** every claim must link to evidence that *directly* proves it
-    - Evidence does not need to enumerate every implementation instance in the repository. A representative selection that successfully demonstrates the claim is sufficient
-    - If claiming "output to directory X", link config/build files, not just example files
-    - If claiming "TypeScript configuration", link `tsconfig.*`, ESLint config, or build config files, not just `.ts` source files
-    - If describing current project behavior, prefer evidence that reflects the current runtime/configured implementation path, not only an illustrative or older example
-    - If a claim spans multiple concerns, link relevant files needed to support it
-  - Focus on implementation facts and engineering intent, not promotional phrasing
+   - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
+   - Create one subsection per `Capability Record` bullet, 5–7 total, in the same order, with headings that exactly match the bullet labels
+   - Each subsection contains:
+     - 1–2 claim sentences
+     - An "Evidence:" section with direct GitHub links to source files
+   - **Critical rule:** every claim must link to evidence that *directly* proves it
+     - Evidence does not need to enumerate every implementation instance in the repository. A representative selection that successfully demonstrates the claim is sufficient
+     - If claiming "output to directory X", link config/build files, not just example files
+     - If claiming "TypeScript configuration", link `tsconfig.*`, ESLint config, or build config files, not just `.ts` source files
+     - If describing current project behavior, prefer evidence that reflects the current runtime/configured implementation path, not only an illustrative or older example
+     - If a claim spans multiple concerns, link relevant files needed to support it
+   - Focus on implementation facts and engineering intent, not promotional phrasing
 
 8. **Current Gaps / Future Improvements** (bulleted list)
-  - 2–4 concise bullets describing what the project or template does NOT cover
-  - Be honest about intentional scope limits
-  - Include automation, testing, documentation, or deployment gaps where applicable
-  - Avoid defensive language; treat gaps as engineering decisions or next-step opportunities
+   - 2–4 concise bullets describing what the project or template does NOT cover
+   - Be honest about intentional scope limits
+   - Include automation, testing, documentation, or deployment gaps where applicable
+   - Avoid defensive language; treat gaps as engineering decisions or next-step opportunities
 
 ## Tone & Style Guidelines
 
@@ -514,20 +514,20 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 2. **Paste the entire prompt into Copilot** (or your IDE's inline AI assistant).
 
 3. **Review the output** against this checklist:
-  ```markdown
-  - [ ] Section structure matches the portfolio page pattern
-  - [ ] Overview is clear and not over-claiming scope
-  - [ ] "At a Glance" is scannable and terminology is precise
-  - [ ] Capability Record has 5–7 bullets and Detailed Technical Notes has one matching subsection per bullet, in the same order
-  - [ ] Capability Record bullets explain technical value, not just tech names
-  - [ ] Every highlight was ranked against the selection criteria, and dropped candidates were dropped rather than merged into unrelated ones
-  - [ ] Any merged highlight combines candidates that answer the same engineering question
-  - [ ] Every technical claim has direct evidence links
-  - [ ] Evidence is representative of the current implementation/configured behavior
-  - [ ] Time-sensitive details are durable or intentionally maintained
-  - [ ] Tooling/runtime/security wording is accurate, and inventory categories do not mix unrelated concerns
-  - [ ] "Current Gaps / Future Improvements" is present and meaningful
-  - [ ] Final read feels evidence-based, concise, and professional
+   ```markdown
+   - [ ] Section structure matches the portfolio page pattern
+   - [ ] Overview is clear and not over-claiming scope
+   - [ ] "At a Glance" is scannable and terminology is precise
+   - [ ] Capability Record has 5–7 bullets and Detailed Technical Notes has one matching subsection per bullet, in the same order
+   - [ ] Capability Record bullets explain technical value, not just tech names
+   - [ ] Every highlight was ranked against the selection criteria, and dropped candidates were dropped rather than merged into unrelated ones
+   - [ ] Any merged highlight combines candidates that answer the same engineering question
+   - [ ] Every technical claim has direct evidence links
+   - [ ] Evidence is representative of the current implementation/configured behavior
+   - [ ] Time-sensitive details are durable or intentionally maintained
+   - [ ] Tooling/runtime/security wording is accurate, and inventory categories do not mix unrelated concerns
+   - [ ] "Current Gaps / Future Improvements" is present and meaningful
+   - [ ] Final read feels evidence-based, concise, and professional
    ```
 
 4. **Iterate** if needed:
