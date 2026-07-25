@@ -164,12 +164,13 @@ JavaScript and TypeScript lint configurations apply recommended and stricter rul
 ### Test strategy and scenario-driven fixtures
 
 The project uses Vitest for repeatable unit testing, including compile-time type checking of test files.
-Shared test input fixtures and scenario builders in `test/utils` support scenario-driven test suites and validation across modules.
+Shared test input fixtures, scenario builders, and reusable contract test suites in `test/utils` support scenario-driven testing and consistent validation of cross-cutting behavior across modules.
 
 **Evidence:**
 
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
+- [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 
 ### CI verification gates

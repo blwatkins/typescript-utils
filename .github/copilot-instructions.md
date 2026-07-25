@@ -67,7 +67,9 @@ test/                     # Vitest test suites (mirrors src/ module structure)
     weighted-element/     # Tests for the weighted-element module
   string/                 # Tests for the string module
   utils/                  # Shared test fixtures and scenario helpers for use across test suites
+    error/                # Shared contract test suites for custom error types
     input/                # Shared test input fixtures
+    static/               # Shared contract test suites for static class instantiation guards
     test-case/            # Shared test-case helpers
       scenarios/          # Reusable test-case scenario definitions
 docs/                     # GitHub Pages site content and manually maintained release documentation
@@ -95,11 +97,11 @@ Static classes must:
 
 Custom error classes must:
 
+- Live in `src/error/` and be re-exported from `src/error/index.ts`
 - Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
 - Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
 - Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
 - Expose a public static `defaultMessage` getter returning the default error message
-- Expose a public `code` getter returning the appropriate Node.js error code (e.g., `ERR_INVALID_ARG_TYPE`)
 
 ### TypeScript Conventions
 
@@ -212,10 +214,13 @@ Use `.md` relative links within `docs/` source files; the build process will con
 
 ### Vitest Testing
 
-This repository uses Vitest for testing, with coverage reporting via V8.
-Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
-Shared test fixtures and scenario helpers live under `test/utils`.
-Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
+- This repository uses Vitest for testing, with coverage reporting via V8. 
+- Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
+- Shared test fixtures and scenario helpers live under `test/utils`.
+- Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
+- Cross-cutting behavior that every member of a family of types must satisfy—for example, the custom error type contract, or the static class instantiation guard—is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file (e.g., `testErrorType` in `test/utils/error/error-tests.ts`, `testStaticClassConstructor` in `test/utils/static/static-class-tests.ts`).
+- Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
+- Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
 ### Validation Steps
 
