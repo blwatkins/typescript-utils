@@ -19,7 +19,7 @@
  */
 
 /**
- * An error thrown when a constructor is called for a static class.
+ * An error thrown when the constructor of a static class is called.
  * This error is typically used in constructors for classes that only contain static properties and methods.
  *
  * @since 0.1.0
