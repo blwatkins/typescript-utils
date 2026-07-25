@@ -58,7 +58,7 @@ Each capability below is expanded with supporting evidence in the correspondingl
 
 - **Version-pinned deterministic randomness** — generates reproducible pseudorandom sequences from string seeds and holds published hash versions immutable, so a given seed keeps producing the same sequence across releases and consumers can depend on that stability.
 - **Documentation as an enforced contract** — treats API documentation as a build gate rather than a convention, failing lint on incomplete doc comments and failing the documentation build on unresolved links or undocumented symbols, to keep published reference material trustworthy.
-- **Strict compile-time posture** — applies strict compiler settings and type-aware lint rules and pins usable language syntax to the ECMAScript version the build targets to catch defects and accidental syntax drift before a change reaches a release.
+- **Strict compile-time posture** — applies strict compiler settings and type-aware lint rules, and pins usable language syntax to the ECMAScript version the build targets, to catch defects and accidental syntax drift before a change reaches a release.
 - **Reusable runtime type narrowing** — provides a schema-validated registry that turns a registered validator into a reusable type guard, enabling discriminated union patterns without duplicating validation logic at each call site.
 - **Layered verification** — verifies behavior through type-checked test sources, shared contract suites, and continuous integration across supported Node.js release lines, to improve confidence that changes are safe across environments.
 - **Runtime contract for JavaScript consumers** — pairs compile-time narrowing with runtime validation and a consistent error vocabulary, so callers without type checking receive the same input safety and the same identifiable failures as TypeScript callers.
@@ -89,6 +89,7 @@ TypeDoc then generates the API reference with warnings treated as errors and val
 
 - [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
 - [typedoc.json](https://github.com/blwatkins/typescript-utils/blob/main/typedoc.json)
+- [gh-pages-jekyll.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/gh-pages-jekyll.yml)
 - [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
 
 ### Strict compile-time posture

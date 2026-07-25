@@ -34,6 +34,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 - `npm run test:coverage` - run Vitest with V8 coverage reporting
 - `npm run docs` - generate API documentation with TypeDoc
 - `npm run prepack` - build the package before packing or publishing
+- `npm run validate` - run lint, documentation generation, build, and tests in sequence
 
 ## GitHub Actions CI
 
@@ -236,7 +237,9 @@ Use `.md` relative links within `docs/` source files; the build process will con
 
 ### Validation Steps
 
-Run in order: `npm ci`, `npm run lint:all`, `npm run build`, `npm test`. See the ["npm Scripts" section](#npm-scripts) for details on each command.
+Run `npm ci`, then `npm run validate`, which runs lint, documentation generation, build, and tests in sequence.
+The documentation step is part of validation because TypeDoc is configured to treat warnings as errors, so an undocumented symbol or an unresolved link fails the run.
+See the ["npm Scripts" section](#npm-scripts) for details on each command.
 
 ### Link Verification
 
@@ -375,87 +378,87 @@ Key Technologies: [list 3-5 core tech choices]
 Generate a Markdown file with these sections in order:
 
 1. **Front Matter** (Jekyll metadata):
-   - title: "[PROJECT_NAME] - Demonstrated Portfolio Skills"
-   - layout: post
-   - date: [CREATION_DATE in YYYY-MM-DD]
-   - modified_date: [TODAY_DATE in YYYY-MM-DD]
-   - toc: true
+  - title: "[PROJECT_NAME] - Demonstrated Portfolio Skills"
+  - layout: post
+  - date: [CREATION_DATE in YYYY-MM-DD]
+  - modified_date: [TODAY_DATE in YYYY-MM-DD]
+  - toc: true
 
 2. **About This Page**
-   - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
+  - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
 
 3. **Project Overview** (2–3 sentences)
-   - What is this project and what does it help you build?
-   - Link to the GitHub repository
-   - Mention 2–3 key technologies
+  - What is this project and what does it help you build?
+  - Link to the GitHub repository
+  - Mention 2–3 key technologies
 
 4. **At a Glance** (bulleted list)
-   - Project Type
-   - Primary Language
-   - Primary Runtime
-   - Primary Framework/Library (if applicable)
-   - Rendering Library/Engine (if applicable)
-   - Build Pipeline (if applicable)
-   - Quality Controls (if applicable)
-   - Automation (if applicable)
-   - Dependency Automation (if applicable)
-   - Security Analysis (if applicable)
-   - Documentation Pattern (if applicable)
+  - Project Type
+  - Primary Language
+  - Primary Runtime
+  - Primary Framework/Library (if applicable)
+  - Rendering Library/Engine (if applicable)
+  - Build Pipeline (if applicable)
+  - Quality Controls (if applicable)
+  - Automation (if applicable)
+  - Dependency Automation (if applicable)
+  - Security Analysis (if applicable)
+  - Documentation Pattern (if applicable)
 
    Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
 
 5. **Skills and Tooling Inventory** (flat bulleted list with bold category labels, e.g., `- **Category:** [Tool](url), [Tool](url)`)
-   - Languages
-   - Runtime (or similar category)
-   - Frameworks (or similar category)
-   - Libraries (or similar category)
-   - Testing
-   - Build / Bundling
-   - Code Quality
-   - Documentation
-   - Site Generation
-   - Dependency Management
-   - Versioning & Platform
-   - Automation
-   - Hosting & Deployment
-   - Code Analysis / Security
-   - Dependency Automation
-   - Development Utilities
-   - Environment Configuration (or similar category)
-   - Development Environments
-   - AI-Assisted Development
+  - Languages
+  - Runtime (or similar category)
+  - Frameworks (or similar category)
+  - Libraries (or similar category)
+  - Testing
+  - Build / Bundling
+  - Code Quality
+  - Documentation
+  - Site Generation
+  - Dependency Management
+  - Versioning & Platform
+  - Automation
+  - Hosting & Deployment
+  - Code Analysis / Security
+  - Dependency Automation
+  - Development Utilities
+  - Environment Configuration (or similar category)
+  - Development Environments
+  - AI-Assisted Development
 
    Link each tool/language to its official documentation.
    Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
    Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
-   - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
-   - Each label must exactly match the heading of its `Detailed Technical Notes` subsection, so the two sections map one to one
-   - Each bullet should connect implementation to engineering value
-   - Use language like "...to improve [benefit]" or "...enabling [outcome]"
-   - Avoid just listing tech names
-   - Keep statements durable; avoid time-sensitive details
+  - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
+  - Each label must exactly match the heading of its `Detailed Technical Notes` subsection, so the two sections map one to one
+  - Each bullet should connect implementation to engineering value
+  - Use language like "...to improve [benefit]" or "...enabling [outcome]"
+  - Avoid just listing tech names
+  - Keep statements durable; avoid time-sensitive details
 
 7. **Detailed Technical Notes** (subsections with evidence)
-   - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
-   - Create one subsection per `Capability Record` bullet, 5–7 total, in the same order, with headings that exactly match the bullet labels
-   - Each subsection contains:
-      - 1–2 claim sentences
-      - An "Evidence:" section with direct GitHub links to source files
-   - **Critical rule:** every claim must link to evidence that *directly* proves it
-     - Evidence does not need to enumerate every implementation instance in the repository. A representative selection that successfully demonstrates the claim is sufficient
-     - If claiming "output to directory X", link config/build files, not just example files
-     - If claiming "TypeScript configuration", link `tsconfig.*`, ESLint config, or build config files, not just `.ts` source files
-     - If describing current project behavior, prefer evidence that reflects the current runtime/configured implementation path, not only an illustrative or older example
-     - If a claim spans multiple concerns, link relevant files needed to support it
-   - Focus on implementation facts and engineering intent, not promotional phrasing
+  - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
+  - Create one subsection per `Capability Record` bullet, 5–7 total, in the same order, with headings that exactly match the bullet labels
+  - Each subsection contains:
+    - 1–2 claim sentences
+    - An "Evidence:" section with direct GitHub links to source files
+  - **Critical rule:** every claim must link to evidence that *directly* proves it
+    - Evidence does not need to enumerate every implementation instance in the repository. A representative selection that successfully demonstrates the claim is sufficient
+    - If claiming "output to directory X", link config/build files, not just example files
+    - If claiming "TypeScript configuration", link `tsconfig.*`, ESLint config, or build config files, not just `.ts` source files
+    - If describing current project behavior, prefer evidence that reflects the current runtime/configured implementation path, not only an illustrative or older example
+    - If a claim spans multiple concerns, link relevant files needed to support it
+  - Focus on implementation facts and engineering intent, not promotional phrasing
 
 8. **Current Gaps / Future Improvements** (bulleted list)
-   - 2–4 concise bullets describing what the project or template does NOT cover
-   - Be honest about intentional scope limits
-   - Include automation, testing, documentation, or deployment gaps where applicable
-   - Avoid defensive language; treat gaps as engineering decisions or next-step opportunities
+  - 2–4 concise bullets describing what the project or template does NOT cover
+  - Be honest about intentional scope limits
+  - Include automation, testing, documentation, or deployment gaps where applicable
+  - Avoid defensive language; treat gaps as engineering decisions or next-step opportunities
 
 ## Tone & Style Guidelines
 
@@ -479,6 +482,7 @@ Generate a Markdown file with these sections in order:
 - Inconsistent tool terminology across pages (e.g., `CI/CD` vs `Automation`, `Code Analysis / Security`, `Dependency Automation`)
 - Mixed inventory categories that blur automation, deployment, security, and dependency management
 - Capability bullets that list technologies without explaining engineering value
+- Unrelated highlights merged under one heading to stay within the count, instead of dropping the lowest-ranked highlight
 
 ## Output Format
 
@@ -501,10 +505,10 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
 ### How to Use This Template
 
 1. **Customize the bracketed fields** at the top with your project's info:
-   - `[PROJECT_NAME]` → actual name
-   - `[GITHUB_REPO_URL]` → full URL
-   - `[PRIMARY_LANGUAGE]` → language(s)
-   - etc.
+  - `[PROJECT_NAME]` → actual name
+  - `[GITHUB_REPO_URL]` → full URL
+  - `[PRIMARY_LANGUAGE]` → language(s)
+  - etc.
 
 2. **Paste the entire prompt into Copilot** (or your IDE's inline AI assistant).
 
@@ -526,10 +530,10 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
    ```
 
 4. **Iterate** if needed:
-   - Ask Copilot to tighten claims that feel broader than the evidence
-   - Ask Copilot to replace brittle details with more durable wording
-   - Ask Copilot to split mixed inventory categories into more precise labels
-   - Ask Copilot to add stronger evidence links where claims are currently under-supported
+  - Ask Copilot to tighten claims that feel broader than the evidence
+  - Ask Copilot to replace brittle details with more durable wording
+  - Ask Copilot to split mixed inventory categories into more precise labels
+  - Ask Copilot to add stronger evidence links where claims are currently under-supported
 
 ### Example Customization
 
@@ -669,6 +673,7 @@ Reuse the earlier template usage checklist as the canonical baseline review list
 - Missing limitations section
 - Evidence is technically relevant but not representative of the current runtime/configured implementation
 - Mixed category labels in tooling inventory that blur automation, deployment, security, and dependency management
+- Unrelated highlights merged under one heading to stay within the count, instead of dropping the lowest-ranked highlight
 
 #### One-Sentence Review Standard
 
