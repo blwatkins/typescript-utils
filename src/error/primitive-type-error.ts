@@ -19,7 +19,7 @@
  */
 
 /**
- * An error thrown when an input does not match the type of the expected primitive type input.
+ * An error thrown when an input does not match the expected primitive type.
  * This error is typically used in validation or assertion scenarios where the input type does not conform to the expected primitive type.
  *
  * @since 0.1.0
