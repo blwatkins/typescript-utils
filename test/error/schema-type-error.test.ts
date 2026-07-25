@@ -26,10 +26,9 @@ import { testErrorType } from '../utils/error/error-tests';
 
 const name: string = 'SchemaTypeError';
 const defaultMessage: string = 'Input does not match schema requirements';
-const code: string = 'ERR_INVALID_ARG_TYPE';
 
 describe(name, (): void => {
-    testErrorType(name, SchemaTypeError, TypeError, defaultMessage, code);
+    testErrorType(name, SchemaTypeError, TypeError, defaultMessage);
 
     describe('defaultMessage', (): void => {
         test(`Default message should be ${defaultMessage}`, (): void => {

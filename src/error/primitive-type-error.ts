@@ -18,15 +18,13 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { UtilsError } from './utils-error';
-
 /**
  * An error thrown when an input does not match the type of the expected primitive type input.
  * This error is typically used in validation or assertion scenarios where the input type does not conform to the expected primitive type.
  *
  * @since 0.1.0
  */
-export class PrimitiveTypeError extends TypeError implements UtilsError {
+export class PrimitiveTypeError extends TypeError {
     /**
      * Public constructor.
      *
@@ -51,17 +49,5 @@ export class PrimitiveTypeError extends TypeError implements UtilsError {
      */
     public static get defaultMessage(): string {
         return 'Input does not match primitive type requirements';
-    }
-
-    /**
-     * Get the Node.js error code.
-     *
-     * @returns {string} - The Node.js error code for {@link PrimitiveTypeError}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public get code(): string {
-        return 'ERR_INVALID_ARG_TYPE';
     }
 }

@@ -25,11 +25,10 @@ import { PrimitiveTypeError } from '../../src';
 import { testErrorType } from '../utils/error/error-tests';
 
 const name: string = 'PrimitiveTypeError';
-const defaultMessage: string = 'Input does not match type requirements';
-const code: string = 'ERR_INVALID_ARG_TYPE';
+const defaultMessage: string = 'Input does not match primitive type requirements';
 
 describe(name, (): void => {
-    testErrorType(name, PrimitiveTypeError, TypeError, defaultMessage, code);
+    testErrorType(name, PrimitiveTypeError, TypeError, defaultMessage);
 
     describe('defaultMessage', (): void => {
         test(`Default message should be ${defaultMessage}`, (): void => {

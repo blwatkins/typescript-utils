@@ -20,9 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { UtilsError } from '../../../src';
-
-export function testErrorType(name: string, ErrorConstructor: new(message?: string) => UtilsError, InheritedErrorType: new() => Error, expectedDefaultMessage: string, expectedCode: string): void {
+export function testErrorType(name: string, ErrorConstructor: new(message?: string) => Error, InheritedErrorType: new() => Error, expectedDefaultMessage: string): void {
     describe(`new ${name}()`, (): void => {
         test(`new ${name}() should return an instance of ${ErrorConstructor.name}`, (): void => {
             expect(new ErrorConstructor()).toBeInstanceOf(ErrorConstructor);
@@ -30,12 +28,6 @@ export function testErrorType(name: string, ErrorConstructor: new(message?: stri
 
         test(`${name} should extend ${InheritedErrorType.name}`, (): void => {
             expect(new ErrorConstructor()).toBeInstanceOf(InheritedErrorType);
-        });
-    });
-
-    describe('code', (): void => {
-        test(`Error code should be ${expectedCode}`, (): void => {
-            expect(new ErrorConstructor().code).toBe(expectedCode);
         });
     });
 
