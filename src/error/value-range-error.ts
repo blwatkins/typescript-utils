@@ -18,6 +18,36 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './primitive-type-error';
-export * from './schema-type-error';
-export * from './value-range-error';
+/**
+ * An error thrown when an input does not match the expected value range.
+ * This error is typically used in validation or assertion scenarios where the input value does not conform to the expected range.
+ *
+ * @since 0.1.0
+ */
+export class ValueRangeError extends RangeError {
+    /**
+     * Public constructor.
+     *
+     * @param {string} message - The error message.
+     * Default value is {@link ValueRangeError.defaultMessage}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public constructor(message: string = ValueRangeError.defaultMessage) {
+        super(message);
+        this.name = 'ValueRangeError';
+    }
+
+    /**
+     * Get the default error message.
+     *
+     * @returns {string} - The default error message for {@link ValueRangeError}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get defaultMessage(): string {
+        return 'Input does not match value range requirements';
+    }
+}

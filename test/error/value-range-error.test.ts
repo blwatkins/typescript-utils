@@ -18,6 +18,15 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './primitive-type-error';
-export * from './schema-type-error';
-export * from './value-range-error';
+import { describe } from 'vitest';
+
+import { ValueRangeError } from '../../src';
+
+import { testErrorType } from '../utils/error/error-tests';
+
+const name: string = 'ValueRangeError';
+const defaultMessage: string = 'Input does not match value range requirements';
+
+describe(name, (): void => {
+    testErrorType(name, ValueRangeError, RangeError, defaultMessage);
+});
