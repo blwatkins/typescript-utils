@@ -54,168 +54,108 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 
 ## Capability Record
 
-- Provides a deterministic seeded pseudorandom number generator (xoshiro128**) with synchronous (FNV-1a) and asynchronous (SHA-256 via Web Crypto API) seed-hashing strategies, enabling reproducible random sequences from string seeds.
-- Provides a static `Random` class for generating random numbers, booleans, and selecting random elements from arrays, with a configurable underlying random function to enable use with seeded generators or custom sources.
-- Provides typed weighted random selection via `WeightedElementUtility` and `WeightedList`, using discriminator-validated element objects and a cumulative-weight selection strategy, enabling non-uniform random sampling from explicit probability distributions.
-- Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
-- Implements reusable static utility classes that group common runtime type checks by value domain, improving consistency across consuming code.
-- Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types that extend the most specific native error class for the failure each one represents, giving runtime failures consistent, identifiable types across consuming code.
-- Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
-- Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
-- Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
-- Automates lint, build, and test checks in GitHub Actions to improve change reliability before merge and release.
-- Produces API documentation and publishes a docs site workflow to improve discoverability and maintenance of project knowledge.
-- Runs CodeQL and Dependabot automation to improve baseline security and dependency hygiene over time.
+Each capability below is expanded with supporting evidence in the correspondingly named subsection of [Detailed Technical Notes](#detailed-technical-notes).
+
+- **Version-pinned deterministic randomness** — generates reproducible pseudorandom sequences from string seeds and holds published hash versions immutable, so a given seed keeps producing the same sequence across releases and consumers can depend on that stability.
+- **Documentation as an enforced contract** — treats API documentation as a build gate rather than a convention, failing lint on incomplete doc comments and failing the documentation build on unresolved links or undocumented symbols, to keep published reference material trustworthy.
+- **Strict compile-time posture** — applies strict compiler settings and type-aware lint rules and pins usable language syntax to the ECMAScript version the build targets to catch defects and accidental syntax drift before a change reaches a release.
+- **Reusable runtime type narrowing** — provides a schema-validated registry that turns a registered validator into a reusable type guard, enabling discriminated union patterns without duplicating validation logic at each call site.
+- **Layered verification** — verifies behavior through type-checked test sources, shared contract suites, and continuous integration across supported Node.js release lines, to improve confidence that changes are safe across environments.
+- **Runtime contract for JavaScript consumers** — pairs compile-time narrowing with runtime validation and a consistent error vocabulary, so callers without type checking receive the same input safety and the same identifiable failures as TypeScript callers.
+- **Release and supply-chain integrity** — publishes through an identity-based release pipeline with automated code scanning and dependency updates, reducing both credential exposure and the manual effort of keeping the supply chain current.
 
 ## Detailed Technical Notes
 
 Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository.
 
-### Deterministic seeded pseudorandom number generation
+### Version-pinned deterministic randomness
 
-`SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state to produce a reproducible, uniformly distributed sequence of floats.
-`RandomNumberGeneratorFactory` derives that initial state from a string seed and optional namespace, using either a synchronous FNV-1a hash (with an optional version selecting the hashing offsets) or an asynchronous SHA-256 hash via the Web Crypto API, giving callers reproducible sequences without managing raw generator state themselves.
+`SeededRandomNumberGenerator` implements the xoshiro128** algorithm over a validated 128-bit state, and `RandomNumberGeneratorFactory` derives that state from a string seed and an optional namespace using either a synchronous FNV-1a hash across four offsets or an asynchronous SHA-256 hash that folds its 256-bit output into 128 bits so no output bits are discarded, joining namespace to seed with a NUL separator so a namespace can never collide with seed content.
+`SeedVersions` holds each published set of hash offsets behind an append-only index, and its test suite pins the exact published values, so adding a new version cannot change the sequence that any previously published seed and version produce.
 
 **Evidence:**
 
 - [src/random/seeded-random/seeded-random-number-generator.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seeded-random-number-generator.ts)
 - [src/random/seeded-random/random-number-generator-factory.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/random-number-generator-factory.ts)
+- [src/random/seeded-random/seed-versions.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/seed-versions.ts)
+- [test/random/seeded-random/seed-versions.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/seed-versions.test.ts)
 
-### Random number generation and weighted element selection
+### Documentation as an enforced contract
 
-The `Random` class centralizes random number, boolean, and array-element selection behind a swappable random number source (defaulting to `Math.random`), enabling deterministic testing and drop-in use of the package's own seeded pseudorandom number generator.
-`WeightedElementUtility` builds on the discriminator registry to validate `WeightedElement` and `WeightedList` objects at runtime and performs non-uniform random selection using a cumulative-weight strategy.
-
-**Evidence:**
-
-- [src/random/random.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/random.ts)
-- [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
-- [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
-
-### Math utilities
-
-`MathUtility` provides static helpers for numeric operations with explicit validation for number type inputs.
+Documentation comments on source files are lint-enforced rather than conventional: the TypeScript lint configuration applies the JSDoc rule set at error level over `src/`, requiring descriptions, parameter and return types, and `@throws` annotations, and imposing a fixed tag ordering so comment structure stays uniform across the codebase.
+TypeDoc then generates the API reference with warnings treated as errors and validation enabled for undocumented symbols, invalid links, and references to non-exported types, and the generated output is published through a Jekyll site that keeps a versioned archive for each release.
 
 **Evidence:**
 
-- [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
+- [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
+- [typedoc.json](https://github.com/blwatkins/typescript-utils/blob/main/typedoc.json)
+- [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
 
-### Static type-guard utilities
+### Strict compile-time posture
 
-Static utility classes provide runtime type guards, such as non-empty string checks and positive integer checks, so consuming code gets both TypeScript narrowing and JavaScript-safe runtime validation from a single call.
+TypeScript is configured with the full strict family plus `noPropertyAccessFromIndexSignature`, `noUnusedLocals`, `noUnusedParameters`, `noImplicitOverride`, and `noImplicitReturns`, with unreachable code and unused labels rejected and library checking left enabled.
+The TypeScript lint configuration layers the `recommendedTypeChecked`, `strictTypeChecked`, and `stylisticTypeChecked` rule sets on top of that, and `eslint-plugin-es-x` restricts usable syntax to ES2022 so source cannot drift past the ECMAScript version the build actually targets.
 
 **Evidence:**
 
-- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
-- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
+- [tsconfig.json](https://github.com/blwatkins/typescript-utils/blob/main/tsconfig.json)
+- [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
+- [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.js.mjs)
 
-### Discriminator-based type guard registry
+### Reusable runtime type narrowing
 
-`DiscriminatorRegistry` maintains a static map of unique discriminator values to validator functions, returning a reusable `TypeGuard<T>` for each registration and enforcing discriminator shape and uniqueness at registration time.
-The `Discriminated` type and its TypeBox schema define the minimal shape required for a registry-validated object, and `Discriminators` centralizes the discriminator string constants used across the package, such as the one backing `WeightedElement`.
+`DiscriminatorRegistry` maps unique discriminator strings to validator functions, returns a reusable `TypeGuard<T>` for each registration, and enforces discriminator shape and uniqueness at registration time, with `Discriminated` and its TypeBox schema defining the minimum shape a registry-validated object must satisfy.
+Discriminator values are namespaced by package (`@blwatkins/utils:WeightedElement`) so registrations from different packages cannot collide, and `WeightedElementUtility` demonstrates the pattern in use by registering a schema-backed validator and building `WeightedList` objects for cumulative-weight random selection.
 
 **Evidence:**
 
 - [src/discriminator/discriminator-registry.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminator-registry.ts)
 - [src/discriminator/discriminated.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminated.ts)
 - [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
+- [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
+- [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
 
-### Custom typed errors
+### Layered verification
 
-Custom error types share one contract: each extends the most specific native error class for the failure it represents, sets `name` to its own class name, and exposes a static `defaultMessage`.
-A single shared contract test suite verifies every member of the family, so failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers as new error types are added.
-
-**Evidence:**
-
-- [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
-- [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
-- [src/error/static-instance-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/static-instance-error.ts)
-- [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
-
-### ESM package contract and artifact layout
-
-The package is configured as ESM and publishes built artifacts from `_dist`, including declaration files and a scoped export map.
-The build pipeline generates those outputs from `src/index.ts` using tsdown.
-
-**Evidence:**
-
-- [package.json](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
-- [tsdown.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/tsdown.config.ts)
-
-### Utility module composition and re-export boundaries
-
-The public entry point re-exports domain modules, and each domain module re-exports dedicated types and classes.
-This keeps the package API small while still allowing clear internal organization by domain.
-
-**Evidence:**
-
-- [src/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/index.ts)
-- [src/random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/index.ts)
-- [src/random/seeded-random/index.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/seeded-random/index.ts)
-
-### Strict typing and lint enforcement model
-
-TypeScript is configured with strict checks, including implicit-type and unused-code protections, to enforce predictable typing behavior.
-JavaScript and TypeScript lint configurations apply recommended and stricter rule sets for syntax safety and style consistency.
-
-**Evidence:**
-
-- [tsconfig.json](https://github.com/blwatkins/typescript-utils/blob/main/tsconfig.json)
-- [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.js.mjs)
-- [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
-
-### Test strategy and scenario-driven fixtures
-
-The project uses Vitest for repeatable unit testing, including compile-time type checking of test files.
-Shared test input fixtures, scenario builders, and reusable contract test suites in `test/utils` support scenario-driven testing and consistent validation of cross-cutting behavior across modules.
+Vitest both executes the suites and type-checks the test sources against a dedicated tsconfig, so a test that no longer type-checks fails the run rather than silently passing, and a single `validate` script chains lint, documentation generation, build, and test so the same gates can run locally before a push.
+Behavior that every member of a type family must satisfy, such as the custom error contract or the static class instantiation guard, is factored into shared helpers under `test/utils` that emit their own `describe` and `test` blocks, so each family member is verified identically rather than through copied assertions, and the full suite runs with lint and build in continuous integration across multiple supported Node.js release lines.
 
 **Evidence:**
 
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
-- [test/error/schema-type-error.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/error/schema-type-error.test.ts)
-- [test/random/seeded-random/random-number-generator-factory.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/random-number-generator-factory.test.ts)
-- [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
-- [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
-- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
-- [test/utils/static/static-class-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/static/static-class-tests.ts)
-- [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
-
-### CI verification gates
-
-Lint, build, and test scripts are wired into local and CI workflows via `package.json`.
-The primary CI workflow runs `npm ci`, lint, build, and tests across supported Node.js release lines before changes are accepted.
-
-**Evidence:**
-
+- [tsconfig.vitest.json](https://github.com/blwatkins/typescript-utils/blob/main/tsconfig.vitest.json)
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
+- [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
+- [test/utils/static/static-class-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/static/static-class-tests.ts)
 - [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
 
-### Documentation generation and GitHub Pages publishing path
+### Runtime contract for JavaScript consumers
 
-API docs are generated with TypeDoc, while the documentation site is built from `docs/` using a Jekyll workflow and deployed to GitHub Pages.
-Release-specific docs are stored under a versioned directory structure in `docs/releases/...`.
-
-**Evidence:**
-
-- [typedoc.json](https://github.com/blwatkins/typescript-utils/blob/main/typedoc.json)
-- [gh-pages-jekyll.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/gh-pages-jekyll.yml)
-- [docs/index.md](https://github.com/blwatkins/typescript-utils/blob/main/docs/index.md)
-- [docs/releases directory](https://github.com/blwatkins/typescript-utils/tree/main/docs/releases)
-
-### Security scanning and dependency update automation
-
-Security analysis is automated with a dedicated CodeQL workflow covering Actions and repository code languages.
-Dependency updates are automated with Dependabot across the project's configured package ecosystems, and package publishing uses trusted publishing permissions.
+The package targets JavaScript and TypeScript consumers alike, so its static utility classes keep runtime validation even where the type system would already reject the same call: `StringUtility` returns narrowing predicates backed by Unicode-property-aware patterns compiled once at module scope, and `MathUtility` validates numeric bounds and rejects grid dimensions whose product would exceed `Number.MAX_SAFE_INTEGER` before computing an index.
+A dedicated error module gives those failures a consistent vocabulary, with each custom error extending the most specific native error class for the failure it represents, setting `name` to its own class name, and exposing a static `defaultMessage`, so callers can discriminate failures by `instanceof` and by name at runtime.
 
 **Evidence:**
 
+- [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
+- [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
+- [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
+- [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
+- [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
+
+### Release and supply-chain integrity
+
+The publish workflow gates both registry pushes behind a job that must install, lint, build, and test first, and the npm publish step authenticates through OIDC trusted publishing rather than a stored long-lived token, while the same workflow publishes to GitHub Packages from a single dispatch.
+CodeQL analyzes the library source, the workflow definitions themselves, and the Ruby powering the documentation site on push, pull request, and a recurring schedule, and Dependabot maintains each configured package ecosystem with grouped update rules that separate production from development dependencies.
+
+**Evidence:**
+
+- [package-publish.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/package-publish.yml)
 - [codeql.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/codeql.yml)
 - [dependabot.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/dependabot.yml)
-- [package-publish.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/package-publish.yml)
 
 ## Current Gaps / Future Improvements
 
 - The public API surface is still expanding; utility domains are added release over release, and the package has not yet reached a stable API commitment.
 - Tests currently focus on unit-level utility behavior; higher-level integration or consumer-facing examples are not yet part of the verification strategy.
+- Coverage is reported on every run but not enforced by a configured threshold, so a decline in coverage would not by itself fail the build.
 - Release documentation under `docs/releases/...` is maintained manually, which can increase maintenance overhead as release volume grows.
