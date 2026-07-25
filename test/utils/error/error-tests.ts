@@ -20,7 +20,12 @@
 
 import { describe, test, expect } from 'vitest';
 
-export function testErrorType(name: string, ErrorConstructor: new(message?: string) => Error, InheritedErrorType: new() => Error, expectedDefaultMessage: string): void {
+export function testErrorType(
+    name: string,
+    ErrorConstructor: ((new(message?: string) => Error) & ({ readonly defaultMessage: string; })),
+    InheritedErrorType: new() => Error,
+    expectedDefaultMessage: string
+): void {
     describe(`new ${name}()`, (): void => {
         test(`new ${name}() should return an instance of ${ErrorConstructor.name}`, (): void => {
             expect(new ErrorConstructor()).toBeInstanceOf(ErrorConstructor);
@@ -32,8 +37,14 @@ export function testErrorType(name: string, ErrorConstructor: new(message?: stri
     });
 
     describe('name', (): void => {
-        test(`Name should be ${name}`, (): void => {
+        test(`Name should be "${name}"`, (): void => {
             expect(new ErrorConstructor().name).toBe(name);
+        });
+    });
+
+    describe('defaultMessage', (): void => {
+        test(`Default message should be "${expectedDefaultMessage}"`, (): void => {
+            expect(ErrorConstructor.defaultMessage).toBe(expectedDefaultMessage);
         });
     });
 

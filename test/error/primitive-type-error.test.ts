@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test, expect } from 'vitest';
+import { describe } from 'vitest';
 
 import { PrimitiveTypeError } from '../../src';
 
@@ -29,10 +29,4 @@ const defaultMessage: string = 'Input does not match primitive type requirements
 
 describe(name, (): void => {
     testErrorType(name, PrimitiveTypeError, TypeError, defaultMessage);
-
-    describe('defaultMessage', (): void => {
-        test(`Default message should be ${defaultMessage}`, (): void => {
-            expect(PrimitiveTypeError.defaultMessage).toBe(defaultMessage);
-        });
-    });
 });

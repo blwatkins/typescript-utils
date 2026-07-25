@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test, expect } from 'vitest';
+import { describe } from 'vitest';
 
 import { SchemaTypeError } from '../../src';
 
@@ -29,10 +29,4 @@ const defaultMessage: string = 'Input does not match schema requirements';
 
 describe(name, (): void => {
     testErrorType(name, SchemaTypeError, TypeError, defaultMessage);
-
-    describe('defaultMessage', (): void => {
-        test(`Default message should be ${defaultMessage}`, (): void => {
-            expect(SchemaTypeError.defaultMessage).toBe(defaultMessage);
-        });
-    });
 });
