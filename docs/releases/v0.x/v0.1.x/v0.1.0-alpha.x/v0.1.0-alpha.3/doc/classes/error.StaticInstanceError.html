@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ValueRangeError | @blwatkins/utils - v0.1.0-alpha.3</title><meta name="description" content="Documentation for @blwatkins/utils"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>StaticInstanceError | @blwatkins/utils - v0.1.0-alpha.3</title><meta name="description" content="Documentation for @blwatkins/utils"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container"><a href="../index.html" class="title">@blwatkins/utils - v0.1.0-alpha.3</a>
 <div id="tsd-toolbar-links"><a href="https://blwatkins.github.io/typescript-utils/">TypeScript Utilities</a><a href="https://blwatkins.github.io/">Brittni Watkins</a></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
 <ul role="listbox" id="tsd-search-results"></ul>
@@ -9,24 +9,24 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
 <li><a href="../modules/error.html">error</a></li>
-<li><a href="" aria-current="page">ValueRangeError</a></li></ul>
-<h1>Class ValueRangeError</h1></div>
+<li><a href="" aria-current="page">StaticInstanceError</a></li></ul>
+<h1>Class StaticInstanceError</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>An error thrown when an input does not match the expected value range.
-This error is typically used in validation or assertion scenarios where the input value does not conform to the expected range.</p>
+<div class="tsd-comment tsd-typography"><p>An error thrown when a constructor is called for a static class.
+This error is typically used in constructors for classes that only contain static properties and methods.</p>
 </div>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since">Since<a href="#since" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div></section>
-<section class="tsd-panel tsd-hierarchy" data-refl="108">
+<section class="tsd-panel tsd-hierarchy" data-refl="89">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li class="tsd-hierarchy-item"><span class="tsd-signature-type">RangeError</span>
+<li class="tsd-hierarchy-item"><span class="tsd-signature-type">TypeError</span>
 <ul class="tsd-hierarchy">
-<li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">ValueRangeError</span></li></ul></li></ul></section><aside class="tsd-sources">
+<li class="tsd-hierarchy-item"><span class="tsd-hierarchy-target">StaticInstanceError</span></li></ul></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/e3b199561b33076e94520ac57aaf3b907cd35c57/src/error/value-range-error.ts#L27">src/error/value-range-error.ts:27</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/e3b199561b33076e94520ac57aaf3b907cd35c57/src/error/static-instance-error.ts#L27">src/error/static-instance-error.ts:27</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -60,25 +60,25 @@ This error is typically used in validation or assertion scenarios where the inpu
 <h3 class="tsd-anchor-link" id="constructor"><span>constructor</span><a href="#constructor" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
-<div class="tsd-signature tsd-anchor-link" id="constructorvaluerangeerror"><span class="tsd-signature-keyword">new</span> <span class="tsd-kind-constructor-signature">ValueRangeError</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type tsd-kind-class">ValueRangeError</a><a href="#constructorvaluerangeerror" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-signature tsd-anchor-link" id="constructorstaticinstanceerror"><span class="tsd-signature-keyword">new</span> <span class="tsd-kind-constructor-signature">StaticInstanceError</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type tsd-kind-class">StaticInstanceError</a><a href="#constructorstaticinstanceerror" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Public constructor.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = ValueRangeError.defaultMessage</span></span>
+<li><span><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = StaticInstanceError.defaultMessage</span></span>
 <div class="tsd-comment tsd-typography"><p>The error message.
-Default value is <a href="#defaultmessage" class="tsd-kind-accessor">ValueRangeError.defaultMessage</a>.</p>
+Default value is <a href="#defaultmessage" class="tsd-kind-accessor">StaticInstanceError.defaultMessage</a>.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">ValueRangeError</a></h4>
+<h4 class="tsd-returns-title">Returns <a href="" class="tsd-signature-type tsd-kind-class">StaticInstanceError</a></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-1">Since<a href="#since-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
-<p>Overrides RangeError.constructor</p>
+<p>Overrides TypeError.constructor</p>
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/e3b199561b33076e94520ac57aaf3b907cd35c57/src/error/value-range-error.ts#L37">src/error/value-range-error.ts:37</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/e3b199561b33076e94520ac57aaf3b907cd35c57/src/error/static-instance-error.ts#L37">src/error/static-instance-error.ts:37</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="properties-1">Properties<a href="#properties-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -93,31 +93,31 @@ will affect any stack trace captured <em>after</em> the value has been changed.<
 <p>If set to a non-number value, or set to a negative number, stack traces will
 not capture any frames.</p>
 </div><aside class="tsd-sources">
-<p>Inherited from RangeError.stackTraceLimit</p>
+<p>Inherited from TypeError.stackTraceLimit</p>
 <ul>
 <li>Defined in node_modules/@types/node/globals.d.ts:67</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="cause"><code class="tsd-tag">Optional</code><span>cause</span><a href="#cause" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">cause</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">unknown</span></div><aside class="tsd-sources">
-<p>Inherited from RangeError.cause</p>
+<p>Inherited from TypeError.cause</p>
 <ul>
 <li>Defined in node_modules/typescript/lib/lib.es2022.error.d.ts:24</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="message"><span>message</span><a href="#message" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
-<p>Inherited from RangeError.message</p>
+<p>Inherited from TypeError.message</p>
 <ul>
 <li>Defined in node_modules/typescript/lib/lib.es5.d.ts:1075</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="name"><span>name</span><a href="#name" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
-<p>Inherited from RangeError.name</p>
+<p>Inherited from TypeError.name</p>
 <ul>
 <li>Defined in node_modules/typescript/lib/lib.es5.d.ts:1074</li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
 <h3 class="tsd-anchor-link" id="stack"><code class="tsd-tag">Optional</code><span>stack</span><a href="#stack" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">stack</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div><aside class="tsd-sources">
-<p>Inherited from RangeError.stack</p>
+<p>Inherited from TypeError.stack</p>
 <ul>
 <li>Defined in node_modules/typescript/lib/lib.es5.d.ts:1076</li></ul></aside></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -132,7 +132,7 @@ not capture any frames.</p>
 <div class="tsd-comment tsd-typography"><p>Get the default error message.</p>
 </div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4><ul>
-<li>The default error message for <a href="#" class="tsd-kind-class">ValueRangeError</a>.</li>
+<li>The default error message for <a href="#" class="tsd-kind-class">StaticInstanceError</a>.</li>
 </ul>
 
 <div class="tsd-comment tsd-typography">
@@ -140,7 +140,7 @@ not capture any frames.</p>
 <h4 class="tsd-anchor-link" id="since-2">Since<a href="#since-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/e3b199561b33076e94520ac57aaf3b907cd35c57/src/error/value-range-error.ts#L50">src/error/value-range-error.ts:50</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/e3b199561b33076e94520ac57aaf3b907cd35c57/src/error/static-instance-error.ts#L50">src/error/static-instance-error.ts:50</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -173,7 +173,7 @@ details of error generation from the user. For instance:</p>
 <li><span><span class="tsd-kind-parameter">targetObject</span>: <span class="tsd-signature-type">object</span></span></li>
 <li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">constructorOpt</span>: <span class="tsd-signature-type">Function</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4><aside class="tsd-sources">
-<p>Inherited from RangeError.captureStackTrace</p>
+<p>Inherited from TypeError.captureStackTrace</p>
 <ul>
 <li>Defined in node_modules/@types/node/globals.d.ts:51</li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-inherited tsd-is-external">
@@ -192,7 +192,7 @@ details of error generation from the user. For instance:</p>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="https://v8.dev/docs/stack-trace-api#customizing-stack-traces">https://v8.dev/docs/stack-trace-api#customizing-stack-traces</a></p>
 </div></div><aside class="tsd-sources">
-<p>Inherited from RangeError.prepareStackTrace</p>
+<p>Inherited from TypeError.prepareStackTrace</p>
 <ul>
 <li>Defined in node_modules/@types/node/globals.d.ts:55</li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
