@@ -26,8 +26,8 @@ import { Discriminated, DiscriminatorRegistration, DiscriminatorRegistry, TypeGu
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
 import { emptyStringInputs, nonStringInputs, singleLineTrimmedFailureInputs } from '../utils/input/string-inputs';
-import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 import { testStaticUtilityConstructor } from '../utils/static/static-utility-tests';
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('DiscriminatorRegistry', (): void => {
     testStaticUtilityConstructor('DiscriminatorRegistry', DiscriminatorRegistry as unknown as new () => DiscriminatorRegistry, Error);
