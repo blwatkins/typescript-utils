@@ -31,7 +31,7 @@ import {
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
-import { testStaticUtilityConstructor } from '../utils/static/static-utility-tests';
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 import {
     asciiNamespace,
@@ -42,7 +42,7 @@ import {
 import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
 
 describe('Random', (): void => {
-    testStaticUtilityConstructor('Random', Random as unknown as new () => Random, Error);
+    testStaticClassConstructor('Random', Random as unknown as new () => unknown, Error);
 
     const testRepeatTotal: number = 50;
 

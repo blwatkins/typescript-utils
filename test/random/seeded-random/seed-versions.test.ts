@@ -23,11 +23,11 @@ import { describe, test, expect } from 'vitest';
 import { SeedVersion, SeedVersions } from '../../../src';
 
 import { negativeNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
-import { testStaticUtilityConstructor } from '../../utils/static/static-utility-tests';
+import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', () => {
-    testStaticUtilityConstructor('SeedVersions', SeedVersions as unknown as new () => SeedVersions, Error);
+    testStaticClassConstructor('SeedVersions', SeedVersions as unknown as new () => SeedVersions, Error);
 
     /**
      * @remarks Once a seed version has been published, it should NEVER be changed or updated.

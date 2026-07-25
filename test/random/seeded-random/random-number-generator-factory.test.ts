@@ -31,7 +31,7 @@ import {
     nonNumberInputs
 } from '../../utils/input/number-inputs';
 
-import { testStaticUtilityConstructor } from '../../utils/static/static-utility-tests';
+import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 
 import {
     Scenario,
@@ -50,7 +50,7 @@ import {
 } from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('RandomNumberGeneratorFactory', (): void => {
-    testStaticUtilityConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => RandomNumberGeneratorFactory, Error);
+    testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => RandomNumberGeneratorFactory, Error);
 
     const sequenceLength: 5 = 5 as const;
 

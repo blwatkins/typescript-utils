@@ -23,11 +23,11 @@ import { describe, test, expect } from 'vitest';
 import { MathUtility } from '../../src';
 
 import { floatInputs, negativeIntegerInputs, nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
-import { testStaticUtilityConstructor } from '../utils/static/static-utility-tests';
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
 
 describe('MathUtility', (): void => {
-    testStaticUtilityConstructor('MathUtility', MathUtility as unknown as new () => MathUtility, Error);
+    testStaticClassConstructor('MathUtility', MathUtility as unknown as new () => unknown, Error);
 
     describe('constrain', (): void => {
         describe('constrain should return the proper value for finite number arguments', (): void => {

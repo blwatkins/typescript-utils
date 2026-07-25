@@ -33,11 +33,11 @@ import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { nonObjectInputs } from '../../utils/input/object-inputs';
-import { testStaticUtilityConstructor } from '../../utils/static/static-utility-tests';
+import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('WeightedElementUtility', (): void => {
-    testStaticUtilityConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => WeightedElementUtility, Error);
+    testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => WeightedElementUtility, Error);
 
     describe('buildWeightedElement', (): void => {
         test('buildWeightedElement() should return a typed weighed element', (): void => {

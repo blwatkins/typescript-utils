@@ -34,11 +34,11 @@ import {
     zeroInputs
 } from '../utils/input/number-inputs';
 
-import { testStaticUtilityConstructor } from '../utils/static/static-utility-tests';
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('NumberUtility', (): void => {
-    testStaticUtilityConstructor('NumberUtility', NumberUtility as unknown as new () => NumberUtility, Error);
+    testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, Error);
 
     describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [

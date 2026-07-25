@@ -20,7 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-export function testStaticUtilityConstructor(name: string, Constructor: new() => unknown, ErrorType: new() => Error): void {
+export function testStaticClassConstructor(name: string, Constructor: new() => unknown, ErrorType: new() => Error): void {
     describe(`new ${name}()`, (): void => {
         describe('Runtime behavior guards', (): void => {
             test(`Constructor should throw ${ErrorType.name} when instantiated at runtime`, (): void => {
