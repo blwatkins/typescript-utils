@@ -60,7 +60,7 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - Provides a static `MathUtility` class for common numeric operations such as clamping a value into a range and converting 2D grid coordinates to a flat array index, with runtime validation of numeric and integer inputs.
 - Implements reusable static utility classes for string and number type checks to improve consistency across consuming code.
 - Provides a static discriminator registry with TypeBox schema validation to enable runtime type narrowing and reusable type guard generation for discriminated union patterns.
-- Provides custom error types that extend the most specific native error class for each failure mode, giving validation failures consistent, identifiable types across consuming code.
+- Provides custom error types that extend the most specific native error class for various failure modes, giving validation failures consistent, identifiable types across consuming code.
 - Uses explicit package export and type declaration mappings to improve compatibility for ESM consumers and TypeScript tooling.
 - Applies strict TypeScript compiler settings and type-aware lint rules to improve early detection of implementation defects.
 - Validates behavior with scenario-driven and shared-fixture Vitest suites to improve confidence in utility correctness across input classes.
@@ -123,7 +123,7 @@ The `Discriminated` type and its TypeBox schema define the minimal shape require
 
 ### Custom typed errors
 
-Custom error types extend the most specific native error class for each failure mode — `TypeError` for type mismatches, `RangeError` for out-of-range values — so validation failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers.
+Custom error types extend the most specific native error class for various failure modes so validation failures stay consistently identifiable at runtime for both TypeScript and JavaScript consumers.
 Each type sets `name` to its class name and exposes a static `defaultMessage`, and the whole family is verified against a single shared contract test suite.
 
 **Evidence:**
@@ -172,8 +172,12 @@ Shared test input fixtures, scenario builders, and reusable contract test suites
 **Evidence:**
 
 - [vitest.config.ts](https://github.com/blwatkins/typescript-utils/blob/main/vitest.config.ts)
+- [test/error/schema-type-error.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/error/schema-type-error.test.ts)
+- [test/random/seeded-random/random-number-generator-factory.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/random-number-generator-factory.test.ts)
+- [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
 - [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
+- [test/utils/static/static-class-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/static/static-class-tests.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 
 ### CI verification gates
