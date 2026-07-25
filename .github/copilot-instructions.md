@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeScript and JavaScript utilities, including validation, custom error types, mathematical operations, random number generation, random selection, and type-safe guards.
+This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
 
 ## Companion Instruction Files
 
