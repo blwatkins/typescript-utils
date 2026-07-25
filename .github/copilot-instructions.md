@@ -103,6 +103,13 @@ Custom error classes must:
 - Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
 - Expose a public static `defaultMessage` getter returning the default error message
 
+Choose the error type by the kind of failure, not by the call site:
+
+- `PrimitiveTypeError` — input is not the expected primitive type (e.g., not a string, not a number)
+- `SchemaTypeError` — input is either an object type that does not satisfy an expected object schema, or not an object at all
+- `ValueRangeError` — input is the correct type but falls outside an allowed range or bound
+- `StaticInstanceError` — a static class constructor was invoked
+
 Custom error types intentionally do not expose a Node.js-style `code` property.
 Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
 
@@ -111,7 +118,7 @@ Consumers discriminate with `instanceof` and the error `name`; the Node.js code 
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
 - Public exports flow through module index files. This pattern is intentional to maintain clear module boundaries and organization in both source code and generated documentation.
 - API documentation entry points stay module-scoped rather than pointing TypeDoc at the root package entry point.
-- The project uses strict TypeScript settings (`strict`, `noImplicitAny`, `noUnusedLocals`, etc.) targeting ES2022 with `moduleResolution: bundler`.
+- The project uses strict TypeScript settings (`strict`, `noImplicitAny`, `noUnusedLocals`, etc.) with `moduleResolution: bundler`.
 
 ### JavaScript Consumer Safety
 
@@ -185,7 +192,8 @@ The following preferences require manual review since no ESLint rule can check t
 - **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value (e.g., `Random.#rng` defaulting to `Math.random`), state the default via `@default` (e.g., `@default Math.random`).
 - **Document default parameter values:** Indicate default values for parameters in the `@param` annotation.
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
-- **Scope `@public` to members:** Apply `@public` to public class members, constructors, and interface properties. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself — the export is the visibility signal.
+- **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
+- **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
 
 ## Documentation and GitHub Pages
 
