@@ -28,26 +28,23 @@ export interface UtilsError {
      * The error name.
      *
      * @type {string}
-     * @readonly
      * @since 0.1.0
      */
-    readonly name: string;
+    name: string;
 
     /**
      * The error message.
      *
      * @type {string}
-     * @readonly
      * @since 0.1.0
      */
-    readonly message: string;
+    message: string;
 
     /**
      * The Node.js error code.
      *
      * @type {string}
-     * @readonly
      * @since 0.1.0
      */
-    readonly code: string;
+    code: string;
 }
