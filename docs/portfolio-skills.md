@@ -176,8 +176,8 @@ Shared test input fixtures, scenario builders, and reusable contract test suites
 - [test/error/schema-type-error.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/error/schema-type-error.test.ts)
 - [test/random/seeded-random/random-number-generator-factory.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/seeded-random/random-number-generator-factory.test.ts)
 - [test/string/string-utility.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/string/string-utility.test.ts)
-- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
+- [test/utils/input/string-inputs.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/input/string-inputs.ts)
 - [test/utils/static/static-class-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/static/static-class-tests.ts)
 - [test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/test-case/scenarios/random-number-generator-factory-scenarios.ts)
 
@@ -216,6 +216,6 @@ Dependency updates are automated with Dependabot across the project's configured
 
 ## Current Gaps / Future Improvements
 
-- The public API surface is still expanding and additional utility domains are planned; `package.json` is the authoritative signal of current release maturity.
+- The public API surface is still expanding; utility domains are added release over release, and the package has not yet reached a stable API commitment.
 - Tests currently focus on unit-level utility behavior; higher-level integration or consumer-facing examples are not yet part of the verification strategy.
 - Release documentation under `docs/releases/...` is maintained manually, which can increase maintenance overhead as release volume grows.
