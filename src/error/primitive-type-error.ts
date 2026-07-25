@@ -21,10 +21,9 @@
 import { UtilsError } from './utils-error';
 
 /**
- * An error thrown when an input does not match the type of the expected data structure.
- * This error is typically used in validation or assertion scenarios where the input data does not conform to the expected type.
+ * An error thrown when an input does not match the type of the expected primitive type input.
+ * This error is typically used in validation or assertion scenarios where the input type does not conform to the expected primitive type.
  *
- * @public
  * @since 0.1.0
  */
 export class PrimitiveTypeError extends TypeError implements UtilsError {
@@ -51,7 +50,7 @@ export class PrimitiveTypeError extends TypeError implements UtilsError {
      * @since 0.1.0
      */
     public static get defaultMessage(): string {
-        return 'Input does not match type requirements';
+        return 'Input does not match primitive type requirements';
     }
 
     /**
