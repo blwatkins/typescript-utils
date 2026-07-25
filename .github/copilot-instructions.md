@@ -347,7 +347,7 @@ Generate a Markdown file with these sections in order:
 
 2. **About This Page**
    - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
-   
+
 3. **Project Overview** (2–3 sentences)
    - What is this project and what does it help you build?
    - Link to the GitHub repository
