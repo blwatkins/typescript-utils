@@ -256,11 +256,16 @@ Review `docs/portfolio-skills.md` against the current repository state.
 
 If anything changed, do the following:
 
-- Update any section where capabilities, tooling, or the skills inventory changed
+- Confirm `Capability Record` has 5–7 bullets and `Detailed Technical Notes` has one matching subsection per bullet
+- When a branch introduces a new capability or updates an existing capability, re-rank the highlights against the [selection criteria](#selecting-the-57-highlights) rather than appending; if the new capability ranks in the top 5–7, the lowest-ranked existing highlight comes off the page
 - Bump `modified_date` to today; do not change the original `date`
 - Evidence links must always point to the `main` branch
 
 Refer to the ["Portfolio Page Generation and Maintenance" section](#portfolio-page-generation-and-maintenance) for the full review checklist.
+
+At least once per minor release line, rebuild the highlights from the repository rather than editing existing sections in place.
+Read the configuration files directly — build, lint, test, documentation, and workflow configuration — and re-rank from scratch.
+Editing in place preserves whatever was true when the sections were written; enforcement posture and compatibility contracts introduced since then are only found by re-reading the configuration.
 
 ### 3. Instruction File Sync
 
@@ -324,6 +329,29 @@ When preparing a release merge to `main`:
 - The portfolio skills page for this repository lives at `docs/portfolio-skills.md` and is published through the Jekyll site under `docs/`.
 - Evidence links in `docs/portfolio-skills.md` should always point to the `main` branch, even when the page is updated from another branch.
 - The guidance in this section applies only when `docs/portfolio-skills.md` is present or intentionally being created.
+
+### Selecting the 5–7 Highlights
+
+The page presents the project's 5–7 strongest highlights, not a complete inventory of its capabilities.
+`Skills and Tooling Inventory` and `At a Glance` carry breadth; these sections carry depth.
+
+Rank every candidate highlight against the following criteria, in order:
+
+1. **Distinctiveness** — does this reflect a deliberate engineering decision, or is it table stakes that most comparable projects also have?
+2. **Evidence strength** — can a specific configuration file or implementation prove the claim directly, or does it need several links that each prove only part of it?
+3. **Currency** — is this in use in the project today, or is it scaffolding for work not yet done?
+4. **Durability** — will the claim still be accurate several releases from now without an edit?
+
+Keep the top 5–7. Drop the rest.
+
+Merge two candidates only when they answer the same engineering question.
+Do not merge unrelated candidates to preserve one that would otherwise be dropped; dropping is the correct outcome for a candidate that does not rank.
+Static analysis, executed tests, documentation, and security or dependency automation are separate questions and should not be merged with one another.
+
+Before dropping a candidate, confirm it ranks low on its own merits rather than because its strongest evidence was never identified.
+A capability whose best evidence is a configuration file often ranks higher than it first appears.
+
+Record the ranking rationale — what was kept, what was dropped, and why — in the pull request description rather than on the page itself.
 
 ### Prompt Template
 
@@ -402,7 +430,8 @@ Generate a Markdown file with these sections in order:
    Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
-   - 5–10 bullets describing what this project demonstrates
+   - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
+   - Each label must exactly match the heading of its `Detailed Technical Notes` subsection, so the two sections map one to one
    - Each bullet should connect implementation to engineering value
    - Use language like "...to improve [benefit]" or "...enabling [outcome]"
    - Avoid just listing tech names
@@ -410,10 +439,10 @@ Generate a Markdown file with these sections in order:
 
 7. **Detailed Technical Notes** (subsections with evidence)
    - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
-   - Create 5–7 subsections, each with:
-     - A descriptive heading (e.g., "Express app composition and middleware stack")
-     - 1–2 claim sentences
-     - An "Evidence:" section with direct GitHub links to source files
+   - Create one subsection per `Capability Record` bullet, 5–7 total, in the same order, with headings that exactly match the bullet labels
+   - Each subsection contains:
+      - 1–2 claim sentences
+      - An "Evidence:" section with direct GitHub links to source files
    - **Critical rule:** every claim must link to evidence that *directly* proves it
      - Evidence does not need to enumerate every implementation instance in the repository. A representative selection that successfully demonstrates the claim is sufficient
      - If claiming "output to directory X", link config/build files, not just example files
@@ -484,9 +513,12 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
    - [ ] Section structure matches the portfolio page pattern
    - [ ] Overview is clear and not over-claiming scope
    - [ ] "At a Glance" is scannable and terminology is precise
-   - [ ] Capability bullets explain technical value, not just tech names
+   - [ ] Capability Record has 5–7 bullets and Detailed Technical Notes has one matching subsection per bullet, in the same order
+   - [ ] Capability Record bullets explain technical value, not just tech names
+   - [ ] Every highlight was ranked against the selection criteria, and dropped candidates were dropped rather than merged into unrelated ones
+   - [ ] Any merged highlight combines candidates that answer the same engineering question
    - [ ] Every technical claim has direct evidence links
-   - [ ] Evidence is representative of the current implementation/configured behavior when relevant
+   - [ ] Evidence is representative of the current implementation/configured behavior
    - [ ] Time-sensitive details are durable or intentionally maintained
    - [ ] Tooling/runtime/security wording is accurate, and inventory categories do not mix unrelated concerns
    - [ ] "Current Gaps / Future Improvements" is present and meaningful
@@ -541,11 +573,17 @@ Ensure the page includes the required front matter and these sections (or equiva
 - `Project Overview`
 - `At a Glance`
 - `Skills and Tooling Inventory`
-- `Capability Record`
-- `Detailed Technical Notes`
-- `Current Gaps / Future Improvements`
+- `Capability Record` (5–7 bullets)
+- `Detailed Technical Notes` (one subsection per bullet, same order, matching headings)
+- `Current Gaps / Future Improvements` (2–4 bullets)
 
-Why: this keeps pages consistent and easy to compare across projects.
+Why: this keeps pages consistent and easy to compare across projects, and the one-to-one mapping means every value claim on the page can be audited in a single step.
+
+Count both sections on every review and confirm the mapping still holds.
+A bullet with no matching subsection is an unevidenced claim; a subsection with no matching bullet is depth the page never promised.
+
+When a section exceeds 7 items, re-rank against the [Selecting the 5–7 Highlights](#selecting-the-57-highlights) criteria and drop the lowest-ranked highlight.
+Do not merge unrelated highlights to stay within the count — a heading that names three unrelated concerns describes none of them, and its evidence list grows too long to audit.
 
 ##### 2) Claim quality (accuracy + durability)
 
