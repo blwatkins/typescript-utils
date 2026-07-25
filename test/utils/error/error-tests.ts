@@ -22,40 +22,40 @@ import { describe, test, expect } from 'vitest';
 
 export function testErrorType(
     name: string,
-    ErrorConstructor: ((new(message?: string) => Error) & ({ readonly defaultMessage: string; })),
+    ErrorType: ((new(message?: string) => Error) & ({ readonly defaultMessage: string; })),
     InheritedErrorType: new() => Error,
     expectedDefaultMessage: string
 ): void {
     describe(`new ${name}()`, (): void => {
-        test(`new ${name}() should return an instance of ${ErrorConstructor.name}`, (): void => {
-            expect(new ErrorConstructor()).toBeInstanceOf(ErrorConstructor);
+        test(`new ${name}() should return an instance of ${ErrorType.name}`, (): void => {
+            expect(new ErrorType()).toBeInstanceOf(ErrorType);
         });
 
         test(`${name} should extend ${InheritedErrorType.name}`, (): void => {
-            expect(new ErrorConstructor()).toBeInstanceOf(InheritedErrorType);
+            expect(new ErrorType()).toBeInstanceOf(InheritedErrorType);
         });
     });
 
     describe('name', (): void => {
         test(`Name should be "${name}"`, (): void => {
-            expect(new ErrorConstructor().name).toBe(name);
+            expect(new ErrorType().name).toBe(name);
         });
     });
 
     describe('defaultMessage', (): void => {
         test(`Default message should be "${expectedDefaultMessage}"`, (): void => {
-            expect(ErrorConstructor.defaultMessage).toBe(expectedDefaultMessage);
+            expect(ErrorType.defaultMessage).toBe(expectedDefaultMessage);
         });
     });
 
     describe('message', (): void => {
         test('Message should use the default message when not set', (): void => {
-            expect(new ErrorConstructor().message).toBe(expectedDefaultMessage);
+            expect(new ErrorType().message).toBe(expectedDefaultMessage);
         });
 
         test('Message should use the given message when set', (): void => {
             const message: string = 'TEST FAILURE MESSAGE';
-            expect(new ErrorConstructor(message).message).toBe(message);
+            expect(new ErrorType(message).message).toBe(message);
         });
     });
 }
