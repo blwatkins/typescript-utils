@@ -18,8 +18,6 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { hexColorFailureInputs, hexColorInputs, hexColorMixedCaseInputs } from './color-string-inputs';
-
 // noinspection JSPrimitiveTypeWrapperUsage
 export const nonStringInputs: unknown[] = [
     null,
@@ -215,8 +213,5 @@ export const nonEmptyStringInputs: string[] = [
     '🎨',
     'ë',
     ...singleLineTrimmedFailureInputs,
-    ...singleLineTrimmedInputs,
-    ...hexColorInputs,
-    ...hexColorMixedCaseInputs,
-    ...hexColorFailureInputs
+    ...singleLineTrimmedInputs
 ];
