@@ -23,7 +23,6 @@ import { Type, type Static } from 'typebox';
 /**
  * TypeBox schema for validating that an object implements the {@link Discriminated} type.
  *
- * @public
  * @since 0.1.0
  */
 export const discriminatedSchema = Type.Object(
@@ -42,7 +41,6 @@ export const discriminatedSchema = Type.Object(
 /**
  * Discriminated objects can be type checked using the discriminator registry.
  *
- * @public
  * @since 0.1.0
  */
 export type Discriminated = Static<typeof discriminatedSchema>;

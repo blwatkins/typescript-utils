@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,9 +18,14 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminator';
-export * from './error';
-export * from './math';
-export * from './number';
-export * from './random';
-export * from './string';
+import { describe, test, expect } from 'vitest';
+
+export function testStaticClassConstructor(name: string, Constructor: new() => unknown, ErrorType: new() => Error): void {
+    describe(`new ${name}()`, (): void => {
+        describe('Runtime behavior guards', (): void => {
+            test(`Constructor should throw ${ErrorType.name} when instantiated at runtime`, (): void => {
+                expect((): unknown => new Constructor()).toThrow(ErrorType);
+            });
+        });
+    });
+}

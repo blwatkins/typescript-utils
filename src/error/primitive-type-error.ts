@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,9 +18,36 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminator';
-export * from './error';
-export * from './math';
-export * from './number';
-export * from './random';
-export * from './string';
+/**
+ * An error thrown when an input does not match the expected primitive type.
+ * This error is typically used in validation or assertion scenarios where the input type does not conform to the expected primitive type.
+ *
+ * @since 0.1.0
+ */
+export class PrimitiveTypeError extends TypeError {
+    /**
+     * Public constructor.
+     *
+     * @param {string} message - The error message.
+     * Default value is {@link PrimitiveTypeError.defaultMessage}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public constructor(message: string = PrimitiveTypeError.defaultMessage) {
+        super(message);
+        this.name = 'PrimitiveTypeError';
+    }
+
+    /**
+     * Get the default error message.
+     *
+     * @returns {string} - The default error message for {@link PrimitiveTypeError}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get defaultMessage(): string {
+        return 'Input does not match primitive type requirements';
+    }
+}

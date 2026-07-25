@@ -21,18 +21,13 @@
 import { describe, test, expect } from 'vitest';
 
 import { MathUtility } from '../../src';
-import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
+
 import { floatInputs, negativeIntegerInputs, nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
+import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
 
 describe('MathUtility', (): void => {
-    describe('new MathUtility()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = MathUtility as unknown as new () => MathUtility;
-                expect((): MathUtility => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
+    testStaticClassConstructor('MathUtility', MathUtility as unknown as new () => unknown, Error);
 
     describe('constrain', (): void => {
         describe('constrain should return the proper value for finite number arguments', (): void => {

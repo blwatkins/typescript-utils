@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -18,9 +18,15 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export * from './discriminator';
-export * from './error';
-export * from './math';
-export * from './number';
-export * from './random';
-export * from './string';
+import { describe } from 'vitest';
+
+import { PrimitiveTypeError } from '../../src';
+
+import { testErrorType } from '../utils/error/error-tests';
+
+const name: string = 'PrimitiveTypeError';
+const defaultMessage: string = 'Input does not match primitive type requirements';
+
+describe(name, (): void => {
+    testErrorType(name, PrimitiveTypeError, TypeError, defaultMessage);
+});

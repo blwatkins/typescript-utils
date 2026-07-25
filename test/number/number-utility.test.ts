@@ -34,17 +34,11 @@ import {
     zeroInputs
 } from '../utils/input/number-inputs';
 
+import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('NumberUtility', (): void => {
-    describe('new NumberUtility()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = NumberUtility as unknown as new () => NumberUtility;
-                expect((): NumberUtility => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
+    testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, Error);
 
     describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [

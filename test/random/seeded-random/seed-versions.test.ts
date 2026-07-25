@@ -23,9 +23,12 @@ import { describe, test, expect } from 'vitest';
 import { SeedVersion, SeedVersions } from '../../../src';
 
 import { negativeNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
+import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', () => {
+    testStaticClassConstructor('SeedVersions', SeedVersions as unknown as new () => unknown, Error);
+
     /**
      * @remarks Once a seed version has been published, it should NEVER be changed or updated.
      * The order of seed versions should NEVER be changed.
@@ -51,15 +54,6 @@ describe('SeedVersions', () => {
 
         return indexes;
     }
-
-    describe('new SeedVersions()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = SeedVersions as unknown as new () => SeedVersions;
-                expect((): SeedVersions => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
 
     describe('size', () => {
         test(`Size should be ${expectedSeedVersions.length}`, () => {
