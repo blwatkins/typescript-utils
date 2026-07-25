@@ -103,6 +103,9 @@ Custom error classes must:
 - Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
 - Expose a public static `defaultMessage` getter returning the default error message
 
+Custom error types intentionally do not expose a Node.js-style `code` property.
+Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
+
 ### TypeScript Conventions
 
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
@@ -182,6 +185,7 @@ The following preferences require manual review since no ESLint rule can check t
 - **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value (e.g., `Random.#rng` defaulting to `Math.random`), state the default via `@default` (e.g., `@default Math.random`).
 - **Document default parameter values:** Indicate default values for parameters in the `@param` annotation.
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
+- **Scope `@public` to members:** Apply `@public` to public class members, constructors, and interface properties. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself — the export is the visibility signal.
 
 ## Documentation and GitHub Pages
 
@@ -214,11 +218,11 @@ Use `.md` relative links within `docs/` source files; the build process will con
 
 ### Vitest Testing
 
-- This repository uses Vitest for testing, with coverage reporting via V8. 
+- This repository uses Vitest for testing, with coverage reporting via V8.
 - Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
 - Shared test fixtures and scenario helpers live under `test/utils`.
 - Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
-- Cross-cutting behavior that every member of a family of types must satisfy—for example, the custom error type contract, or the static class instantiation guard—is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file (e.g., `testErrorType` in `test/utils/error/error-tests.ts`, `testStaticClassConstructor` in `test/utils/static/static-class-tests.ts`).
+- Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file (e.g., `testErrorType` in `test/utils/error/error-tests.ts`, `testStaticClassConstructor` in `test/utils/static/static-class-tests.ts`).
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
