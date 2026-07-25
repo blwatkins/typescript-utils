@@ -33,17 +33,11 @@ import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { nonObjectInputs } from '../../utils/input/object-inputs';
+import { testStaticUtilityConstructor } from '../../utils/static/static-utility-tests';
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('WeightedElementUtility', (): void => {
-    describe('new WeightedElementUtility()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = WeightedElementUtility as unknown as new () => WeightedElementUtility;
-                expect((): WeightedElementUtility => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
+    testStaticUtilityConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => WeightedElementUtility, Error);
 
     describe('buildWeightedElement', (): void => {
         test('buildWeightedElement() should return a typed weighed element', (): void => {

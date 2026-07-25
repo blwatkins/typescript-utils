@@ -37,17 +37,12 @@ import {
     singleLineTrimmedInputs
 } from '../utils/input/string-inputs';
 
+import { testStaticUtilityConstructor } from '../utils/static/static-utility-tests';
+
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('StringUtility', (): void => {
-    describe('new StringUtility()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = StringUtility as unknown as new () => StringUtility;
-                expect((): StringUtility => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
+    testStaticUtilityConstructor('StringUtility', StringUtility as unknown as new () => StringUtility, Error);
 
     describe('isString', (): void => {
         const scenarios: Scenario[] = [
