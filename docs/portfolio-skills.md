@@ -128,7 +128,9 @@ A single shared contract test suite verifies every member of the family, so fail
 
 **Evidence:**
 
-- [src/error directory](https://github.com/blwatkins/typescript-utils/tree/main/src/error)
+- [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
+- [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
+- [src/error/static-instance-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/static-instance-error.ts)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 
 ### ESM package contract and artifact layout
