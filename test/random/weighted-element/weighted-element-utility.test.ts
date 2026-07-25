@@ -37,7 +37,7 @@ import { testStaticClassConstructor } from '../../utils/static/static-class-test
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('WeightedElementUtility', (): void => {
-    testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => WeightedElementUtility, Error);
+    testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, Error);
 
     describe('buildWeightedElement', (): void => {
         test('buildWeightedElement() should return a typed weighed element', (): void => {

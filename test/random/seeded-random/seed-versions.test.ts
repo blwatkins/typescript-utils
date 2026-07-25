@@ -27,7 +27,7 @@ import { testStaticClassConstructor } from '../../utils/static/static-class-test
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', () => {
-    testStaticClassConstructor('SeedVersions', SeedVersions as unknown as new () => SeedVersions, Error);
+    testStaticClassConstructor('SeedVersions', SeedVersions as unknown as new () => unknown, Error);
 
     /**
      * @remarks Once a seed version has been published, it should NEVER be changed or updated.

@@ -50,7 +50,7 @@ import {
 } from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('RandomNumberGeneratorFactory', (): void => {
-    testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => RandomNumberGeneratorFactory, Error);
+    testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => unknown, Error);
 
     const sequenceLength: 5 = 5 as const;
 
