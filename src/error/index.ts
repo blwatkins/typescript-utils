@@ -20,3 +20,4 @@
 
 export * from './primitive-type-error';
 export * from './schema-type-error';
+export * from './utils-error';

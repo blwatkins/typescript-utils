@@ -18,6 +18,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { UtilsError } from './utils-error';
+
 /**
  * An error thrown when an input does not match the type of the expected data structure.
  * This error is typically used in validation or assertion scenarios where the input data does not conform to the expected type.
@@ -25,7 +27,7 @@
  * @public
  * @since 0.1.0
  */
-export class PrimitiveTypeError extends TypeError {
+export class PrimitiveTypeError extends TypeError implements UtilsError {
     /**
      * Public constructor.
      *
