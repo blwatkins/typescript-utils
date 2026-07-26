@@ -48,8 +48,9 @@ export class WeightedElementUtility {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {boolean} - `true` if the input is a {@link WeightedElement}, `false` otherwise.
+     * @returns {input is WeightedElement<unknown>} - `true` if the input is a {@link WeightedElement}, `false` otherwise.
      *
+     * @type {TypeGuard<WeightedElement<unknown>>}
      * @readonly
      * @private
      */

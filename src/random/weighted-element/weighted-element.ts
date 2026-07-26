@@ -74,6 +74,7 @@ export interface WeightedElement<TValue> {
     /**
      * The value to be selected from the weighted list.
      *
+     * @type {TValue}
      * @readonly
      * @since 0.1.0
      */

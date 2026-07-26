@@ -12,8 +12,8 @@ The two documents serve overlapping audiences and should stay consistent: when y
 
 ## Tech Stack
 
-- **Language:** TypeScript (targeting ES2022)
-- **Runtime:** Node.js (^22.22.0 || >=24)
+- **Language:** TypeScript
+- **Runtime:** Node.js
 - **Package manager:** npm
 - **Build:** tsdown (ESM output)
 - **Test:** Vitest (coverage via V8)
@@ -34,6 +34,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 - `npm run test:coverage` - run Vitest with V8 coverage reporting
 - `npm run docs` - generate API documentation with TypeDoc
 - `npm run prepack` - build the package before packing or publishing
+- `npm run validate` - run lint, documentation generation, build, and tests in sequence
 
 ## GitHub Actions CI
 
@@ -49,6 +50,7 @@ The two documents serve overlapping audiences and should stay consistent: when y
 ```
 src/
   discriminator/          # Discriminated type-guard utilities and registry
+  error/                  # Custom error types
   math/                   # Math utilities
   number/                 # Number utilities
   random/                 # Random number generation utilities
@@ -58,6 +60,7 @@ src/
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
   discriminator/          # Tests for the discriminator module
+  error/                  # Tests for the error module
   math/                   # Tests for the math module
   number/                 # Tests for the number module
   random/                 # Tests for the random module
@@ -65,7 +68,9 @@ test/                     # Vitest test suites (mirrors src/ module structure)
     weighted-element/     # Tests for the weighted-element module
   string/                 # Tests for the string module
   utils/                  # Shared test fixtures and scenario helpers for use across test suites
+    error/                # Shared contract test suites for custom error types
     input/                # Shared test input fixtures
+    static/               # Shared contract test suites for static class instantiation guards
     test-case/            # Shared test-case helpers
       scenarios/          # Reusable test-case scenario definitions
 docs/                     # GitHub Pages site content and manually maintained release documentation
@@ -89,12 +94,32 @@ Static classes must:
 - Include a JSDoc `@throws` on the constructor documenting the instantiation error
 - Expose public static getters or methods only
 
+### Custom Error Types
+
+Custom error classes must:
+
+- Live in `src/error/` and be re-exported from `src/error/index.ts`
+- Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
+- Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
+- Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
+- Expose a public static `defaultMessage` getter returning the default error message
+
+Choose the error type by the kind of failure, not by the call site:
+
+- `PrimitiveTypeError` — input is not the expected primitive type (e.g., not a string, not a number)
+- `SchemaTypeError` — input is either an object type that does not satisfy an expected object schema, or not an object at all
+- `ValueRangeError` — input is the correct type but falls outside an allowed range or bound
+- `StaticInstanceError` — a static class constructor was invoked
+
+Custom error types intentionally do not expose a Node.js-style `code` property.
+Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
+
 ### TypeScript Conventions
 
 - The package is ESM-only (`"type": "module"`), so keep imports/exports compatible with Node.js ESM resolution.
 - Public exports flow through module index files. This pattern is intentional to maintain clear module boundaries and organization in both source code and generated documentation.
 - API documentation entry points stay module-scoped rather than pointing TypeDoc at the root package entry point.
-- The project uses strict TypeScript settings (`strict`, `noImplicitAny`, `noUnusedLocals`, etc.) targeting ES2022 with `moduleResolution: bundler`.
+- The project uses strict TypeScript settings (`strict`, `noImplicitAny`, `noUnusedLocals`, etc.) with `moduleResolution: bundler`.
 
 ### JavaScript Consumer Safety
 
@@ -168,12 +193,22 @@ The following preferences require manual review since no ESLint rule can check t
 - **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value (e.g., `Random.#rng` defaulting to `Math.random`), state the default via `@default` (e.g., `@default Math.random`).
 - **Document default parameter values:** Indicate default values for parameters in the `@param` annotation.
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
+- **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
+- **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
 
 ## Documentation and GitHub Pages
 
 `README.md` and `docs/index.md` should stay in sync for shared content, but they are not expected to be identical.
 Expected differences include Jekyll front matter, file-specific introductory or heading sections, footer or copyright text, and internal link differences.
 Any addition, removal, or update to shared sections must be applied consistently to both files.
+
+### Markdown Formatting
+
+These rules apply to every Markdown file in the repository, including `README.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and all files under `docs/`.
+
+- Indent a list item's nested content by the width of its parent marker: 2 spaces under `- `, 3 spaces under `1. `. Under-indenting by even one space detaches the content from the list item and splits the list in two. This applies to nested lists, paragraphs, and code fences alike.
+- A single file may need both widths, since the required indent comes from each item's own marker. Do not normalize a file to one indent width.
+- When a fenced code block sits inside a list item, indent the opening fence to the item's content column. The closing fence's indentation does not affect nesting, so match it to the opening fence for readability rather than correctness.
 
 ### Jekyll Build
 
@@ -200,14 +235,19 @@ Use `.md` relative links within `docs/` source files; the build process will con
 
 ### Vitest Testing
 
-This repository uses Vitest for testing, with coverage reporting via V8.
-Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
-Shared test fixtures and scenario helpers live under `test/utils`.
-Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
+- This repository uses Vitest for testing, with coverage reporting via V8.
+- Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
+- Shared test fixtures and scenario helpers live under `test/utils`.
+- Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
+- Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file (e.g., `testErrorType` in `test/utils/error/error-tests.ts`, `testStaticClassConstructor` in `test/utils/static/static-class-tests.ts`).
+- Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
+- Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
 ### Validation Steps
 
-Run in order: `npm ci`, `npm run lint:all`, `npm run build`, `npm test`. See the ["npm Scripts" section](#npm-scripts) for details on each command.
+Run `npm ci`, then `npm run validate`, which runs lint, documentation generation, build, and tests in sequence.
+The documentation step is part of validation because TypeDoc is configured to treat warnings as errors, so an undocumented symbol or an unresolved link fails the run.
+See the ["npm Scripts" section](#npm-scripts) for details on each command.
 
 ### Link Verification
 
@@ -227,11 +267,16 @@ Review `docs/portfolio-skills.md` against the current repository state.
 
 If anything changed, do the following:
 
-- Update any section where capabilities, tooling, or the skills inventory changed
+- Confirm `Capability Record` has 5–7 bullets and `Detailed Technical Notes` has one matching subsection per bullet
+- When a branch introduces a new capability or updates an existing capability, re-rank the highlights against the [selection criteria](#selecting-the-57-highlights) rather than appending; if the new capability ranks in the top 5–7, the lowest-ranked existing highlight comes off the page
 - Bump `modified_date` to today; do not change the original `date`
 - Evidence links must always point to the `main` branch
 
 Refer to the ["Portfolio Page Generation and Maintenance" section](#portfolio-page-generation-and-maintenance) for the full review checklist.
+
+At least once per minor release line, rebuild the highlights from the repository rather than editing existing sections in place.
+Read the configuration files directly — build, lint, test, documentation, and workflow configuration — and re-rank from scratch.
+Editing in place preserves whatever was true when the sections were written; enforcement posture and compatibility contracts introduced since then are only found by re-reading the configuration.
 
 ### 3. Instruction File Sync
 
@@ -296,6 +341,29 @@ When preparing a release merge to `main`:
 - Evidence links in `docs/portfolio-skills.md` should always point to the `main` branch, even when the page is updated from another branch.
 - The guidance in this section applies only when `docs/portfolio-skills.md` is present or intentionally being created.
 
+### Selecting the 5–7 Highlights
+
+The page presents the project's 5–7 strongest highlights, not a complete inventory of its capabilities.
+`Skills and Tooling Inventory` and `At a Glance` carry breadth; these sections carry depth.
+
+Rank every candidate highlight against the following criteria, in order:
+
+1. **Distinctiveness** — does this reflect a deliberate engineering decision, or is it table stakes that most comparable projects also have?
+2. **Evidence strength** — can a specific configuration file or implementation prove the claim directly, or does it need several links that each prove only part of it?
+3. **Currency** — is this in use in the project today, or is it scaffolding for work not yet done?
+4. **Durability** — will the claim still be accurate several releases from now without an edit?
+
+Keep the top 5–7. Drop the rest.
+
+Merge two candidates only when they answer the same engineering question.
+Do not merge unrelated candidates to preserve one that would otherwise be dropped; dropping is the correct outcome for a candidate that does not rank.
+Static analysis, executed tests, documentation, and security or dependency automation are separate questions and should not be merged with one another.
+
+Before dropping a candidate, confirm it ranks low on its own merits rather than because its strongest evidence was never identified.
+A capability whose best evidence is a configuration file often ranks higher than it first appears.
+
+Record the ranking rationale — what was kept, what was dropped, and why — in the pull request description rather than on the page itself.
+
 ### Prompt Template
 
 Use the following prompt template when generating or updating the `docs/portfolio-skills.md` page; for example, when a new project is started, when key dependencies or tooling change, or when the project's capabilities, functionality, or implementation evolve.
@@ -326,7 +394,7 @@ Generate a Markdown file with these sections in order:
 
 2. **About This Page**
    - "This page is a technical record of the skills, tools, and engineering practices represented in the [PROJECT_NAME] project."
-   
+
 3. **Project Overview** (2–3 sentences)
    - What is this project and what does it help you build?
    - Link to the GitHub repository
@@ -373,7 +441,8 @@ Generate a Markdown file with these sections in order:
    Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
-   - 5–10 bullets describing what this project demonstrates
+   - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
+   - Each label must exactly match the heading of its `Detailed Technical Notes` subsection, so the two sections map one to one
    - Each bullet should connect implementation to engineering value
    - Use language like "...to improve [benefit]" or "...enabling [outcome]"
    - Avoid just listing tech names
@@ -381,8 +450,8 @@ Generate a Markdown file with these sections in order:
 
 7. **Detailed Technical Notes** (subsections with evidence)
    - Begin with: "Each technical claim below is backed by a source link to the corresponding implementation or workflow configuration in the project repository."
-   - Create 5–7 subsections, each with:
-     - A descriptive heading (e.g., "Express app composition and middleware stack")
+   - Create one subsection per `Capability Record` bullet, 5–7 total, in the same order, with headings that exactly match the bullet labels
+   - Each subsection contains:
      - 1–2 claim sentences
      - An "Evidence:" section with direct GitHub links to source files
    - **Critical rule:** every claim must link to evidence that *directly* proves it
@@ -421,6 +490,7 @@ Generate a Markdown file with these sections in order:
 - Inconsistent tool terminology across pages (e.g., `CI/CD` vs `Automation`, `Code Analysis / Security`, `Dependency Automation`)
 - Mixed inventory categories that blur automation, deployment, security, and dependency management
 - Capability bullets that list technologies without explaining engineering value
+- Unrelated highlights merged under one heading to stay within the count, instead of dropping the lowest-ranked highlight
 
 ## Output Format
 
@@ -455,9 +525,12 @@ Return the complete Markdown file ready to save as `docs/portfolio-skills.md` an
    - [ ] Section structure matches the portfolio page pattern
    - [ ] Overview is clear and not over-claiming scope
    - [ ] "At a Glance" is scannable and terminology is precise
-   - [ ] Capability bullets explain technical value, not just tech names
+   - [ ] Capability Record has 5–7 bullets and Detailed Technical Notes has one matching subsection per bullet, in the same order
+   - [ ] Capability Record bullets explain technical value, not just tech names
+   - [ ] Every highlight was ranked against the selection criteria, and dropped candidates were dropped rather than merged into unrelated ones
+   - [ ] Any merged highlight combines candidates that answer the same engineering question
    - [ ] Every technical claim has direct evidence links
-   - [ ] Evidence is representative of the current implementation/configured behavior when relevant
+   - [ ] Evidence is representative of the current implementation/configured behavior
    - [ ] Time-sensitive details are durable or intentionally maintained
    - [ ] Tooling/runtime/security wording is accurate, and inventory categories do not mix unrelated concerns
    - [ ] "Current Gaps / Future Improvements" is present and meaningful
@@ -512,11 +585,17 @@ Ensure the page includes the required front matter and these sections (or equiva
 - `Project Overview`
 - `At a Glance`
 - `Skills and Tooling Inventory`
-- `Capability Record`
-- `Detailed Technical Notes`
-- `Current Gaps / Future Improvements`
+- `Capability Record` (5–7 bullets)
+- `Detailed Technical Notes` (one subsection per bullet, same order, matching headings)
+- `Current Gaps / Future Improvements` (2–4 bullets)
 
-Why: this keeps pages consistent and easy to compare across projects.
+Why: this keeps pages consistent and easy to compare across projects, and the one-to-one mapping means every value claim on the page can be audited in a single step.
+
+Count both sections on every review and confirm the mapping still holds.
+A bullet with no matching subsection is an unevidenced claim; a subsection with no matching bullet is depth the page never promised.
+
+When a section exceeds 7 items, re-rank against the [Selecting the 5–7 Highlights](#selecting-the-57-highlights) criteria and drop the lowest-ranked highlight.
+Do not merge unrelated highlights to stay within the count — a heading that names three unrelated concerns describes none of them, and its evidence list grows too long to audit.
 
 ##### 2) Claim quality (accuracy + durability)
 
@@ -602,6 +681,7 @@ Reuse the earlier template usage checklist as the canonical baseline review list
 - Missing limitations section
 - Evidence is technically relevant but not representative of the current runtime/configured implementation
 - Mixed category labels in tooling inventory that blur automation, deployment, security, and dependency management
+- Unrelated highlights merged under one heading to stay within the count, instead of dropping the lowest-ranked highlight
 
 #### One-Sentence Review Standard
 

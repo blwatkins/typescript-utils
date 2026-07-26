@@ -33,6 +33,7 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
   described in the "Portfolio Page Generation and Maintenance" section of
   `.github/copilot-instructions.md`.
 - Release documentation under `docs/releases/` is maintained manually.
+- Markdown indentation rules for all repository `.md` files are in the ["Markdown Formatting" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#markdown-formatting).
 
 ## Pre-Merge and Release Review
 
@@ -43,5 +44,5 @@ Before merging a branch, complete these review steps (full details in the ["Pre-
 3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
 5. **GitHub repository topics** — align with `package.json` keywords
-6. **Branch code review** — convention compliance (static class pattern, JSDoc completeness, copyright headers, README/docs sync, test coverage), code quality (correctness, API consistency, efficiency, backward compatibility, reuse/DRY, runtime safety), and consistency (cross-source consistency across code/comments/docs, implicit pattern detection with maintainer notification)
+6. **Branch code review** — convention compliance (static class pattern, custom error type pattern, JSDoc completeness, copyright headers, README/docs sync, test coverage), code quality (correctness, API consistency, efficiency, backward compatibility, reuse/DRY, runtime safety), and consistency (cross-source consistency across code/comments/docs, implicit pattern detection with maintainer notification)
 7. **Release readiness** (for merges to `main`) — version bump, release docs, TypeDoc entry points, publish workflow

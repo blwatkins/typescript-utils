@@ -31,6 +31,8 @@ import {
     nonNumberInputs
 } from '../../utils/input/number-inputs';
 
+import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
+
 import {
     Scenario,
     SingleInputScenario,
@@ -48,6 +50,8 @@ import {
 } from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('RandomNumberGeneratorFactory', (): void => {
+    testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => unknown, Error);
+
     const sequenceLength: 5 = 5 as const;
 
     function callBuild(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
@@ -77,15 +81,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         return await RandomNumberGeneratorFactory.asyncBuild(seed);
     }
-
-    describe('new RandomNumberGeneratorFactory()', (): void => {
-        describe('Runtime behavior guards', (): void => {
-            test('Constructor should throw an error when instantiated at runtime', (): void => {
-                const RuntimeConstructor = RandomNumberGeneratorFactory as unknown as new () => RandomNumberGeneratorFactory;
-                expect((): RandomNumberGeneratorFactory => new RuntimeConstructor()).toThrow(Error);
-            });
-        });
-    });
 
     describe('build', (): void => {
         describe('build() with valid inputs', (): void => {

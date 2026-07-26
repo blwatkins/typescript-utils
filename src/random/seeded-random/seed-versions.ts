@@ -31,6 +31,7 @@ export interface SeedVersion {
      * A collection of offset values for the FNV-1a hashing algorithm.
      * Each offset value should be a 32-bit unsigned integer.
      *
+     * @type {[number, number, number, number]}
      * @readonly
      * @since 0.1.0
      */
