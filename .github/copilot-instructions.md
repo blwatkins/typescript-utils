@@ -413,7 +413,7 @@ Generate a Markdown file with these sections in order:
    - Security Analysis (if applicable)
    - Documentation Pattern (if applicable)
 
-Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
+   Use consistent capitalization across similar projects, keep labels semantically precise, and keep tool mentions durable (avoid hardcoded versions, exact cadences, or similarly brittle operational details unless they are intentionally maintained).
 
 5. **Skills and Tooling Inventory** (flat bulleted list with bold category labels, e.g., `- **Category:** [Tool](url), [Tool](url)`)
    - Languages
@@ -436,9 +436,9 @@ Use consistent capitalization across similar projects, keep labels semantically 
    - Development Environments
    - AI-Assisted Development
 
-Link each tool/language to its official documentation.
-Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
-Omit categories that do not apply to the project; add context-specific categories where appropriate.
+   Link each tool/language to its official documentation.
+   Keep categories semantically precise: do not group unrelated concerns together (for example, CI automation, deployment/hosting, code analysis/security, and dependency automation should usually remain separate).
+   Omit categories that do not apply to the project; add context-specific categories where appropriate.
 
 6. **Capability Record** (bulleted list)
    - 5–7 bullets, one per highlight, each opening with a bold label naming the highlight
@@ -495,7 +495,6 @@ Omit categories that do not apply to the project; add context-specific categorie
 ## Output Format
 
 Return the complete Markdown file ready to save as `docs/portfolio-skills.md` and publish. Ensure:
-
 - All links use the full GitHub repo URL with `/blob/main/` path format for files
 - Use `/tree/main/` for directory links when appropriate
 - All code blocks and filenames use backticks
