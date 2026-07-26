@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-25
+modified_date: 2026-07-26
 toc: true
 ---
 
@@ -47,7 +47,6 @@ The repository is maintained at [blwatkins/typescript-utils](https://github.com/
 - **Hosting & Deployment:** [GitHub Pages](https://docs.github.com/en/pages), [npm package registry](https://www.npmjs.com/), [GitHub package registry](https://docs.github.com/en/packages)
 - **Code Analysis / Security:** [CodeQL](https://codeql.github.com/)
 - **Dependency Automation:** [Dependabot](https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-version-updates)
-- **Development Utilities:** [npm CLI](https://docs.npmjs.com/cli)
 - **Environment Configuration:** Node.js version pinning via `.node-version`, plus Ruby version pinning for the Jekyll/Bundler docs site via `docs/.ruby-version`
 - **Development Environments:** [WebStorm](https://www.jetbrains.com/webstorm/), [Visual Studio Code](https://code.visualstudio.com/)
 - **AI-Assisted Development:** [GitHub Copilot](https://github.com/features/copilot), [Claude Code](https://code.claude.com/docs/en/overview)
