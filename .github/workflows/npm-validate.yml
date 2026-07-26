@@ -1,18 +1,18 @@
-name: npm Lint, Build, and Test
+name: npm Validate
 
 on:
   workflow_dispatch:
   push:
     branches:
       - "main"
-      - "release/**/*"
+      - "release/**"
   pull_request:
     branches:
       - "main"
-      - "release/**/*"
+      - "release/**"
 
 jobs:
-  test:
+  validate:
     permissions:
       contents: read
 
@@ -31,6 +31,4 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
-      - run: npm run lint:all
-      - run: npm run build
-      - run: npm test
+      - run: npm run validate
