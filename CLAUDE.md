@@ -39,7 +39,7 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
 
 Before merging a branch, complete these review steps (full details in the ["Pre-Merge and Release Review" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#pre-merge-and-release-review)):
 
-1. **Validation** — `npm ci`, `npm run lint:all`, `npm run build`, `npm test` all pass
+1. **Validation** — `npm ci`, then `npm run validate` (lint, docs, build, test) passes cleanly
 2. **Portfolio skills page** — review `docs/portfolio-skills.md` for accuracy; update `modified_date` if content changes
 3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
