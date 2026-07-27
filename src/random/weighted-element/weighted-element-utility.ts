@@ -190,25 +190,17 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
      *
+     * @deprecated - Migrated to {@link WeightedListUtility.isWeightedList}. Will be removed in v0.1.0-alpha.4.
+     *
      * @public
      * @since 0.1.0
      */
     public static isWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedList<TValue> {
-        if (typeof valueTypeGuard !== 'function') {
-            throw new TypeError('Value type guard must be a function');
-        }
-
-        if (!WeightedElementUtility.isGenericWeightedList(input)) {
-            return false;
-        }
-
-        return input.every((element: unknown): boolean => {
-            return WeightedElementUtility.isWeightedElement(element, valueTypeGuard);
-        });
+        return WeightedListUtility.isWeightedList(input, valueTypeGuard);
     }
 
     /**
-     * Validate that an object is a valid {@link WeightedList}.
+     * Validate that an object is a valid generic {@link WeightedList}.
      * This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedList}
