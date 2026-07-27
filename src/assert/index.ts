@@ -18,17 +18,4 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrimitiveTypeError } from '../error';
-import { StringUtility } from '../string';
-
-export class PrimitiveTypeAssertions {
-    public static assertFunctionType(input: unknown, message?: string): asserts input is Function {
-        if (typeof input !== 'function') {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
-                throw new PrimitiveTypeError(message);
-            }
-
-            throw new PrimitiveTypeError(`Expected a function, but received: ${typeof input}`);
-        }
-    }
-}
+export * from './primitive-type-assertions';

@@ -20,7 +20,7 @@
 
 import { NumberUtility } from '../number';
 
-import { WeightedElementUtility, WeightedList } from './weighted-element';
+import {WeightedElementUtility, WeightedList, WeightedListUtility} from './weighted-element';
 
 /**
  * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
@@ -199,7 +199,7 @@ export class Random {
      * @since 0.1.0
      */
     public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type {
-        WeightedElementUtility.validateWeightedList(elements);
+        WeightedListUtility.assertGenericWeightedList(elements);
         const r: number = Random.random();
         let cumulativeWeight: number = 0;
 
