@@ -25,6 +25,7 @@ import { Type } from 'typebox';
 import { DiscriminatorRegistry, Discriminators, TypeGuard } from '../../discriminator';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
+import { WeightedListUtility } from './weighted-list-utility';
 
 /**
  * Static methods and properties for building and validating {@link WeightedElement} and {@link WeightedList} objects.
@@ -165,25 +166,13 @@ export class WeightedElementUtility {
      * @returns {input is WeightedList<unknown>} - `true` if the given input is a valid {@link WeightedList} object; `false` otherwise.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
+     * @deprecated - Migrated to {@link WeightedListUtility.isGenericWeightedList}. Will be removed in v0.1.0-alpha.4.
+     *
      * @public
      * @since 0.1.0
      */
     public static isGenericWeightedList(input: unknown): input is WeightedList<unknown> {
-        if (!input || !Array.isArray(input) || input.length === 0) {
-            return false;
-        }
-
-        const containsWeightedElements: boolean = input.every((element: unknown): boolean => {
-            return WeightedElementUtility.isGenericWeightedElement(element);
-        });
-
-        if (!containsWeightedElements) {
-            return false;
-        }
-
-        const weightSum: number = input.reduce((sum: number, element: unknown): number => sum + (element as WeightedElement<unknown>).weight, 0);
-        const precisionSum: number = Number.parseFloat(weightSum.toFixed(4));
-        return precisionSum === 1;
+        return WeightedListUtility.isGenericWeightedList(input);
     }
 
     /**
@@ -230,13 +219,13 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given list is not a valid {@link WeightedList}.
      *
+     * @deprecated - Migrated to {@link WeightedListUtility.assertGenericWeightedList}. Will be removed in v0.1.0-alpha.4.
+     *
      * @public
      * @since 0.1.0
      */
     public static validateWeightedList(list: unknown): void {
-        if (!WeightedElementUtility.isGenericWeightedList(list)) {
-            throw new TypeError('Input does not match schema requirements for weighted list');
-        }
+        WeightedListUtility.assertGenericWeightedList(list);
     }
 
     /**
