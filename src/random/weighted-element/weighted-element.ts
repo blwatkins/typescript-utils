@@ -20,7 +20,7 @@
 
 import { Type } from 'typebox';
 
-import { Discriminators, discriminatedSchema } from '../../discriminator';
+import { Discriminated, Discriminators, discriminatedSchema } from '../../discriminator';
 
 /**
  * TypeBox schema to validate a {@link WeightedElement} object.
@@ -70,7 +70,7 @@ export const weightedElementSchema = Type.Generic(
  *
  * @since 0.1.0
  */
-export interface WeightedElement<TValue> {
+export interface WeightedElement<TValue> extends Discriminated {
     /**
      * The value to be selected from the weighted list.
      *
