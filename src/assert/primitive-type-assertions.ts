@@ -22,7 +22,7 @@ import { PrimitiveTypeError } from '../error';
 import { StringUtility } from '../string';
 
 export class PrimitiveTypeAssertions {
-    public static assertFunctionType(input: unknown, message?: string): asserts input is Function {
+    public static assertFunctionType(input: unknown, message?: string): asserts input is (...args: unknown[]) => unknown {
         if (typeof input !== 'function') {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);

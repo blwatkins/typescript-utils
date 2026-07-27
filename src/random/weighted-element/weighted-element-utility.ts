@@ -212,7 +212,8 @@ export class WeightedElementUtility {
         }
     }
 
-    /******************** TODO: DEPRECATED ********************/
+    /* ******************* TODO: DEPRECATED ******************* */
+
     /**
      * Is the given input a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function?
      *

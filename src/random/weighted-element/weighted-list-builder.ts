@@ -17,28 +17,3 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-import { PrimitiveTypeAssertions } from '../../assert/primitive-type-assertions';
-
-import {WeightedElement, WeightedList} from './weighted-element';
-import { WeightedListUtility } from './weighted-list-utility';
-
-export class WeightedListBuilder<TValue> {
-    readonly #elements: WeightedElement<TValue>[] = [];
-    readonly #valueTypeGuard: ((value: unknown) => value is TValue) | undefined;
-
-    public constructor(valueTypeGuard?: (value: unknown) => value is TValue) {
-        PrimitiveTypeAssertions.assertFunctionType(valueTypeGuard);
-        this.#valueTypeGuard = valueTypeGuard;
-    }
-
-    public build(): WeightedList<TValue> {
-        if (this.#valueTypeGuard) {
-            WeightedListUtility.assertWeightedList(this.#elements, this.#valueTypeGuard);
-        } else {
-            WeightedListUtility.assertGenericWeightedList(this.#elements);
-        }
-
-        return this.#elements;
-    }
-}
