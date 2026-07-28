@@ -17,3 +17,43 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+import { PrimitiveTypeAssertions } from '../../assert';
+import { Discriminators } from '../../discriminator';
+import { StaticInstanceError } from '../../error';
+import { MathUtility } from '../../math';
+
+import { WeightedElement } from './weighted-element';
+import { WeightedElementUtility } from './weighted-element-utility';
+
+/**
+ * A static utility class for building {@link WeightedElement} objects.
+ *
+ * @since 0.1.0
+ */
+export class WeightedElementBuilder {
+    /**
+     * Private constructor.
+     *
+     * @throws {StaticInstanceError} - When class is instantiated.
+     * {@link WeightedElementBuilder} is a static class and cannot be instantiated.
+     *
+     * @private
+     */
+    private constructor() {
+        throw new StaticInstanceError('WeightedElementBuilder is a static class and cannot be instantiated');
+    }
+
+    public static buildFrom<TValue>(value: TValue, weight: number): WeightedElement<TValue> {
+        return {
+            value: value,
+            weight: MathUtility.constrain(weight, WeightedElementUtility.minWeight, WeightedElementUtility.maxWeight),
+            discriminator: Discriminators.WeightedElement
+        };
+    }
+
+    public static buildFromObject<TValue>(input: { value: TValue; weight: number; }): WeightedElement<TValue> {
+        PrimitiveTypeAssertions.assertObjectType(input);
+        return WeightedElementBuilder.buildFrom(input.value, input.weight);
+    }
+}

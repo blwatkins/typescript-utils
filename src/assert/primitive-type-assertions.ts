@@ -31,4 +31,24 @@ export class PrimitiveTypeAssertions {
             throw new PrimitiveTypeError(`Expected a function, but received: ${typeof input}`);
         }
     }
+
+    public static assertObjectType(input: unknown, message?: string): asserts input is object {
+        if (!input || typeof input !== 'object' || Array.isArray(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a non-array object, but received: ${typeof input}`);
+        }
+    }
+
+    public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
+        if (!input || typeof input !== 'object' || !Array.isArray(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}`);
+        }
+    }
 }
