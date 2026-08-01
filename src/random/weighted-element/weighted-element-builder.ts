@@ -50,13 +50,23 @@ export class WeightedElementBuilder {
      *
      * @param {TValue} value - The value of the {@link WeightedElement}.
      * @param {number} weight - The weight of the {@link WeightedElement}.
+     * @param {((input) => input is TValue) | undefined} typeGuard - An optional type guard to assert the type of the value. This method should return true when the input is of type TValue, and false otherwise. If provided, the type guard will be used to assert the type of the value before building the {@link WeightedElement}. If not provided, no type assertion will be performed.
      *
      * @returns {WeightedElement<TValue>} - A {@link WeightedElement} object with the given value and weight.
+     *
+     * @throws {TypeError} - When a type guard is provided and the given value does not match the type guard.
      *
      * @public
      * @since 0.1.0
      */
-    public static buildFrom<TValue>(value: TValue, weight: number): WeightedElement<TValue> {
+    public static buildFrom<TValue>(value: TValue, weight: number, typeGuard?: (input: unknown) => input is TValue): WeightedElement<TValue> {
+        if (typeGuard) {
+            PrimitiveTypeAssertions.assertFunctionType(typeGuard);
+            if (!typeGuard(value)) {
+                throw new TypeError('Value does not match the provided type guard.');
+            }
+        }
+
         return {
             value: value,
             weight: MathUtility.constrain(weight, minElementWeight, maxElementWeight),
