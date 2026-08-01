@@ -48,30 +48,6 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Minimum valid weight for a {@link WeightedElement}.
-     *
-     * @returns {0} - The minimum valid weight for a {@link WeightedElement}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static get minWeight(): 0 {
-        return 0;
-    }
-
-    /**
-     * Maximum valid weight for a {@link WeightedElement}.
-     *
-     * @returns {1} - The maximum valid weight for a {@link WeightedElement}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static get maxWeight(): 1 {
-        return 1;
-    }
-
-    /**
      * A type guard for generic {@link WeightedElement} objects.
      *
      * @remarks This method does not enforce type checking for {@link WeightedElement.value}.

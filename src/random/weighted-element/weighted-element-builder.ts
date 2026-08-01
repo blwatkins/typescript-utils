@@ -23,8 +23,7 @@ import { Discriminators } from '../../discriminator';
 import { StaticInstanceError } from '../../error';
 import { MathUtility } from '../../math';
 
-import { WeightedElement } from './weighted-element';
-import { WeightedElementUtility } from './weighted-element-utility';
+import { WeightedElement, maxElementWeight, minElementWeight } from './weighted-element';
 
 /**
  * A static utility class for building {@link WeightedElement} objects.
@@ -60,7 +59,7 @@ export class WeightedElementBuilder {
     public static buildFrom<TValue>(value: TValue, weight: number): WeightedElement<TValue> {
         return {
             value: value,
-            weight: MathUtility.constrain(weight, WeightedElementUtility.minWeight, WeightedElementUtility.maxWeight),
+            weight: MathUtility.constrain(weight, minElementWeight, maxElementWeight),
             discriminator: Discriminators.WeightedElement
         };
     }

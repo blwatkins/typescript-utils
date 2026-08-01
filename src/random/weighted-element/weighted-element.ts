@@ -23,6 +23,22 @@ import { Type } from 'typebox';
 import { Discriminated, Discriminators, discriminatedSchema } from '../../discriminator';
 
 /**
+ * Minimum value for a {@link WeightedElement.weight}.
+ *
+ * @type {0}
+ * @since 0.1.0
+ */
+export const minElementWeight: 0 = 0 as const;
+
+/**
+ * Maximum value for a {@link WeightedElement.weight}.
+ *
+ * @type {1}
+ * @since 0.1.0
+ */
+export const maxElementWeight: 1 = 1 as const;
+
+/**
  * TypeBox schema to validate a {@link WeightedElement} object.
  *
  * @since 0.1.0
@@ -48,8 +64,8 @@ export const weightedElementSchema = Type.Generic(
                  * @readonly
                  */
                 weight: Type.Readonly(Type.Number({
-                    minimum: 0,
-                    maximum: 1
+                    minimum: minElementWeight,
+                    maximum: maxElementWeight
                 })),
 
                 /**
