@@ -44,6 +44,19 @@ export class WeightedElementBuilder {
         throw new StaticInstanceError('WeightedElementBuilder is a static class and cannot be instantiated');
     }
 
+    /**
+     * Builds a {@link WeightedElement} object from the given value and weight.
+     *
+     * @template TValue - The type of the value of the {@link WeightedElement}.
+     *
+     * @param {TValue} value - The value of the {@link WeightedElement}.
+     * @param {number} weight - The weight of the {@link WeightedElement}.
+     *
+     * @returns {WeightedElement<TValue>} - A {@link WeightedElement} object with the given value and weight.
+     *
+     * @public
+     * @since 0.1.0
+     */
     public static buildFrom<TValue>(value: TValue, weight: number): WeightedElement<TValue> {
         return {
             value: value,
@@ -52,6 +65,20 @@ export class WeightedElementBuilder {
         };
     }
 
+    /**
+     * Builds a {@link WeightedElement} object from the given input object.
+     *
+     * @template TValue - The type of the value of the {@link WeightedElement}.
+     *
+     * @param {{value: TValue, weight: number}} input - The given input object containing the value and weight of the {@link WeightedElement}.
+     * @param {TValue} input.value - The value of the {@link WeightedElement}.
+     * @param {number} input.weight - The weight of the {@link WeightedElement}.
+     *
+     * @returns {WeightedElement<TValue>} - A {@link WeightedElement} object with the given value and weight.
+     *
+     * @public
+     * @since 0.1.0
+     */
     public static buildFromObject<TValue>(input: { value: TValue; weight: number; }): WeightedElement<TValue> {
         PrimitiveTypeAssertions.assertObjectType(input);
         return WeightedElementBuilder.buildFrom(input.value, input.weight);
