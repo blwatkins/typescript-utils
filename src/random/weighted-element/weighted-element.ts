@@ -74,6 +74,8 @@ export interface WeightedElement<TValue> extends Discriminated {
     /**
      * The value to be selected from the weighted list.
      *
+     * @template TValue
+     *
      * @type {TValue}
      * @readonly
      * @since 0.1.0
@@ -104,6 +106,8 @@ export interface WeightedElement<TValue> extends Discriminated {
  * Type alias for a list of {@link WeightedElement} objects.
  *
  * @see {@link weightedElementSchema}
+ *
+ * @template TValue - The type of the value property of the {@link WeightedElement} objects in the list.
  *
  * @since 0.1.0
  */
