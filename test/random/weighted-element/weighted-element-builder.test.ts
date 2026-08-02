@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {describe, expect, test} from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import {
     Discriminators,
@@ -41,7 +41,9 @@ describe('WeightedElementBuilder', (): void => {
                 const element: WeightedElement<string> = WeightedElementBuilder.buildFrom<string>(value, weight);
                 expect(element).toEqual({ value, weight, discriminator: Discriminators.WeightedElement });
                 expect(WeightedElementUtility.isGenericWeightedElement(element)).toBeTruthy();
-                expect((): void => WeightedElementUtility.assertGenericWeightedElement(element)).not.toThrow();
+                expect((): void => {
+                    WeightedElementUtility.assertGenericWeightedElement(element);
+                }).not.toThrow();
             });
 
             test('with undefined type guard', (): void => {
@@ -50,16 +52,20 @@ describe('WeightedElementBuilder', (): void => {
                 const element: WeightedElement<string> = WeightedElementBuilder.buildFrom<string>(value, weight, undefined);
                 expect(element).toEqual({ value, weight, discriminator: Discriminators.WeightedElement });
                 expect(WeightedElementUtility.isGenericWeightedElement(element)).toBeTruthy();
-                expect((): void => WeightedElementUtility.assertGenericWeightedElement(element)).not.toThrow();
+                expect((): void => {
+                    WeightedElementUtility.assertGenericWeightedElement(element);
+                }).not.toThrow();
             });
 
             test('with type guard', (): void => {
                 const value: string = 'TEST VALUE';
                 const weight: number = 1;
-                const element: WeightedElement<string> = WeightedElementBuilder.buildFrom<string>(value, weight, StringUtility.isNonEmptyString);
+                const element: WeightedElement<string> = WeightedElementBuilder.buildFrom<string>(value, weight, StringUtility.isNonEmptyString.bind(StringUtility));
                 expect(element).toEqual({ value, weight, discriminator: Discriminators.WeightedElement });
                 expect(WeightedElementUtility.isGenericWeightedElement(element)).toBeTruthy();
-                expect((): void => WeightedElementUtility.assertGenericWeightedElement(element)).not.toThrow();
+                expect((): void => {
+                    WeightedElementUtility.assertGenericWeightedElement(element);
+                }).not.toThrow();
             });
         });
 
