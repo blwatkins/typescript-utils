@@ -20,8 +20,12 @@
 
 import { Type, type Static } from 'typebox';
 
+/* ******************* TODO: DEPRECATED ******************* */
+
 /**
  * TypeBox schema for validating that an object implements the {@link Discriminated} type.
+ *
+ * @deprecated - Will be removed in v0.1.0-alpha.4
  *
  * @since 0.1.0
  */
@@ -40,6 +44,8 @@ export const discriminatedSchema = Type.Object(
 
 /**
  * Discriminated objects can be type checked using the discriminator registry.
+ *
+ * @deprecated - Will be removed in v0.1.0-alpha.4
  *
  * @since 0.1.0
  */
