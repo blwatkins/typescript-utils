@@ -26,7 +26,6 @@ import {
     WeightedElement,
     weightedElementSchema,
     WeightedElementUtility,
-    WeightedList
 } from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
@@ -38,219 +37,6 @@ import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-c
 
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, Error);
-
-    describe('buildWeightedElement', (): void => {
-        test('buildWeightedElement() should return a typed weighed element', (): void => {
-            const element: WeightedElement<string> = WeightedElementUtility.buildWeightedElement({ value: 'test value', weight: 0.5 });
-
-            expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is string => typeof input === 'string')).toBe(true);
-            expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is number => typeof input === 'number')).toBe(false);
-        });
-
-        describe('Input validation', (): void => {
-            const scenarios: Scenario[] = [
-                {
-                    label: 'Non-object type inputs',
-                    inputs: [
-                        ...nonObjectInputs
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Array type inputs',
-                    inputs: [
-                        [],
-                        [1, 2, 3],
-                        ['a', 'b', 'c']
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Object inputs missing value property',
-                    inputs: [
-                        { weight: 0 },
-                        { weight: 0.5 },
-                        { weight: 1 }
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Object inputs missing weight property',
-                    inputs: [
-                        { value: 10 },
-                        { value: 'hello' },
-                        {
-                            value: (): number => {
-                                return 100;
-                            }
-                        }
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Object inputs with non-numeric weight property',
-                    inputs: [
-                        ...nonNumberInputs.map((input) => {
-                            return { value: 'test', weight: input };
-                        })
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Object inputs with non-finite weight property',
-                    inputs: [
-                        ...nonFiniteNumberInputs.map((input) => {
-                            return { value: 'test', weight: input };
-                        })
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Object inputs with out of range weight property',
-                    inputs: [
-                        { value: 10, weight: -5 },
-                        { value: 10, weight: -1 },
-                        { value: 10, weight: -0.1 },
-                        { value: 10, weight: -Number.EPSILON },
-                        { value: 10, weight: 1 + Number.EPSILON },
-                        { value: 10, weight: 1.1 },
-                        { value: 10, weight: 5 }
-                    ],
-                    expected: TypeError
-                },
-                {
-                    label: 'Object inputs with additional properties',
-                    inputs: [
-                        { value: 'hello', weight: 0, name: 'bob' },
-                        { value: 'hello', weight: 0.5, age: 42 },
-                        { value: 'hello', weight: 1, day: 7 }
-                    ],
-                    expected: TypeError
-                }
-            ];
-
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect((): void => {
-                        WeightedElementUtility.buildWeightedElement(testInput as { value: unknown; weight: number; });
-                    }).toThrow(testExpected);
-                });
-            });
-        });
-    });
-
-    describe('buildWeightedList', (): void => {
-        test('buildWeightedList() should return a typed weighted list', (): void => {
-            const list: WeightedList<string> = WeightedElementUtility.buildWeightedList([
-                { value: 'test value 1', weight: 0.5 },
-                { value: 'test value 2', weight: 0.5 }
-            ]);
-
-            expect(WeightedElementUtility.isWeightedList(list, (input: unknown): input is string => typeof input === 'string')).toBe(true);
-            expect(WeightedElementUtility.isWeightedList(list, (input: unknown): input is number => typeof input === 'number')).toBe(false);
-        });
-
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-array type inputs',
-                inputs: [
-                    ...nonArrayInputs
-                ],
-                expected: TypeError
-            },
-            {
-                label: 'Empty array input',
-                inputs: [
-                    []
-                ],
-                expected: TypeError
-            },
-            {
-                label: 'Incorrect type array input',
-                inputs: [
-                    [1, 2, 3],
-                    ['a', 'b', 'c'],
-                    [
-                        { weight: 1 }
-                    ],
-                    [
-                        { value: 'hello' }
-                    ],
-                    [
-                        { value: 'hello', weight: 'three' }
-                    ],
-                    [
-                        { value: 'hello', weight: NaN }
-                    ],
-                    [
-                        { value: 'hello', weight: Infinity }
-                    ],
-                    [
-                        { value: 10, weight: -0.1 }
-                    ],
-                    [
-                        { value: 'hello', weight: 1, name: 'bob' }
-                    ]
-                ],
-                expected: TypeError
-            },
-            {
-                label: 'Weight sum is not equal to one',
-                inputs: [
-                    [
-                        { value: 'test 1', weight: 0.5 },
-                        { value: 'test 2', weight: 0.5 },
-                        { value: 'test 3', weight: 0.0001 }
-                    ],
-                    [
-                        { value: 'test 1', weight: 0.5 },
-                        { value: 'test 2', weight: 0.5 - 0.0001 }
-                    ],
-                    [
-                        { value: 'test 1', weight: 0.5 },
-                        { value: 'test 2', weight: 0.5 + 0.0001 }
-                    ],
-                    [
-                        { value: 'test 1', weight: 0 }
-                    ],
-                    [
-                        { value: 'test 1', weight: 1 - 0.0001 }
-                    ],
-                    [
-                        { value: 'test 1', weight: 1 },
-                        { value: 'test 2', weight: 1 }
-                    ],
-                    [
-                        [
-                            { value: 'test 1', weight: 1 },
-                            { value: 'test 2', weight: 0.0001 }
-                        ]
-                    ]
-                ],
-                expected: TypeError
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect((): void => {
-                    WeightedElementUtility.buildWeightedList(testInput as { value: unknown; weight: number; }[]);
-                }).toThrow(testExpected);
-            });
-        });
-    });
 
     describe('isGenericWeightedElement()', (): void => {
         describe('weightedElementSchema and WeightedElement interface should be equivalent', (): void => {
@@ -301,32 +87,22 @@ describe('WeightedElementUtility', (): void => {
                 {
                     label: 'Object inputs missing value property',
                     inputs: [
-                        { weight: 0, discriminator: Discriminators.WeightedElement },
-                        { weight: 0.5, discriminator: Discriminators.WeightedElement },
-                        { weight: 1, discriminator: Discriminators.WeightedElement }
+                        { weight: 0 },
+                        { weight: 0.5 },
+                        { weight: 1 }
                     ],
                     expected: false
                 },
                 {
                     label: 'Object inputs missing weight property',
                     inputs: [
-                        { value: 10, discriminator: Discriminators.WeightedElement },
-                        { value: 'hello', discriminator: Discriminators.WeightedElement },
+                        { value: 10 },
+                        { value: 'hello' },
                         {
                             value: (): number => {
                                 return 100;
-                            },
-                            discriminator: Discriminators.WeightedElement
+                            }
                         }
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs missing discriminator property',
-                    inputs: [
-                        { value: 'hi', weight: 0 },
-                        { value: 'hello', weight: 0.5 },
-                        { value: 'test', weight: 1 }
                     ],
                     expected: false
                 },
@@ -334,7 +110,7 @@ describe('WeightedElementUtility', (): void => {
                     label: 'Object inputs with non-numeric weight property',
                     inputs: [
                         ...nonNumberInputs.map((input) => {
-                            return { value: 'test', weight: input, discriminator: Discriminators.WeightedElement };
+                            return { value: 'test', weight: input };
                         })
                     ],
                     expected: false
@@ -343,7 +119,7 @@ describe('WeightedElementUtility', (): void => {
                     label: 'Object inputs with non-finite weight property',
                     inputs: [
                         ...nonFiniteNumberInputs.map((input) => {
-                            return { value: 'test', weight: input, discriminator: Discriminators.WeightedElement };
+                            return { value: 'test', weight: input };
                         })
                     ],
                     expected: false
@@ -351,40 +127,31 @@ describe('WeightedElementUtility', (): void => {
                 {
                     label: 'Object inputs with out of range weight property',
                     inputs: [
-                        { value: 10, weight: -5, discriminator: Discriminators.WeightedElement },
-                        { value: 10, weight: -1, discriminator: Discriminators.WeightedElement },
-                        { value: 10, weight: -0.1, discriminator: Discriminators.WeightedElement },
-                        { value: 10, weight: -Number.EPSILON, discriminator: Discriminators.WeightedElement },
-                        { value: 10, weight: 1 + Number.EPSILON, discriminator: Discriminators.WeightedElement },
-                        { value: 10, weight: 1.1, discriminator: Discriminators.WeightedElement },
-                        { value: 10, weight: 5, discriminator: Discriminators.WeightedElement }
+                        { value: 10, weight: -5 },
+                        { value: 10, weight: -1 },
+                        { value: 10, weight: -0.1 },
+                        { value: 10, weight: -Number.EPSILON },
+                        { value: 10, weight: 1 + Number.EPSILON },
+                        { value: 10, weight: 1.1 },
+                        { value: 10, weight: 5 }
                     ],
                     expected: false
                 },
                 {
                     label: 'Object inputs with additional properties',
                     inputs: [
-                        { value: 'hello', weight: 0, name: 'bob', discriminator: Discriminators.WeightedElement },
-                        { value: 'hello', weight: 0.5, age: 42, discriminator: Discriminators.WeightedElement },
-                        { value: 'hello', weight: 1, day: 7, discriminator: Discriminators.WeightedElement }
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs with incorrect discriminator',
-                    inputs: [
-                        { value: 'hello', weight: 0, discriminator: 'invalid' },
-                        { value: 'hello', weight: 0.5, discriminator: '' },
-                        { value: 'hello', weight: 1, discriminator: 'other discriminator' }
+                        { value: 'hello', weight: 0, name: 'bob' },
+                        { value: 'hello', weight: 0.5, age: 42 },
+                        { value: 'hello', weight: 1, day: 7 }
                     ],
                     expected: false
                 },
                 {
                     label: 'Valid weighted element object',
                     inputs: [
-                        { value: 'hello', weight: 0, discriminator: Discriminators.WeightedElement },
-                        { value: 'hi', weight: 0.5, discriminator: Discriminators.WeightedElement },
-                        { value: 'hey', weight: 1, discriminator: Discriminators.WeightedElement }
+                        { value: 'hello', weight: 0 },
+                        { value: 'hi', weight: 0.5 },
+                        { value: 'hey', weight: 1 }
                     ],
                     expected: true
                 }
