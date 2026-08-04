@@ -36,7 +36,7 @@ export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
  *
- * @deprecated - Will be removed in v0.1.0-alpha.4
+ * @deprecated - Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */
@@ -109,7 +109,7 @@ export class DiscriminatorRegistry {
      *
      * @returns {boolean} - `true` if the discriminator is registered, `false` otherwise.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
