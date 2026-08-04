@@ -34,7 +34,7 @@ export const alternateAsciiNamespace: 'test-namespace-01' = 'test-namespace-01' 
 /**
  * Sequences are keyed by their namespace and seed input. The version index should match the index of the sequence in the array.
  *
- * @remarks Once a seed version has been published, it should <b>NEVER</b> be changed or updated.
+ * @remarks - Once a seed version has been published, it should <b>NEVER</b> be changed or updated.
  * The order of seed versions should <b>NEVER</b> be changed.
  * New seed versions can only be added to the end of the array.
  * This array is meant to help ensure that the published SeedVersion data <b>NEVER</b> changes.
@@ -94,7 +94,7 @@ const sequences: Record<string, number[][]> = {
 /**
  * Async sequences are keyed by their namespace and seed input.
  *
- * @remarks Once a test seed and namespace sequence has been determined, any deviation from that expected behavior is indicative of a breaking change and should be investigated immediately.
+ * @remarks - Once a test seed and namespace sequence has been determined, any deviation from that expected behavior is indicative of a breaking change and should be investigated immediately.
  */
 const asyncSequences: Record<string, number[]> = {
     '': [0.10194779536686838, 0.056906999787315726, 0.37946939864195883, 0.5692655819002539, 0.7202949896454811],

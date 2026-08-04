@@ -43,7 +43,7 @@ export class WeightedElementUtility {
      * @private
      */
     private constructor() {
-        throw new StaticInstanceError('WeightedElementUtility is a static class and cannot be instantiated');
+        throw new StaticInstanceError('WeightedElementUtility is a static class and cannot be instantiated.');
     }
 
     /**
@@ -253,7 +253,7 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given element is not a valid {@link WeightedElement}.
      *
-     * @deprecated
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -272,7 +272,7 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given input is not an object.
      *
-     * @deprecated
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -291,7 +291,7 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given input is not a non-empty array.
      *
-     * @deprecated
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
