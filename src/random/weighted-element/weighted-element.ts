@@ -62,7 +62,7 @@ export const weightedElementSchema = Type.Generic(
             weight: Type.Readonly(Type.Number({
                 minimum: minElementWeight,
                 maximum: maxElementWeight
-            })),
+            }))
         },
         { additionalProperties: false }
     )
