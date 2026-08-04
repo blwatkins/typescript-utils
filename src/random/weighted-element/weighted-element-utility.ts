@@ -23,7 +23,6 @@ import Value from 'typebox/value';
 import { Type } from 'typebox';
 
 import { PrimitiveTypeAssertions } from '../../assert';
-import { Discriminators } from '../../discriminator';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
@@ -208,8 +207,7 @@ export class WeightedElementUtility {
         WeightedElementUtility.#validateBuildWeightedElementInput(input);
 
         const weightedElement = {
-            ...input,
-            discriminator: Discriminators.WeightedElement
+            ...input
         };
 
         WeightedElementUtility.#validateWeightedElement(weightedElement);
