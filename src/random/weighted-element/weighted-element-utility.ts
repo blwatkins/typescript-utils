@@ -198,7 +198,7 @@ export class WeightedElementUtility {
      * @throws {TypeError} - When the given input does not result in a valid {@link WeightedElement}.
      * See {@link weightedElementSchema} for the requirements of a valid {@link WeightedElement}.
      *
-     * @deprecated - Migrated to WeightedElementBuilder. Will be removed in v0.1.0-alpha.4.
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0

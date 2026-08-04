@@ -38,14 +38,14 @@ import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-c
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, Error);
 
-    describe('[DEPRECATED] buildWeightedElement', (): void => {
-        test('[DEPRECATED] buildWeightedElement() should return a typed weighed element', (): void => {
+    describe('buildWeightedElement', (): void => {
+        test('buildWeightedElement() should return a typed weighed element', (): void => {
             const element: WeightedElement<string> = WeightedElementUtility.buildWeightedElement({ value: 'test value', weight: 0.5 });
             expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is string => typeof input === 'string')).toBe(true);
             expect(WeightedElementUtility.isWeightedElement(element, (input: unknown): input is number => typeof input === 'number')).toBe(false);
         });
 
-        describe('[DEPRECATED] Input validation', (): void => {
+        describe('Input validation', (): void => {
             const scenarios: Scenario[] = [
                 {
                     label: 'Non-object type inputs',
@@ -129,12 +129,12 @@ describe('WeightedElementUtility', (): void => {
 
             describe.each(
                 scenarios
-            )('[DEPRECATED] %# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                 test.each(
                     testCases
-                )('[DEPRECATED] %# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): void => {
                         WeightedElementUtility.buildWeightedElement(testInput as { value: unknown; weight: number; });
                     }).toThrow(testExpected);
@@ -143,8 +143,8 @@ describe('WeightedElementUtility', (): void => {
         });
     });
 
-    describe('[DEPRECATED] buildWeightedList', (): void => {
-        test('[DEPRECATED] buildWeightedList() should return a typed weighted list', (): void => {
+    describe('buildWeightedList', (): void => {
+        test('buildWeightedList() should return a typed weighted list', (): void => {
             const list: WeightedList<string> = WeightedElementUtility.buildWeightedList([
                 { value: 'test value 1', weight: 0.5 },
                 { value: 'test value 2', weight: 0.5 }
@@ -237,12 +237,12 @@ describe('WeightedElementUtility', (): void => {
 
         describe.each(
             scenarios
-        )('[DEPRECATED] %# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
             test.each(
                 testCases
-            )('[DEPRECATED] %# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 expect((): void => {
                     WeightedElementUtility.buildWeightedList(testInput as { value: unknown; weight: number; }[]);
                 }).toThrow(testExpected);
