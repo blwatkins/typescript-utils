@@ -23,7 +23,7 @@ import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 import {
     Random,
     RandomNumberGeneratorFactory,
-    SeededRandomNumberGenerator,
+    SeededRandomNumberGenerator
 } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';

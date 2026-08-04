@@ -25,7 +25,7 @@ import {
     Discriminators,
     WeightedElement,
     weightedElementSchema,
-    WeightedElementUtility,
+    WeightedElementUtility
 } from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
