@@ -20,8 +20,6 @@
 
 import { Type } from 'typebox';
 
-import { Discriminated, Discriminators, discriminatedSchema } from '../../discriminator';
-
 /**
  * Minimum value for a {@link WeightedElement.weight}.
  *
@@ -45,40 +43,29 @@ export const maxElementWeight: 1 = 1 as const;
  */
 export const weightedElementSchema = Type.Generic(
     [Type.Parameter('T')],
-    Type.Intersect([
-        discriminatedSchema,
-        Type.Object(
-            {
-                /**
-                 * The value to be selected from the weighted list.
-                 *
-                 * @readonly
-                 */
-                value: Type.Readonly(Type.Ref('T')),
+    Type.Object(
+        {
+            /**
+             * The value to be selected from the weighted list.
+             *
+             * @readonly
+             */
+            value: Type.Readonly(Type.Ref('T')),
 
-                /**
-                 * The probability weight of the element.
-                 * Should be a number between 0 and 1, inclusive.
-                 *
-                 * @type {number}
-                 * @readonly
-                 */
-                weight: Type.Readonly(Type.Number({
-                    minimum: minElementWeight,
-                    maximum: maxElementWeight
-                })),
-
-                /**
-                 * The discriminator for the weighted element.
-                 *
-                 * @type {Discriminators.WeightedElement}
-                 * @readonly
-                 */
-                discriminator: Type.Literal(Discriminators.WeightedElement)
-            },
-            { additionalProperties: false }
-        )
-    ])
+            /**
+             * The probability weight of the element.
+             * Should be a number between 0 and 1, inclusive.
+             *
+             * @type {number}
+             * @readonly
+             */
+            weight: Type.Readonly(Type.Number({
+                minimum: minElementWeight,
+                maximum: maxElementWeight
+            }))
+        },
+        { additionalProperties: false }
+    )
 );
 
 /**
@@ -86,7 +73,7 @@ export const weightedElementSchema = Type.Generic(
  *
  * @since 0.1.0
  */
-export interface WeightedElement<TValue> extends Discriminated {
+export interface WeightedElement<TValue> {
     /**
      * The value to be selected from the weighted list.
      *
@@ -107,15 +94,6 @@ export interface WeightedElement<TValue> extends Discriminated {
      * @since 0.1.0
      */
     readonly weight: number;
-
-    /**
-     * The discriminator for the weighted element.
-     *
-     * @type {Discriminators.WeightedElement}
-     * @readonly
-     * @since 0.1.0
-     */
-    readonly discriminator: Discriminators.WeightedElement;
 }
 
 /**

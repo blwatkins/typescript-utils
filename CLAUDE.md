@@ -4,14 +4,17 @@ Guidance for Claude Code (and other AI assistants) when working in this reposito
 
 ## Canonical Instructions
 
-The detailed, authoritative conventions for this project live in [`.github/copilot-instructions.md`](./.github/copilot-instructions.md); read that file first.
-This document is a concise map; `.github/copilot-instructions.md` is the source of truth.
+The detailed, authoritative conventions for this project live in [`.github/copilot-instructions.md`](./.github/copilot-instructions.md).
+Read that file before making any change to this repository, including documentation-only changes.
+This document is a map of what lives there; it does not repeat its rules.
 
 ## Keep These Two Files in Sync
 
 This repository maintains both `CLAUDE.md` and `.github/copilot-instructions.md`.
-When you update guidance in one file that also applies to the other, mirror the change so the two stay consistent.
-Updates to `CLAUDE.md` should be reflected, when appropriate, in `.github/copilot-instructions.md`, and vice versa.
+`CLAUDE.md` is a map of where guidance lives; `.github/copilot-instructions.md` holds the guidance itself.
+Add or change a convention in `.github/copilot-instructions.md`.
+A new convention under an existing section requires no change here.
+Update `CLAUDE.md` when the map changes: a new or renamed top-level section in `.github/copilot-instructions.md`, or a change to the project summary, npm commands, generated output directories, or the review step list.
 
 ## Project Summary
 
@@ -27,13 +30,9 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
 
 ## Documentation Notes
 
-- Keep shared content between `README.md` and `docs/index.md` consistent; expected differences
-  (front matter, headings, footer/links) are documented in `.github/copilot-instructions.md`.
-- The portfolio skills page (`docs/portfolio-skills.md`) and its generation/review workflow are
-  described in the "Portfolio Page Generation and Maintenance" section of
-  `.github/copilot-instructions.md`.
+- `README.md` / `docs/index.md` sync, Markdown formatting, TypeDoc, and the Jekyll build are covered in the ["Documentation and GitHub Pages"](./.github/copilot-instructions.md#documentation-and-github-pages) and ["Markdown Formatting"](./.github/copilot-instructions.md#markdown-formatting) sections of `.github/copilot-instructions.md`.
+- The portfolio skills page (`docs/portfolio-skills.md`) and its generation/review workflow are described in the ["Portfolio Page Generation and Maintenance"](./.github/copilot-instructions.md#portfolio-page-generation-and-maintenance) section.
 - Release documentation under `docs/releases/` is maintained manually.
-- Markdown indentation rules for all repository `.md` files are in the ["Markdown Formatting" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#markdown-formatting).
 
 ## Pre-Merge and Release Review
 
@@ -44,5 +43,5 @@ Before merging a branch, complete these review steps (full details in the ["Pre-
 3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
 5. **GitHub repository topics** — align with `package.json` keywords
-6. **Branch code review** — convention compliance (static class pattern, custom error type pattern, JSDoc completeness, copyright headers, README/docs sync, test coverage), code quality (correctness, API consistency, efficiency, backward compatibility, reuse/DRY, runtime safety), and consistency (cross-source consistency across code/comments/docs, implicit pattern detection with maintainer notification)
+6. **Branch code review** — convention compliance, code quality, and cross-source consistency, per the linked section
 7. **Release readiness** (for merges to `main`) — version bump, release docs, TypeDoc entry points, publish workflow

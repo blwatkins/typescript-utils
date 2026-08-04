@@ -19,6 +19,5 @@
  */
 
 export * from './weighted-element';
-export * from './weighted-element-builder';
 export * from './weighted-element-utility';
 export * from './weighted-list-utility';

@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-07-31
+modified_date: 2026-08-04
 toc: true
 ---
 
@@ -127,7 +127,7 @@ Behavior that every member of a type family must satisfy, such as the custom err
 - [package.json scripts](https://github.com/blwatkins/typescript-utils/blob/main/package.json)
 - [test/utils/error/error-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/error/error-tests.ts)
 - [test/utils/static/static-class-tests.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/utils/static/static-class-tests.ts)
-- [npm-test.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-test.yml)
+- [npm-validate.yml](https://github.com/blwatkins/typescript-utils/blob/main/.github/workflows/npm-validate.yml)
 
 ### Runtime contract for JavaScript consumers
 

@@ -44,7 +44,7 @@ export class StringUtility {
     /**
      * Get the regular expression for single-line lowercase strings.
      *
-     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     * @remarks - This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
      * @returns {RegExp} - Regular expression pattern for validating single-line lowercase strings.
      *
@@ -58,7 +58,7 @@ export class StringUtility {
     /**
      * Get the regular expression for single-line uppercase strings.
      *
-     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     * @remarks - This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
      * @returns {RegExp} - Regular expression pattern for validating single-line uppercase strings.
      *
@@ -72,7 +72,7 @@ export class StringUtility {
     /**
      * Get the regular expression for single-line mixed-case strings.
      *
-     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     * @remarks - This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
      *
      * @returns {RegExp} - Regular expression pattern for validating single-line mixed-case strings.
      *

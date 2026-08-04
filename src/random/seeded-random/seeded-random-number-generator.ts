@@ -57,7 +57,7 @@ export class SeededRandomNumberGenerator {
     /**
      * Get the next number in the seeded sequence.
      *
-     * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
+     * @remarks - This method advances the internal 128-bit xoshiro128** state by one step.
      * Successive calls produce an independent, uniformly distributed sequence.
      *
      * @returns {number} - The next pseudorandom float in the range [0, 1).

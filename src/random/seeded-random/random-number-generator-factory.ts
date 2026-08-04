@@ -90,7 +90,7 @@ export class RandomNumberGeneratorFactory {
     /**
      * Build a {@link SeededRandomNumberGenerator} object with the given seed and namespace from an asynchronous hashing algorithm.
      *
-     * @remarks This method relies on the Web Crypto API via `crypto.subtle`.
+     * @remarks - This method relies on the Web Crypto API via `crypto.subtle`.
      * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
      * @param {string} seed - The primary input to determine the random number sequence.
@@ -211,7 +211,7 @@ export class RandomNumberGeneratorFactory {
     /**
      * Create a state array from the given input using the SHA-256 hashing algorithm.
      *
-     * @remarks This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.<hr/>
+     * @remarks - This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.<hr/>
      * This method relies on the Web Crypto API via `crypto.subtle`.
      * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *

@@ -23,7 +23,6 @@ import Value from 'typebox/value';
 import { Type } from 'typebox';
 
 import { PrimitiveTypeAssertions } from '../../assert';
-import { DiscriminatorRegistry, Discriminators, TypeGuard } from '../../discriminator';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
@@ -44,33 +43,13 @@ export class WeightedElementUtility {
      * @private
      */
     private constructor() {
-        throw new StaticInstanceError('WeightedElementUtility is a static class and cannot be instantiated');
+        throw new StaticInstanceError('WeightedElementUtility is a static class and cannot be instantiated.');
     }
-
-    /**
-     * A type guard for generic {@link WeightedElement} objects.
-     *
-     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
-     *
-     * @param {unknown} input - The input to check.
-     *
-     * @returns {input is WeightedElement<unknown>} - `true` if the input is a generic {@link WeightedElement}, `false` otherwise.
-     *
-     * @type {TypeGuard<WeightedElement<unknown>>}
-     * @readonly
-     * @private
-     */
-    static readonly #genericTypeGuard: TypeGuard<WeightedElement<unknown>> = DiscriminatorRegistry.register<WeightedElement<unknown>>({
-        discriminator: Discriminators.WeightedElement,
-        validator: (input: unknown): input is WeightedElement<unknown> => {
-            return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
-        }
-    });
 
     /**
      * Validate and assert that the given input is a generic {@link WeightedElement} object.
      *
-     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     * @remarks - This method does not enforce type checking for {@link WeightedElement.value}.
      *
      * @param {unknown} input - The input to check.
      *
@@ -90,7 +69,7 @@ export class WeightedElementUtility {
     /**
      * Is the given input a generic {@link WeightedElement} object?
      *
-     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     * @remarks - This method does not enforce type checking for {@link WeightedElement.value}.
      *
      * @param {unknown} input - The input to check.
      *
@@ -100,49 +79,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isGenericWeightedElement(input: unknown): input is WeightedElement<unknown> {
-        return WeightedElementUtility.#genericTypeGuard(input);
-    }
-
-    /**
-     * Builds a {@link WeightedList} object from the given elements list.
-     *
-     * @param {{ value: TValue; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
-     * Each element will be converted into a {@link WeightedElement} using {@link WeightedElementUtility.buildWeightedElement}.
-     *
-     * @returns {WeightedList<TValue>} - A {@link WeightedList} object containing the given elements.
-     *
-     * @throws {TypeError} - When the given elements are not a non-empty array.
-     * @throws {TypeError} - When the given elements do not result in a valid {@link WeightedList}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static buildWeightedList<TValue>(elements: { value: TValue; weight: number; }[]): WeightedList<TValue> {
-        WeightedElementUtility.#validateBuildWeightedListInput(elements);
-
-        const weightedElements: WeightedElement<TValue>[] = elements.map((element: { value: TValue; weight: number; }): WeightedElement<TValue> => {
-            return WeightedElementUtility.buildWeightedElement(element);
-        });
-
-        WeightedElementUtility.validateWeightedList(weightedElements);
-        return weightedElements;
-    }
-
-    /**
-     * Validate the input of {@link WeightedElementUtility.buildWeightedList}.
-     *
-     * @param {unknown} input - The input to validate.
-     *
-     * @returns {void}
-     *
-     * @throws {TypeError} - When the given input is not a non-empty array.
-     *
-     * @private
-     */
-    static #validateBuildWeightedListInput(input: unknown): void {
-        if (!input || !Array.isArray(input) || input.length === 0) {
-            throw new TypeError('Input must be a non-empty array');
-        }
+        return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
     }
 
     /* ******************* TODO: DEPRECATED ******************* */
@@ -261,7 +198,7 @@ export class WeightedElementUtility {
      * @throws {TypeError} - When the given input does not result in a valid {@link WeightedElement}.
      * See {@link weightedElementSchema} for the requirements of a valid {@link WeightedElement}.
      *
-     * @deprecated - Migrated to WeightedElementBuilder. Will be removed in v0.1.0-alpha.4.
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -270,12 +207,38 @@ export class WeightedElementUtility {
         WeightedElementUtility.#validateBuildWeightedElementInput(input);
 
         const weightedElement = {
-            ...input,
-            discriminator: Discriminators.WeightedElement
+            ...input
         };
 
         WeightedElementUtility.#validateWeightedElement(weightedElement);
         return weightedElement;
+    }
+
+    /**
+     * Builds a {@link WeightedList} object from the given elements list.
+     *
+     * @param {{ value: TValue; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
+     * Each element will be converted into a {@link WeightedElement} using {@link WeightedElementUtility.buildWeightedElement}.
+     *
+     * @returns {WeightedList<TValue>} - A {@link WeightedList} object containing the given elements.
+     *
+     * @throws {TypeError} - When the given elements are not a non-empty array.
+     * @throws {TypeError} - When the given elements do not result in a valid {@link WeightedList}.
+     *
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static buildWeightedList<TValue>(elements: { value: TValue; weight: number; }[]): WeightedList<TValue> {
+        WeightedElementUtility.#validateBuildWeightedListInput(elements);
+
+        const weightedElements: WeightedElement<TValue>[] = elements.map((element: { value: TValue; weight: number; }): WeightedElement<TValue> => {
+            return WeightedElementUtility.buildWeightedElement(element);
+        });
+
+        WeightedElementUtility.validateWeightedList(weightedElements);
+        return weightedElements;
     }
 
     /**
@@ -290,7 +253,7 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given element is not a valid {@link WeightedElement}.
      *
-     * @deprecated
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -309,13 +272,32 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} - When the given input is not an object.
      *
-     * @deprecated
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
     static #validateBuildWeightedElementInput(input: unknown): void {
         if (!input || typeof input !== 'object' || Array.isArray(input)) {
             throw new TypeError('Input must be an object');
+        }
+    }
+
+    /**
+     * Validate the input of {@link WeightedElementUtility.buildWeightedList}.
+     *
+     * @param {unknown} input - The input to validate.
+     *
+     * @returns {void}
+     *
+     * @throws {TypeError} - When the given input is not a non-empty array.
+     *
+     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     *
+     * @private
+     */
+    static #validateBuildWeightedListInput(input: unknown): void {
+        if (!input || !Array.isArray(input) || input.length === 0) {
+            throw new TypeError('Input must be a non-empty array');
         }
     }
 }
