@@ -32,7 +32,8 @@ export class WeightedListUtility {
     /**
      * Private constructor.
      *
-     * @throws {StaticInstanceError} - WeightedListUtility is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} - When class is instantiated.
+     * {@link WeightedListUtility} is a static class and cannot be instantiated.
      *
      * @private
      */
@@ -42,7 +43,8 @@ export class WeightedListUtility {
 
     /**
      * Is the given input a generic {@link WeightedList} object?
-     * This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
+     *
+     * @remarks - This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
@@ -74,7 +76,8 @@ export class WeightedListUtility {
 
     /**
      * Validate and assert that the given input is a generic {@link WeightedList} object.
-     * This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
+     *
+     * @remarks - This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      *

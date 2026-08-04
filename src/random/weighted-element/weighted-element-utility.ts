@@ -50,7 +50,7 @@ export class WeightedElementUtility {
     /**
      * Validate and assert that the given input is a generic {@link WeightedElement} object.
      *
-     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     * @remarks - This method does not enforce type checking for {@link WeightedElement.value}.
      *
      * @param {unknown} input - The input to check.
      *
@@ -70,7 +70,7 @@ export class WeightedElementUtility {
     /**
      * Is the given input a generic {@link WeightedElement} object?
      *
-     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     * @remarks - This method does not enforce type checking for {@link WeightedElement.value}.
      *
      * @param {unknown} input - The input to check.
      *
