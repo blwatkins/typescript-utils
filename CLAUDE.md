@@ -14,7 +14,7 @@ This repository maintains both `CLAUDE.md` and `.github/copilot-instructions.md`
 `CLAUDE.md` is a map of where guidance lives; `.github/copilot-instructions.md` holds the guidance itself.
 Add or change a convention in `.github/copilot-instructions.md`.
 A new convention under an existing section requires no change here.
-Update `CLAUDE.md` when the map changes: a new or renamed top-level section in `.github/copilot-instructions.md`, or a change to the project summary, npm commands, generated output directories, or the review step list.
+Update `CLAUDE.md` when the map changes: a new or renamed section in `.github/copilot-instructions.md` that this file links to, or a change to the project summary, npm commands, generated output directories, or the review step list.
 
 ## Project Summary
 
@@ -39,9 +39,9 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
 Before merging a branch, complete these review steps (full details in the ["Pre-Merge and Release Review" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#pre-merge-and-release-review)):
 
 1. **Validation** — `npm ci`, then `npm run validate` (lint, docs, build, test) passes cleanly
-2. **Portfolio skills page** — review `docs/portfolio-skills.md` for accuracy; update `modified_date` if content changes
+2. **Portfolio skills page** — review `docs/portfolio-skills.md` for accuracy and currency, per the linked section
 3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
 5. **GitHub repository topics** — align with `package.json` keywords
 6. **Branch code review** — convention compliance, code quality, and cross-source consistency, per the linked section
-7. **Release readiness** (for merges to `main`) — version bump, release docs, TypeDoc entry points, publish workflow
+7. **Release readiness** (for merges to `main`) — version bump, deprecation removals, release docs, TypeDoc entry points, publish workflow

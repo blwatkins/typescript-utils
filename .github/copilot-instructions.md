@@ -7,8 +7,10 @@ This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeSc
 ## Companion Instruction Files
 
 This repository maintains a companion `CLAUDE.md` at the repository root alongside this file.
-The two documents serve overlapping audiences and should stay consistent: when you update guidance in `.github/copilot-instructions.md` that also applies to `CLAUDE.md`, mirror the change there, and vice versa.
-`CLAUDE.md` is intentionally a concise pointer to this file; this file remains the canonical, detailed source of conventions.
+This file holds the guidance itself; `CLAUDE.md` is a map of where that guidance lives and does not repeat its rules.
+Add or change a convention here.
+A new convention placed under an existing section requires no change to `CLAUDE.md`.
+Update `CLAUDE.md` when the map changes: a new or renamed section that `CLAUDE.md` links to, or a change to the project summary, npm scripts, generated output directories, or the [Pre-Merge and Release Review](#pre-merge-and-release-review) step list.
 
 ## Tech Stack
 
@@ -118,7 +120,7 @@ Consumers discriminate with `instanceof` and the error `name`; the Node.js code 
 
 ### Deprecation
 
-When a public member is deprecated rather than removed:
+When a member is deprecated rather than removed:
 
 - Group deprecated members below a banner comment inside the class or module:
   `/* ******************* TODO: DEPRECATED ******************* */`
@@ -215,7 +217,7 @@ The following preferences require manual review since no ESLint rule can check t
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
 - **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
-- **Separate block tag text with a hyphen:** Follow the tag name with ` - ` before the description on `@remarks` and `@deprecated`, matching the existing `@param`, `@returns`, and `@throws` style (e.g., `@remarks - This method does not enforce type checking.`). This applies to test sources as well as `src/`.
+- **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag and its type: `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
 - **State the removal version on `@deprecated`:** Write `@deprecated - Will be removed in v{version}.` When a replacement exists, name it first: `@deprecated - Migrated to {@link Replacement}. Will be removed in v{version}.` Apply the tag to private helpers that exist only to support deprecated members, using the same message format.
 
 ## Documentation and GitHub Pages
@@ -345,6 +347,7 @@ Review all branch changes for convention compliance and code quality.
 When preparing a release merge to `main`:
 
 - Confirm the version in `package.json` is bumped appropriately
+- Remove any member whose `@deprecated` tag names this release as its removal version, together with the private helpers, schema or type members, and tests that exist only to support it
 - Ensure release documentation under `docs/releases/` covers the new version
 - Verify `typedoc.json` entry points include any new module-level index files
 - Confirm the npm publish workflow (`package-publish.yml`) is configured correctly for the release
