@@ -27,7 +27,7 @@ import { Discriminated } from './discriminated';
 /**
  * A type guard function that checks if an input is of a specific {@link Discriminated} type.
  *
- * @deprecated - Will be removed in v0.1.0-alpha.4.
+ * @deprecated Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */
@@ -36,7 +36,7 @@ export type TypeGuard<T extends Discriminated> = (input: unknown) => input is T;
 /**
  * A registration for a discriminator to the {@link DiscriminatorRegistry}.
  *
- * @deprecated - Will be removed in v0.1.0-alpha.4.
+ * @deprecated Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */
@@ -45,7 +45,7 @@ export interface DiscriminatorRegistration {
      * The discriminator value that identifies the type of a {@link Discriminated} object.
      * This value must be unique across all registered discriminators.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @type {string}
      * @readonly
@@ -58,9 +58,9 @@ export interface DiscriminatorRegistration {
      *
      * @param {unknown} input - The input to validate.
      *
-     * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
+     * @returns {boolean} `true` if the input matches the type associated with the discriminator, `false` otherwise.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @type {(input: unknown) => boolean}
      * @readonly
@@ -73,7 +73,7 @@ export interface DiscriminatorRegistration {
  * Static registry for managing discriminators and their associated type guards.
  * Discriminators are used to identify the type of a {@link Discriminated} object and validate it using a registered type guard function.
  *
- * @deprecated - Will be removed in v0.1.0-alpha.4.
+ * @deprecated Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */
@@ -81,7 +81,7 @@ export class DiscriminatorRegistry {
     /**
      * A map of discriminator values to their corresponding validation functions.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @type {Map<string, (input: unknown) => boolean>}
      * @readonly
@@ -92,9 +92,9 @@ export class DiscriminatorRegistry {
     /**
      * Private constructor.
      *
-     * @throws {Error} - DiscriminatorRegistry is a static class and cannot be instantiated.
+     * @throws {Error} DiscriminatorRegistry is a static class and cannot be instantiated.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -107,9 +107,9 @@ export class DiscriminatorRegistry {
      *
      * @param {string} discriminator - The discriminator value to check.
      *
-     * @returns {boolean} - `true` if the discriminator is registered, `false` otherwise.
+     * @returns {boolean} `true` if the discriminator is registered, `false` otherwise.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -123,14 +123,14 @@ export class DiscriminatorRegistry {
      *
      * @param {DiscriminatorRegistration} registration - The registration details for the discriminator.
      *
-     * @returns {TypeGuard<T>} - A type guard function for the registered type.
+     * @returns {TypeGuard<T>} A type guard function for the registered type.
      *
-     * @throws {TypeError} - When the given input is not an object.
-     * @throws {TypeError} - When the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
-     * @throws {TypeError} - When the {@link DiscriminatorRegistration.validator} property is not a function.
-     * @throws {Error} - When the {@link DiscriminatorRegistration.discriminator} is already registered.
+     * @throws {TypeError} When the given input is not an object.
+     * @throws {TypeError} When the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
+     * @throws {TypeError} When the {@link DiscriminatorRegistration.validator} property is not a function.
+     * @throws {Error} When the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -150,9 +150,9 @@ export class DiscriminatorRegistry {
      * @param {unknown} input - The input to validate.
      * @param {string} discriminator - The discriminator value to check.
      *
-     * @returns {boolean} - `true` if the input matches the type associated with the discriminator, `false` otherwise.
+     * @returns {boolean} `true` if the input matches the type associated with the discriminator, `false` otherwise.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -180,12 +180,12 @@ export class DiscriminatorRegistry {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When the given input is not an object.
-     * @throws {TypeError} - When the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
-     * @throws {TypeError} - When the {@link DiscriminatorRegistration.validator} property is not a function.
-     * @throws {Error} - When the {@link DiscriminatorRegistration.discriminator} is already registered.
+     * @throws {TypeError} When the given input is not an object.
+     * @throws {TypeError} When the {@link DiscriminatorRegistration.discriminator} is not a non-empty single line trimmed string.
+     * @throws {TypeError} When the {@link DiscriminatorRegistration.validator} property is not a function.
+     * @throws {Error} When the {@link DiscriminatorRegistration.discriminator} is already registered.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -215,9 +215,9 @@ export class DiscriminatorRegistry {
      * @param {unknown} input - The input to check.
      * @param {string} discriminator - The discriminator value to match.
      *
-     * @returns {boolean} - `true` if the input is an object with a discriminator property that matches the given discriminator value, `false` otherwise.
+     * @returns {boolean} `true` if the input is an object with a discriminator property that matches the given discriminator value, `false` otherwise.
      *
-     * @deprecated - Will be removed in v0.1.0-alpha.4.
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
