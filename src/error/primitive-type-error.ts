@@ -42,7 +42,7 @@ export class PrimitiveTypeError extends TypeError {
     /**
      * Get the default error message.
      *
-     * @returns {string} - The default error message for {@link PrimitiveTypeError}.
+     * @returns {string} The default error message for {@link PrimitiveTypeError}.
      *
      * @public
      * @since 0.1.0

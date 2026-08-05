@@ -42,7 +42,7 @@ export class SchemaTypeError extends TypeError {
     /**
      * Get the default error message.
      *
-     * @returns {string} - The default error message for {@link SchemaTypeError}.
+     * @returns {string} The default error message for {@link SchemaTypeError}.
      *
      * @public
      * @since 0.1.0
