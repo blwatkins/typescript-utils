@@ -40,7 +40,7 @@ Before merging a branch, complete these review steps (full details in the ["Pre-
 
 1. **Validation** — `npm ci`, then `npm run validate` (lint, docs, build, test) passes cleanly
 2. **Portfolio skills page** — review `docs/portfolio-skills.md` for accuracy and currency, per the linked section
-3. **Instruction file sync** — `CLAUDE.md` and `copilot-instructions.md` are consistent and current
+3. **Instruction file sync** — `CLAUDE.md` and `.github/copilot-instructions.md` are consistent and current
 4. **`package.json` keywords** — reflect current utility domains and features
 5. **GitHub repository topics** — align with `package.json` keywords
 6. **Branch code review** — convention compliance, code quality, and cross-source consistency, per the linked section
