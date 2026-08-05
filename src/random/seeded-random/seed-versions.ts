@@ -39,7 +39,7 @@ export interface SeedVersion {
 }
 
 /**
- * @remarks - Once a seed version has been published, it should <b>NEVER</b> be changed or updated.
+ * @remarks Once a seed version has been published, it should <b>NEVER</b> be changed or updated.
  * The order of seed versions should <b>NEVER</b> be changed.
  * New seed versions can only be added to the end of the array.
  * Each element in the offsets array should be unique.
@@ -65,7 +65,7 @@ export class SeedVersions {
     /**
      * Private constructor.
      *
-     * @throws {Error} - SeedVersions is a static class and cannot be instantiated.
+     * @throws {Error} SeedVersions is a static class and cannot be instantiated.
      *
      * @private
      */
@@ -76,7 +76,7 @@ export class SeedVersions {
     /**
      * The number of seed versions.
      *
-     * @returns {number} - The total number of seed versions that currently exist.
+     * @returns {number} The total number of seed versions that currently exist.
      *
      * @public
      * @since 0.1.0
@@ -90,7 +90,7 @@ export class SeedVersions {
      *
      * @param {number} index - The index to check.
      *
-     * @returns {boolean} - `true` if the given index is a valid seed version; `false` otherwise.
+     * @returns {boolean} `true` if the given index is a valid seed version; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -105,9 +105,9 @@ export class SeedVersions {
      * @param {number} index - The index of the seed version to retrieve.
      * Must be a valid {@link SeedVersions} index.
      *
-     * @returns {SeedVersion} - The seed version with the given index.
+     * @returns {SeedVersion} The seed version with the given index.
      *
-     * @throws {RangeError} - When the index is not a valid seed version index.
+     * @throws {RangeError} When the index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0

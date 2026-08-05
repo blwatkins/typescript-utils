@@ -32,7 +32,7 @@ export class WeightedListUtility {
     /**
      * Private constructor.
      *
-     * @throws {StaticInstanceError} - When class is instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
      * {@link WeightedListUtility} is a static class and cannot be instantiated.
      *
      * @private
@@ -44,13 +44,13 @@ export class WeightedListUtility {
     /**
      * Is the given input a generic {@link WeightedList} object?
      *
-     * @remarks - This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
+     * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
-     * @param {unknown} input - The input to check.
+     * @param {unknown} input The input to check.
      *
-     * @returns {input is WeightedList<unknown>} - `true` if the given input is a valid {@link WeightedList} object; `false` otherwise.
+     * @returns {input is WeightedList<unknown>} `true` if the given input is a valid {@link WeightedList} object; `false` otherwise.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @public
@@ -77,15 +77,15 @@ export class WeightedListUtility {
     /**
      * Validate and assert that the given input is a generic {@link WeightedList} object.
      *
-     * @remarks - This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
+     * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      *
      * @param {unknown} input - The input to validate.
      *
-     * @returns {asserts input is WeightedList<unknown>} - Asserts that the given input is a valid {@link WeightedList}.
+     * @returns {asserts input is WeightedList<unknown>} Asserts that the given input is a valid {@link WeightedList}.
      *
-     * @throws {SchemaTypeError} - When the given input is not a valid {@link WeightedList}.
+     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedList}.
      *
      * @public
      * @since 0.1.0

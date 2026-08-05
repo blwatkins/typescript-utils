@@ -38,7 +38,7 @@ export class RandomNumberGeneratorFactory {
     /**
      * Private constructor.
      *
-     * @throws {Error} - RandomNumberGeneratorFactory is a static class and cannot be instantiated.
+     * @throws {Error} RandomNumberGeneratorFactory is a static class and cannot be instantiated.
      *
      * @private
      * @since 0.1.0
@@ -51,7 +51,7 @@ export class RandomNumberGeneratorFactory {
      * Prime number for FNV-1a hashing algorithm.
      * This number is an algorithmic constant; it must not change.
      *
-     * @returns {number} - 0x01000193
+     * @returns {number} 0x01000193
      *
      * @private
      */
@@ -70,12 +70,12 @@ export class RandomNumberGeneratorFactory {
      * @param {number|undefined} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
      *
-     * @returns {SeededRandomNumberGenerator} - A {@link SeededRandomNumberGenerator} object with the resulting initial state.
+     * @returns {SeededRandomNumberGenerator} A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
-     * @throws {TypeError} - When the given seed is not a string.
-     * @throws {TypeError} - When the given namespace is not a string.
-     * @throws {TypeError} - When the given version is not an integer.
-     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     * @throws {TypeError} When the given seed is not a string.
+     * @throws {TypeError} When the given namespace is not a string.
+     * @throws {TypeError} When the given version is not an integer.
+     * @throws {RangeError} When the given version is not a valid {@link SeedVersions} index.
      *
      * @public
      * @since 0.1.0
@@ -90,16 +90,16 @@ export class RandomNumberGeneratorFactory {
     /**
      * Build a {@link SeededRandomNumberGenerator} object with the given seed and namespace from an asynchronous hashing algorithm.
      *
-     * @remarks - This method relies on the Web Crypto API via `crypto.subtle`.
+     * @remarks This method relies on the Web Crypto API via `crypto.subtle`.
      * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string|undefined} namespace - Namespace to create different sequences from the same seed.
      *
-     * @returns {Promise<SeededRandomNumberGenerator>} - A {@link SeededRandomNumberGenerator} object with the resulting initial state.
+     * @returns {Promise<SeededRandomNumberGenerator>} A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
-     * @throws {TypeError} - When the given seed is not a string.
-     * @throws {TypeError} - When the given namespace is not a string.
+     * @throws {TypeError} When the given seed is not a string.
+     * @throws {TypeError} When the given namespace is not a string.
      *
      * @public
      * @since 0.1.0
@@ -125,10 +125,10 @@ export class RandomNumberGeneratorFactory {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When the given seed is not a string.
-     * @throws {TypeError} - When the given namespace is not a string.
-     * @throws {TypeError} - When the given version is not an integer.
-     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     * @throws {TypeError} When the given seed is not a string.
+     * @throws {TypeError} When the given namespace is not a string.
+     * @throws {TypeError} When the given version is not an integer.
+     * @throws {RangeError} When the given version is not a valid {@link SeedVersions} index.
      *
      * @private
      */
@@ -156,7 +156,7 @@ export class RandomNumberGeneratorFactory {
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string|undefined} namespace - Optional namespace to create different sequences from the same seed.
      *
-     * @returns {string} - The input string for the hash algorithm.
+     * @returns {string} The input string for the hash algorithm.
      *
      * @private
      */
@@ -180,11 +180,11 @@ export class RandomNumberGeneratorFactory {
      * Changing the version number will result in a different sequence of random numbers for the same input.
      * Default value is 0.
      *
-     * @returns {[number, number, number, number]} - The initial state array for the random number generator.
+     * @returns {[number, number, number, number]} The initial state array for the random number generator.
      *
-     * @throws {TypeError} - When the given input is not a string.
-     * @throws {TypeError} - When the given version is not an integer.
-     * @throws {RangeError} - When the given version is not a valid {@link SeedVersions} index.
+     * @throws {TypeError} When the given input is not a string.
+     * @throws {TypeError} When the given version is not an integer.
+     * @throws {RangeError} When the given version is not a valid {@link SeedVersions} index.
      *
      * @private
      */
@@ -211,15 +211,15 @@ export class RandomNumberGeneratorFactory {
     /**
      * Create a state array from the given input using the SHA-256 hashing algorithm.
      *
-     * @remarks - This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.<hr/>
+     * @remarks This method hashes the given input with SHA-256 and folds the 256-bit output into 128 bits by XOR-ing the two 128-bit halves together, fully utilizing all output bits.<hr/>
      * This method relies on the Web Crypto API via `crypto.subtle`.
      * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
      *
-     * @returns {Promise<[number, number, number, number]>} - The initial state array for the random number generator.
+     * @returns {Promise<[number, number, number, number]>} The initial state array for the random number generator.
      *
-     * @throws {TypeError} - When the given input is not a string.
+     * @throws {TypeError} When the given input is not a string.
      *
      * @private
      */

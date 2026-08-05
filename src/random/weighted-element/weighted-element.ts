@@ -101,7 +101,7 @@ export interface WeightedElement<TValue> {
  *
  * @see {@link weightedElementSchema}
  *
- * @template TValue - The type of the value property of the {@link WeightedElement} objects in the list.
+ * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
  *
  * @since 0.1.0
  */
