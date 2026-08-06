@@ -50,6 +50,8 @@ export class WeightedElementUtility {
      *
      * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
      *
+     * @see {@link WeightedElementUtility.isGenericWeightedElement}
+     *
      * @param {unknown} input - The input to check.
      *
      * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a generic {@link WeightedElement}.
@@ -62,6 +64,31 @@ export class WeightedElementUtility {
     public static assertGenericWeightedElement(input: unknown): asserts input is WeightedElement<unknown> {
         if (!WeightedElementUtility.isGenericWeightedElement(input)) {
             throw new SchemaTypeError(`Input does not match schema requirements for generic WeightedElement`);
+        }
+    }
+
+    /**
+     * Validate and assert that the given input a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function?
+     *
+     * @see {@link WeightedElementUtility.isWeightedElement}
+     *
+     * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard - The method used to validate the type or schema of {@link WeightedElement.value}.
+     * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
+     * The type validated by the function should match the assigned type of the {@link WeightedElement}.
+     *
+     * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a {@link WeightedElement} whose value matches the expected type or schema.
+     *
+     * @throws {SchemaTypeError} When the given input is not a valid typed {@link WeightedElement}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): asserts input is WeightedElement<TValue> {
+        if (!WeightedElementUtility.isWeightedElement(input, valueTypeGuard)) {
+            throw new SchemaTypeError(`Input does not match schema requirements for WeightedElement`);
         }
     }
 
