@@ -8,8 +8,7 @@ This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeSc
 
 This repository maintains a companion `CLAUDE.md` at the repository root alongside this file.
 This file holds the guidance itself; `CLAUDE.md` is a map of where that guidance lives and does not repeat its rules.
-Add or change a convention here.
-A new convention placed under an existing section requires no change to `CLAUDE.md`.
+Add or change a convention here, not in `CLAUDE.md`; a new convention placed under an existing section requires no change to `CLAUDE.md`.
 Update `CLAUDE.md` when the map changes: a new or renamed section that `CLAUDE.md` links to, or a change to the project summary, npm scripts, generated output directories, or the [Pre-Merge and Release Review](#pre-merge-and-release-review) step list.
 
 ## Tech Stack
@@ -298,7 +297,7 @@ Editing in place preserves whatever was true when the sections were written; enf
 
 Verify that `CLAUDE.md` and `.github/copilot-instructions.md` are consistent with each other and reflect the current project state:
 
-- Guidance shared between the two files is mirrored
+- `CLAUDE.md` still maps accurately to this file
 - The [Directory Structure section](#directory-structure) accurately reflects the current `src/` module layout
 - Any new tooling, conventions, or workflows introduced on the branch are documented
 
