@@ -87,6 +87,20 @@ export class PrimitiveTypeAssertions {
         }
     }
 
+    /**
+     * Validate and assert that the given input is an array.
+     *
+     * @remarks This method does not enforce size requirements or type checking for any array elements.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown if the input is not an array.
+     *
+     * @returns {asserts input is unknown[]} Asserts that the given input is an array.
+     *
+     * @throws {PrimitiveTypeError} When the input is not an array.
+     *
+     * @since 0.1.0
+     */
     public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
         if (!input || typeof input !== 'object' || !Array.isArray(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
