@@ -145,6 +145,9 @@ describe('TypeAssertions', () => {
         nonFunctionInputs
     );
 
+    /**
+     * @remarks Nested arrays are required for failure cases due to Vitest `test.each` array spreading.
+     */
     testTypeAssertions(
         'assertObjectType',
         TypeAssertions.assertObjectType.bind(TypeAssertions),
@@ -159,14 +162,15 @@ describe('TypeAssertions', () => {
         ],
         [
             ...nonObjectInputs,
-            new Array([]),
-            new Array([1, 2, 3]),
-            new Array(['a', 'b', 'c'])
+            [[]],
+            [[1, 2, 3]],
+            [['a', 'b', 'c']],
+            [[{ key: 1 }, { key: 2 }, { key: 3 }]]
         ]
     );
 
     /**
-     * @remarks Nested arrays are required for success cases due to vitest `test.each` array spreading.
+     * @remarks Nested arrays are required for success cases due to Vitest `test.each` array spreading.
      */
     testTypeAssertions(
         'assertArrayType',
@@ -175,7 +179,8 @@ describe('TypeAssertions', () => {
         [
             [[]],
             [[1, 2, 3]],
-            [['a', 'b', 'c']]
+            [['a', 'b', 'c']],
+            [[{ key: 1 }, { key: 2 }, { key: 3 }]]
         ],
         nonArrayInputs
     );
