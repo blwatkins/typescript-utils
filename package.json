@@ -71,9 +71,7 @@
     "typescript",
     "javascript",
     "utility",
-    "utilities",
-    "utils",
-    "type-guards",
+    "type-guard",
     "validation",
     "type-assertion",
     "math",
@@ -85,7 +83,6 @@
     "prng",
     "pseudorandom",
     "deterministic",
-    "xoshiro",
     "xoshiro128",
     "esm"
   ]
