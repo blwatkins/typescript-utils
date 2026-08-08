@@ -84,7 +84,7 @@ describe('TypeAssertions', () => {
                         describe('Non-string type message', (): void => {
                             test.each(
                                 nonStringInputs
-                            )(`%# - ${methodName}(${input as string}, %o)`, (message: unknown): void => {
+                            )(`%# - ${methodName}(input, %o)`, (message: unknown): void => {
                                 try {
                                     method(input, message as string);
                                     fail('Method should throw error');
@@ -99,7 +99,7 @@ describe('TypeAssertions', () => {
                         describe('String type messages that are not single-line trimmed', (): void => {
                             test.each(
                                 singleLineTrimmedFailureInputs
-                            )(`%# - ${methodName}(${input as string}, %s)`, (message: string): void => {
+                            )(`%# - ${methodName}(input, %s)`, (message: string): void => {
                                 try {
                                     method(input, message);
                                     fail('Method should throw error');
@@ -145,9 +145,6 @@ describe('TypeAssertions', () => {
         nonFunctionInputs
     );
 
-    /**
-     * @remarks Nested arrays are required for failure cases due to Vitest `test.each` array spreading.
-     */
     testTypeAssertions(
         'assertObjectType',
         TypeAssertions.assertObjectType.bind(TypeAssertions),
@@ -162,10 +159,10 @@ describe('TypeAssertions', () => {
         ],
         [
             ...nonObjectInputs,
-            [[]],
-            [[1, 2, 3]],
-            [['a', 'b', 'c']],
-            [[{ key: 1 }, { key: 2 }, { key: 3 }]]
+            [],
+            [1, 2, 3],
+            ['a', 'b', 'c'],
+            [{ key: 1 }, { key: 2 }, { key: 3 }]
         ]
     );
 
