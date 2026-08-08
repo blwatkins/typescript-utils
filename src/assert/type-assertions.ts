@@ -22,7 +22,7 @@ import { PrimitiveTypeError, StaticInstanceError } from '../error';
 import { StringUtility } from '../string';
 
 /**
- * Static methods and properties for validating primitive type values.
+ * Static methods and properties for asserting the type of an unknown value.
  *
  * @since 0.1.0
  */

@@ -32,7 +32,7 @@ import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 describe('TypeAssertions', () => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
 
-    function testPrimitiveTypeAssertions(
+    function testTypeAssertions(
         methodName: string,
         method: (input: unknown, message?: string) => asserts input is unknown,
         expectedType: string,
@@ -126,7 +126,7 @@ describe('TypeAssertions', () => {
         });
     }
 
-    testPrimitiveTypeAssertions(
+    testTypeAssertions(
         'assertFunctionType',
         TypeAssertions.assertFunctionType.bind(TypeAssertions),
         'a function',
@@ -145,7 +145,7 @@ describe('TypeAssertions', () => {
         nonFunctionInputs
     );
 
-    testPrimitiveTypeAssertions(
+    testTypeAssertions(
         'assertObjectType',
         TypeAssertions.assertObjectType.bind(TypeAssertions),
         'a non-array object',
@@ -165,14 +165,17 @@ describe('TypeAssertions', () => {
         ]
     );
 
-    testPrimitiveTypeAssertions(
+    /**
+     * @remarks Nested arrays are required for success cases due to vitest `test.each` array spreading.
+     */
+    testTypeAssertions(
         'assertArrayType',
         TypeAssertions.assertArrayType.bind(TypeAssertions),
         'an array',
         [
-            new Array([]),
-            new Array([1, 2, 3]),
-            new Array(['a', 'b', 'c'])
+            [[]],
+            [[1, 2, 3]],
+            [['a', 'b', 'c']]
         ],
         nonArrayInputs
     );
