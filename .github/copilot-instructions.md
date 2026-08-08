@@ -50,7 +50,7 @@ Update `CLAUDE.md` when the map changes: a new or renamed section that `CLAUDE.m
 
 ```
 src/
-  assert/                 # Primitive type assertion utilities
+  assert/                 # Type assertion utilities
   discriminator/          # Discriminated type-guard utilities and registry (deprecated; scheduled for removal in v0.1.0-alpha.4)
   error/                  # Custom error types
   math/                   # Math utilities
