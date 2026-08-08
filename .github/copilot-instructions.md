@@ -50,7 +50,7 @@ Update `CLAUDE.md` when the map changes: a new or renamed section that `CLAUDE.m
 
 ```
 src/
-  assert/                 # Internal assertion helpers
+  assert/                 # Type assertion utilities
   discriminator/          # Discriminated type-guard utilities and registry (deprecated; scheduled for removal in v0.1.0-alpha.4)
   error/                  # Custom error types
   math/                   # Math utilities
@@ -61,6 +61,7 @@ src/
   string/                 # String utilities
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
+  assert/                 # Tests for the assert module
   discriminator/          # Tests for the discriminator module
   error/                  # Tests for the error module
   math/                   # Tests for the math module
@@ -109,8 +110,8 @@ Custom error classes must:
 
 Choose the error type by the kind of failure, not by the call site:
 
-- `PrimitiveTypeError` — input is not the expected primitive type (e.g., not a string, not a number)
-- `SchemaTypeError` — input is either an object type that does not satisfy an expected object schema, or not an object at all
+- `PrimitiveTypeError` — input fails a `typeof`-level type check with no schema involved (e.g., not a string, not a number, not a function, not an object)
+- `SchemaTypeError` — input is checked against an expected object schema and fails it, either because it does not satisfy the schema or because it is not an object at all
 - `ValueRangeError` — input is the correct type but falls outside an allowed range or bound
 - `StaticInstanceError` — a static class constructor was invoked
 

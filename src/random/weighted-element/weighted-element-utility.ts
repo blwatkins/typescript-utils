@@ -22,7 +22,7 @@ import Value from 'typebox/value';
 
 import { Type } from 'typebox';
 
-import { PrimitiveTypeAssertions } from '../../assert';
+import { TypeAssertions } from '../../assert';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
@@ -126,7 +126,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
-        PrimitiveTypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function');
+        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function');
         return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
     }
 

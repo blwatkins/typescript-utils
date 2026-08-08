@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-08-04
+modified_date: 2026-08-07
 toc: true
 ---
 
@@ -139,6 +139,7 @@ A dedicated error module gives those failures a consistent vocabulary, with each
 - [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
 - [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
 - [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
+- [src/assert/type-assertions.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/assert/type-assertions.ts)
 - [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
 - [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
 
