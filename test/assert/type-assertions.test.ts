@@ -128,7 +128,9 @@ describe('TypeAssertions', () => {
 
     testTypeAssertions(
         'assertFunctionType',
-        TypeAssertions.assertFunctionType.bind(TypeAssertions),
+        (input: unknown, message?: string): void => {
+            TypeAssertions.assertFunctionType(input, message);
+        },
         'a function',
         [
             Math.random,
@@ -147,7 +149,9 @@ describe('TypeAssertions', () => {
 
     testTypeAssertions(
         'assertObjectType',
-        TypeAssertions.assertObjectType.bind(TypeAssertions),
+        (input: unknown, message?: string): void => {
+            TypeAssertions.assertObjectType(input, message);
+        },
         'a non-array object',
         [
             {},
@@ -171,7 +175,9 @@ describe('TypeAssertions', () => {
      */
     testTypeAssertions(
         'assertArrayType',
-        TypeAssertions.assertArrayType.bind(TypeAssertions),
+        (input: unknown, message?: string): void => {
+            TypeAssertions.assertArrayType(input, message);
+        },
         'an array',
         [
             [[]],
