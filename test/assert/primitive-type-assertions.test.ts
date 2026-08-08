@@ -21,103 +21,155 @@
 import { fail } from 'node:assert';
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeAssertions, PrimitiveTypeError, StaticInstanceError } from '../../src';
+import { PrimitiveTypeAssertions, PrimitiveTypeError, RandomNumberGeneratorFactory, StaticInstanceError } from '../../src';
 
+import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
+import { nonObjectInputs } from '../utils/input/object-inputs';
 import { nonStringInputs, singleLineTrimmedFailureInputs } from '../utils/input/string-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 describe('PrimitiveTypeAssertions', () => {
     testStaticClassConstructor('PrimitiveTypeAssertions', PrimitiveTypeAssertions as unknown as new () => unknown, StaticInstanceError);
 
-    describe('assertFunctionType', (): void => {
-        describe('Non-function types should throw a PrimitiveTypeError', (): void => {
-            describe('With default message', (): void => {
-                test.each(
-                    nonFunctionInputs
-                )('%# - assertFunctionType(%o)', (input: unknown): void => {
-                    const expectedMessage = `Expected a function, but received: ${typeof input}`;
+    function testPrimitiveTypeAssertions(
+        methodName: string,
+        method: (input: unknown, message?: string) => asserts input is unknown,
+        expectedType: string,
+        successInputs: unknown[],
+        failureInputs: unknown[]
+    ): void {
+        describe(methodName, (): void => {
+            describe('Failure cases should throw a PrimitiveTypeError', (): void => {
+                describe('With default message', (): void => {
+                    test.each(
+                        failureInputs
+                    )(`%# - ${methodName}(%o)`, (input: unknown): void => {
+                        const expectedMessage = `Expected ${expectedType}, but received: ${typeof input}`;
 
-                    try {
-                        PrimitiveTypeAssertions.assertFunctionType(input);
-                        fail('Method should throw error');
-                    } catch (e) {
-                        const error: PrimitiveTypeError = e as PrimitiveTypeError;
-                        expect(error.message).toBe(expectedMessage);
-                    }
+                        try {
+                            method(input);
+                            fail('Method should throw error');
+                        } catch (e) {
+                            const error: PrimitiveTypeError = e as PrimitiveTypeError;
+                            expect(error.message).toBe(expectedMessage);
+                        }
+                    });
+                });
+
+                describe('With custom message', (): void => {
+                    const expectedMessage: string = `Test Custom Error: ${methodName}`;
+
+                    test.each(
+                        failureInputs
+                    )(`%# - ${methodName}(%o, ${expectedMessage})`, (input: unknown): void => {
+                        try {
+                            method(input, expectedMessage);
+                            fail('Method should throw error');
+                        } catch (e) {
+                            const error: PrimitiveTypeError = e as PrimitiveTypeError;
+                            expect(error.message).toBe(expectedMessage);
+                        }
+                    });
+                });
+
+                describe('With invalid message type', (): void => {
+                    describe.each(
+                        failureInputs
+                    )(`%# - ${methodName}(%o, message) should throw with default message when given message is not a single-line trimmed string`, (input: unknown): void => {
+                        const expectedMessage: string = `Expected ${expectedType}, but received: ${typeof input}`;
+
+                        describe('Non-string type message', (): void => {
+                            test.each(
+                                nonStringInputs
+                            )(`%# - ${methodName}(${input as string}, %o)`, (message: unknown): void => {
+                                try {
+                                    method(input, message as string);
+                                    fail('Method should throw error');
+                                } catch (e) {
+                                    const error: PrimitiveTypeError = e as PrimitiveTypeError;
+                                    expect(error.message).toBe(expectedMessage);
+                                }
+                            });
+                        });
+
+                        describe('String type messages that are not single-line trimmed', (): void => {
+                            test.each(
+                                singleLineTrimmedFailureInputs
+                            )(`%# - ${methodName}(${input as string}, %s)`, (message: string): void => {
+                                try {
+                                    method(input, message);
+                                    fail('Method should throw error');
+                                } catch (e) {
+                                    const error: PrimitiveTypeError = e as PrimitiveTypeError;
+                                    expect(error.message).toBe(expectedMessage);
+                                }
+                            });
+                        });
+                    });
                 });
             });
 
-            describe('With custom message', (): void => {
-                const expectedMessage = 'test custom function message';
-
+            describe('Success cases should not throw an error', (): void => {
                 test.each(
-                    nonFunctionInputs
-                )(`%# - assertFunctionType(%o, ${expectedMessage})`, (input: unknown): void => {
-                    try {
-                        PrimitiveTypeAssertions.assertFunctionType(input, expectedMessage);
-                        fail('Method should throw error');
-                    } catch (e) {
-                        const error: PrimitiveTypeError = e as PrimitiveTypeError;
-                        expect(error.message).toBe(expectedMessage);
-                    }
-                });
-            });
-
-            describe('With invalid message type', (): void => {
-                describe.each([
-                    ...nonFunctionInputs
-                ])('%# - assertFunctionType(%o, message) should throw with default message when given message is not a single-line trimmed string', (input: unknown): void => {
-                    const expectedMessage = `Expected a function, but received: ${typeof input}`;
-
-                    describe('Non-string type message', (): void => {
-                        test.each(
-                            nonStringInputs
-                        )(`%# - assertFunctionType(${input as string}, %o)`, (message: unknown): void => {
-                            try {
-                                PrimitiveTypeAssertions.assertFunctionType(input, message as string);
-                                fail('Method should throw error');
-                            } catch (e) {
-                                const error: PrimitiveTypeError = e as PrimitiveTypeError;
-                                expect(error.message).toBe(expectedMessage);
-                            }
-                        });
-                    });
-
-                    describe('String type messages that are not single-line trimmed', (): void => {
-                        test.each(
-                            singleLineTrimmedFailureInputs
-                        )(`%# - assertFunctionType(${input as string}, %s)`, (message: string): void => {
-                            try {
-                                PrimitiveTypeAssertions.assertFunctionType(input, message);
-                                fail('Method should throw error');
-                            } catch (e) {
-                                const error: PrimitiveTypeError = e as PrimitiveTypeError;
-                                expect(error.message).toBe(expectedMessage);
-                            }
-                        });
-                    });
+                    successInputs
+                )(`${methodName}(%o)`, (input: unknown): void => {
+                    expect((): void => {
+                        method(input);
+                    }).not.toThrow();
                 });
             });
         });
+    }
 
-        describe('Function types should not throw an error', (): void => {
-            test.each([
-                Math.random,
-                (): boolean => {
-                    return false;
-                },
-                (): number => {
-                    return 2;
-                },
-                (x: number, y: number): number => {
-                    return (x * y) - (x + y);
-                }
-            ])('assertFunctionType(%o)', (input: unknown): void => {
-                expect((): void => {
-                    PrimitiveTypeAssertions.assertFunctionType(input);
-                }).not.toThrow(PrimitiveTypeError);
-            });
-        });
-    });
+    testPrimitiveTypeAssertions(
+        'assertFunctionType',
+        PrimitiveTypeAssertions.assertFunctionType.bind(PrimitiveTypeAssertions),
+        'a function',
+        [
+            Math.random,
+            (): boolean => {
+                return false;
+            },
+            (): number => {
+                return 2;
+            },
+            (x: number, y: number): number => {
+                return (x * y) - (x + y);
+            }
+        ],
+        nonFunctionInputs
+    );
+
+    testPrimitiveTypeAssertions(
+        'assertObjectType',
+        PrimitiveTypeAssertions.assertObjectType.bind(PrimitiveTypeAssertions),
+        'a non-array object',
+        [
+            {},
+            { key: 'value' },
+            { 'other key': 'other value' },
+            RandomNumberGeneratorFactory.build('seed'),
+            new Error(),
+            new Set<string>()
+        ],
+        [
+            ...nonObjectInputs,
+            new Array([]),
+            new Array([1, 2, 3]),
+            new Array(['a', 'b', 'c'])
+        ]
+    );
+
+    testPrimitiveTypeAssertions(
+        'assertArrayType',
+        PrimitiveTypeAssertions.assertArrayType.bind(PrimitiveTypeAssertions),
+        'an array',
+        [
+            new Array([]),
+            new Array([1, 2, 3]),
+            new Array(['a', 'b', 'c'])
+        ],
+        nonArrayInputs
+    );
 });
