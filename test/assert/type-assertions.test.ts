@@ -21,7 +21,7 @@
 import { fail } from 'node:assert';
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeAssertions, PrimitiveTypeError, RandomNumberGeneratorFactory, StaticInstanceError } from '../../src';
+import { TypeAssertions, PrimitiveTypeError, RandomNumberGeneratorFactory, StaticInstanceError } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
@@ -29,8 +29,8 @@ import { nonObjectInputs } from '../utils/input/object-inputs';
 import { nonStringInputs, singleLineTrimmedFailureInputs } from '../utils/input/string-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
-describe('PrimitiveTypeAssertions', () => {
-    testStaticClassConstructor('PrimitiveTypeAssertions', PrimitiveTypeAssertions as unknown as new () => unknown, StaticInstanceError);
+describe('TypeAssertions', () => {
+    testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
 
     function testPrimitiveTypeAssertions(
         methodName: string,
@@ -51,6 +51,7 @@ describe('PrimitiveTypeAssertions', () => {
                             method(input);
                             fail('Method should throw error');
                         } catch (e) {
+                            expect(e).toBeInstanceOf(PrimitiveTypeError);
                             const error: PrimitiveTypeError = e as PrimitiveTypeError;
                             expect(error.message).toBe(expectedMessage);
                         }
@@ -67,6 +68,7 @@ describe('PrimitiveTypeAssertions', () => {
                             method(input, expectedMessage);
                             fail('Method should throw error');
                         } catch (e) {
+                            expect(e).toBeInstanceOf(PrimitiveTypeError);
                             const error: PrimitiveTypeError = e as PrimitiveTypeError;
                             expect(error.message).toBe(expectedMessage);
                         }
@@ -87,6 +89,7 @@ describe('PrimitiveTypeAssertions', () => {
                                     method(input, message as string);
                                     fail('Method should throw error');
                                 } catch (e) {
+                                    expect(e).toBeInstanceOf(PrimitiveTypeError);
                                     const error: PrimitiveTypeError = e as PrimitiveTypeError;
                                     expect(error.message).toBe(expectedMessage);
                                 }
@@ -101,6 +104,7 @@ describe('PrimitiveTypeAssertions', () => {
                                     method(input, message);
                                     fail('Method should throw error');
                                 } catch (e) {
+                                    expect(e).toBeInstanceOf(PrimitiveTypeError);
                                     const error: PrimitiveTypeError = e as PrimitiveTypeError;
                                     expect(error.message).toBe(expectedMessage);
                                 }
@@ -124,7 +128,7 @@ describe('PrimitiveTypeAssertions', () => {
 
     testPrimitiveTypeAssertions(
         'assertFunctionType',
-        PrimitiveTypeAssertions.assertFunctionType.bind(PrimitiveTypeAssertions),
+        TypeAssertions.assertFunctionType.bind(TypeAssertions),
         'a function',
         [
             Math.random,
@@ -143,7 +147,7 @@ describe('PrimitiveTypeAssertions', () => {
 
     testPrimitiveTypeAssertions(
         'assertObjectType',
-        PrimitiveTypeAssertions.assertObjectType.bind(PrimitiveTypeAssertions),
+        TypeAssertions.assertObjectType.bind(TypeAssertions),
         'a non-array object',
         [
             {},
@@ -163,7 +167,7 @@ describe('PrimitiveTypeAssertions', () => {
 
     testPrimitiveTypeAssertions(
         'assertArrayType',
-        PrimitiveTypeAssertions.assertArrayType.bind(PrimitiveTypeAssertions),
+        TypeAssertions.assertArrayType.bind(TypeAssertions),
         'an array',
         [
             new Array([]),

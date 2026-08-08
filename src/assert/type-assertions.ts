@@ -26,17 +26,17 @@ import { StringUtility } from '../string';
  *
  * @since 0.1.0
  */
-export class PrimitiveTypeAssertions {
+export class TypeAssertions {
     /**
      * Private constructor.
      *
      * @throws {StaticInstanceError} When class is instantiated.
-     * {@link PrimitiveTypeAssertions} is a static class and cannot be instantiated.
+     * {@link TypeAssertions} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new StaticInstanceError('PrimitiveTypeAssertions is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('TypeAssertions is a static class and cannot be instantiated.');
     }
 
     /**
@@ -51,6 +51,7 @@ export class PrimitiveTypeAssertions {
      *
      * @throws {PrimitiveTypeError} When the input is not a callable function.
      *
+     * @public
      * @since 0.1.0
      */
     public static assertFunctionType(input: unknown, message?: string): asserts input is (...args: unknown[]) => unknown {
@@ -64,17 +65,19 @@ export class PrimitiveTypeAssertions {
     }
 
     /**
-     * Validate and assert that the given input is an object.
+     * Validate and assert that the given input is a non-array object.
      *
      * @remarks This method does not enforce presence or type checking for any object properties.
+     * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown if the input is not an object.
+     * @param {string|undefined} message - Optional message for the error thrown if the input is not a non-array object.
      *
-     * @returns {asserts input is object} Asserts that the given input is an object.
+     * @returns {asserts input is object} Asserts that the given input is a non-array object.
      *
-     * @throws {PrimitiveTypeError} When the input is not an object.
+     * @throws {PrimitiveTypeError} When the input is not a non-array object.
      *
+     * @public
      * @since 0.1.0
      */
     public static assertObjectType(input: unknown, message?: string): asserts input is object {
@@ -99,10 +102,11 @@ export class PrimitiveTypeAssertions {
      *
      * @throws {PrimitiveTypeError} When the input is not an array.
      *
+     * @public
      * @since 0.1.0
      */
     public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
-        if (!input || typeof input !== 'object' || !Array.isArray(input)) {
+        if (!Array.isArray(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);
             }
