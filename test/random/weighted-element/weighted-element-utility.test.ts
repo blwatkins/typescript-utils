@@ -18,6 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { fail } from 'node:assert';
 import { Static, Type } from 'typebox';
 import { describe, expect, expectTypeOf, test } from 'vitest';
 
@@ -34,7 +35,6 @@ import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number
 import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
-import {fail} from "node:assert";
 
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, Error);
@@ -110,7 +110,7 @@ describe('WeightedElementUtility', (): void => {
                 {
                     label: 'Object inputs with non-numeric weight property',
                     inputs: [
-                        ...nonNumberInputs.map((input: unknown): { value: string; weight: unknown } => {
+                        ...nonNumberInputs.map((input: unknown): { value: string; weight: unknown; } => {
                             return { value: 'test', weight: input };
                         })
                     ],
@@ -119,7 +119,7 @@ describe('WeightedElementUtility', (): void => {
                 {
                     label: 'Object inputs with non-finite weight property',
                     inputs: [
-                        ...nonFiniteNumberInputs.map((input: number): { value: string; weight: number } => {
+                        ...nonFiniteNumberInputs.map((input: number): { value: string; weight: number; } => {
                             return { value: 'test', weight: input };
                         })
                     ],
