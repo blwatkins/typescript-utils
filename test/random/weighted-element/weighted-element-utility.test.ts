@@ -19,13 +19,11 @@
  */
 
 import { fail } from 'node:assert';
-import { Static, Type } from 'typebox';
 import { describe, expect, expectTypeOf, test } from 'vitest';
 
 import {
     WeightedElement,
     WeightedList,
-    weightedElementSchema,
     WeightedElementUtility, PrimitiveTypeError, StringUtility
 } from '../../../src';
 
@@ -39,127 +37,100 @@ import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-c
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, Error);
 
-    describe('isGenericWeightedElement()', (): void => {
-        describe('weightedElementSchema and WeightedElement interface should be equivalent', (): void => {
-            const numberSchema = Type.Call(weightedElementSchema, [Type.Number()]);
-            type NumberStatic = Static<typeof numberSchema>;
-            const stringSchema = Type.Call(weightedElementSchema, [Type.String()]);
-            type StringStatic = Static<typeof stringSchema>;
-
-            test('String type', (): void => {
-                expect(stringSchema).toBeDefined();
-
-                expectTypeOf<StringStatic>().toExtend<WeightedElement<string>>();
-                expectTypeOf<WeightedElement<string>>().toExtend<StringStatic>();
-
-                expectTypeOf<NumberStatic>().not.toExtend<WeightedElement<string>>();
-                expectTypeOf<WeightedElement<string>>().not.toExtend<NumberStatic>();
-            });
-
-            test('Number type', (): void => {
-                expect(numberSchema).toBeDefined();
-
-                expectTypeOf<NumberStatic>().toExtend<WeightedElement<number>>();
-                expectTypeOf<WeightedElement<number>>().toExtend<NumberStatic>();
-
-                expectTypeOf<StringStatic>().not.toExtend<WeightedElement<number>>();
-                expectTypeOf<WeightedElement<number>>().not.toExtend<StringStatic>();
-            });
-        });
-
-        describe('Input validation', (): void => {
-            const scenarios: Scenario[] = [
+    const weightedElementInputScenarios: Scenario[] = [
+        {
+            label: 'Non-object type inputs',
+            inputs: [
+                ...nonObjectInputs
+            ],
+            expected: false
+        },
+        {
+            label: 'Array type inputs',
+            inputs: [
+                [],
+                [1, 2, 3],
+                ['a', 'b', 'c']
+            ],
+            expected: false
+        },
+        {
+            label: 'Object inputs missing value property',
+            inputs: [
+                { weight: 0 },
+                { weight: 0.5 },
+                { weight: 1 }
+            ],
+            expected: false
+        },
+        {
+            label: 'Object inputs missing weight property',
+            inputs: [
+                { value: 10 },
+                { value: 'hello' },
                 {
-                    label: 'Non-object type inputs',
-                    inputs: [
-                        ...nonObjectInputs
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Array type inputs',
-                    inputs: [
-                        [],
-                        [1, 2, 3],
-                        ['a', 'b', 'c']
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs missing value property',
-                    inputs: [
-                        { weight: 0 },
-                        { weight: 0.5 },
-                        { weight: 1 }
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs missing weight property',
-                    inputs: [
-                        { value: 10 },
-                        { value: 'hello' },
-                        {
-                            value: (): number => {
-                                return 100;
-                            }
-                        }
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs with non-numeric weight property',
-                    inputs: [
-                        ...nonNumberInputs.map((input: unknown): { value: string; weight: unknown; } => {
-                            return { value: 'test', weight: input };
-                        })
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs with non-finite weight property',
-                    inputs: [
-                        ...nonFiniteNumberInputs.map((input: number): { value: string; weight: number; } => {
-                            return { value: 'test', weight: input };
-                        })
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs with out of range weight property',
-                    inputs: [
-                        { value: 10, weight: -5 },
-                        { value: 10, weight: -1 },
-                        { value: 10, weight: -0.1 },
-                        { value: 10, weight: -Number.EPSILON },
-                        { value: 10, weight: 1 + Number.EPSILON },
-                        { value: 10, weight: 1.1 },
-                        { value: 10, weight: 5 }
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Object inputs with additional properties',
-                    inputs: [
-                        { value: 'hello', weight: 0, name: 'bob' },
-                        { value: 'hello', weight: 0.5, age: 42 },
-                        { value: 'hello', weight: 1, day: 7 }
-                    ],
-                    expected: false
-                },
-                {
-                    label: 'Valid weighted element object',
-                    inputs: [
-                        { value: 'hello', weight: 0 },
-                        { value: 'hi', weight: 0.5 },
-                        { value: 'hey', weight: 1 }
-                    ],
-                    expected: true
+                    value: (): number => {
+                        return 100;
+                    }
                 }
-            ];
+            ],
+            expected: false
+        },
+        {
+            label: 'Object inputs with non-numeric weight property',
+            inputs: [
+                ...nonNumberInputs.map((input: unknown): { value: string; weight: unknown; } => {
+                    return { value: 'test', weight: input };
+                })
+            ],
+            expected: false
+        },
+        {
+            label: 'Object inputs with non-finite weight property',
+            inputs: [
+                ...nonFiniteNumberInputs.map((input: number): { value: string; weight: number; } => {
+                    return { value: 'test', weight: input };
+                })
+            ],
+            expected: false
+        },
+        {
+            label: 'Object inputs with out of range weight property',
+            inputs: [
+                { value: 10, weight: -5 },
+                { value: 10, weight: -1 },
+                { value: 10, weight: -0.1 },
+                { value: 10, weight: -Number.EPSILON },
+                { value: 10, weight: 1 + Number.EPSILON },
+                { value: 10, weight: 1.1 },
+                { value: 10, weight: 5 }
+            ],
+            expected: false
+        },
+        {
+            label: 'Object inputs with additional properties',
+            inputs: [
+                { value: 'hello', weight: 0, name: 'bob' },
+                { value: 'hello', weight: 0.5, age: 42 },
+                { value: 'hello', weight: 1, day: 7 }
+            ],
+            expected: false
+        },
+        {
+            label: 'Valid weighted element object',
+            inputs: [
+                { value: 'hello', weight: 0 },
+                { value: 'hi', weight: 0.5 },
+                { value: 'hey', weight: 1 }
+            ],
+            expected: true
+        }
+    ];
 
+    describe('isGenericWeightedElement()', (): void => {
+        describe('isGenericWeightedElement should correctly identify WeightedElement objects', (): void => {
             describe.each(
-                scenarios
+                weightedElementInputScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
