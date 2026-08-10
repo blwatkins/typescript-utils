@@ -72,16 +72,16 @@ export class WeightedElementUtility {
      *
      * @see {@link WeightedElementUtility.isWeightedElement}
      *
-     * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
+     * @template TValue The type of the value property of the {@link WeightedElement} object.
      *
      * @param {unknown} input - The input to check.
-     * @param {(value: unknown) => value is TValue} valueTypeGuard - The method used to validate the type or schema of {@link WeightedElement.value}.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
      * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
      *
      * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a {@link WeightedElement} whose value matches the expected type or schema.
      *
-     * @throws {SchemaTypeError} When the given input is not a valid typed {@link WeightedElement}.
+     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedElement}.
      *
      * @public
      * @since 0.1.0
@@ -113,10 +113,10 @@ export class WeightedElementUtility {
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
-     * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
+     * @template TValue The type of the value property of the {@link WeightedElement} object.
      *
      * @param {unknown} input - The input to check.
-     * @param {(value: unknown) => value is TValue} valueTypeGuard - The method used to validate the type or schema of {@link WeightedElement.value}.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
      * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
      *
