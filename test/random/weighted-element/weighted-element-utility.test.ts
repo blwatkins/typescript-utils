@@ -19,14 +19,14 @@
  */
 
 import { fail } from 'node:assert';
-import { describe, expect, expectTypeOf, test } from 'vitest';
+import { describe, test, expect, expectTypeOf } from 'vitest';
 
 import {
     PrimitiveTypeError,
     StringUtility,
     WeightedElement,
     WeightedList,
-    WeightedElementUtility, SchemaTypeError
+    WeightedElementUtility, SchemaTypeError, StaticInstanceError
 } from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
@@ -37,9 +37,9 @@ import { testStaticClassConstructor } from '../../utils/static/static-class-test
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('WeightedElementUtility', (): void => {
-    testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, Error);
+    testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, StaticInstanceError);
 
-    const weightedElementInputScenarios: Scenario[] = [
+    const failureScenarios: Scenario[] = [
         {
             label: 'Non-object type inputs',
             inputs: [
@@ -117,7 +117,10 @@ describe('WeightedElementUtility', (): void => {
                 { value: 'hello', weight: 1, day: 7 }
             ],
             expected: false
-        },
+        }
+    ];
+
+    const successScenarios: Scenario[] = [
         {
             label: 'Valid weighted element objects',
             inputs: [
@@ -131,23 +134,35 @@ describe('WeightedElementUtility', (): void => {
 
     describe('assertGenericWeightedElement', (): void => {
         describe('Should correctly identify generic WeightedElement objects', (): void => {
-            describe.each(
-                weightedElementInputScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+            describe('Failure scenarios', (): void => {
+                describe.each(
+                    failureScenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                test.each(
-                    testCases
-                )('%# - Input $input should throw a SchemaTypeError if it is not a valid weighted element', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    if (testExpected) {
-                        expect((): void => {
-                            WeightedElementUtility.assertGenericWeightedElement(testInput);
-                        }).not.toThrow();
-                    } else {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw a SchemaTypeError', ({ input: testInput }: TestCase): void => {
                         expect((): void => {
                             WeightedElementUtility.assertGenericWeightedElement(testInput);
                         }).toThrow(SchemaTypeError);
-                    }
+                    });
+                });
+            });
+
+            describe('Success scenarios', (): void => {
+                describe.each(
+                    successScenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    test.each(
+                        testCases
+                    )('%# - Input $input should not throw any errors', ({ input: testInput }: TestCase): void => {
+                        expect((): void => {
+                            WeightedElementUtility.assertGenericWeightedElement(testInput);
+                        }).not.toThrow();
+                    });
                 });
             });
         });
@@ -175,46 +190,18 @@ describe('WeightedElementUtility', (): void => {
 
         });
 
-        describe('Should throw for any invalid weighted element', (): void => {
+        describe('Should throw for invalid weighted elements', (): void => {
             describe.each(
-                weightedElementInputScenarios
+                failureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                 test.each(
                     testCases
-                )('%# - Input $input should throw a SchemaTypeError if it is not a valid weighted element', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    if (!testExpected) {
-                        expect((): void => {
-                            WeightedElementUtility.assertWeightedElement(testInput, typeGuard);
-                        }).toThrow(SchemaTypeError);
-                    }
-                });
-            });
-        });
-
-        describe('Input validation', (): void => {
-            const scenarios: Scenario[] = [
-                {
-                    label: 'Non-function type inputs',
-                    inputs: [
-                        ...nonFunctionInputs
-                    ],
-                    expected: PrimitiveTypeError
-                }
-            ];
-
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should throw a SchemaTypeError', ({ input: testInput }: TestCase): void => {
                     expect((): void => {
-                        WeightedElementUtility.assertWeightedElement({}, testInput as ((value: unknown) => value is unknown));
-                    }).toThrow(testExpected);
+                        WeightedElementUtility.assertWeightedElement(testInput, typeGuard);
+                    }).toThrow(SchemaTypeError);
                 });
             });
         });
@@ -222,9 +209,10 @@ describe('WeightedElementUtility', (): void => {
 
     describe('isGenericWeightedElement', (): void => {
         describe('Should correctly identify WeightedElement objects', (): void => {
-            describe.each(
-                weightedElementInputScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            describe.each([
+                ...failureScenarios,
+                ...successScenarios
+            ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                 test.each(
@@ -261,8 +249,10 @@ describe('WeightedElementUtility', (): void => {
                 fail('WeightedElement type narrowing failed');
             }
         });
+    });
 
-        describe('Input validation', (): void => {
+    describe('Input validation', (): void => {
+        describe('Function type guard input validation', (): void => {
             const scenarios: Scenario[] = [
                 {
                     label: 'Non-function type inputs',
@@ -278,12 +268,24 @@ describe('WeightedElementUtility', (): void => {
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                test.each(
-                    testCases
-                )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect((): void => {
-                        WeightedElementUtility.isWeightedElement({}, testInput as ((value: unknown) => value is unknown));
-                    }).toThrow(testExpected);
+                describe('isWeightedElement', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            WeightedElementUtility.isWeightedElement({}, testInput as ((value: unknown) => value is unknown));
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('assertWeightedElement', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            WeightedElementUtility.assertWeightedElement({}, testInput as ((value: unknown) => value is unknown));
+                        }).toThrow(testExpected);
+                    });
                 });
             });
         });
