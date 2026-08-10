@@ -42,6 +42,53 @@ export class WeightedListUtility {
     }
 
     /**
+     * Validate and assert that the given input is a generic {@link WeightedList} object.
+     *
+     * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
+     *
+     * @see {@link WeightedListUtility.isGenericWeightedList}
+     *
+     * @param {unknown} input - The input to validate.
+     *
+     * @returns {asserts input is WeightedList<unknown>} Asserts that the given input is a valid {@link WeightedList}.
+     *
+     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedList}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertGenericWeightedList(input: unknown): asserts input is WeightedList<unknown> {
+        if (!WeightedListUtility.isGenericWeightedList(input)) {
+            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedList');
+        }
+    }
+
+    /**
+     * Validate and assert that the given input is a {@link WeightedList} object, where the {@link WeightedElement.value} property of each element passes the given type guard function.
+     *
+     * @see {@link WeightedListUtility.isWeightedList}
+     *
+     * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
+     *
+     * @param {unknown} input - The input to validate.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard -  The type guard function used to validate the type or schema of the {@link WeightedElement.value} property of each element in the list.
+     * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
+     * The type validated by the function should match the assigned type of the {@link WeightedList}.
+     *
+     * @returns {asserts input is WeightedList<TValue>} Asserts that the given input is a valid {@link WeightedList}, where the {@link WeightedElement.value} property of each element passes the given type guard function.
+     *
+     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedList}, or when the {@link WeightedElement.value} property of any element does not pass the given type guard function.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): asserts input is WeightedList<TValue> {
+        if (!WeightedListUtility.isWeightedList(input, valueTypeGuard)) {
+            throw new SchemaTypeError('Input does not match schema requirements for WeightedList');
+        }
+    }
+
+    /**
      * Is the given input a generic {@link WeightedList} object?
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
@@ -75,24 +122,30 @@ export class WeightedListUtility {
     }
 
     /**
-     * Validate and assert that the given input is a generic {@link WeightedList} object.
-     *
-     * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
+     * Is the given input a {@link WeightedList} object, where the {@link WeightedElement.value} property of each element passes the given type guard function?
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
+     * @see {@link WeightedElementUtility.isWeightedElement}
      *
-     * @param {unknown} input - The input to validate.
+     * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
      *
-     * @returns {asserts input is WeightedList<unknown>} Asserts that the given input is a valid {@link WeightedList}.
+     * @param {unknown} input - The input to check.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard -  The type guard function used to validate the type or schema of the {@link WeightedElement.value} property of each element in the list.
+     * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
+     * The type validated by the function should match the assigned type of the {@link WeightedList}.
      *
-     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedList}.
+     * @returns {input is WeightedList<TValue>} `true` if the given input is a valid {@link WeightedList} object, where the {@link WeightedElement.value} property of each element passes the given type guard function; `false` otherwise.
      *
      * @public
      * @since 0.1.0
      */
-    public static assertGenericWeightedList(input: unknown): asserts input is WeightedList<unknown> {
+    public static isWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedList<TValue> {
         if (!WeightedListUtility.isGenericWeightedList(input)) {
-            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedList');
+            return false;
         }
+
+        return input.every((element: unknown): boolean => {
+            return WeightedElementUtility.isWeightedElement(element, valueTypeGuard);
+        });
     }
 }
