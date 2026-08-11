@@ -32,7 +32,7 @@ import {
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
-import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
+import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('WeightedListUtility', (): void => {
     testStaticClassConstructor('WeightedListUtility', WeightedListUtility as unknown as new () => unknown, StaticInstanceError);
