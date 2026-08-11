@@ -18,6 +18,9 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { PrimitiveTypeError, StaticInstanceError } from '../error';
+import { StringUtility } from '../string';
+
 /**
  * Static properties and methods for validating number types.
  *
@@ -27,12 +30,85 @@ export class NumberUtility {
     /**
      * Private constructor.
      *
-     * @throws {Error} NumberUtility is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link NumberUtility} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('NumberUtility is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('NumberUtility is a static class and cannot be instantiated.');
+    }
+
+    /**
+     * Validates and asserts that the given input is a finite number.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|unknown} message - Optional message for the error thrown when the input is not a finite number.
+     *
+     * @returns {asserts input is number} Asserts that the given input is a finite number.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a finite number.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertFiniteNumber(input: unknown, message?: string): asserts input is number {
+        if (!NumberUtility.isFiniteNumber(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a finite number, but received: ${typeof input}`);
+        }
+    }
+
+    /**
+     * Validates and asserts that the given input is an integer.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|unknown} message - Optional message for the error thrown when the input is not an integer.
+     *
+     * @returns {asserts input is number} Asserts that the given input is an integer.
+     *
+     * @throws {PrimitiveTypeError} When the input is not an integer.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertInteger(input: unknown, message?: string): asserts input is number {
+        if (!NumberUtility.isInteger(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected an integer, but received: ${typeof input}`);
+        }
+    }
+
+    /**
+     * Validates and asserts that the given input is a positive integer.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
+     * `false` if zero should be considered an invalid input.
+     * Default value is `false`.
+     * @param {string|unknown} message - Optional message for the error thrown when the input is not a positive integer.
+     *
+     * @returns {asserts input is number} Asserts that the given input is a positive integer.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a positive integer.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertPositiveInteger(input: unknown, zeroInclusive: boolean = false, message?: string): asserts input is number {
+        if (!NumberUtility.isPositiveInteger(input, zeroInclusive)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a positive integer (zeroInclusive=${zeroInclusive}), but received: ${typeof input}`);
+        }
     }
 
     /**
