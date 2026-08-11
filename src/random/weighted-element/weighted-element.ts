@@ -71,13 +71,15 @@ export const weightedElementSchema = Type.Generic(
 /**
  * Interface for a weighted element, which can be used for non-uniform random selection from a list.
  *
- * @template TValue
+ * @template TValue The type of the {@link WeightedElement.value} property of the object.
  *
  * @since 0.1.0
  */
 export interface WeightedElement<TValue> {
     /**
      * The value to be selected from the weighted list.
+     *
+     * @template TValue
      *
      * @type {TValue}
      * @readonly
