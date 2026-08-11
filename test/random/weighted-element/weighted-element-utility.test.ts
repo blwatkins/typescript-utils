@@ -179,15 +179,14 @@ describe('WeightedElementUtility', (): void => {
             const element3: WeightedElement<unknown> = { value: 100, weight: 1 };
 
             expect((): void => {
-                WeightedElementUtility.assertWeightedElement<string>(element1, typeGuard)
+                WeightedElementUtility.assertWeightedElement<string>(element1, typeGuard);
             }).not.toThrow();
             expect((): void => {
-                WeightedElementUtility.assertWeightedElement<string>(element2, typeGuard)
+                WeightedElementUtility.assertWeightedElement<string>(element2, typeGuard);
             }).toThrow(SchemaTypeError);
             expect((): void => {
-                WeightedElementUtility.assertWeightedElement<string>(element3, typeGuard)
+                WeightedElementUtility.assertWeightedElement<string>(element3, typeGuard);
             }).toThrow(SchemaTypeError);
-
         });
 
         describe('Should throw for invalid weighted elements', (): void => {
@@ -245,9 +244,24 @@ describe('WeightedElementUtility', (): void => {
             if (WeightedElementUtility.isWeightedElement<string>(element1, typeGuard)) {
                 expect(element1.value).toBeTruthy();
                 expectTypeOf(element1.value).toBeString();
+                expectTypeOf(element1.value.toLowerCase()).toBeString();
             } else {
                 fail('WeightedElement type narrowing failed');
             }
+        });
+
+        describe('Should return false for invalid weighted elements', (): void => {
+            describe.each(
+                failureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(WeightedElementUtility.isWeightedElement(testInput, typeGuard)).toBe(testExpected);
+                });
+            });
         });
     });
 
