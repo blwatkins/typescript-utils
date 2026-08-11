@@ -40,9 +40,7 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
 
 ## Documentation Notes
 
-- `README.md` / `docs/index.md` sync, Markdown formatting, TypeDoc, and the Jekyll build are covered in the ["Documentation and GitHub Pages"](./.github/copilot-instructions.md#documentation-and-github-pages) and ["Markdown Formatting"](./.github/copilot-instructions.md#markdown-formatting) sections of `.github/copilot-instructions.md`.
-- The portfolio skills page (`docs/portfolio-skills.md`) and its generation/review workflow are described in the ["Portfolio Page Generation and Maintenance"](./.github/copilot-instructions.md#portfolio-page-generation-and-maintenance) section.
-- Release documentation under `docs/releases/` is maintained manually.
+Documentation, the GitHub Pages site, and the portfolio skills page (`docs/portfolio-skills.md`) are governed by the ["Documentation and GitHub Pages"](./.github/copilot-instructions.md#documentation-and-github-pages) and ["Portfolio Page Generation and Maintenance"](./.github/copilot-instructions.md#portfolio-page-generation-and-maintenance) sections of `.github/copilot-instructions.md`.
 
 ## Pre-Merge and Release Review
 

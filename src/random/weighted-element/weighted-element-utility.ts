@@ -242,7 +242,7 @@ export class WeightedElementUtility {
      *
      * @throws {TypeError} When the given `valueTypeGuard` is not a function.
      *
-     * @deprecated Migrated to {@link WeightedListUtility.isWeightedList} Will be removed in v0.1.0-alpha.4.
+     * @deprecated Migrated to {@link WeightedListUtility.isWeightedList}. Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
