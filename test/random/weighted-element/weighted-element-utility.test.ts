@@ -27,8 +27,8 @@ import {
     StaticInstanceError,
     StringUtility,
     WeightedElement,
-    WeightedList,
-    WeightedElementUtility
+    WeightedElementUtility,
+    WeightedList
 } from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
@@ -36,7 +36,7 @@ import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
-import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
+import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, StaticInstanceError);

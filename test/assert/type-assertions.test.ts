@@ -20,7 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { TypeAssertions, PrimitiveTypeError, RandomNumberGeneratorFactory, StaticInstanceError } from '../../src';
+import { PrimitiveTypeError, RandomNumberGeneratorFactory, StaticInstanceError, TypeAssertions } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
@@ -48,7 +48,7 @@ describe('TypeAssertions', (): void => {
                     test.each(
                         failureCases
                     )(`%# - ${methodName}($input)`, ({ input: testInput }: TestCase): void => {
-                        const expectedMessage = `Expected ${expectedType}, but received: ${typeof testInput}`;
+                        const expectedMessage: string = `Expected ${expectedType}, but received: ${typeof testInput}`;
 
                         expect((): void => {
                             method(testInput);
@@ -75,9 +75,11 @@ describe('TypeAssertions', (): void => {
                         const expectedMessage: string = `Expected ${expectedType}, but received: ${typeof testInput}`;
 
                         describe('Non-string type message', (): void => {
+                            const nonStringCases: TestCase[] = buildTestCases(nonStringInputs, undefined);
+
                             test.each(
-                                nonStringInputs
-                            )(`%# - ${methodName}(input, %o)`, (message: unknown): void => {
+                                nonStringCases
+                            )(`%# - ${methodName}(input, $input)`, ({ input: message }: TestCase): void => {
                                 expect((): void => {
                                     method(testInput, message as string);
                                 }).toThrow(new PrimitiveTypeError(expectedMessage));
@@ -85,11 +87,13 @@ describe('TypeAssertions', (): void => {
                         });
 
                         describe('String type messages that are not single-line trimmed', (): void => {
+                            const stringFailureCases: TestCase[] = buildTestCases(singleLineTrimmedFailureInputs, undefined);
+
                             test.each(
-                                singleLineTrimmedFailureInputs
-                            )(`%# - ${methodName}(input, %s)`, (message: string): void => {
+                                stringFailureCases
+                            )(`%# - ${methodName}(input, $input)`, ({ input: message }: TestCase): void => {
                                 expect((): void => {
-                                    method(testInput, message);
+                                    method(testInput, message as string);
                                 }).toThrow(new PrimitiveTypeError(expectedMessage));
                             });
                         });
