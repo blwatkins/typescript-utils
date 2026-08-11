@@ -282,7 +282,7 @@ describe('WeightedListUtility', (): void => {
 
                 test.each(
                     testCases
-                )('%# - Input $input should return $expected', ({ input: testInput }: TestCase): void => {
+                )('%# - Input $input should throw SchemaTypeError', ({ input: testInput }: TestCase): void => {
                     expect((): void => {
                         WeightedListUtility.assertWeightedList(testInput, typeGuard);
                     }).toThrow(SchemaTypeError);
