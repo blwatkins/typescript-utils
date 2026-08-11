@@ -192,7 +192,7 @@ export class Random {
      *
      * @returns {Type} A random element from the given {@link WeightedList}, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
      *
-     * @throws {TypeError} When the given list is not a valid {@link WeightedList}.
+     * @throws {SchemaTypeError} When the given list is not a valid {@link WeightedList}.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @public

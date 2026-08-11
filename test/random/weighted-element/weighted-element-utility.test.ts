@@ -23,10 +23,12 @@ import { describe, test, expect, expectTypeOf } from 'vitest';
 
 import {
     PrimitiveTypeError,
+    SchemaTypeError,
+    StaticInstanceError,
     StringUtility,
     WeightedElement,
     WeightedList,
-    WeightedElementUtility, SchemaTypeError, StaticInstanceError
+    WeightedElementUtility
 } from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
