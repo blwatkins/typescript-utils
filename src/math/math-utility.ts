@@ -18,6 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
 
 /**
@@ -29,12 +30,13 @@ export class MathUtility {
     /**
      * Private constructor.
      *
-     * @throws {Error} MathUtility is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link MathUtility} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('MathUtility is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('MathUtility is a static class and cannot be instantiated.');
     }
 
     /**
@@ -46,19 +48,19 @@ export class MathUtility {
      *
      * @returns {number} `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
      *
-     * @throws {TypeError} When `value`, `min`, and `max` are not all finite numbers.
+     * @throws {PrimitiveTypeError} When `value`, `min`, and `max` are not all finite numbers.
      * @throws {RangeError} When `min` is not less than or equal to `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static constrain(value: number, min: number, max: number): number {
-        if (!(NumberUtility.isFiniteNumber(value) && NumberUtility.isFiniteNumber(min) && NumberUtility.isFiniteNumber(max))) {
-            throw new TypeError('All arguments must be finite numbers.');
-        }
+        NumberUtility.assertFiniteNumber(value, 'Value must be a finite number.');
+        NumberUtility.assertFiniteNumber(min, 'Min must be a finite number.');
+        NumberUtility.assertFiniteNumber(max, 'Max must be a finite number.');
 
         if (min > max) {
-            throw new RangeError(`Min value ${min} cannot be greater than max value ${max}.`);
+            throw new ValueRangeError(`Min value ${min} cannot be greater than max value ${max}.`);
         }
 
         if (value < min) return min;
@@ -85,22 +87,17 @@ export class MathUtility {
      * @since 0.1.0
      */
     public static toFlatIndex(x: number, y: number, columns: number, rows: number): number {
-        if (!(NumberUtility.isPositiveInteger(x, true)
-            && NumberUtility.isPositiveInteger(y, true))) {
-            throw new TypeError('x and y must be positive integers or zero.');
-        }
-
-        if (!(NumberUtility.isPositiveInteger(columns, false)
-            && NumberUtility.isPositiveInteger(rows, false))) {
-            throw new TypeError('columns and rows must be positive integers greater than 0.');
-        }
+        NumberUtility.assertPositiveInteger(x, true, 'x must be a positive integer or zero.');
+        NumberUtility.assertPositiveInteger(y, true, 'y must be a positive integer or zero.');
+        NumberUtility.assertPositiveInteger(columns, false, 'columns must be a positive integer greater than 0.');
+        NumberUtility.assertPositiveInteger(rows, false, 'rows must be a positive integer greater than 0.');
 
         if (columns * rows > Number.MAX_SAFE_INTEGER) {
-            throw new RangeError(`The total size of the given grid (${columns} * ${rows}) exceeds the maximum safe integer value in JavaScript.`);
+            throw new ValueRangeError(`The total size of the given grid (${columns} * ${rows}) exceeds the maximum safe integer value in JavaScript.`);
         }
 
         if (x >= columns || y >= rows) {
-            throw new RangeError(`2D index (${x}, ${y}) is out of bounds for array dimensions (${columns}, ${rows})`);
+            throw new ValueRangeError(`2D index (${x}, ${y}) is out of bounds for array dimensions (${columns}, ${rows})`);
         }
 
         return ((y * columns) + x);
