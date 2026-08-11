@@ -150,8 +150,8 @@ export class WeightedListUtility {
             return false;
         }
 
-        return input.every((element: unknown): boolean => {
-            return WeightedElementUtility.isWeightedElement(element, valueTypeGuard);
+        return input.every((element: WeightedElement<unknown>): boolean => {
+            return valueTypeGuard(element.value);
         });
     }
 }
