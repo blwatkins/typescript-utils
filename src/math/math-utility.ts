@@ -29,7 +29,7 @@ export class MathUtility {
     /**
      * Private constructor.
      *
-     * @throws {Error} - MathUtility is a static class and cannot be instantiated.
+     * @throws {Error} MathUtility is a static class and cannot be instantiated.
      *
      * @private
      */
@@ -44,10 +44,10 @@ export class MathUtility {
      * @param {number} min - The minimum value to constrain to.
      * @param {number} max - The maximum value to constrain to.
      *
-     * @returns {number} - `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
+     * @returns {number} `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
      *
-     * @throws {TypeError} - When `value`, `min`, and `max` are not all finite numbers.
-     * @throws {RangeError} - When `min` is not less than or equal to `max`.
+     * @throws {TypeError} When `value`, `min`, and `max` are not all finite numbers.
+     * @throws {RangeError} When `min` is not less than or equal to `max`.
      *
      * @public
      * @since 0.1.0
@@ -74,12 +74,12 @@ export class MathUtility {
      * @param {number} columns - The number of columns in the 2D array.
      * @param {number} rows - The number of rows in the 2D array.
      *
-     * @returns {number} - The one-dimensional index for the given (x, y) coordinates.
+     * @returns {number} The one-dimensional index for the given (x, y) coordinates.
      *
-     * @throws {TypeError} - When `x` or `y` are not positive integers or zero.
-     * @throws {TypeError} - When `columns` or `rows` are not positive integers greater than 0.
-     * @throws {RangeError} - When the total grid size (`columns` * `rows`) exceeds `Number.MAX_SAFE_INTEGER`.
-     * @throws {RangeError} - When the given (x, y) coordinates are out of bounds for the given grid dimensions.
+     * @throws {TypeError} When `x` or `y` are not positive integers or zero.
+     * @throws {TypeError} When `columns` or `rows` are not positive integers greater than 0.
+     * @throws {RangeError} When the total grid size (`columns` * `rows`) exceeds `Number.MAX_SAFE_INTEGER`.
+     * @throws {RangeError} When the given (x, y) coordinates are out of bounds for the given grid dimensions.
      *
      * @public
      * @since 0.1.0

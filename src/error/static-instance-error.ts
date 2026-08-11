@@ -42,7 +42,7 @@ export class StaticInstanceError extends TypeError {
     /**
      * Get the default error message.
      *
-     * @returns {string} - The default error message for {@link StaticInstanceError}.
+     * @returns {string} The default error message for {@link StaticInstanceError}.
      *
      * @public
      * @since 0.1.0

@@ -7,8 +7,22 @@ This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeSc
 ## Companion Instruction Files
 
 This repository maintains a companion `CLAUDE.md` at the repository root alongside this file.
-The two documents serve overlapping audiences and should stay consistent: when you update guidance in `.github/copilot-instructions.md` that also applies to `CLAUDE.md`, mirror the change there, and vice versa.
-`CLAUDE.md` is intentionally a concise pointer to this file; this file remains the canonical, detailed source of conventions.
+This file holds the guidance itself; `CLAUDE.md` is a map of where that guidance lives and does not repeat its rules — the sync rule below is the deliberate exception, since an agent that opens only one of the two files still needs it.
+Add or change a convention here, not in `CLAUDE.md`.
+
+`CLAUDE.md` carries two kinds of content: links into this file, and a small number of facts restated in its own words where a link would cost more than it saves.
+Update `CLAUDE.md` when a change here invalidates either kind:
+
+- **A link stops resolving** — a section `CLAUDE.md` links to is renamed, moved, or removed.
+- **A restated fact stops matching** — a summary, a name, or a list that `CLAUDE.md` spells out rather than links to has changed here.
+
+Do not restate an open enumeration of the topics a linked section covers; such a list goes stale every time that section grows, and is the most common source of drift between the two files.
+
+A new convention added under an existing section invalidates neither, and requires no change to `CLAUDE.md`.
+
+A new *section* is the one case that needs judgment, since a new section is not yet linked from anywhere.
+Add it to the map only if a contributor would need to know the section exists before starting work; leave it off if they would find it by reading this file once they reach the work it governs.
+When the call is close, leave `CLAUDE.md` alone and let the ["Instruction File Sync"](#3-instruction-file-sync) review step revisit it — an incomplete map costs less than a map that drifts into a second copy of this file.
 
 ## Tech Stack
 
@@ -42,23 +56,25 @@ The two documents serve overlapping audiences and should stay consistent: when y
 |---|---|---|---|
 | `codeql.yml` | CodeQL | Push/PR to `main` and `release/**`, manual, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
 | `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
-| `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Lints, builds, tests, then publishes to npm and GitHub Packages; requires `release_tag` input and uses `id-token: write` trusted publishing permissions for the npm publish job |
-| `npm-test.yml` | npm Lint, Build, and Test | Push/PR to `main` and `release/**`, manual | Runs lint, build, and tests across supported Node.js versions |
+| `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Runs `npm run validate` (lint, documentation generation, build, and tests), then publishes to npm and GitHub Packages; requires `release_tag` input and uses `id-token: write` trusted publishing permissions for the npm publish job |
+| `npm-validate.yml` | npm Validate | Push/PR to `main` and `release/**`, manual | Runs `npm run validate` (lint, documentation generation, build, and tests) across supported Node.js versions |
 
 ## Directory Structure
 
 ```
 src/
-  discriminator/          # Discriminated type-guard utilities and registry
+  assert/                 # Type assertion utilities
+  discriminator/          # Discriminated type-guard utilities and registry (deprecated; scheduled for removal in v0.1.0-alpha.4)
   error/                  # Custom error types
   math/                   # Math utilities
   number/                 # Number utilities
   random/                 # Random number generation utilities
     seeded-random/        # Seeded random number generator utilities
-    weighted-element/     # Weighted element selection utilities
+    weighted-element/     # Weighted element and weighted list selection utilities
   string/                 # String utilities
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
+  assert/                 # Tests for the assert module
   discriminator/          # Tests for the discriminator module
   error/                  # Tests for the error module
   math/                   # Tests for the math module
@@ -74,6 +90,8 @@ test/                     # Vitest test suites (mirrors src/ module structure)
     test-case/            # Shared test-case helpers
       scenarios/          # Reusable test-case scenario definitions
 docs/                     # GitHub Pages site content and manually maintained release documentation
+  doc/                    # Latest release TypeDoc output, committed manually and published with the site
+  releases/               # Per-version TypeDoc output, committed manually and published with the site
 .github/
   workflows/              # CI, publishing, documentation, and analysis workflows
 _dist/                    # Build output - generated by tsdown (not committed)
@@ -106,13 +124,23 @@ Custom error classes must:
 
 Choose the error type by the kind of failure, not by the call site:
 
-- `PrimitiveTypeError` — input is not the expected primitive type (e.g., not a string, not a number)
-- `SchemaTypeError` — input is either an object type that does not satisfy an expected object schema, or not an object at all
+- `PrimitiveTypeError` — input fails a `typeof`-level type check with no schema involved (e.g., not a string, not a number, not a function, not an object)
+- `SchemaTypeError` — input is checked against an expected object schema and fails it, either because it does not satisfy the schema or because it is not an object at all
 - `ValueRangeError` — input is the correct type but falls outside an allowed range or bound
 - `StaticInstanceError` — a static class constructor was invoked
 
 Custom error types intentionally do not expose a Node.js-style `code` property.
 Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
+
+### Deprecation
+
+When a member is deprecated rather than removed:
+
+- Group deprecated members below a banner comment inside the class or module:
+  `/* ******************* TODO: DEPRECATED ******************* */`
+- Keep the member exported and fully functional until the removal release. A deprecated method must still satisfy its documented contract.
+- Keep its test coverage until the member is removed. Do not delete a suite because a deprecated member started failing — a failing deprecated member is a defect in the current release, not dead weight.
+- Deprecate the member, any private helpers that exist only to support it, and the schema or type members it depends on, in the same change.
 
 ### TypeScript Conventions
 
@@ -175,6 +203,14 @@ All source files must include the MIT License copyright header at the top.
 - Keep formatting compatible with the repository ESLint configurations in `eslint.config.js.mjs` and `eslint.config.ts.mjs`.
 - Do not introduce formatting-only tooling or workflow changes unless the task explicitly requires them.
 
+### Markdown Formatting
+
+These rules apply to every Markdown file in the repository, including `README.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and all files under `docs/`.
+
+- Indent a list item's nested content by the width of its parent marker: 2 spaces under `- `, 3 spaces under `1. `. Under-indenting by even one space detaches the content from the list item and splits the list in two. This applies to nested lists, paragraphs, and code fences alike.
+- A single file may need both widths, since the required indent comes from each item's own marker. Do not normalize a file to one indent width.
+- When a fenced code block sits inside a list item, indent the opening fence to the item's content column. The closing fence's indentation does not affect nesting, so match it to the opening fence for readability rather than correctness.
+
 ### Documentation Comment Preferences
 
 Most documentation comment conventions are enforced automatically by `eslint.config.ts.mjs`.
@@ -195,6 +231,8 @@ The following preferences require manual review since no ESLint rule can check t
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
 - **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
+- **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag (and any optional type/identifier), e.g. `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
+- **State the removal version on `@deprecated`:** Write `@deprecated Will be removed in v{version}.` When a replacement exists, name it first: `@deprecated Migrated to {@link Replacement}. Will be removed in v{version}.` Apply the tag to private helpers that exist only to support deprecated members, using the same message format.
 
 ## Documentation and GitHub Pages
 
@@ -202,19 +240,17 @@ The following preferences require manual review since no ESLint rule can check t
 Expected differences include Jekyll front matter, file-specific introductory or heading sections, footer or copyright text, and internal link differences.
 Any addition, removal, or update to shared sections must be applied consistently to both files.
 
-### Markdown Formatting
-
-These rules apply to every Markdown file in the repository, including `README.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and all files under `docs/`.
-
-- Indent a list item's nested content by the width of its parent marker: 2 spaces under `- `, 3 spaces under `1. `. Under-indenting by even one space detaches the content from the list item and splits the list in two. This applies to nested lists, paragraphs, and code fences alike.
-- A single file may need both widths, since the required indent comes from each item's own marker. Do not normalize a file to one indent width.
-- When a fenced code block sits inside a list item, indent the opening fence to the item's content column. The closing fence's indentation does not affect nesting, so match it to the opening fence for readability rather than correctness.
-
 ### Jekyll Build
 
 The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths.
 For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site.
 Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
+
+### Front Matter Dates
+
+Markdown pages that use `layout: post` with `date` and `modified_date` front matter render both values through `docs/_layouts/post.html` as "Published" and "Updated", respectively.
+When a branch changes the content of one of these pages, bump that page's `modified_date` to the commit date and leave the original `date` unchanged.
+A page whose content did not change keeps its existing `modified_date`.
 
 ### TypeDoc Configuration
 
@@ -269,7 +305,7 @@ If anything changed, do the following:
 
 - Confirm `Capability Record` has 5–7 bullets and `Detailed Technical Notes` has one matching subsection per bullet
 - When a branch introduces a new capability or updates an existing capability, re-rank the highlights against the [selection criteria](#selecting-the-57-highlights) rather than appending; if the new capability ranks in the top 5–7, the lowest-ranked existing highlight comes off the page
-- Bump `modified_date` to today; do not change the original `date`
+- Bump `modified_date` per the ["Front Matter Dates" section](#front-matter-dates); do not change the original `date`
 - Evidence links must always point to the `main` branch
 
 Refer to the ["Portfolio Page Generation and Maintenance" section](#portfolio-page-generation-and-maintenance) for the full review checklist.
@@ -282,8 +318,10 @@ Editing in place preserves whatever was true when the sections were written; enf
 
 Verify that `CLAUDE.md` and `.github/copilot-instructions.md` are consistent with each other and reflect the current project state:
 
-- Guidance shared between the two files is mirrored
-- The [Directory Structure section](#directory-structure) accurately reflects the current `src/` module layout
+- Every link in `CLAUDE.md` resolves to a section of this file that still exists under that name
+- Every fact `CLAUDE.md` restates rather than links to still matches this file
+- If the branch added a section to this file, decide whether it belongs on the map, per the ["Companion Instruction Files" section](#companion-instruction-files)
+- The [Directory Structure section](#directory-structure) accurately reflects the current source layout
 - Any new tooling, conventions, or workflows introduced on the branch are documented
 
 ### 4. `package.json` Keywords
@@ -310,6 +348,7 @@ Review all branch changes for convention compliance and code quality.
 - All source code files should follow the conventions listed in the ["Development Guidelines" section](#development-guidelines) of this file.
 - Copyright year headers are present and accurate (see ["File Headers" section](#file-headers)).
 - `README.md` and `docs/index.md` are in sync for any shared content changes
+- `modified_date` is bumped on every page whose content changed on the branch (see the ["Front Matter Dates" section](#front-matter-dates))
 - Test coverage is complete and meaningful for all new or changed public API surface
 
 #### Code Quality
@@ -331,6 +370,7 @@ Review all branch changes for convention compliance and code quality.
 When preparing a release merge to `main`:
 
 - Confirm the version in `package.json` is bumped appropriately
+- Remove any member whose `@deprecated` tag names this release as its removal version, together with the private helpers, schema or type members, and tests that exist only to support it
 - Ensure release documentation under `docs/releases/` covers the new version
 - Verify `typedoc.json` entry points include any new module-level index files
 - Confirm the npm publish workflow (`package-publish.yml`) is configured correctly for the release
@@ -386,8 +426,9 @@ Key Technologies: [list 3-5 core tech choices]
 Generate a Markdown file with these sections in order:
 
 1. **Front Matter** (Jekyll metadata):
-   - title: "[PROJECT_NAME] - Demonstrated Portfolio Skills"
+   - title: "Demonstrated Portfolio Skills"
    - layout: post
+   - author: list of contributors (people and AI assistants) credited on the page
    - date: [CREATION_DATE in YYYY-MM-DD]
    - modified_date: [TODAY_DATE in YYYY-MM-DD]
    - toc: true
@@ -581,7 +622,8 @@ The core standard is: **every technical claim should be durable and traceable to
 
 Ensure the page includes the required front matter and these sections (or equivalents):
 
-- Required Front Matter (`title`, `layout`, `date`, `modified_date`)
+- Required Front Matter (`title`, `layout`, `author`, `date`, `modified_date`, `toc`)
+- `About This Page`
 - `Project Overview`
 - `At a Glance`
 - `Skills and Tooling Inventory`
@@ -643,7 +685,7 @@ When reviewing a new page, compare with existing template pages for:
 - label style and format in `Skills and Tooling Inventory` (flat bulleted list with bold category labels)
 - tense and sentence style
 - bullet punctuation consistency
-- naming conventions (`webpack` vs `Webpack`, etc.)
+- naming conventions (match each tool's own capitalization, e.g. `webpack`, `npm`, `Vite`, `ESLint`)
 
 Consistency boosts professionalism at portfolio scale.
 

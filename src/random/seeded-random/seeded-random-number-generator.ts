@@ -42,9 +42,9 @@ export class SeededRandomNumberGenerator {
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @throws {TypeError} - When state is not an array with 4 elements.
-     * @throws {RangeError} - When each element of state is not a 32-bit unsigned integer.
-     * @throws {RangeError} - When state does not have at least one element that is greater than 0.
+     * @throws {TypeError} When state is not an array with 4 elements.
+     * @throws {RangeError} When each element of state is not a 32-bit unsigned integer.
+     * @throws {RangeError} When state does not have at least one element that is greater than 0.
      *
      * @public
      * @since 0.1.0
@@ -60,7 +60,7 @@ export class SeededRandomNumberGenerator {
      * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
      * Successive calls produce an independent, uniformly distributed sequence.
      *
-     * @returns {number} - The next pseudorandom float in the range [0, 1).
+     * @returns {number} The next pseudorandom float in the range [0, 1).
      *
      * @public
      * @since 0.1.0
@@ -88,7 +88,7 @@ export class SeededRandomNumberGenerator {
      * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
      * @param {number} k - The number of bits to rotate.
      *
-     * @returns {number} - The rotated 32-bit unsigned integer.
+     * @returns {number} The rotated 32-bit unsigned integer.
      *
      * @private
      */
@@ -99,7 +99,7 @@ export class SeededRandomNumberGenerator {
     /**
      * The maximum valid value in the state array.
      *
-     * @returns {number} - 0xFFFFFFFF
+     * @returns {number} 0xFFFFFFFF
      *
      * @private
      */
@@ -114,9 +114,9 @@ export class SeededRandomNumberGenerator {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When state is not an array with 4 elements.
-     * @throws {RangeError} - When each element of state is not a 32-bit unsigned integer
-     * @throws {RangeError} - When state does not have at least one element that is greater than 0.
+     * @throws {TypeError} When state is not an array with 4 elements.
+     * @throws {RangeError} When each element of state is not a 32-bit unsigned integer
+     * @throws {RangeError} When state does not have at least one element that is greater than 0.
      *
      * @private
      */

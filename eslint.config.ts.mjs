@@ -316,6 +316,7 @@ export default defineConfig([
                 tagSequence: [
                     { tags: ['remarks'] },
                     { tags: ['see'] },
+                    { tags: ['template'] },
                     { tags: ['param'] },
                     { tags: ['returns'] },
                     { tags: ['throws'] },

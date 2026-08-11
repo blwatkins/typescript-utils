@@ -64,7 +64,7 @@ The full text of the license is included with the project source code.
 ### GitHub Actions
 
 ![CodeQL](https://github.com/blwatkins/typescript-utils/actions/workflows/codeql.yml/badge.svg)
-![npm Lint, Build, and Test](https://github.com/blwatkins/typescript-utils/actions/workflows/npm-test.yml/badge.svg)
+![npm Validate](https://github.com/blwatkins/typescript-utils/actions/workflows/npm-validate.yml/badge.svg)
 ![Deploy GitHub Pages with Jekyll](https://github.com/blwatkins/typescript-utils/actions/workflows/gh-pages-jekyll.yml/badge.svg)
 
 ## Sources and Technical Notes

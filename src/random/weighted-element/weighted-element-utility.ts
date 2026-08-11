@@ -22,12 +22,13 @@ import Value from 'typebox/value';
 
 import { Type } from 'typebox';
 
-import { DiscriminatorRegistry, Discriminators, TypeGuard } from '../../discriminator';
+import { TypeAssertions } from '../../assert';
+import { SchemaTypeError, StaticInstanceError } from '../../error';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
 
 /**
- * Static methods and properties for building and validating {@link WeightedElement} and {@link WeightedList} objects.
+ * Static methods and properties for validating {@link WeightedElement} objects.
  *
  * @since 0.1.0
  */
@@ -35,31 +36,104 @@ export class WeightedElementUtility {
     /**
      * Private constructor.
      *
-     * @throws {Error} - WeightedElementUtility is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link WeightedElementUtility} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('WeightedElementUtility is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('WeightedElementUtility is a static class and cannot be instantiated.');
     }
 
     /**
-     * A type guard for {@link WeightedElement} objects.
+     * Validate and assert that the given input is a generic {@link WeightedElement} object.
+     *
+     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     *
+     * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is WeightedElement<unknown>} - `true` if the input is a {@link WeightedElement}, `false` otherwise.
+     * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a generic {@link WeightedElement}.
      *
-     * @type {TypeGuard<WeightedElement<unknown>>}
-     * @readonly
-     * @private
+     * @throws {SchemaTypeError} When the given input is not a valid generic {@link WeightedElement}.
+     *
+     * @public
+     * @since 0.1.0
      */
-    static readonly #isGenericWeightedElement: TypeGuard<WeightedElement<unknown>> = DiscriminatorRegistry.register<WeightedElement<unknown>>({
-        discriminator: Discriminators.WeightedElement,
-        validator: (input: unknown): input is WeightedElement<unknown> => {
-            return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
+    public static assertGenericWeightedElement(input: unknown): asserts input is WeightedElement<unknown> {
+        if (!WeightedElementUtility.isGenericWeightedElement(input)) {
+            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedElement');
         }
-    });
+    }
+
+    /**
+     * Validate and assert that the given input is a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function.
+     *
+     * @see {@link WeightedElementUtility.isWeightedElement}
+     *
+     * @template TValue The type of the value property of the {@link WeightedElement} object.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
+     * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
+     * The type validated by the function should match the assigned type of the {@link WeightedElement}.
+     *
+     * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a {@link WeightedElement} whose value matches the expected type or schema.
+     *
+     * @throws {PrimitiveTypeError} When the given value type guard is not a function.
+     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedElement}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): asserts input is WeightedElement<TValue> {
+        if (!WeightedElementUtility.isWeightedElement(input, valueTypeGuard)) {
+            throw new SchemaTypeError('Input does not match schema requirements for WeightedElement');
+        }
+    }
+
+    /**
+     * Is the given input a generic {@link WeightedElement} object?
+     *
+     * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {input is WeightedElement<unknown>} `true` if the given input is a generic {@link WeightedElement} object; `false` otherwise.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isGenericWeightedElement(input: unknown): input is WeightedElement<unknown> {
+        return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
+    }
+
+    /**
+     * Is the given input a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function?
+     *
+     * @see {@link WeightedElementUtility.isGenericWeightedElement}
+     *
+     * @template TValue The type of the value property of the {@link WeightedElement} object.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
+     * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
+     * The type validated by the function should match the assigned type of the {@link WeightedElement}.
+     *
+     * @returns {input is WeightedElement<TValue>} `true` if the given input is a {@link WeightedElement} whose value matches the expected type or schema; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When the given value type guard is not a function.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
+        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function');
+        return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
+    }
+
+    /* ******************* TODO: DEPRECATED ******************* */
 
     /**
      * Builds a {@link WeightedElement} object with a value of the given type.
@@ -70,11 +144,13 @@ export class WeightedElementUtility {
      * @param {TValue} input.value - The value to be selected from the weighted list.
      * @param {number} input.weight - The probability weight of the element. Should be a number between 0 and 1, inclusive.
      *
-     * @returns {WeightedElement<TValue>} - A {@link WeightedElement} object with a value of the given type.
+     * @returns {WeightedElement<TValue>} A {@link WeightedElement} object with a value of the given type.
      *
-     * @throws {TypeError} - When the given input is not an object.
-     * @throws {TypeError} - When the given input does not result in a valid {@link WeightedElement}.
+     * @throws {TypeError} When the given input is not an object.
+     * @throws {TypeError} When the given input does not result in a valid {@link WeightedElement}.
      * See {@link weightedElementSchema} for the requirements of a valid {@link WeightedElement}.
+     *
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -83,8 +159,7 @@ export class WeightedElementUtility {
         WeightedElementUtility.#validateBuildWeightedElementInput(input);
 
         const weightedElement = {
-            ...input,
-            discriminator: Discriminators.WeightedElement
+            ...input
         };
 
         WeightedElementUtility.#validateWeightedElement(weightedElement);
@@ -97,10 +172,12 @@ export class WeightedElementUtility {
      * @param {{ value: TValue; weight: number }[]} elements - The elements to build the {@link WeightedList} from.
      * Each element will be converted into a {@link WeightedElement} using {@link WeightedElementUtility.buildWeightedElement}.
      *
-     * @returns {WeightedList<TValue>} - A {@link WeightedList} object containing the given elements.
+     * @returns {WeightedList<TValue>} A {@link WeightedList} object containing the given elements.
      *
-     * @throws {TypeError} - When the given elements are not a non-empty array.
-     * @throws {TypeError} - When the given elements do not result in a valid {@link WeightedList}.
+     * @throws {TypeError} When the given elements are not a non-empty array.
+     * @throws {TypeError} When the given elements do not result in a valid {@link WeightedList}.
+     *
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -117,44 +194,6 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Is the given input a {@link WeightedElement} object?
-     * This method does not enforce type checking for {@link WeightedElement.value}.
-     *
-     * @param {unknown} input - The input to check.
-     *
-     * @returns {input is WeightedElement<unknown>} - `true` if the given input is a {@link WeightedElement} object; `false` otherwise.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static isGenericWeightedElement(input: unknown): input is WeightedElement<unknown> {
-        return WeightedElementUtility.#isGenericWeightedElement(input);
-    }
-
-    /**
-     * Is the given input a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function?
-     *
-     * @param {unknown} input - The input to check.
-     * @param {(value: unknown) => boolean} valueTypeGuard - The method used to validate the type of {@link WeightedElement.value}.
-     * This method should return `true` if the value is of the expected type, and `false` otherwise.
-     * The type validated by the function should match the assigned type of the {@link WeightedElement}.
-     *
-     * @returns {input is WeightedElement<TValue>} - `true` if the given input is a {@link WeightedElement} object with a value of the correct type; `false` otherwise.
-     *
-     * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
-        if (typeof valueTypeGuard !== 'function') {
-            throw new TypeError('Value type guard must be a function');
-        }
-
-        return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
-    }
-
-    /**
      * Is the given input a {@link WeightedList} object?
      * This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      *
@@ -162,8 +201,10 @@ export class WeightedElementUtility {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is WeightedList<unknown>} - `true` if the given input is a valid {@link WeightedList} object; `false` otherwise.
+     * @returns {input is WeightedList<unknown>} `true` if the given input is a valid {@link WeightedList} object; `false` otherwise.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     *
+     * @deprecated Migrated to {@link WeightedListUtility.isGenericWeightedList}. Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -196,10 +237,12 @@ export class WeightedElementUtility {
      * This method should return `true` if the value is of the expected type, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedList}.
      *
-     * @returns {input is WeightedList<TValue>} - `true` if the given input is a {@link WeightedList} object with elements of the correct type; `false` otherwise.
+     * @returns {input is WeightedList<TValue>} `true` if the given input is a {@link WeightedList} object with elements of the correct type; `false` otherwise.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
-     * @throws {TypeError} - When the given `valueTypeGuard` is not a function.
+     * @throws {TypeError} When the given `valueTypeGuard` is not a function.
+     *
+     * @deprecated Migrated to {@link WeightedListUtility.isWeightedList}. Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -219,7 +262,7 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Validate that an object is a valid {@link WeightedList}.
+     * Validate that an object is a valid generic {@link WeightedList}.
      * This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedList}
@@ -228,7 +271,9 @@ export class WeightedElementUtility {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When the given list is not a valid {@link WeightedList}.
+     * @throws {TypeError} When the given list is not a valid {@link WeightedList}.
+     *
+     * @deprecated Migrated to {@link WeightedListUtility.assertGenericWeightedList}. Will be removed in v0.1.0-alpha.4.
      *
      * @public
      * @since 0.1.0
@@ -246,7 +291,9 @@ export class WeightedElementUtility {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When the given input is not an object.
+     * @throws {TypeError} When the given input is not an object.
+     *
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -263,7 +310,9 @@ export class WeightedElementUtility {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When the given input is not a non-empty array.
+     * @throws {TypeError} When the given input is not a non-empty array.
+     *
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */
@@ -283,7 +332,9 @@ export class WeightedElementUtility {
      *
      * @returns {void}
      *
-     * @throws {TypeError} - When the given element is not a valid {@link WeightedElement}.
+     * @throws {TypeError} When the given element is not a valid {@link WeightedElement}.
+     *
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @private
      */

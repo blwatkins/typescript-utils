@@ -18,36 +18,4 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * An error thrown when an input does not match the shape or schema of the expected data structure.
- * This error is typically used in validation or assertion scenarios where the input data does not conform to the expected schema.
- *
- * @since 0.1.0
- */
-export class SchemaTypeError extends TypeError {
-    /**
-     * Public constructor.
-     *
-     * @param {string} message - The error message.
-     * Default value is {@link SchemaTypeError.defaultMessage}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public constructor(message: string = SchemaTypeError.defaultMessage) {
-        super(message);
-        this.name = 'SchemaTypeError';
-    }
-
-    /**
-     * Get the default error message.
-     *
-     * @returns {string} The default error message for {@link SchemaTypeError}.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static get defaultMessage(): string {
-        return 'Input does not match schema requirements';
-    }
-}
+export * from './type-assertions';
