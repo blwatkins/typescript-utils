@@ -22,6 +22,7 @@ import { fail } from 'node:assert';
 import { describe, test, expect, expectTypeOf } from 'vitest';
 
 import {
+    PrimitiveTypeError,
     SchemaTypeError,
     StaticInstanceError,
     StringUtility,
@@ -30,6 +31,7 @@ import {
 
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
+import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { buildTestCases, Scenario, TestCase } from '../../utils/test-case/test-case';
 
 describe('WeightedListUtility', (): void => {
@@ -352,6 +354,46 @@ describe('WeightedListUtility', (): void => {
                     testCases
                 )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect(WeightedListUtility.isWeightedList(testInput, typeGuard)).toBe(testExpected);
+                });
+            });
+        });
+    });
+
+    describe('Input validation', (): void => {
+        describe('Function type guard input validation', (): void => {
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-function type inputs',
+                    inputs: [
+                        ...nonFunctionInputs
+                    ],
+                    expected: PrimitiveTypeError
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('isWeightedList', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            WeightedListUtility.isWeightedList({}, testInput as ((value: unknown) => value is unknown));
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('assertWeightedList', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            WeightedListUtility.assertWeightedList({}, testInput as ((value: unknown) => value is unknown));
+                        }).toThrow(testExpected);
+                    });
                 });
             });
         });
