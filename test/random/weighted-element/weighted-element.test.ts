@@ -19,7 +19,7 @@
  */
 
 import { Static, Type } from 'typebox';
-import { describe, expect, expectTypeOf, test } from 'vitest';
+import { describe, test, expect, expectTypeOf } from 'vitest';
 
 import { WeightedElement, weightedElementSchema } from '../../../src';
 
