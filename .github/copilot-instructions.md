@@ -16,11 +16,12 @@ Update `CLAUDE.md` when a change here invalidates either kind:
 - **A link stops resolving** — a section `CLAUDE.md` links to is renamed, moved, or removed.
 - **A restated fact stops matching** — a summary, a name, or a list that `CLAUDE.md` spells out rather than links to has changed here.
 
+Do not restate an open enumeration of the topics a linked section covers; such a list goes stale every time that section grows, and is the most common source of drift between the two files.
+
 A new convention added under an existing section invalidates neither, and requires no change to `CLAUDE.md`.
 
 A new *section* is the one case that needs judgment, since a new section is not yet linked from anywhere.
 Add it to the map only if a contributor would need to know the section exists before starting work; leave it off if they would find it by reading this file once they reach the work it governs.
-Do not restate an open enumeration of the topics a linked section covers; such a list goes stale every time that section grows, and is the most common source of drift between the two files.
 When the call is close, leave `CLAUDE.md` alone and let the ["Instruction File Sync"](#3-instruction-file-sync) review step revisit it — an incomplete map costs less than a map that drifts into a second copy of this file.
 
 ## Tech Stack

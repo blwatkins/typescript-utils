@@ -104,7 +104,7 @@ The TypeScript lint configuration layers the `recommendedTypeChecked`, `strictTy
 
 ### Schema-defined validation contracts
 
-`WeightedElement` declares its shape once as a generic TypeBox schema with bounded numeric weights and no additional properties, and `WeightedElementUtility` and `WeightedListUtility` derive a matched pair of members from it — an `is*` predicate that narrows and an `assert*` that throws a typed error — so a caller can branch or fail fast without a second, hand-written copy of the same rules.
+`WeightedElement` declares its shape once as a generic TypeBox schema with bounded numeric weights and no additional properties, and `WeightedElementUtility` and `WeightedListUtility` derive a matched pair of members from it — an `is*` predicate that narrows and an `assert*` that throws a typed error — so a caller can branch or fail fast without a second copy of the same rules.
 `TypeAssertions` carries the assertion half of that pattern down to the primitive level through TypeScript `asserts` signatures, and a type-level test asserts that the schema's inferred static type and the exported interface are mutually assignable, so a change to either one that breaks the correspondence fails the run.
 
 **Evidence:**
@@ -139,7 +139,6 @@ A dedicated error module gives those failures a consistent vocabulary, with each
 - [src/string/string-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/string/string-utility.ts)
 - [src/number/number-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/number/number-utility.ts)
 - [src/math/math-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/math/math-utility.ts)
-- [src/assert/type-assertions.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/assert/type-assertions.ts)
 - [src/error/primitive-type-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/primitive-type-error.ts)
 - [src/error/value-range-error.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/error/value-range-error.ts)
 
