@@ -45,7 +45,7 @@ export class TypeAssertions {
      * @remarks This method does not enforce type checking for function parameters or return type.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown if the input is not a function.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a function.
      *
      * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that the given input is a callable function.
      *
@@ -71,7 +71,7 @@ export class TypeAssertions {
      * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown if the input is not a non-array object.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a non-array object.
      *
      * @returns {asserts input is object} Asserts that the given input is a non-array object.
      *
@@ -96,7 +96,7 @@ export class TypeAssertions {
      * @remarks This method does not enforce size requirements or type checking for any array elements.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown if the input is not an array.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not an array.
      *
      * @returns {asserts input is unknown[]} Asserts that the given input is an array.
      *
