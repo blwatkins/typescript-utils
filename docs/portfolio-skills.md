@@ -6,7 +6,7 @@ author:
   - Claude Code
   - GitHub Copilot
 date: 2026-05-27
-modified_date: 2026-08-04
+modified_date: 2026-08-10
 toc: true
 ---
 
@@ -58,7 +58,7 @@ Each capability below is expanded with supporting evidence in the correspondingl
 - **Version-pinned deterministic randomness** — generates reproducible pseudorandom sequences from string seeds and holds published hash versions immutable, so a given seed keeps producing the same sequence across releases and consumers can depend on that stability.
 - **Documentation as an enforced contract** — treats API documentation as a build gate rather than a convention, failing lint on incomplete doc comments and failing the documentation build on unresolved links or undocumented symbols, to keep published reference material trustworthy.
 - **Strict compile-time posture** — applies strict compiler settings and type-aware lint rules, and pins usable language syntax to the ECMAScript version the build targets, to catch defects and accidental syntax drift before a change reaches a release.
-- **Reusable runtime type narrowing** — provides a schema-validated registry that turns a registered validator into a reusable type guard, enabling discriminated union patterns without duplicating validation logic at each call site.
+- **Schema-defined validation contracts** — derives both a narrowing type guard and a throwing assertion from a single declarative schema, and type-tests that schema against its hand-written interface, so runtime validation and compile-time narrowing cannot drift apart.
 - **Layered verification** — verifies behavior through type-checked test sources, shared contract suites, and continuous integration across supported Node.js release lines, to improve confidence that changes are safe across environments.
 - **Runtime contract for JavaScript consumers** — pairs compile-time narrowing with runtime validation and a consistent error vocabulary, so callers without type checking receive the same input safety and the same identifiable failures as TypeScript callers.
 - **Release and supply-chain integrity** — publishes through an identity-based release pipeline with automated code scanning and dependency updates, reducing both credential exposure and the manual effort of keeping the supply chain current.
@@ -102,18 +102,18 @@ The TypeScript lint configuration layers the `recommendedTypeChecked`, `strictTy
 - [eslint.config.ts.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.ts.mjs)
 - [eslint.config.js.mjs](https://github.com/blwatkins/typescript-utils/blob/main/eslint.config.js.mjs)
 
-### Reusable runtime type narrowing
+### Schema-defined validation contracts
 
-`DiscriminatorRegistry` maps unique discriminator strings to validator functions, returns a reusable `TypeGuard<T>` for each registration, and enforces discriminator shape and uniqueness at registration time, with `Discriminated` and its TypeBox schema defining the minimum shape a registry-validated object must satisfy.
-Discriminator values are namespaced by package (`@blwatkins/utils:WeightedElement`) so registrations from different packages cannot collide, and `WeightedElementUtility` demonstrates the pattern in use by registering a schema-backed validator and building `WeightedList` objects for cumulative-weight random selection.
+`WeightedElement` declares its shape once as a generic TypeBox schema with bounded numeric weights and no additional properties, and `WeightedElementUtility` and `WeightedListUtility` derive a matched pair of members from it — an `is*` predicate that narrows and an `assert*` that throws a typed error — so a caller can branch or fail fast without a second copy of the same rules.
+`TypeAssertions` carries the assertion half of that pattern down to the primitive level through TypeScript `asserts` signatures, and a type-level test asserts that the schema's inferred static type and the exported interface are mutually assignable, so a change to either one that breaks the correspondence fails the run.
 
 **Evidence:**
 
-- [src/discriminator/discriminator-registry.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminator-registry.ts)
-- [src/discriminator/discriminated.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminated.ts)
-- [src/discriminator/discriminators.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/discriminator/discriminators.ts)
 - [src/random/weighted-element/weighted-element.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element.ts)
 - [src/random/weighted-element/weighted-element-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-element-utility.ts)
+- [src/random/weighted-element/weighted-list-utility.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/random/weighted-element/weighted-list-utility.ts)
+- [src/assert/type-assertions.ts](https://github.com/blwatkins/typescript-utils/blob/main/src/assert/type-assertions.ts)
+- [test/random/weighted-element/weighted-element.test.ts](https://github.com/blwatkins/typescript-utils/blob/main/test/random/weighted-element/weighted-element.test.ts)
 
 ### Layered verification
 

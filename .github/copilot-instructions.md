@@ -7,9 +7,22 @@ This repository contains `@blwatkins/utils`, a toolkit of general-purpose TypeSc
 ## Companion Instruction Files
 
 This repository maintains a companion `CLAUDE.md` at the repository root alongside this file.
-This file holds the guidance itself; `CLAUDE.md` is a map of where that guidance lives and does not repeat its rules.
-Add or change a convention here, not in `CLAUDE.md`; a new convention placed under an existing section requires no change to `CLAUDE.md`.
-Update `CLAUDE.md` when the map changes: a new or renamed section that `CLAUDE.md` links to, or a change to the project summary, npm scripts, generated output directories, or the [Pre-Merge and Release Review](#pre-merge-and-release-review) step list.
+This file holds the guidance itself; `CLAUDE.md` is a map of where that guidance lives and does not repeat its rules — the sync rule below is the deliberate exception, since an agent that opens only one of the two files still needs it.
+Add or change a convention here, not in `CLAUDE.md`.
+
+`CLAUDE.md` carries two kinds of content: links into this file, and a small number of facts restated in its own words where a link would cost more than it saves.
+Update `CLAUDE.md` when a change here invalidates either kind:
+
+- **A link stops resolving** — a section `CLAUDE.md` links to is renamed, moved, or removed.
+- **A restated fact stops matching** — a summary, a name, or a list that `CLAUDE.md` spells out rather than links to has changed here.
+
+Do not restate an open enumeration of the topics a linked section covers; such a list goes stale every time that section grows, and is the most common source of drift between the two files.
+
+A new convention added under an existing section invalidates neither, and requires no change to `CLAUDE.md`.
+
+A new *section* is the one case that needs judgment, since a new section is not yet linked from anywhere.
+Add it to the map only if a contributor would need to know the section exists before starting work; leave it off if they would find it by reading this file once they reach the work it governs.
+When the call is close, leave `CLAUDE.md` alone and let the ["Instruction File Sync"](#3-instruction-file-sync) review step revisit it — an incomplete map costs less than a map that drifts into a second copy of this file.
 
 ## Tech Stack
 
@@ -50,7 +63,7 @@ Update `CLAUDE.md` when the map changes: a new or renamed section that `CLAUDE.m
 
 ```
 src/
-  assert/                 # Internal assertion helpers
+  assert/                 # Type assertion utilities
   discriminator/          # Discriminated type-guard utilities and registry (deprecated; scheduled for removal in v0.1.0-alpha.4)
   error/                  # Custom error types
   math/                   # Math utilities
@@ -61,6 +74,7 @@ src/
   string/                 # String utilities
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
+  assert/                 # Tests for the assert module
   discriminator/          # Tests for the discriminator module
   error/                  # Tests for the error module
   math/                   # Tests for the math module
@@ -109,8 +123,8 @@ Custom error classes must:
 
 Choose the error type by the kind of failure, not by the call site:
 
-- `PrimitiveTypeError` — input is not the expected primitive type (e.g., not a string, not a number)
-- `SchemaTypeError` — input is either an object type that does not satisfy an expected object schema, or not an object at all
+- `PrimitiveTypeError` — input fails a `typeof`-level type check with no schema involved (e.g., not a string, not a number, not a function, not an object)
+- `SchemaTypeError` — input is checked against an expected object schema and fails it, either because it does not satisfy the schema or because it is not an object at all
 - `ValueRangeError` — input is the correct type but falls outside an allowed range or bound
 - `StaticInstanceError` — a static class constructor was invoked
 
@@ -231,6 +245,12 @@ The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_c
 For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site.
 Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
 
+### Front Matter Dates
+
+Markdown pages that use `layout: post` with `date` and `modified_date` front matter render both values through `docs/_layouts/post.html` as "Published" and "Updated", respectively.
+When a branch changes the content of one of these pages, bump that page's `modified_date` to the commit date and leave the original `date` unchanged.
+A page whose content did not change keeps its existing `modified_date`.
+
 ### TypeDoc Configuration
 
 - API docs are generated with TypeDoc (`npm run docs`) using `typedoc.json`.
@@ -284,7 +304,7 @@ If anything changed, do the following:
 
 - Confirm `Capability Record` has 5–7 bullets and `Detailed Technical Notes` has one matching subsection per bullet
 - When a branch introduces a new capability or updates an existing capability, re-rank the highlights against the [selection criteria](#selecting-the-57-highlights) rather than appending; if the new capability ranks in the top 5–7, the lowest-ranked existing highlight comes off the page
-- Bump `modified_date` to today; do not change the original `date`
+- Bump `modified_date` per the ["Front Matter Dates" section](#front-matter-dates); do not change the original `date`
 - Evidence links must always point to the `main` branch
 
 Refer to the ["Portfolio Page Generation and Maintenance" section](#portfolio-page-generation-and-maintenance) for the full review checklist.
@@ -297,8 +317,10 @@ Editing in place preserves whatever was true when the sections were written; enf
 
 Verify that `CLAUDE.md` and `.github/copilot-instructions.md` are consistent with each other and reflect the current project state:
 
-- `CLAUDE.md` still maps accurately to this file
-- The [Directory Structure section](#directory-structure) accurately reflects the current `src/` module layout
+- Every link in `CLAUDE.md` resolves to a section of this file that still exists under that name
+- Every fact `CLAUDE.md` restates rather than links to still matches this file
+- If the branch added a section to this file, decide whether it belongs on the map, per the ["Companion Instruction Files" section](#companion-instruction-files)
+- The [Directory Structure section](#directory-structure) accurately reflects the current source layout
 - Any new tooling, conventions, or workflows introduced on the branch are documented
 
 ### 4. `package.json` Keywords
@@ -325,6 +347,7 @@ Review all branch changes for convention compliance and code quality.
 - All source code files should follow the conventions listed in the ["Development Guidelines" section](#development-guidelines) of this file.
 - Copyright year headers are present and accurate (see ["File Headers" section](#file-headers)).
 - `README.md` and `docs/index.md` are in sync for any shared content changes
+- `modified_date` is bumped on every page whose content changed on the branch (see the ["Front Matter Dates" section](#front-matter-dates))
 - Test coverage is complete and meaningful for all new or changed public API surface
 
 #### Code Quality
@@ -661,7 +684,7 @@ When reviewing a new page, compare with existing template pages for:
 - label style and format in `Skills and Tooling Inventory` (flat bulleted list with bold category labels)
 - tense and sentence style
 - bullet punctuation consistency
-- naming conventions (`webpack` vs `Webpack`, etc.)
+- naming conventions (match each tool's own capitalization, e.g. `webpack`, `npm`, `Vite`, `ESLint`)
 
 Consistency boosts professionalism at portfolio scale.
 
