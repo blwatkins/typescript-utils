@@ -42,6 +42,8 @@ See the ["npm Scripts" section of `.github/copilot-instructions.md`](./.github/c
 
 Documentation, the GitHub Pages site, and the portfolio skills page (`docs/portfolio-skills.md`) are governed by the ["Documentation and GitHub Pages"](./.github/copilot-instructions.md#documentation-and-github-pages) and ["Portfolio Page Generation and Maintenance"](./.github/copilot-instructions.md#portfolio-page-generation-and-maintenance) sections of `.github/copilot-instructions.md`.
 
+Markdown indentation rules for all repository `.md` files are in the ["Markdown Formatting" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#markdown-formatting).
+
 ## Pre-Merge and Release Review
 
 Before merging a branch, complete these review steps (full details in the ["Pre-Merge and Release Review" section of `.github/copilot-instructions.md`](./.github/copilot-instructions.md#pre-merge-and-release-review)):
