@@ -64,12 +64,12 @@ describe('MathUtility', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-number inputs',
-                        inputs: [...nonNumberInputs],
+                        inputs: nonNumberInputs,
                         expected: PrimitiveTypeError
                     },
                     {
                         label: 'Non-finite number inputs',
-                        inputs: [...nonFiniteNumberInputs],
+                        inputs: nonFiniteNumberInputs,
                         expected: PrimitiveTypeError
                     }
                 ];
@@ -154,22 +154,22 @@ describe('MathUtility', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-number inputs',
-                        inputs: [...nonNumberInputs],
+                        inputs: nonNumberInputs,
                         expected: PrimitiveTypeError
                     },
                     {
                         label: 'Non-finite number inputs',
-                        inputs: [...nonFiniteNumberInputs],
+                        inputs: nonFiniteNumberInputs,
                         expected: PrimitiveTypeError
                     },
                     {
                         label: 'Float number inputs',
-                        inputs: [...floatInputs],
+                        inputs: floatInputs,
                         expected: PrimitiveTypeError
                     },
                     {
                         label: 'Negative integer inputs',
-                        inputs: [...negativeIntegerInputs],
+                        inputs: negativeIntegerInputs,
                         expected: PrimitiveTypeError
                     }
                 ];
