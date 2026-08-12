@@ -24,6 +24,7 @@ import { Type } from 'typebox';
 
 import { TypeAssertions } from '../../assert';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
+import { StringUtility } from '../../string';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
 
@@ -53,6 +54,7 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
+     * @param {string|unknown} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedElement}.
      *
      * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a generic {@link WeightedElement}.
      *
@@ -61,8 +63,12 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    public static assertGenericWeightedElement(input: unknown): asserts input is WeightedElement<unknown> {
+    public static assertGenericWeightedElement(input: unknown, message?: string): asserts input is WeightedElement<unknown> {
         if (!WeightedElementUtility.isGenericWeightedElement(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new SchemaTypeError(message);
+            }
+
             throw new SchemaTypeError('Input does not match schema requirements for generic WeightedElement');
         }
     }
