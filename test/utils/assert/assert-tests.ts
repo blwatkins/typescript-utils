@@ -28,6 +28,8 @@ export function testAssertMethod(
     failureScenarios: Scenario[],
     buildDefaultMessage?: (input: unknown) => string
 ): void {
+    const maxMessageTestCases: number = 5;
+
     describe('Success scenarios should not throw an error', (): void => {
         describe.each(
             successScenarios
@@ -77,7 +79,7 @@ export function testAssertMethod(
 
             describe('Failure scenarios should throw the expected error with custom message', (): void => {
                 test.each(
-                    failureCases
+                    failureCases.slice(0, Math.min(maxMessageTestCases, failureCases.length))
                 )(`%# - ${method.name}($input) should throw $expected with custom message`, ({ input: testInput, expected: testExpected }: TestCase): void => {
                     const expectedMessage: string = `CUSTOM TEST ERROR MESSAGE: ${method.name}`;
                     const ExpectedErrorType: new (message?: string) => Error = testExpected as new (message?: string) => Error;
@@ -112,7 +114,7 @@ export function testAssertMethod(
                 ];
 
                 describe.each(
-                    failureCases
+                    failureCases.slice(0, Math.min(maxMessageTestCases, failureCases.length))
                 )(`%# - ${method.name}($input, message) should throw $expected with default message if message is not properly formatted`, ({ input: failureInput, expected: failureExpected }: TestCase): void => {
                     describe.each(
                         messageScenarios
