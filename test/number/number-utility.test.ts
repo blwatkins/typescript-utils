@@ -141,7 +141,7 @@ describe('NumberUtility', (): void => {
                 label: 'Negative integer inputs',
                 inputs: negativeIntegerInputs,
                 expected: PrimitiveTypeError
-            },
+            }
         ];
 
         const successScenarios: Scenario[] = [
@@ -172,7 +172,7 @@ describe('NumberUtility', (): void => {
             ],
             failureScenarios,
             (input: unknown): string => {
-                return `Expected a positive integer (zeroInclusive=true), but received: ${typeof input}`
+                return `Expected a positive integer (zeroInclusive=true), but received: ${typeof input}`;
             }
         );
 
@@ -188,7 +188,7 @@ describe('NumberUtility', (): void => {
                 }
             ],
             (input: unknown): string => {
-                return `Expected a positive integer (zeroInclusive=false), but received: ${typeof input}`
+                return `Expected a positive integer (zeroInclusive=false), but received: ${typeof input}`;
             }
         );
     });
