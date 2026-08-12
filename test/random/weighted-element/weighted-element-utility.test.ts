@@ -37,6 +37,7 @@ import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number
 import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
+import { testAssertMethod } from '../../utils/assert/assert-tests';
 
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, StaticInstanceError);
@@ -135,6 +136,19 @@ describe('WeightedElementUtility', (): void => {
     ];
 
     describe('assertGenericWeightedElement', (): void => {
+        const assertFailureScenarios: Scenario[] = failureScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: SchemaTypeError
+            };
+        });
+
+        testAssertMethod(
+            WeightedElementUtility.assertGenericWeightedElement.bind(WeightedElementUtility),
+            successScenarios,
+            assertFailureScenarios
+        );
+
         describe('Should correctly identify generic WeightedElement objects', (): void => {
             describe('Failure scenarios', (): void => {
                 describe.each(

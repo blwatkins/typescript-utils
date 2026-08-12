@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, test, expect, } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
 import { Scenario, TestCase, buildTestCases } from '../test-case/test-case';
 
@@ -92,7 +92,16 @@ export function testAssertMethod(
                 const messageScenarios: Scenario[] = [
                     {
                         label: 'Non-string type message',
-                        inputs: [10, false, undefined, null, (): string => { return 'hello' }, {}],
+                        inputs: [
+                            10,
+                            false,
+                            undefined,
+                            null,
+                            (): string => {
+                                return 'hello';
+                            },
+                            {}
+                        ],
                         expected: undefined
                     },
                     {

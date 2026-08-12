@@ -20,7 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { NumberUtility } from '../../src';
+import { NumberUtility, PrimitiveTypeError, StaticInstanceError } from '../../src';
 
 import {
     floatInputs,
@@ -36,9 +36,46 @@ import {
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
+import { testAssertMethod } from '../utils/assert/assert-tests';
 
 describe('NumberUtility', (): void => {
-    testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, Error);
+    testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, StaticInstanceError);
+
+    describe('assertFiniteNumber', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: [...nonNumberInputs],
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: [...nonFiniteNumberInputs],
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Number inputs',
+                inputs: [
+                    ...positiveNumberInputs,
+                    ...negativeNumberInputs,
+                    ...zeroInputs
+                ],
+                expected: undefined
+            }
+        ];
+
+        testAssertMethod(
+            NumberUtility.assertFiniteNumber.bind(NumberUtility),
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                return `Expected a finite number, but received: ${typeof input}`;
+            }
+        );
+    });
 
     describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [
