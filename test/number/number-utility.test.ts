@@ -22,6 +22,8 @@ import { describe, test, expect } from 'vitest';
 
 import { NumberUtility, PrimitiveTypeError, StaticInstanceError } from '../../src';
 
+import { testAssertMethod } from '../utils/assert/assert-tests';
+
 import {
     floatInputs,
     integerInputs,
@@ -36,7 +38,6 @@ import {
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
-import { testAssertMethod } from '../utils/assert/assert-tests';
 
 describe('NumberUtility', (): void => {
     testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, StaticInstanceError);
@@ -45,12 +46,12 @@ describe('NumberUtility', (): void => {
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
-                inputs: [...nonNumberInputs],
+                inputs: nonNumberInputs,
                 expected: PrimitiveTypeError
             },
             {
                 label: 'Non-finite number inputs',
-                inputs: [...nonFiniteNumberInputs],
+                inputs: nonFiniteNumberInputs,
                 expected: PrimitiveTypeError
             }
         ];
@@ -73,6 +74,121 @@ describe('NumberUtility', (): void => {
             failureScenarios,
             (input: unknown): string => {
                 return `Expected a finite number, but received: ${typeof input}`;
+            }
+        );
+    });
+
+    describe('assertInteger', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: nonFiniteNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Float inputs',
+                inputs: floatInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Zero inputs',
+                inputs: zeroInputs,
+                expected: undefined
+            },
+            {
+                label: 'Integer inputs',
+                inputs: integerInputs,
+                expected: undefined
+            }
+        ];
+
+        testAssertMethod(
+            NumberUtility.assertInteger.bind(NumberUtility),
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                return `Expected an integer, but received: ${typeof input}`;
+            }
+        );
+    });
+
+    describe('assertPositiveInteger', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: nonFiniteNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Float inputs',
+                inputs: floatInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Negative integer inputs',
+                inputs: negativeIntegerInputs,
+                expected: PrimitiveTypeError
+            },
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Positive integer inputs',
+                inputs: positiveIntegerInputs,
+                expected: undefined
+            }
+        ];
+
+        function assertPositiveIntegerWithZeroInclusive(input: unknown, message?: string): void {
+            NumberUtility.assertPositiveInteger(input, true, message);
+        }
+
+        function assertPositiveInteger(input: unknown, message?: string): void {
+            NumberUtility.assertPositiveInteger(input, false, message);
+        }
+
+        testAssertMethod(
+            assertPositiveIntegerWithZeroInclusive,
+            [
+                ...successScenarios,
+                {
+                    label: 'Zero inputs',
+                    inputs: zeroInputs,
+                    expected: undefined
+                }
+            ],
+            failureScenarios,
+            (input: unknown): string => {
+                return `Expected a positive integer (zeroInclusive=true), but received: ${typeof input}`
+            }
+        );
+
+        testAssertMethod(
+            assertPositiveInteger,
+            successScenarios,
+            [
+                ...failureScenarios,
+                {
+                    label: 'Zero inputs',
+                    inputs: zeroInputs,
+                    expected: PrimitiveTypeError
+                }
+            ],
+            (input: unknown): string => {
+                return `Expected a positive integer (zeroInclusive=false), but received: ${typeof input}`
             }
         );
     });
