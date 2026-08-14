@@ -58,7 +58,7 @@ export class NumberUtility {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a finite number, but received: ${typeof input}`);
+            throw new PrimitiveTypeError(`Expected a finite number, but received: ${typeof input}.`);
         }
     }
 
@@ -81,7 +81,7 @@ export class NumberUtility {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected an integer, but received: ${typeof input}`);
+            throw new PrimitiveTypeError(`Expected an integer, but received: ${typeof input}.`);
         }
     }
 
@@ -107,7 +107,7 @@ export class NumberUtility {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a positive integer (zeroInclusive=${zeroInclusive}), but received: ${typeof input}`);
+            throw new PrimitiveTypeError(`Expected a positive integer (zeroInclusive=${zeroInclusive}), but received: ${typeof input}.`);
         }
     }
 
