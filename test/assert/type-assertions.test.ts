@@ -65,7 +65,7 @@ describe('TypeAssertions', (): void => {
             successScenarios,
             failureScenarios,
             (input: unknown): string => {
-                return `Expected a function, but received: ${typeof input}`;
+                return `Expected a function, but received: ${typeof input}.`;
             }
         );
     });
@@ -110,7 +110,7 @@ describe('TypeAssertions', (): void => {
             successScenarios,
             failureScenarios,
             (input: unknown): string => {
-                return `Expected a non-array object, but received: ${typeof input}`;
+                return `Expected a non-array object, but received: ${typeof input}.`;
             }
         );
     });
@@ -143,7 +143,7 @@ describe('TypeAssertions', (): void => {
             successScenarios,
             failureScenarios,
             (input: unknown): string => {
-                return `Expected an array, but received: ${typeof input}`;
+                return `Expected an array, but received: ${typeof input}.`;
             }
         );
     });
