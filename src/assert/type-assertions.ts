@@ -40,6 +40,31 @@ export class TypeAssertions {
     }
 
     /**
+     * Validate and assert that the given input is an array.
+     *
+     * @remarks This method does not enforce size requirements or type checking for any array elements.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not an array.
+     *
+     * @returns {asserts input is unknown[]} Asserts that the given input is an array.
+     *
+     * @throws {PrimitiveTypeError} When the input is not an array.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
+        if (!Array.isArray(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}.`);
+        }
+    }
+
+    /**
      * Validate and assert that the given input is a callable function.
      *
      * @remarks This method does not enforce type checking for function parameters or return type.
@@ -60,7 +85,7 @@ export class TypeAssertions {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a function, but received: ${typeof input}`);
+            throw new PrimitiveTypeError(`Expected a function, but received: ${typeof input}.`);
         }
     }
 
@@ -86,32 +111,11 @@ export class TypeAssertions {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a non-array object, but received: ${typeof input}`);
+            throw new PrimitiveTypeError(`Expected a non-array object, but received: ${typeof input}.`);
         }
     }
 
-    /**
-     * Validate and assert that the given input is an array.
-     *
-     * @remarks This method does not enforce size requirements or type checking for any array elements.
-     *
-     * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not an array.
-     *
-     * @returns {asserts input is unknown[]} Asserts that the given input is an array.
-     *
-     * @throws {PrimitiveTypeError} When the input is not an array.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
-        if (!Array.isArray(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
-                throw new PrimitiveTypeError(message);
-            }
-
-            throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}`);
-        }
+    public static assertStringType(input: unknown, message?: string): asserts input is string {
+        StringUtility.assertStringType(input, message);
     }
 }
