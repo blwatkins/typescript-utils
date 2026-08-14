@@ -16,6 +16,12 @@
   "bugs": {
     "url": "https://github.com/blwatkins/typescript-utils/issues"
   },
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/blwatkins"
+    }
+  ],
   "type": "module",
   "engines": {
     "node": "^22.23.0 || >=24"
