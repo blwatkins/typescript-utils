@@ -18,6 +18,8 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { PrimitiveTypeError } from '../error';
+
 const regularExpressions = {
     singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
     singleLineUppercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Ll})(?!.* {2})[^\t\r\n]+$/u,
@@ -81,6 +83,26 @@ export class StringUtility {
      */
     public static get singleLineTrimmedPattern(): RegExp {
         return regularExpressions.singleLineTrimmed;
+    }
+
+    public static assertStringType(input: unknown, message?: string): asserts input is string {
+        if (!StringUtility.isString(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a string, but received: ${typeof input}.`);
+        }
+    }
+
+    public static assertSingleLineTrimmedString(input: unknown, message?: string): asserts input is string {
+        if (!StringUtility.isSingleLineTrimmedString(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a single-line trimmed string, but received: ${typeof input}.`);
+        }
     }
 
     /**
