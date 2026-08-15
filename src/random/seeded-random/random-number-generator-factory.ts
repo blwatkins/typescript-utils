@@ -75,7 +75,7 @@ export class RandomNumberGeneratorFactory {
      *
      * @throws {PrimitiveTypeError} When the given seed is not a string.
      * @throws {PrimitiveTypeError} When the given namespace is not a string.
-     * @throws {TypeError} When the given version is not an integer.
+     * @throws {PrimitiveTypeError} When the given version is not an integer.
      * @throws {RangeError} When the given version is not a valid {@link SeedVersions} index.
      *
      * @public
@@ -84,6 +84,7 @@ export class RandomNumberGeneratorFactory {
     public static build(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
         StringUtility.assertStringType(seed, 'seed must be a string.');
         if (namespace !== undefined) StringUtility.assertStringType(namespace, 'namespace must be a string.');
+        if (version !== undefined) NumberUtility.assertInteger(version, 'version must be an integer.');
 
         RandomNumberGeneratorFactory.#validateBuildInputs(seed, namespace, version);
         const input: string = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
@@ -111,6 +112,7 @@ export class RandomNumberGeneratorFactory {
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
         StringUtility.assertStringType(seed, 'seed must be a string.');
         if (namespace !== undefined) StringUtility.assertStringType(namespace, 'namespace must be a string.');
+
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
         return new SeededRandomNumberGenerator(state);
@@ -138,19 +140,23 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static #validateBuildInputs(seed: unknown, namespace?: unknown, version?: unknown): void {
-        if (!StringUtility.isString(seed)) {
-            throw new TypeError('Seed must be a string.');
-        }
+        // if (!StringUtility.isString(seed)) {
+        //     throw new TypeError('Seed must be a string.');
+        // }
 
-        if (namespace !== undefined && !StringUtility.isString(namespace)) {
-            throw new TypeError('Namespace must be a string.');
-        }
+        // if (namespace !== undefined && !StringUtility.isString(namespace)) {
+        //     throw new TypeError('Namespace must be a string.');
+        // }
 
-        if (version !== undefined && !NumberUtility.isInteger(version)) {
-            throw new TypeError('Version must be an integer.');
-        }
+        // if (version !== undefined && !NumberUtility.isInteger(version)) {
+        //     throw new TypeError('Version must be an integer.');
+        // }
 
-        if (version !== undefined && !SeedVersions.isValidIndex(version)) {
+        console.log(seed);
+        console.log(namespace);
+        console.log(version);
+
+        if (version !== undefined && !SeedVersions.isValidIndex(version as number)) {
             throw new RangeError('Version must be a valid seed versions index.');
         }
     }
@@ -203,6 +209,7 @@ export class RandomNumberGeneratorFactory {
      */
     static #generateFnvHashState(input: string, version: number = 0): [number, number, number, number] {
         StringUtility.assertStringType(input, 'input must be a string.');
+        NumberUtility.assertInteger(version, 'version must be an integer.');
 
         RandomNumberGeneratorFactory.#validateBuildInputs(input, undefined, version);
         const bytes = textEncoder.encode(input);
