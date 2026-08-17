@@ -223,7 +223,7 @@ Any addition, removal, or update to shared sections must be applied consistently
 ### Jekyll Build
 
 The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths.
-For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site.
+For example, `./releases.md` in `docs/index.md` resolves to `releases.html` on the published site.
 Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
 
 ### Front Matter Dates
