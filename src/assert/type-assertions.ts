@@ -115,6 +115,19 @@ export class TypeAssertions {
         }
     }
 
+    /**
+     * Validate and assert that the given input is a string.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
+     *
+     * @returns {asserts input is string} Asserts that the given input is a string.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a string.
+     *
+     * @public
+     * @since 0.1.0
+     */
     public static assertStringType(input: unknown, message?: string): asserts input is string {
         StringUtility.assertStringType(input, message);
     }
