@@ -74,7 +74,6 @@ The full text of the license is included with the project source code.
 
 ## Sources and Technical Notes
 
-- [Demonstrated Portfolio Skills](./portfolio-skills.md)
 - [Resources and References](./resources-and-references.md)
 
 ## Thank Yous
