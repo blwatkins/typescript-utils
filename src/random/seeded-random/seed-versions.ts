@@ -18,7 +18,9 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { ValueRangeError } from '../../error';
 import { NumberUtility } from '../../number';
+import { StringUtility } from '../../string';
 
 /**
  * A seed version defines a specific set of offsets for the FNV-1a hashing algorithm.
@@ -83,6 +85,18 @@ export class SeedVersions {
      */
     static get size(): number {
         return seedVersions.length;
+    }
+
+    static assertValidIndex(input: unknown, message?: string): asserts input is number {
+        NumberUtility.assertPositiveInteger(input, true);
+
+        if (!SeedVersions.isValidIndex(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError(`Input ${input.toString(10)} out of bounds for valid seed version index (0-${SeedVersions.size}).`);
+        }
     }
 
     /**
