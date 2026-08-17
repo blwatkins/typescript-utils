@@ -79,20 +79,6 @@
     "utility",
     "utilities",
     "utils",
-    "type-guard",
-    "validation",
-    "type-assertion",
-    "math",
-    "number",
-    "string",
-    "random",
-    "seeded-random",
-    "weighted-random",
-    "prng",
-    "pseudorandom",
-    "deterministic",
-    "xoshiro",
-    "xoshiro128",
     "esm"
   ]
 }
