@@ -26,11 +26,45 @@ import { testAssertMethod } from '../utils/assert/assert-tests';
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
+import { emptyStringInputs, nonEmptyStringInputs, nonStringInputs } from '../utils/input/string-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario } from '../utils/test-case/test-case';
 
 describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
+
+    describe('assertArrayType', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Array inputs',
+                inputs: [
+                    [],
+                    [1, 2, 3],
+                    ['a', 'b', 'c'],
+                    [{ key: 1 }, { key: 2 }, { key: 3 }],
+                    [[1, 2, 3], [4, 5, 6]]
+                ],
+                expected: undefined
+            }
+        ];
+
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-array inputs',
+                inputs: nonArrayInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        testAssertMethod(
+            TypeAssertions.assertArrayType.bind(TypeAssertions),
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                return `Expected an array, but received: ${typeof input}.`;
+            }
+        );
+    });
 
     describe('assertFunctionType', (): void => {
         const successScenarios: Scenario[] = [
@@ -115,16 +149,13 @@ describe('TypeAssertions', (): void => {
         );
     });
 
-    describe('assertArrayType', (): void => {
+    describe('assertStringType', (): void => {
         const successScenarios: Scenario[] = [
             {
-                label: 'Array inputs',
+                label: 'String inputs',
                 inputs: [
-                    [],
-                    [1, 2, 3],
-                    ['a', 'b', 'c'],
-                    [{ key: 1 }, { key: 2 }, { key: 3 }],
-                    [[1, 2, 3], [4, 5, 6]]
+                    ...emptyStringInputs,
+                    ...nonEmptyStringInputs
                 ],
                 expected: undefined
             }
@@ -132,18 +163,18 @@ describe('TypeAssertions', (): void => {
 
         const failureScenarios: Scenario[] = [
             {
-                label: 'Non-array inputs',
-                inputs: nonArrayInputs,
+                label: 'Non-string inputs',
+                inputs: nonStringInputs,
                 expected: PrimitiveTypeError
             }
         ];
 
         testAssertMethod(
-            TypeAssertions.assertArrayType.bind(TypeAssertions),
+            TypeAssertions.assertStringType.bind(TypeAssertions),
             successScenarios,
             failureScenarios,
             (input: unknown): string => {
-                return `Expected an array, but received: ${typeof input}.`;
+                return `Expected a string, but received: ${typeof input}.`;
             }
         );
     });
