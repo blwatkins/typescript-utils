@@ -20,7 +20,13 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { RandomNumberGeneratorFactory, SeedVersions, SeededRandomNumberGenerator } from '../../../src';
+import {
+    RandomNumberGeneratorFactory,
+    SeedVersions,
+    SeededRandomNumberGenerator,
+    PrimitiveTypeError,
+    ValueRangeError
+} from '../../../src';
 
 import { nonStringInputs } from '../../utils/input/string-inputs';
 
@@ -153,19 +159,23 @@ describe('RandomNumberGeneratorFactory', (): void => {
                             ...nonFiniteNumberInputs,
                             ...floatInputs
                         ],
-                        expected: TypeError
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Negative integer versions',
+                        inputs: negativeIntegerInputs,
+                        expected: PrimitiveTypeError
                     },
                     {
                         label: 'Out-of-range integer versions',
                         inputs: [
-                            ...negativeIntegerInputs,
                             SeedVersions.size,
                             SeedVersions.size + 1,
                             Number.MAX_SAFE_INTEGER,
                             500,
                             1_000
                         ],
-                        expected: RangeError
+                        expected: ValueRangeError
                     }
                 ];
 
