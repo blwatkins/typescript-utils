@@ -118,6 +118,8 @@ export class TypeAssertions {
     /**
      * Validate and assert that the given input is a string.
      *
+     * @see {@link StringUtility.assertStringType}
+     *
      * @param {unknown} input - The input to check.
      * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
      *
