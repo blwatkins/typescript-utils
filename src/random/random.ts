@@ -64,7 +64,7 @@ export class Random {
      * @since 0.1.0
      */
     public static set randomNumberGenerator(rng: () => number) {
-        TypeAssertions.assertFunctionType(rng, 'Random number generator must be a function.')
+        TypeAssertions.assertFunctionType(rng, 'Random number generator must be a function.');
         Random.#rng = rng;
     }
 
