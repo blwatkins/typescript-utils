@@ -107,8 +107,8 @@ export class RandomNumberGeneratorFactory {
      * @since 0.1.0
      */
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
-        StringUtility.assertStringType(seed, 'seed must be a string.');
-        if (namespace !== undefined) StringUtility.assertStringType(namespace, 'namespace must be a string.');
+        StringUtility.assertStringType(seed, 'Seed must be a string.');
+        if (namespace !== undefined) StringUtility.assertStringType(namespace, 'Namespace must be a string.');
 
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
@@ -131,8 +131,8 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static #buildInputString(seed: string, namespace?: string): string {
-        StringUtility.assertStringType(seed, 'seed must be a string.');
-        if (namespace !== undefined) StringUtility.assertStringType(namespace, 'namespace must be a string.');
+        StringUtility.assertStringType(seed, 'Seed must be a string.');
+        if (namespace !== undefined) StringUtility.assertStringType(namespace, 'Namespace must be a string.');
 
         if (namespace === undefined) {
             return seed;
@@ -161,7 +161,7 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static #generateFnvHashState(input: string, version: number = 0): [number, number, number, number] {
-        StringUtility.assertStringType(input, 'input must be a string.');
+        StringUtility.assertStringType(input, 'Input must be a string.');
         SeedVersions.assertValidIndex(version);
 
         const bytes = textEncoder.encode(input);
@@ -198,7 +198,7 @@ export class RandomNumberGeneratorFactory {
      * @private
      */
     static async #generateSha256HashState(input: string): Promise<[number, number, number, number]> {
-        StringUtility.assertStringType(input, 'input must be a string.');
+        StringUtility.assertStringType(input, 'Input must be a string.');
         const hashBuffer: ArrayBuffer = await crypto.subtle.digest('SHA-256', textEncoder.encode(input));
         const v: DataView = new DataView(hashBuffer);
 
