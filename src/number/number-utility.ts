@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrimitiveTypeError, StaticInstanceError } from '../error';
+import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { StringUtility } from '../string';
 
 /**
@@ -41,6 +41,8 @@ export class NumberUtility {
 
     /**
      * Validates and asserts that the given input is a finite number.
+     *
+     * @see {@link NumberUtility.isFiniteNumber}
      *
      * @param {unknown} input - The input to check.
      * @param {string|unknown} message - Optional message for the error thrown when the input is not a finite number.
@@ -65,6 +67,8 @@ export class NumberUtility {
     /**
      * Validates and asserts that the given input is an integer.
      *
+     * @see {@link NumberUtility.isInteger}
+     *
      * @param {unknown} input - The input to check.
      * @param {string|unknown} message - Optional message for the error thrown when the input is not an integer.
      *
@@ -88,6 +92,8 @@ export class NumberUtility {
     /**
      * Validates and asserts that the given input is a positive integer.
      *
+     * @see {@link NumberUtility.assertPositiveInteger}
+     *
      * @param {unknown} input - The input to check.
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
@@ -108,6 +114,65 @@ export class NumberUtility {
             }
 
             throw new PrimitiveTypeError(`Expected a positive integer (zeroInclusive=${zeroInclusive}), but received: ${typeof input}.`);
+        }
+    }
+
+    /**
+     * Validate and assert that the given min and max are finite numbers, where min is less than or equal to max.
+     *
+     * @see {@link NumberUtility.isValidRange}
+     *
+     * @param {number} min - Minimum value to check.
+     * @param {number} max - Maximum value to check.
+     * @param {string|unknown} message - Optional message for the error thrown when the given min is not less than or equal to the given max.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When the given min is not a finite number.
+     * @throws {PrimitiveTypeError} When the given max is not a finite number.
+     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertValidRange(min: number, max: number, message?: string): void {
+        if (!NumberUtility.isValidRange(min, max)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError(`min (${min}) must be less than or equal to max (${max})`);
+        }
+    }
+
+    /**
+     * Validate and assert that the given value is greater than or equal to the given min and less than or equal to the given max.
+     *
+     * @see {@link NumberUtility.isInRange}
+     *
+     * @param {number} value - The value to check. Must be a finite number.
+     * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
+     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
+     * @param {string|unknown} message - Optional message for the error thrown when the given value is not within the range [min, max] (inclusive).
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When the given value is not a finite number.
+     * @throws {PrimitiveTypeError} When the given min is not a finite number.
+     * @throws {PrimitiveTypeError} When the given max is not a finite number.
+     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     * @throws {ValueRangeError} When the given value is not in the range [min, max] (inclusive).
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertInRange(value: number, min: number, max: number, message?: string): void {
+        if (!NumberUtility.isInRange(value, min, max)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError(`Value ${value} must be in the range [${min}, ${max}].`);
         }
     }
 
@@ -162,5 +227,50 @@ export class NumberUtility {
         }
 
         return input > 0;
+    }
+
+    /**
+     * Do the given min and max form a valid range, where min and max finite numbers and min is less than or equal to max?
+     *
+     * @param {number} min - Minimum value to check.
+     * @param {number} max - Maximum value to check.
+     *
+     * @returns {boolean} `true` if the given min and max are finite numbers and min is less than or equal to max; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When the given min is not a finite number.
+     * @throws {PrimitiveTypeError} When the given max is not a finite number.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isValidRange(min: number, max: number): boolean {
+        NumberUtility.assertFiniteNumber(min, 'Min must be a finite number');
+        NumberUtility.assertFiniteNumber(max, 'Max must be a finite number');
+        return min > max
+    }
+
+    /**
+     * Is the given value greater than or equal to the given min and less than or equal to the given max?
+     *
+     * @param {number} value - The value to check. Must be a finite number.
+     * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
+     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
+     *
+     * @returns {boolean} `true` if the given value is in the range [min, max] (inclusive).; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When the given value is not a finite number.
+     * @throws {PrimitiveTypeError} When the given min is not a finite number.
+     * @throws {PrimitiveTypeError} When the given max is not a finite number.
+     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isInRange(value: number, min: number, max: number): boolean {
+        NumberUtility.assertFiniteNumber(min);
+        NumberUtility.assertFiniteNumber(max);
+        NumberUtility.assertFiniteNumber(value);
+        NumberUtility.assertValidRange(min, max);
+        return value >= min && value <= max;
     }
 }
