@@ -25,7 +25,7 @@ import { ValueRangeError } from '../../src';
 import { testErrorType } from '../utils/error/error-tests';
 
 const name: string = 'ValueRangeError';
-const defaultMessage: string = 'Input does not match value range requirements';
+const defaultMessage: string = 'Input does not match value range requirements.';
 
 describe(name, (): void => {
     testErrorType(name, ValueRangeError, RangeError, defaultMessage);

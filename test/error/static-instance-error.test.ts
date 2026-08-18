@@ -25,7 +25,7 @@ import { StaticInstanceError } from '../../src';
 import { testErrorType } from '../utils/error/error-tests';
 
 const name: string = 'StaticInstanceError';
-const defaultMessage: string = 'This class is static and cannot be instantiated';
+const defaultMessage: string = 'This class is static and cannot be instantiated.';
 
 describe(name, (): void => {
     testErrorType(name, StaticInstanceError, TypeError, defaultMessage);

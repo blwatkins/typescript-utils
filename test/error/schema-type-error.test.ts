@@ -25,7 +25,7 @@ import { SchemaTypeError } from '../../src';
 import { testErrorType } from '../utils/error/error-tests';
 
 const name: string = 'SchemaTypeError';
-const defaultMessage: string = 'Input does not match schema requirements';
+const defaultMessage: string = 'Input does not match schema requirements.';
 
 describe(name, (): void => {
     testErrorType(name, SchemaTypeError, TypeError, defaultMessage);
