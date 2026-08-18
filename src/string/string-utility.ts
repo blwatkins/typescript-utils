@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrimitiveTypeError } from '../error';
+import { PrimitiveTypeError, StaticInstanceError } from '../error';
 
 const regularExpressions = {
     singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
@@ -35,12 +35,13 @@ export class StringUtility {
     /**
      * Private constructor.
      *
-     * @throws {Error} StringUtility is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link StringUtility} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('StringUtility is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('StringUtility is a static class and cannot be instantiated.');
     }
 
     /**
