@@ -246,7 +246,7 @@ export class NumberUtility {
     public static isValidRange(min: number, max: number): boolean {
         NumberUtility.assertFiniteNumber(min, 'Min must be a finite number');
         NumberUtility.assertFiniteNumber(max, 'Max must be a finite number');
-        return min > max
+        return min <= max;
     }
 
     /**
