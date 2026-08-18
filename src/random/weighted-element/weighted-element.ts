@@ -26,10 +26,30 @@ import { Type } from 'typebox';
  * @type {0}
  * @since 0.1.0
  */
+export const minWeight: 0 = 0 as const;
+
+/**
+ * Maximum value for a {@link WeightedElement.weight}.
+ *
+ * @type {1}
+ * @since 0.1.0
+ */
+export const maxWeight: 1 = 1 as const;
+
+/**
+ * Minimum value for a {@link WeightedElement.weight}.
+ *
+ * @deprecated Replaced by {@link minWeight}. Will be removed in v0.1.0-alpha.4.
+ *
+ * @type {0}
+ * @since 0.1.0
+ */
 export const minElementWeight: 0 = 0 as const;
 
 /**
  * Maximum value for a {@link WeightedElement.weight}.
+ *
+ * @deprecated Replaced by {@link maxWeight}. Will be removed in v0.1.0-alpha.4.
  *
  * @type {1}
  * @since 0.1.0
@@ -60,8 +80,8 @@ export const weightedElementSchema = Type.Generic(
              * @readonly
              */
             weight: Type.Readonly(Type.Number({
-                minimum: minElementWeight,
-                maximum: maxElementWeight
+                minimum: minWeight,
+                maximum: maxWeight
             }))
         },
         { additionalProperties: false }
@@ -100,8 +120,6 @@ export interface WeightedElement<TValue> {
 
 /**
  * Type alias for a list of {@link WeightedElement} objects.
- *
- * @see {@link weightedElementSchema}
  *
  * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
  *
