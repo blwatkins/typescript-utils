@@ -69,7 +69,7 @@ export class WeightedElementUtility {
                 throw new SchemaTypeError(message);
             }
 
-            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedElement');
+            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedElement.');
         }
     }
 
@@ -100,7 +100,7 @@ export class WeightedElementUtility {
                 throw new SchemaTypeError(message);
             }
 
-            throw new SchemaTypeError('Input does not match schema requirements for WeightedElement');
+            throw new SchemaTypeError('Input does not match schema requirements for WeightedElement.');
         }
     }
 
@@ -140,7 +140,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
-        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function');
+        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function.');
         return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
     }
 

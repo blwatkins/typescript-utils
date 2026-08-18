@@ -92,7 +92,7 @@ export class NumberUtility {
     /**
      * Validates and asserts that the given input is a positive integer.
      *
-     * @see {@link NumberUtility.assertPositiveInteger}
+     * @see {@link NumberUtility.isPositiveInteger}
      *
      * @param {unknown} input - The input to check.
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
@@ -141,7 +141,7 @@ export class NumberUtility {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError(`min (${min}) must be less than or equal to max (${max})`);
+            throw new ValueRangeError(`Min (${min}) must be less than or equal to max (${max}).`);
         }
     }
 
@@ -244,8 +244,8 @@ export class NumberUtility {
      * @since 0.1.0
      */
     public static isValidRange(min: number, max: number): boolean {
-        NumberUtility.assertFiniteNumber(min, 'Min must be a finite number');
-        NumberUtility.assertFiniteNumber(max, 'Max must be a finite number');
+        NumberUtility.assertFiniteNumber(min, 'Min must be a finite number.');
+        NumberUtility.assertFiniteNumber(max, 'Max must be a finite number.');
         return min <= max;
     }
 

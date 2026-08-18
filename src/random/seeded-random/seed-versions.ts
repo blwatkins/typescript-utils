@@ -89,28 +89,28 @@ export class SeedVersions {
     }
 
     /**
-     * Validate and assert that the given input is a valid seed version index.
+     * Validate and assert that the given index is a valid seed version index.
      *
-     * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid index.
+     * @see {@link SeedVersions.isValidIndex}
      *
-     * @returns {asserts input is number} Asserts that the given input is a valid seed version index number.
+     * @param {unknown} index - The index to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the index is not a valid index.
      *
-     * @throws {PrimitiveTypeError} When the input is not a positive integer or zero.
-     * @throws {ValueRangeError} When the input is not a valid seed version index.
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When the index is not a positive integer or zero.
+     * @throws {ValueRangeError} When the index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0
      */
-    static assertValidIndex(input: unknown, message?: string): asserts input is number {
-        NumberUtility.assertPositiveInteger(input, true);
-
-        if (!SeedVersions.isValidIndex(input)) {
+    static assertValidIndex(index: number, message?: string): void {
+        if (!SeedVersions.isValidIndex(index)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError(`Input ${input.toString(10)} out of bounds for valid seed version index (0-${SeedVersions.size}).`);
+            throw new ValueRangeError(`Index ${index.toString(10)} out of bounds for valid seed version index [0-${SeedVersions.size - 1}].`);
         }
     }
 
@@ -121,11 +121,14 @@ export class SeedVersions {
      *
      * @returns {boolean} `true` if the given index is a valid seed version; `false` otherwise.
      *
+     * @throws {PrimitiveTypeError} When index is not a positive integer or zero.
+     *
      * @public
      * @since 0.1.0
      */
     static isValidIndex(index: number): boolean {
-        return NumberUtility.isPositiveInteger(index, true) && index < seedVersions.length;
+        NumberUtility.assertPositiveInteger(index, true);
+        return index < seedVersions.length;
     }
 
     /**
@@ -143,7 +146,7 @@ export class SeedVersions {
      * @since 0.1.0
      */
     static getVersion(index: number): SeedVersion {
-        SeedVersions.assertValidIndex(index, `Seed version ${index} does not exist`);
+        SeedVersions.assertValidIndex(index, `Seed version ${index} does not exist.`);
         return seedVersions[index];
     }
 }

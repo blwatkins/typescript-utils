@@ -48,6 +48,6 @@ export class ValueRangeError extends RangeError {
      * @since 0.1.0
      */
     public static get defaultMessage(): string {
-        return 'Input does not match value range requirements';
+        return 'Input does not match value range requirements.';
     }
 }

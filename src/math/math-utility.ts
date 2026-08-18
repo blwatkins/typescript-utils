@@ -49,7 +49,7 @@ export class MathUtility {
      * @returns {number} `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
      *
      * @throws {PrimitiveTypeError} When `value`, `min`, and `max` are not all finite numbers.
-     * @throws {RangeError} When `min` is not less than or equal to `max`.
+     * @throws {ValueRangeError} When `min` is not less than or equal to `max`.
      *
      * @public
      * @since 0.1.0
@@ -58,10 +58,7 @@ export class MathUtility {
         NumberUtility.assertFiniteNumber(value, 'Value must be a finite number.');
         NumberUtility.assertFiniteNumber(min, 'Min must be a finite number.');
         NumberUtility.assertFiniteNumber(max, 'Max must be a finite number.');
-
-        if (min > max) {
-            throw new ValueRangeError(`Min value ${min} cannot be greater than max value ${max}.`);
-        }
+        NumberUtility.assertValidRange(min, max);
 
         if (value < min) return min;
         if (value > max) return max;
@@ -87,10 +84,10 @@ export class MathUtility {
      * @since 0.1.0
      */
     public static toFlatIndex(x: number, y: number, columns: number, rows: number): number {
-        NumberUtility.assertPositiveInteger(x, true, 'x must be a positive integer or zero.');
-        NumberUtility.assertPositiveInteger(y, true, 'y must be a positive integer or zero.');
-        NumberUtility.assertPositiveInteger(columns, false, 'columns must be a positive integer greater than 0.');
-        NumberUtility.assertPositiveInteger(rows, false, 'rows must be a positive integer greater than 0.');
+        NumberUtility.assertPositiveInteger(x, true, 'X must be a positive integer or zero.');
+        NumberUtility.assertPositiveInteger(y, true, 'Y must be a positive integer or zero.');
+        NumberUtility.assertPositiveInteger(columns, false, 'Columns must be a positive integer greater than 0.');
+        NumberUtility.assertPositiveInteger(rows, false, 'Rows must be a positive integer greater than 0.');
 
         if (columns * rows > Number.MAX_SAFE_INTEGER) {
             throw new ValueRangeError(`The total size of the given grid (${columns} * ${rows}) exceeds the maximum safe integer value in JavaScript.`);

@@ -48,6 +48,6 @@ export class StaticInstanceError extends TypeError {
      * @since 0.1.0
      */
     public static get defaultMessage(): string {
-        return 'This class is static and cannot be instantiated';
+        return 'This class is static and cannot be instantiated.';
     }
 }

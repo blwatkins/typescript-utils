@@ -66,7 +66,7 @@ export class WeightedListUtility {
                 throw new SchemaTypeError(message);
             }
 
-            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedList');
+            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedList.');
         }
     }
 
@@ -97,7 +97,7 @@ export class WeightedListUtility {
                 throw new SchemaTypeError(message);
             }
 
-            throw new SchemaTypeError('Input does not match schema requirements for WeightedList');
+            throw new SchemaTypeError('Input does not match schema requirements for WeightedList.');
         }
     }
 
@@ -155,7 +155,7 @@ export class WeightedListUtility {
      * @since 0.1.0
      */
     public static isWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedList<TValue> {
-        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function');
+        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function.');
 
         if (!WeightedListUtility.isGenericWeightedList(input)) {
             return false;

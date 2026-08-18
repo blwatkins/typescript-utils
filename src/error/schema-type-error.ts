@@ -48,6 +48,6 @@ export class SchemaTypeError extends TypeError {
      * @since 0.1.0
      */
     public static get defaultMessage(): string {
-        return 'Input does not match schema requirements';
+        return 'Input does not match schema requirements.';
     }
 }
