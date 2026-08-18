@@ -18,7 +18,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ValueRangeError } from '../../error';
+import { StaticInstanceError, ValueRangeError } from '../../error';
 import { NumberUtility } from '../../number';
 import { StringUtility } from '../../string';
 
@@ -67,12 +67,13 @@ export class SeedVersions {
     /**
      * Private constructor.
      *
-     * @throws {Error} SeedVersions is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link SeedVersions} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('SeedVersions is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('SeedVersions is a static class and cannot be instantiated.');
     }
 
     /**
@@ -87,6 +88,20 @@ export class SeedVersions {
         return seedVersions.length;
     }
 
+    /**
+     * Validate and assert that the given input is a valid seed version index.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid index.
+     *
+     * @returns {asserts input is number} Asserts that the given input is a valid seed version index number.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a positive integer or zero.
+     * @throws {ValueRangeError} When the input is not a valid seed version index.
+     *
+     * @public
+     * @since 0.1.0
+     */
     static assertValidIndex(input: unknown, message?: string): asserts input is number {
         NumberUtility.assertPositiveInteger(input, true);
 
@@ -121,16 +136,14 @@ export class SeedVersions {
      *
      * @returns {SeedVersion} The seed version with the given index.
      *
-     * @throws {RangeError} When the index is not a valid seed version index.
+     * @throws {PrimitiveTypeError} When the input is not a positive integer or zero.
+     * @throws {ValueRangeError} When the index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0
      */
     static getVersion(index: number): SeedVersion {
-        if (!SeedVersions.isValidIndex(index)) {
-            throw new RangeError(`SeedVersion ${index} does not exist`);
-        }
-
+        SeedVersions.assertValidIndex(index, `Seed version ${index} does not exist`);
         return seedVersions[index];
     }
 }
