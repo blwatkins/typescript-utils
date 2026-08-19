@@ -54,7 +54,7 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|unknown} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedElement}.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedElement}.
      *
      * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a generic {@link WeightedElement}.
      *
@@ -84,7 +84,7 @@ export class WeightedElementUtility {
      * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
      * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
-     * @param {string|unknown} message - Optional message for the error thrown when the input is not a valid {@link WeightedElement}.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid {@link WeightedElement}.
      *
      * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a {@link WeightedElement} whose value matches the expected type or schema.
      *

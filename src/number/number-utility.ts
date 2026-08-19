@@ -45,7 +45,7 @@ export class NumberUtility {
      * @see {@link NumberUtility.isFiniteNumber}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|unknown} message - Optional message for the error thrown when the input is not a finite number.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a finite number.
      *
      * @returns {asserts input is number} Asserts that the given input is a finite number.
      *
@@ -70,7 +70,7 @@ export class NumberUtility {
      * @see {@link NumberUtility.isInteger}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|unknown} message - Optional message for the error thrown when the input is not an integer.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not an integer.
      *
      * @returns {asserts input is number} Asserts that the given input is an integer.
      *
@@ -98,7 +98,7 @@ export class NumberUtility {
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
      * Default value is `false`.
-     * @param {string|unknown} message - Optional message for the error thrown when the input is not a positive integer.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a positive integer.
      *
      * @returns {asserts input is number} Asserts that the given input is a positive integer.
      *
@@ -124,7 +124,7 @@ export class NumberUtility {
      *
      * @param {number} min - Minimum value to check.
      * @param {number} max - Maximum value to check.
-     * @param {string|unknown} message - Optional message for the error thrown when the given min is not less than or equal to the given max.
+     * @param {string|undefined} message - Optional message for the error thrown when the given min is not less than or equal to the given max.
      *
      * @returns {void}
      *
@@ -153,7 +153,7 @@ export class NumberUtility {
      * @param {number} value - The value to check. Must be a finite number.
      * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
      * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
-     * @param {string|unknown} message - Optional message for the error thrown when the given value is not within the range [min, max] (inclusive).
+     * @param {string|undefined} message - Optional message for the error thrown when the given value is not within the range [min, max] (inclusive).
      *
      * @returns {void}
      *
