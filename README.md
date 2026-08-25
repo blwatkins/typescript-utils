@@ -1,6 +1,6 @@
 # TypeScript Utilities
 
-A toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
+A toolkit of general-purpose TypeScript and JavaScript utilities.
 
 ## Documentation
 

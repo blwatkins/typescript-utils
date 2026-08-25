@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.3",
   "license": "MIT",
   "private": false,
-  "description": "A toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.",
+  "description": "A toolkit of general-purpose TypeScript and JavaScript utilities.",
   "author": {
     "name": "Brittni Watkins",
     "url": "https://blwatkins.github.io/"
