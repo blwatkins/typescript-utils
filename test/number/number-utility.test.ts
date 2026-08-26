@@ -378,6 +378,49 @@ describe('NumberUtility', (): void => {
         );
     });
 
+    describe('assertValidRange', (): void => {
+        describe('Should throw the correct error when arguments are not finite numbers', (): void => {
+            const failureScenarios: Scenario[] = [
+                {
+                    label: 'Non-number inputs',
+                    inputs: nonNumberInputs,
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Non-finite number inputs',
+                    inputs: nonFiniteNumberInputs,
+                    expected: PrimitiveTypeError
+                }
+            ];
+
+            describe.each(
+                failureScenarios
+            )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('Min argument', (): void => {
+                    test.each(
+                        testCases
+                    )('assertValidRange($input, max) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                        expect((): void => {
+                            NumberUtility.assertValidRange(testInput as number, Number.MAX_SAFE_INTEGER)
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Max argument', (): void => {
+                    test.each(
+                        testCases
+                    )('assertValidRange(min, $input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                        expect((): void => {
+                            NumberUtility.assertValidRange(Number.MIN_SAFE_INTEGER, testInput as number)
+                        }).toThrow(testExpected);
+                    });
+                });
+            });
+        });
+    });
+
     describe('isFiniteNumber', (): void => {
         const scenarios: Scenario[] = [
             {
