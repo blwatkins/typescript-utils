@@ -20,7 +20,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { NumberUtility, PrimitiveTypeError, StaticInstanceError } from '../../src';
+import {NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError} from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
 
@@ -152,43 +152,228 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        function assertPositiveIntegerWithZeroInclusive(input: unknown, message?: string): void {
-            NumberUtility.assertPositiveInteger(input, true, message);
-        }
-
-        function assertPositiveInteger(input: unknown, message?: string): void {
-            NumberUtility.assertPositiveInteger(input, false, message);
-        }
-
-        testAssertMethod(
-            assertPositiveIntegerWithZeroInclusive,
-            [
-                ...successScenarios,
-                {
-                    label: 'Zero inputs',
-                    inputs: zeroInputs,
-                    expected: undefined
-                }
-            ],
-            failureScenarios,
-            (input: unknown): string => {
-                return `Expected a positive integer (zeroInclusive=true), but received: ${typeof input}.`;
+        describe('assertPositiveInteger with zero inclusive', () => {
+            function assertPositiveIntegerWithZeroInclusive(input: unknown, message?: string): void {
+                NumberUtility.assertPositiveInteger(input, true, message);
             }
-        );
 
-        testAssertMethod(
-            assertPositiveInteger,
-            successScenarios,
-            [
-                ...failureScenarios,
+            testAssertMethod(
+                assertPositiveIntegerWithZeroInclusive,
+                [
+                    ...successScenarios,
+                    {
+                        label: 'Zero inputs',
+                        inputs: zeroInputs,
+                        expected: undefined
+                    }
+                ],
+                failureScenarios,
+                (input: unknown): string => {
+                    return `Expected a positive integer (zeroInclusive=true), but received: ${typeof input}.`;
+                }
+            );
+        });
+
+        describe('assertPositiveInteger', (): void => {
+            function assertPositiveInteger(input: unknown, message?: string): void {
+                NumberUtility.assertPositiveInteger(input, false, message);
+            }
+
+            testAssertMethod(
+                assertPositiveInteger,
+                successScenarios,
+                [
+                    ...failureScenarios,
+                    {
+                        label: 'Zero inputs',
+                        inputs: zeroInputs,
+                        expected: PrimitiveTypeError
+                    }
+                ],
+                (input: unknown): string => {
+                    return `Expected a positive integer (zeroInclusive=false), but received: ${typeof input}.`;
+                }
+            );
+        });
+    });
+
+    describe('assertInRange', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Unequal min and max',
+                inputs: [
+                    { value: Number.MIN_SAFE_INTEGER - 1, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER + 1, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: -100, min: -10, max: 10 },
+                    { value: 100, min: -10, max: 10 },
+                    { value: -10 - 1, min: -10, max: 10 },
+                    { value: 10 + 1, min: -10, max: 10 },
+                    { value: -10 - 1, min: -10, max: -1 },
+                    { value: -1 + 1, min: -10, max: -1 },
+                    { value: 0, min: 10, max: 100 },
+                    { value: 200, min: 10, max: 100 },
+                    { value: 10 - 1, min: 10, max: 100 },
+                    { value: 100 + 1, min: 10, max: 100 },
+                    { value: -11.123, min: -10.123, max: 10.123 },
+                    { value: 11.123, min: -10.123, max: 10.123 },
+                    { value: -10.123 - 0.5, min: -10.123, max: 10.123 },
+                    { value: 10.123 + 0.5, min: -10.123, max: 10.123 },
+                    { value: -11.123, min: -10.123, max: -1.123 },
+                    { value: 11.123, min: -10.123, max: -1.123 },
+                    { value: -10.123 - 0.5, min: -10.123, max: -1.123 },
+                    { value: -1.132 + 0.5, min: -10.123, max: -1.123 },
+                    { value: 5, min: 10.123, max: 100.123 },
+                    { value: 500, min: 10.123, max: 100.123 },
+                    { value: 10.123 - 0.5, min: 10.123, max: 100.123 },
+                    { value: 100.123 + 0.5, min: 10.123, max: 100.123 },
+                    { value: 9.5, min: 10, max: 100 },
+                    { value: 50, min: 10.5, max: 25 },
+                    { value: 0, min: 10, max: 100.5 }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'Equal min and max',
+                inputs: [
+                    { value: 1, min: 0, max: 0 },
+                    { value: -1, min: 0, max: 0 },
+                    { value: 0.0001, min: 0, max: 0 },
+                    { value: -0.0001, min: 0, max: 0 },
+                    { value: 250, min: 100, max: 100 },
+                    { value: 10, min: 100, max: 100 },
+                    { value: -101, min: -100, max: -100 },
+                    { value: -99, min: -100, max: -100 },
+                    { value: 0, min: -100, max: -100 },
+                    { value: 100, min: -100, max: -100 },
+                    { value: 100.123001, min: 100.123, max: 100.123 },
+                    { value: -100.123001, min: -100.123, max: -100.123 },
+                    { value: Number.MIN_SAFE_INTEGER + 1, min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER + 1, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MIN_VALUE + Number.EPSILON, min: Number.MIN_VALUE, max: Number.MIN_VALUE },
+                    { value: Number.EPSILON + Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
+                ],
+                expected: ValueRangeError
+            }
+        ]
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Unequal min and max',
+                inputs: [
+                    { value: 0, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: 0, min: -10, max: 10 },
+                    { value: -10, min: -10, max: 10 },
+                    { value: 10, min: -10, max: 10 },
+                    { value: -5, min: -10, max: -1 },
+                    { value: -10, min: -10, max: -1 },
+                    { value: -1, min: -10, max: -1 },
+                    { value: 50, min: 10, max: 100 },
+                    { value: 10, min: 10, max: 100 },
+                    { value: 100, min: 10, max: 100 },
+                    { value: 0, min: -10.123, max: 10.123 },
+                    { value: -10.123, min: -10.123, max: 10.123 },
+                    { value: 10.123, min: -10.123, max: 10.123 },
+                    { value: -5, min: -10.123, max: -1.123 },
+                    { value: -10.123, min: -10.123, max: -1.123 },
+                    { value: -1.132, min: -10.123, max: -1.123 },
+                    { value: 50, min: 10.123, max: 100.123 },
+                    { value: 10.123, min: 10.123, max: 100.123 },
+                    { value: 100.123, min: 10.123, max: 100.123 },
+                    { value: 50.5, min: 10, max: 100 },
+                    { value: 50, min: 10.5, max: 100 },
+                    { value: 50, min: 10, max: 100.5 }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Equal min and max',
+                inputs: [
+                    { value: 0, min: 0, max: 0 },
+                    { value: 100, min: 100, max: 100 },
+                    { value: -100, min: -100, max: -100 },
+                    { value: 100.123, min: 100.123, max: 100.123 },
+                    { value: -100.123, min: -100.123, max: -100.123 },
+                    { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MAX_VALUE, min: Number.MAX_VALUE, max: Number.MAX_VALUE },
+                    { value: Number.MIN_VALUE, min: Number.MIN_VALUE, max: Number.MIN_VALUE },
+                    { value: Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
+                ],
+                expected: undefined
+            }
+        ];
+
+        function assertInRange(input: unknown, message?: string): void {
+            const inputObject = input as { value: number; min: number; max: number; };
+            NumberUtility.assertInRange(inputObject.value, inputObject.min, inputObject.max, message);
+        }
+
+        describe('Should throw the correct error when arguments are not finite numbers', (): void => {
+            const failureScenarios: Scenario[] = [
                 {
-                    label: 'Zero inputs',
-                    inputs: zeroInputs,
+                    label: 'Non-number inputs',
+                    inputs: nonNumberInputs,
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Non-finite number inputs',
+                    inputs: nonFiniteNumberInputs,
                     expected: PrimitiveTypeError
                 }
-            ],
+            ];
+
+            describe.each(
+                failureScenarios
+            )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('Value argument', (): void => {
+                    test.each(
+                        testCases
+                    )('assertInRange($input, min, max) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                        expect((): void => {
+                            NumberUtility.assertInRange(testInput as number, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Min argument', (): void => {
+                    test.each(
+                        testCases
+                    )('assertInRange(value, $input, max) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                        expect((): void => {
+                            NumberUtility.assertInRange(0, testInput as number, Number.MAX_SAFE_INTEGER)
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Max argument', (): void => {
+                    test.each(
+                        testCases
+                    )('assertInRange(value, min, $input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                        expect((): void => {
+                            NumberUtility.assertInRange(0, Number.MIN_SAFE_INTEGER, testInput as number)
+                        }).toThrow(testExpected);
+                    });
+                });
+            });
+        });
+
+        test('Should throw the correct error when min and max are not a valid range', (): void => {
+            expect((): void => {
+               NumberUtility.assertInRange(0, 10, -10)
+            }).toThrow(ValueRangeError);
+        });
+
+        testAssertMethod(
+            assertInRange,
+            successScenarios,
+            failureScenarios,
             (input: unknown): string => {
-                return `Expected a positive integer (zeroInclusive=false), but received: ${typeof input}.`;
+                const inputObject = input as { value: number; min: number; max: number; };
+                return `Value ${inputObject.value} must be in the range [${inputObject.min}, ${inputObject.max}].`;
             }
         );
     });
