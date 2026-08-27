@@ -19,8 +19,8 @@ It is a live reflection of my current goals for the project, and it is subject t
 - [x] String type checks and assertions
 - [x] Number type checks and assertions
 - [x] Deterministic random number generation
-- [ ] Random number selection
-- [ ] Random element selection
+- [x] Random number selection
+- [x] Random element selection
 - [ ] Range type
 - [ ] Generic list shuffle utility
 - [ ] Random selectors
