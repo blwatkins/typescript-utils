@@ -215,14 +215,14 @@ describe('WeightedListUtility', (): void => {
             return {
                 ...scenario,
                 expected: undefined
-            }
+            };
         });
 
         const assertFailureScenarios: Scenario[] = failureScenarios.map((scenario: Scenario): Scenario => {
             return {
                 ...scenario,
                 expected: SchemaTypeError
-            }
+            };
         });
 
         testAssertMethod(
@@ -251,7 +251,7 @@ describe('WeightedListUtility', (): void => {
             return {
                 ...scenario,
                 expected: undefined
-            }
+            };
         });
 
         const assertFailureScenarios: Scenario[] = [
@@ -261,7 +261,7 @@ describe('WeightedListUtility', (): void => {
             return {
                 ...scenario,
                 expected: SchemaTypeError
-            }
+            };
         });
 
         testAssertMethod(

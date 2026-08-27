@@ -22,7 +22,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import {NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError} from '../../src';
+import { NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
 
@@ -256,7 +256,7 @@ describe('NumberUtility', (): void => {
                 ],
                 expected: ValueRangeError
             }
-        ]
+        ];
 
         const successScenarios: Scenario[] = [
             {
@@ -324,12 +324,12 @@ describe('NumberUtility', (): void => {
 
         test('Should throw the correct error when min and max are not a valid range', (): void => {
             expect((): void => {
-                NumberUtility.assertInRange(0, 10, -10)
+                NumberUtility.assertInRange(0, 10, -10);
             }).toThrow(ValueRangeError);
         });
 
         describe('Should throw the correct error when arguments are not finite numbers', (): void => {
-            const failureScenarios: Scenario[] = [
+            const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Non-number inputs',
                     inputs: nonNumberInputs,
@@ -343,16 +343,16 @@ describe('NumberUtility', (): void => {
             ];
 
             describe.each(
-                failureScenarios
-            )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                 describe('Value argument', (): void => {
                     test.each(
                         testCases
-                    )('assertInRange($input, min, max) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                    )('assertInRange($input, min, max) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            NumberUtility.assertInRange(testInput as number, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+                            NumberUtility.assertInRange(testInput as number, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
                         }).toThrow(testExpected);
                     });
                 });
@@ -360,9 +360,9 @@ describe('NumberUtility', (): void => {
                 describe('Min argument', (): void => {
                     test.each(
                         testCases
-                    )('assertInRange(value, $input, max) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                    )('assertInRange(value, $input, max) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            NumberUtility.assertInRange(0, testInput as number, Number.MAX_SAFE_INTEGER)
+                            NumberUtility.assertInRange(0, testInput as number, Number.MAX_SAFE_INTEGER);
                         }).toThrow(testExpected);
                     });
                 });
@@ -370,9 +370,9 @@ describe('NumberUtility', (): void => {
                 describe('Max argument', (): void => {
                     test.each(
                         testCases
-                    )('assertInRange(value, min, $input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                    )('assertInRange(value, min, $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            NumberUtility.assertInRange(0, Number.MIN_SAFE_INTEGER, testInput as number)
+                            NumberUtility.assertInRange(0, Number.MIN_SAFE_INTEGER, testInput as number);
                         }).toThrow(testExpected);
                     });
                 });
@@ -429,7 +429,7 @@ describe('NumberUtility', (): void => {
                 ],
                 expected: ValueRangeError
             }
-        ]
+        ];
 
         function assertValidRange(input: unknown, message?: string): void {
             const inputObject = input as { min: number; max: number; };
@@ -447,7 +447,7 @@ describe('NumberUtility', (): void => {
         );
 
         describe('Should throw the correct error when arguments are not finite numbers', (): void => {
-            const failureScenarios: Scenario[] = [
+            const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Non-number inputs',
                     inputs: nonNumberInputs,
@@ -461,16 +461,16 @@ describe('NumberUtility', (): void => {
             ];
 
             describe.each(
-                failureScenarios
-            )('%# - $label', ({inputs: scenarioInputs, expected: scenarioExpected}: Scenario): void => {
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
                 describe('Min argument', (): void => {
                     test.each(
                         testCases
-                    )('assertValidRange($input, max) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                    )('assertValidRange($input, max) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            NumberUtility.assertValidRange(testInput as number, Number.MAX_SAFE_INTEGER)
+                            NumberUtility.assertValidRange(testInput as number, Number.MAX_SAFE_INTEGER);
                         }).toThrow(testExpected);
                     });
                 });
@@ -478,9 +478,9 @@ describe('NumberUtility', (): void => {
                 describe('Max argument', (): void => {
                     test.each(
                         testCases
-                    )('assertValidRange(min, $input) should throw $expected', ({input: testInput, expected: testExpected}: TestCase): void => {
+                    )('assertValidRange(min, $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            NumberUtility.assertValidRange(Number.MIN_SAFE_INTEGER, testInput as number)
+                            NumberUtility.assertValidRange(Number.MIN_SAFE_INTEGER, testInput as number);
                         }).toThrow(testExpected);
                     });
                 });

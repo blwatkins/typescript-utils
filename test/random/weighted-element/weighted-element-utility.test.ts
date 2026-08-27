@@ -151,7 +151,7 @@ describe('WeightedElementUtility', (): void => {
             return {
                 ...scenario,
                 expected: undefined
-            }
+            };
         });
 
         testAssertMethod(
