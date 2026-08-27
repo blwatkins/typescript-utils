@@ -16,8 +16,8 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
-    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    runs-on: 'ubuntu-latest'
+    timeout-minutes: 360
     permissions:
       actions: read
       contents: read
@@ -27,10 +27,6 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'actions', 'javascript-typescript', 'ruby' ]
-        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift' ]
-        # Use only 'java-kotlin' to analyze code written in Java, Kotlin or both
-        # Use only 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
     steps:
       - name: Checkout repository

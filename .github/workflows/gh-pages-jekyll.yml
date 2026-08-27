@@ -28,7 +28,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1.321.0
         with:
-          bundler: 4.0.8
+          bundler: 4.0.16
           bundler-cache: true
           working-directory: docs
       - name: Setup Pages
