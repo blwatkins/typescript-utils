@@ -44,6 +44,10 @@ import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case
 describe('StringUtility', (): void => {
     testStaticClassConstructor('StringUtility', StringUtility as unknown as new () => unknown, Error);
 
+    test.todo('assertStringType');
+
+    test.todo('assertSingleLineTrimmedString');
+
     describe('isString', (): void => {
         const scenarios: Scenario[] = [
             {
