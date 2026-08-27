@@ -310,6 +310,22 @@ describe('NumberUtility', (): void => {
             NumberUtility.assertInRange(inputObject.value, inputObject.min, inputObject.max, message);
         }
 
+        testAssertMethod(
+            assertInRange,
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                const inputObject = input as { value: number; min: number; max: number; };
+                return `Value ${inputObject.value} must be in the range [${inputObject.min}, ${inputObject.max}].`;
+            }
+        );
+
+        test('Should throw the correct error when min and max are not a valid range', (): void => {
+            expect((): void => {
+                NumberUtility.assertInRange(0, 10, -10)
+            }).toThrow(ValueRangeError);
+        });
+
         describe('Should throw the correct error when arguments are not finite numbers', (): void => {
             const failureScenarios: Scenario[] = [
                 {
@@ -360,25 +376,74 @@ describe('NumberUtility', (): void => {
                 });
             });
         });
-
-        test('Should throw the correct error when min and max are not a valid range', (): void => {
-            expect((): void => {
-               NumberUtility.assertInRange(0, 10, -10)
-            }).toThrow(ValueRangeError);
-        });
-
-        testAssertMethod(
-            assertInRange,
-            successScenarios,
-            failureScenarios,
-            (input: unknown): string => {
-                const inputObject = input as { value: number; min: number; max: number; };
-                return `Value ${inputObject.value} must be in the range [${inputObject.min}, ${inputObject.max}].`;
-            }
-        );
     });
 
     describe('assertValidRange', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Unequal min and max',
+                inputs: [
+                    { min: 0, max: 10 },
+                    { min: Number.MIN_SAFE_INTEGER, max: 0 },
+                    { min: 0, max: Number.MAX_SAFE_INTEGER },
+                    { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                    { min: -500, max: -100 },
+                    { min: -5.123, max: -3.123 },
+                    { min: 10, max: 100 },
+                    { min: 10.123, max: 100.123 }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Equal min and max',
+                inputs: [
+                    { min: 0, max: 0 },
+                    { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
+                    { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { min: Number.MAX_VALUE, max: Number.MAX_VALUE },
+                    { min: 5, max: 5 },
+                    { min: 5.123, max: 5.123 },
+                    { min: -5, max: -5 },
+                    { min: -5.123, max: -5.123 }
+                ],
+                expected: undefined
+            }
+        ];
+
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Min greater than max',
+                inputs: [
+                    { max: 0, min: 10 },
+                    { max: Number.MIN_SAFE_INTEGER, min: 0 },
+                    { max: 0, min: Number.MAX_SAFE_INTEGER },
+                    { max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER },
+                    { max: -Number.MAX_VALUE, min: Number.MAX_VALUE },
+                    { max: -500, min: -100 },
+                    { max: -5.123, min: -3.123 },
+                    { max: 10, min: 100 },
+                    { max: 10.123, min: 100.123 }
+                ],
+                expected: ValueRangeError
+            }
+        ]
+
+        function assertValidRange(input: unknown, message?: string): void {
+            const inputObject = input as { min: number; max: number; };
+            NumberUtility.assertValidRange(inputObject.min, inputObject.max, message);
+        }
+
+        testAssertMethod(
+            assertValidRange,
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                const inputObject = input as { min: number; max: number; };
+                return `Min (${inputObject.min}) must be less than or equal to max (${inputObject.max}).`;
+            }
+        );
+
         describe('Should throw the correct error when arguments are not finite numbers', (): void => {
             const failureScenarios: Scenario[] = [
                 {
