@@ -20,6 +20,14 @@ minima:
   hide_site_feed_link: true
   show_excerpts: false
   social_links:
+    - title: "GitHub Pages Home"
+      icon: house
+      icon_pack: regular
+      url: "https://blwatkins.github.io/"
+    - title: "Beehiiv Newsletter"
+      icon: envelope
+      icon_pack: regular
+      url: "https://brittniwatkins.beehiiv.com/"
     - title: "@blwatkins/utils"
       icon: npm
       icon_pack: brands
@@ -28,10 +36,6 @@ minima:
       icon: git-alt
       icon_pack: brands
       url: "https://github.com/blwatkins/typescript-utils"
-    - title: "GitHub Pages"
-      icon: square-github
-      icon_pack: brands
-      url: "https://blwatkins.github.io/"
     - title: GitHub
       icon: github
       icon_pack: brands
@@ -44,8 +48,14 @@ minima:
       icon: linkedin
       icon_pack: brands
       url: "https://www.linkedin.com/in/brittni-watkins/"
+    - title: Ko-fi
+      icon: ko-fi
+      icon_pack: brands
+      url: "https://ko-fi.com/brittniwatkins"
   nav_pages:
     - index.md
+    - releases.md
+    - roadmap.md
 
 title: "TypeScript Utilities"
 description: "A toolkit of general-purpose TypeScript and JavaScript utilities."
