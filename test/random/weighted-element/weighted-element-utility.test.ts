@@ -31,13 +31,13 @@ import {
     WeightedList
 } from '../../../src';
 
+import { testAssertMethod } from '../../utils/assert/assert-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
 import { nonObjectInputs } from '../../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
-import { testAssertMethod } from '../../utils/assert/assert-tests';
 
 describe('WeightedElementUtility', (): void => {
     testStaticClassConstructor('WeightedElementUtility', WeightedElementUtility as unknown as new () => unknown, StaticInstanceError);
@@ -129,7 +129,9 @@ describe('WeightedElementUtility', (): void => {
             inputs: [
                 { value: 'hello', weight: 0 },
                 { value: 'hi', weight: 0.5 },
-                { value: 'hey', weight: 1 }
+                { value: 'hey', weight: 1 },
+                { value: 100, weight: 0.5 },
+                { value: { key: 'value' }, weight: 1 }
             ],
             expected: true
         }
@@ -142,14 +144,14 @@ describe('WeightedElementUtility', (): void => {
         };
     });
 
-    const assertSuccessScenarios: Scenario[] = successScenarios.map((scenario: Scenario): Scenario => {
-        return {
-            ...scenario,
-            expected: undefined
-        }
-    });
-
     describe('assertGenericWeightedElement', (): void => {
+        const assertSuccessScenarios: Scenario[] = successScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: undefined
+            }
+        });
+
         testAssertMethod(
             WeightedElementUtility.assertGenericWeightedElement.bind(WeightedElementUtility),
             assertSuccessScenarios,
@@ -171,7 +173,18 @@ describe('WeightedElementUtility', (): void => {
 
         testAssertMethod(
             assertWeightedElement,
-            assertSuccessScenarios,
+            [
+                {
+                    label: 'Valid weighted element objects',
+                    inputs: [
+                        { value: 'hello', weight: 0 },
+                        { value: 'hi', weight: 0.5 },
+                        { value: 'hey', weight: 1 },
+                        { value: 'single line', weight: 0.5 }
+                    ],
+                    expected: true
+                }
+            ],
             [
                 ...assertFailureScenarios,
                 {
