@@ -9,8 +9,8 @@ A toolkit of general-purpose TypeScript and JavaScript utilities.
 
 ## History and Origins
 
-Development for this project originally began in March 2022 when I started creating utility classes in JavaScript to use across my personal algorithmic generative art projects.
-Over the years, the utilities have been refined, expanded, updated, and organized into a series of cohesive libraries that can be used in a variety of projects.
+Development for this project originally began in March 2022, when I started creating utility classes in JavaScript to use in my generative art algorithms.
+Over the years, the utilities have been refined, expanded, and organized into a series of cohesive libraries that can be used in a variety of projects.
 
 ## License
 
