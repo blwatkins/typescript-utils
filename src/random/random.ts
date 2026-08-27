@@ -16,8 +16,12 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
+import { TypeAssertions } from '../assert';
+import { PrimitiveTypeError, StaticInstanceError } from '../error';
 import { NumberUtility } from '../number';
 
 import { WeightedList, WeightedListUtility } from './weighted-element';
@@ -42,12 +46,13 @@ export class Random {
     /**
      * Private constructor.
      *
-     * @throws {Error} Random is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link Random} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('Random is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('Random is a static class and cannot be instantiated.');
     }
 
     /**
@@ -55,18 +60,13 @@ export class Random {
      *
      * @param {() => number} rng - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
-     * @returns {void}
-     *
-     * @throws {TypeError} When the given random number generator is not a function.
+     * @throws {PrimitiveTypeError} When the given random number generator is not a function.
      *
      * @public
      * @since 0.1.0
      */
     public static set randomNumberGenerator(rng: () => number) {
-        if (typeof rng !== 'function') {
-            throw new TypeError('Random number generator must be a function');
-        }
-
+        TypeAssertions.assertFunctionType(rng, 'Random number generator must be a function.');
         Random.#rng = rng;
     }
 
@@ -90,15 +90,15 @@ export class Random {
      *
      * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive).
      *
-     * @throws {TypeError} When `min` is not a finite number.
-     * @throws {TypeError} When `max` is not a finite number.
-     * @throws {RangeError} When `min` is not less than or equal `max`.
+     * @throws {PrimitiveTypeError} When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static randomFloat(min: number, max: number): number {
-        Random.#validateRange(min, max);
+        NumberUtility.assertValidRange(min, max);
         return (Random.random() * (max - min)) + min;
     }
 
@@ -113,15 +113,15 @@ export class Random {
      *
      * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
      *
-     * @throws {TypeError} When `min` is not a finite number.
-     * @throws {TypeError} When `max` is not a finite number.
-     * @throws {RangeError} When `min` is not less than or equal `max`.
+     * @throws {PrimitiveTypeError} When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
-        Random.#validateRange(min, max);
+        NumberUtility.assertValidRange(min, max);
         const floorMin: number = Math.floor(min);
         const floorMax: number = Math.floor(max);
         return Math.floor(Random.randomFloat(floorMin, floorMax));
@@ -140,9 +140,9 @@ export class Random {
      *
      * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
      *
-     * @throws {TypeError} When `min` is not a finite number.
-     * @throws {TypeError} When `max` is not a finite number.
-     * @throws {RangeError} When `min` is not less than or equal `max`.
+     * @throws {PrimitiveTypeError} When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      *
      * @public
      * @since 0.1.0
@@ -159,11 +159,14 @@ export class Random {
      *
      * @returns {boolean} A random boolean value.
      *
+     * @throws {PrimitiveTypeError} When `chanceOfTrue` is not a finite number.
+     * @throws {ValueRangeError} When `chanceOfTrue` is not in the range [0, 1] (inclusive).
+     *
      * @public
      * @since 0.1.0
      */
     public static randomBoolean(chanceOfTrue: number = 0.5): boolean {
-        Random.#validateChanceOfTrue(chanceOfTrue);
+        NumberUtility.assertInRange(chanceOfTrue, 0, 1, 'Chance of true must be between 0 and 1.');
         return Random.random() < chanceOfTrue;
     }
 
@@ -174,11 +177,18 @@ export class Random {
      *
      * @returns {Type} A random element from the array.
      *
+     * @throws {PrimitiveTypeError} When elements is not a non-empty array.
+     *
      * @public
      * @since 0.1.0
      */
     public static randomElement<Type>(elements: Type[]): Type {
-        Random.#validateElements(elements);
+        TypeAssertions.assertArrayType(elements);
+
+        if (elements.length === 0) {
+            throw new PrimitiveTypeError('Elements must be a non-empty array.');
+        }
+
         return elements[Random.randomInt(0, elements.length)];
     }
 
@@ -211,74 +221,5 @@ export class Random {
         }
 
         return elements[elements.length - 1].value;
-    }
-
-    /**
-     * Validate min and max values for random number generation.
-     *
-     * @see {@link NumberUtility.isFiniteNumber}
-     *
-     * @param {unknown} min - Minimum value to validate. Should be a finite number less than or equal to the given max.
-     * @param {unknown} max - Maximum value to validate. Should be a finite number greater than or equal to the given min.
-     *
-     * @returns {void}
-     *
-     * @throws {TypeError} When the given min is not a finite number.
-     * @throws {TypeError} When the given max is not a finite number.
-     * @throws {RangeError} When the given min is not less than or equal to the given max.
-     *
-     * @private
-     */
-    static #validateRange(min: unknown, max: unknown): void {
-        if (!NumberUtility.isFiniteNumber(min)) {
-            throw new TypeError('min must be a finite number');
-        }
-
-        if (!NumberUtility.isFiniteNumber(max)) {
-            throw new TypeError('max must be a finite number');
-        }
-
-        if (min > max) {
-            throw new RangeError(`min (${min}) must be less than or equal to max (${max})`);
-        }
-    }
-
-    /**
-     * Validate chanceOfTrue input for random boolean generation.
-     *
-     * @param {unknown} chanceOfTrue - Chance of returning `true`. Should be a finite number between 0 and 1 (inclusive).
-     *
-     * @returns {void}
-     *
-     * @throws {TypeError} When the given chanceOfTrue is not a finite number.
-     * @throws {RangeError} When the given chanceOfTrue is not between 0 and 1 (inclusive).
-     *
-     * @private
-     */
-    static #validateChanceOfTrue(chanceOfTrue: unknown): void {
-        if (!NumberUtility.isFiniteNumber(chanceOfTrue)) {
-            throw new TypeError('chanceOfTrue must be a finite number');
-        }
-
-        if (chanceOfTrue < 0 || chanceOfTrue > 1) {
-            throw new RangeError(`chance (${chanceOfTrue}) must be between 0 and 1`);
-        }
-    }
-
-    /**
-     * Validate elements input for random element selection.
-     *
-     * @param {unknown} elements - Elements to select from. Should be a non-empty array.
-     *
-     * @returns {void}
-     *
-     * @throws {TypeError} When the given elements is not a non-empty array.
-     *
-     * @private
-     */
-    static #validateElements(elements: unknown): void {
-        if (!elements || !Array.isArray(elements) || elements.length === 0) {
-            throw new TypeError('elements must be a non-empty array');
-        }
     }
 }

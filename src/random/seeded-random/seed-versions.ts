@@ -16,9 +16,13 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
+import { StaticInstanceError, ValueRangeError } from '../../error';
 import { NumberUtility } from '../../number';
+import { StringUtility } from '../../string';
 
 /**
  * A seed version defines a specific set of offsets for the FNV-1a hashing algorithm.
@@ -65,12 +69,13 @@ export class SeedVersions {
     /**
      * Private constructor.
      *
-     * @throws {Error} SeedVersions is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link SeedVersions} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('SeedVersions is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('SeedVersions is a static class and cannot be instantiated.');
     }
 
     /**
@@ -86,17 +91,46 @@ export class SeedVersions {
     }
 
     /**
+     * Validate and assert that the given index is a valid seed version index.
+     *
+     * @see {@link SeedVersions.isValidIndex}
+     *
+     * @param {unknown} index - The index to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the index is not a valid index.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When the index is not a positive integer or zero.
+     * @throws {ValueRangeError} When the index is not a valid seed version index.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    static assertValidIndex(index: number, message?: string): void {
+        if (!SeedVersions.isValidIndex(index)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError(`Index ${index.toString(10)} out of bounds for valid seed version index [0-${SeedVersions.size - 1}].`);
+        }
+    }
+
+    /**
      * Is the given index a valid seed version?
      *
      * @param {number} index - The index to check.
      *
      * @returns {boolean} `true` if the given index is a valid seed version; `false` otherwise.
      *
+     * @throws {PrimitiveTypeError} When index is not a positive integer or zero.
+     *
      * @public
      * @since 0.1.0
      */
     static isValidIndex(index: number): boolean {
-        return NumberUtility.isPositiveInteger(index, true) && index < seedVersions.length;
+        NumberUtility.assertPositiveInteger(index, true);
+        return index < seedVersions.length;
     }
 
     /**
@@ -107,16 +141,14 @@ export class SeedVersions {
      *
      * @returns {SeedVersion} The seed version with the given index.
      *
-     * @throws {RangeError} When the index is not a valid seed version index.
+     * @throws {PrimitiveTypeError} When the input is not a positive integer or zero.
+     * @throws {ValueRangeError} When the index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0
      */
     static getVersion(index: number): SeedVersion {
-        if (!SeedVersions.isValidIndex(index)) {
-            throw new RangeError(`SeedVersion ${index} does not exist`);
-        }
-
+        SeedVersions.assertValidIndex(index, `Seed version ${index} does not exist.`);
         return seedVersions[index];
     }
 }

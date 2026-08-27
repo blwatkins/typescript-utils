@@ -16,18 +16,20 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { describe, test, expect } from 'vitest';
 
-import { MathUtility } from '../../src';
+import { MathUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
 import { floatInputs, negativeIntegerInputs, nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
-import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('MathUtility', (): void => {
-    testStaticClassConstructor('MathUtility', MathUtility as unknown as new () => unknown, Error);
+    testStaticClassConstructor('MathUtility', MathUtility as unknown as new () => unknown, StaticInstanceError);
 
     describe('constrain', (): void => {
         describe('constrain should return the proper value for finite number arguments', (): void => {
@@ -64,13 +66,13 @@ describe('MathUtility', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-number inputs',
-                        inputs: [...nonNumberInputs],
-                        expected: TypeError
+                        inputs: nonNumberInputs,
+                        expected: PrimitiveTypeError
                     },
                     {
                         label: 'Non-finite number inputs',
-                        inputs: [...nonFiniteNumberInputs],
-                        expected: TypeError
+                        inputs: nonFiniteNumberInputs,
+                        expected: PrimitiveTypeError
                     }
                 ];
 
@@ -121,10 +123,10 @@ describe('MathUtility', (): void => {
                     { min: 0, max: -1 },
                     { min: 1, max: -1 },
                     { min: 1, max: 0 }
-                ])(`%# - constrain(${defaultValue}, $min, $max) should throw RangeError`, ({ min, max }: { min: number; max: number; }): void => {
+                ])(`%# - constrain(${defaultValue}, $min, $max) should throw ValueRangeError`, ({ min, max }: { min: number; max: number; }): void => {
                     expect((): void => {
                         MathUtility.constrain(defaultValue, min, max);
-                    }).toThrow(RangeError);
+                    }).toThrow(ValueRangeError);
                 });
             });
         });
@@ -154,23 +156,23 @@ describe('MathUtility', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-number inputs',
-                        inputs: [...nonNumberInputs],
-                        expected: TypeError
+                        inputs: nonNumberInputs,
+                        expected: PrimitiveTypeError
                     },
                     {
                         label: 'Non-finite number inputs',
-                        inputs: [...nonFiniteNumberInputs],
-                        expected: TypeError
+                        inputs: nonFiniteNumberInputs,
+                        expected: PrimitiveTypeError
                     },
                     {
                         label: 'Float number inputs',
-                        inputs: [...floatInputs],
-                        expected: TypeError
+                        inputs: floatInputs,
+                        expected: PrimitiveTypeError
                     },
                     {
                         label: 'Negative integer inputs',
-                        inputs: [...negativeIntegerInputs],
-                        expected: TypeError
+                        inputs: negativeIntegerInputs,
+                        expected: PrimitiveTypeError
                     }
                 ];
 
@@ -226,11 +228,11 @@ describe('MathUtility', (): void => {
                     test('columns and rows parameters cannot be zero', (): void => {
                         expect((): void => {
                             MathUtility.toFlatIndex(defaultX, defaultY, 0, defaultRows);
-                        }).toThrow(TypeError);
+                        }).toThrow(PrimitiveTypeError);
 
                         expect((): void => {
                             MathUtility.toFlatIndex(defaultX, defaultY, defaultColumns, 0);
-                        }).toThrow(TypeError);
+                        }).toThrow(PrimitiveTypeError);
                     });
                 });
             });
@@ -250,10 +252,10 @@ describe('MathUtility', (): void => {
                     { x: 4, y: 9, columns: 10, rows: 5 },
                     { x: 10, y: 5, columns: 5, rows: 10 },
                     { x: 9, y: 4, columns: 5, rows: 10 }
-                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw RangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
+                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw ValueRangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
                     expect((): void => {
                         MathUtility.toFlatIndex(x, y, columns, rows);
-                    }).toThrow(RangeError);
+                    }).toThrow(ValueRangeError);
                 });
             });
 
@@ -264,10 +266,10 @@ describe('MathUtility', (): void => {
                     { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 2 },
                     { x: 0, y: 0, columns: 2, rows: Number.MAX_SAFE_INTEGER },
                     { x: 0, y: 0, columns: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)), rows: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)) }
-                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw RangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
+                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw ValueRangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
                     expect((): void => {
                         MathUtility.toFlatIndex(x, y, columns, rows);
-                    }).toThrow(RangeError);
+                    }).toThrow(ValueRangeError);
                 });
             });
         });

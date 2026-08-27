@@ -1,6 +1,6 @@
 # TypeScript Utilities
 
-A toolkit of general-purpose TypeScript and JavaScript utilities, including validation, mathematical operations, random number generation, random selection, and type-safe guards.
+A toolkit of general-purpose TypeScript and JavaScript utilities.
 
 ## Documentation
 
@@ -9,8 +9,8 @@ A toolkit of general-purpose TypeScript and JavaScript utilities, including vali
 
 ## History and Origins
 
-Development for this project originally began in March 2022 when I started creating utility classes in JavaScript to use across my personal algorithmic generative art projects.
-Over the years, the utilities have been refined, expanded, updated, and organized into a series of cohesive libraries that can be used in a variety of projects.
+Development for this project originally began in March 2022, when I started creating utility classes in JavaScript to use in my generative art algorithms.
+Over the years, the utilities have been refined, expanded, and organized into a series of cohesive libraries that can be used in a variety of projects.
 
 ## License
 
@@ -69,7 +69,6 @@ The full text of the license is included with the project source code.
 
 ## Sources and Technical Notes
 
-- [Demonstrated Portfolio Skills](https://blwatkins.github.io/typescript-utils/portfolio-skills.html)
 - [Resources and References](https://blwatkins.github.io/typescript-utils/resources-and-references.html)
 
 ## Thank Yous
@@ -81,4 +80,4 @@ Thank you for giving me the tools, resources, opportunities, support, and inspir
 
 ----
 
-Copyright &copy; 2022-2026 Brittni Watkins.
+Copyright &copy; 2022-2026 Brittni Watkins. All rights reserved.

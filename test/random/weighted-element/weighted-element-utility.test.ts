@@ -16,6 +16,8 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { fail } from 'node:assert';
@@ -31,6 +33,7 @@ import {
     WeightedList
 } from '../../../src';
 
+import { testAssertMethod } from '../../utils/assert/assert-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
@@ -128,46 +131,37 @@ describe('WeightedElementUtility', (): void => {
             inputs: [
                 { value: 'hello', weight: 0 },
                 { value: 'hi', weight: 0.5 },
-                { value: 'hey', weight: 1 }
+                { value: 'hey', weight: 1 },
+                { value: 100, weight: 0.5 },
+                { value: { key: 'value' }, weight: 1 }
             ],
             expected: true
         }
     ];
 
+    const assertFailureScenarios: Scenario[] = failureScenarios.map((scenario: Scenario): Scenario => {
+        return {
+            ...scenario,
+            expected: SchemaTypeError
+        };
+    });
+
     describe('assertGenericWeightedElement', (): void => {
-        describe('Should correctly identify generic WeightedElement objects', (): void => {
-            describe('Failure scenarios', (): void => {
-                describe.each(
-                    failureScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - Input $input should throw a SchemaTypeError', ({ input: testInput }: TestCase): void => {
-                        expect((): void => {
-                            WeightedElementUtility.assertGenericWeightedElement(testInput);
-                        }).toThrow(SchemaTypeError);
-                    });
-                });
-            });
-
-            describe('Success scenarios', (): void => {
-                describe.each(
-                    successScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - Input $input should not throw any errors', ({ input: testInput }: TestCase): void => {
-                        expect((): void => {
-                            WeightedElementUtility.assertGenericWeightedElement(testInput);
-                        }).not.toThrow();
-                    });
-                });
-            });
+        const assertSuccessScenarios: Scenario[] = successScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: undefined
+            };
         });
+
+        testAssertMethod(
+            WeightedElementUtility.assertGenericWeightedElement.bind(WeightedElementUtility),
+            assertSuccessScenarios,
+            assertFailureScenarios,
+            (): string => {
+                return 'Input does not match schema requirements for generic WeightedElement.';
+            }
+        );
     });
 
     describe('assertWeightedElement', (): void => {
@@ -175,37 +169,39 @@ describe('WeightedElementUtility', (): void => {
             return StringUtility.isSingleLineTrimmedString(input);
         };
 
-        test('Should assert based on the given type guard and element value', (): void => {
-            const element1: WeightedElement<unknown> = { value: 'single line', weight: 1 };
-            const element2: WeightedElement<unknown> = { value: 'multi\nline', weight: 1 };
-            const element3: WeightedElement<unknown> = { value: 100, weight: 1 };
+        function assertWeightedElement(input: unknown, message?: string): void {
+            WeightedElementUtility.assertWeightedElement(input, typeGuard, message);
+        }
 
-            expect((): void => {
-                WeightedElementUtility.assertWeightedElement<string>(element1, typeGuard);
-            }).not.toThrow();
-            expect((): void => {
-                WeightedElementUtility.assertWeightedElement<string>(element2, typeGuard);
-            }).toThrow(SchemaTypeError);
-            expect((): void => {
-                WeightedElementUtility.assertWeightedElement<string>(element3, typeGuard);
-            }).toThrow(SchemaTypeError);
-        });
-
-        describe('Should throw for invalid weighted elements', (): void => {
-            describe.each(
-                failureScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should throw a SchemaTypeError', ({ input: testInput }: TestCase): void => {
-                    expect((): void => {
-                        WeightedElementUtility.assertWeightedElement(testInput, typeGuard);
-                    }).toThrow(SchemaTypeError);
-                });
-            });
-        });
+        testAssertMethod(
+            assertWeightedElement,
+            [
+                {
+                    label: 'Valid weighted element objects',
+                    inputs: [
+                        { value: 'hello', weight: 0 },
+                        { value: 'hi', weight: 0.5 },
+                        { value: 'hey', weight: 1 },
+                        { value: 'single line', weight: 0.5 }
+                    ],
+                    expected: true
+                }
+            ],
+            [
+                ...assertFailureScenarios,
+                {
+                    label: 'Valid weighted elements with incorrect value type',
+                    inputs: [
+                        { value: 'multi\nline', weight: 1 },
+                        { value: 100, weight: 1 }
+                    ],
+                    expected: SchemaTypeError
+                }
+            ],
+            (): string => {
+                return 'Input does not match schema requirements for WeightedElement.';
+            }
+        );
     });
 
     describe('isGenericWeightedElement', (): void => {

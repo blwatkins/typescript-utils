@@ -16,6 +16,8 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import Value from 'typebox/value';
@@ -24,6 +26,7 @@ import { Type } from 'typebox';
 
 import { TypeAssertions } from '../../assert';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
+import { StringUtility } from '../../string';
 
 import { WeightedElement, WeightedList, weightedElementSchema } from './weighted-element';
 
@@ -53,6 +56,7 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedElement}.
      *
      * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a generic {@link WeightedElement}.
      *
@@ -61,9 +65,13 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    public static assertGenericWeightedElement(input: unknown): asserts input is WeightedElement<unknown> {
+    public static assertGenericWeightedElement(input: unknown, message?: string): asserts input is WeightedElement<unknown> {
         if (!WeightedElementUtility.isGenericWeightedElement(input)) {
-            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedElement');
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new SchemaTypeError(message);
+            }
+
+            throw new SchemaTypeError('Input does not match schema requirements for generic WeightedElement.');
         }
     }
 
@@ -78,6 +86,7 @@ export class WeightedElementUtility {
      * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
      * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid {@link WeightedElement}.
      *
      * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a {@link WeightedElement} whose value matches the expected type or schema.
      *
@@ -87,9 +96,13 @@ export class WeightedElementUtility {
      * @public
      * @since 0.1.0
      */
-    public static assertWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): asserts input is WeightedElement<TValue> {
+    public static assertWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue, message?: string): asserts input is WeightedElement<TValue> {
         if (!WeightedElementUtility.isWeightedElement(input, valueTypeGuard)) {
-            throw new SchemaTypeError('Input does not match schema requirements for WeightedElement');
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new SchemaTypeError(message);
+            }
+
+            throw new SchemaTypeError('Input does not match schema requirements for WeightedElement.');
         }
     }
 
@@ -129,7 +142,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
-        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function');
+        TypeAssertions.assertFunctionType(valueTypeGuard, 'Value type guard must be a function.');
         return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
     }
 

@@ -16,7 +16,11 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
+
+import { PrimitiveTypeError, StaticInstanceError } from '../error';
 
 const regularExpressions = {
     singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
@@ -33,12 +37,13 @@ export class StringUtility {
     /**
      * Private constructor.
      *
-     * @throws {Error} StringUtility is a static class and cannot be instantiated.
+     * @throws {StaticInstanceError} When class is instantiated.
+     * {@link StringUtility} is a static class and cannot be instantiated.
      *
      * @private
      */
     private constructor() {
-        throw new Error('StringUtility is a static class and cannot be instantiated.');
+        throw new StaticInstanceError('StringUtility is a static class and cannot be instantiated.');
     }
 
     /**
@@ -81,6 +86,56 @@ export class StringUtility {
      */
     public static get singleLineTrimmedPattern(): RegExp {
         return regularExpressions.singleLineTrimmed;
+    }
+
+    /**
+     * Validate and assert that the given input is a string.
+     *
+     * @see {@link StringUtility.isString}
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
+     *
+     * @returns {asserts input is string} Asserts that the given input is a string.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a string.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertStringType(input: unknown, message?: string): asserts input is string {
+        if (!StringUtility.isString(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a string, but received: ${typeof input}.`);
+        }
+    }
+
+    /**
+     * Validate and assert that the given input is a single-line string that is trimmed (no leading or trailing whitespace).
+     *
+     * @see {@link StringUtility.isSingleLineTrimmedString}
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a single-line trimmed string.
+     *
+     * @returns {asserts input is string} Asserts that the given input is a single-line trimmed string.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a single-line string that is trimmed.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertSingleLineTrimmedString(input: unknown, message?: string): asserts input is string {
+        if (!StringUtility.isSingleLineTrimmedString(input)) {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a single-line trimmed string, but received: ${typeof input}.`);
+        }
     }
 
     /**
