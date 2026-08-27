@@ -6,6 +6,7 @@
   },
 
   "entryPoints": [
+    "./src/assert/index.ts",
     "./src/discriminator/index.ts",
     "./src/error/index.ts",
     "./src/math/index.ts",
@@ -51,5 +52,5 @@
 
   "treatWarningsAsErrors": true,
 
-  "customFooterHtml": "<br/>Copyright &copy; 2022-2026 Brittni Watkins."
+  "customFooterHtml": "<br/>Copyright &copy; 2022-2026 Brittni Watkins. All rights reserved."
 }

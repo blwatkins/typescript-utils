@@ -16,6 +16,8 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
@@ -23,9 +25,7 @@ import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 import {
     Random,
     RandomNumberGeneratorFactory,
-    SeededRandomNumberGenerator,
-    WeightedElementUtility,
-    WeightedList
+    SeededRandomNumberGenerator
 } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
@@ -623,11 +623,10 @@ describe('Random', (): void => {
             ])('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number; }[]; type: string; }): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
-                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
                 const expectedElements: unknown[] = input.map((item: { value: unknown; weight: number; }): unknown => item.value);
 
                 for (let i: number = 0; i < repeatTotal; i++) {
-                    selected.push(Random.randomWeightedElement(weightedElements));
+                    selected.push(Random.randomWeightedElement(input));
                 }
 
                 validateRandomElements(selected, expectedElements, type);
@@ -700,10 +699,9 @@ describe('Random', (): void => {
             ])('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number; }[]; expected: unknown[]; type: string; }): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 10);
-                const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
 
                 for (let i: number = 0; i < repeatTotal; i++) {
-                    selected.push(Random.randomWeightedElement(weightedElements));
+                    selected.push(Random.randomWeightedElement(input));
                 }
 
                 validateRandomElements(selected, expected, type);
@@ -816,8 +814,7 @@ describe('Random', (): void => {
                         return -0.1;
                     };
 
-                    const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
-                    const selected: unknown = Random.randomWeightedElement(weightedElements);
+                    const selected: unknown = Random.randomWeightedElement(input);
                     expect(selected).toBe(input[0].value);
                 });
 
@@ -826,8 +823,7 @@ describe('Random', (): void => {
                         return 1.1;
                     };
 
-                    const weightedElements: WeightedList<unknown> = WeightedElementUtility.buildWeightedList(input);
-                    const selected: unknown = Random.randomWeightedElement(weightedElements);
+                    const selected: unknown = Random.randomWeightedElement(input);
                     expect(selected).toBe(input[input.length - 1].value);
                 });
             });

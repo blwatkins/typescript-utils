@@ -16,16 +16,24 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
+
+/* ******************* TODO: DEPRECATED ******************* */
 
 /**
  * Valid discriminators for package types and interfaces.
+ *
+ * @deprecated Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */
 export enum Discriminators {
     /**
      * Discriminator value for the WeightedElement interface.
+     *
+     * @deprecated Will be removed in v0.1.0-alpha.4.
      *
      * @since 0.1.0
      */

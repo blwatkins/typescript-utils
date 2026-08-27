@@ -16,6 +16,8 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { describe } from 'vitest';
@@ -25,7 +27,7 @@ import { ValueRangeError } from '../../src';
 import { testErrorType } from '../utils/error/error-tests';
 
 const name: string = 'ValueRangeError';
-const defaultMessage: string = 'Input does not match value range requirements';
+const defaultMessage: string = 'Input does not match value range requirements.';
 
 describe(name, (): void => {
     testErrorType(name, ValueRangeError, RangeError, defaultMessage);

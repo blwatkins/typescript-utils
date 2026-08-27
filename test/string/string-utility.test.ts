@@ -16,11 +16,15 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { describe, test, expect } from 'vitest';
 
-import { StringUtility } from '../../src';
+import { PrimitiveTypeError, StringUtility } from '../../src';
+
+import { testAssertMethod } from '../utils/assert/assert-tests';
 
 import {
     emptyStringInputs,
@@ -38,11 +42,72 @@ import {
 } from '../utils/input/string-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
-
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('StringUtility', (): void => {
     testStaticClassConstructor('StringUtility', StringUtility as unknown as new () => unknown, Error);
+
+    describe('assertStringType', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'String inputs',
+                inputs: [
+                    ...emptyStringInputs,
+                    ...nonEmptyStringInputs
+                ],
+                expected: undefined
+            }
+        ];
+
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-string inputs',
+                inputs: nonStringInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        testAssertMethod(
+            StringUtility.assertStringType.bind(StringUtility),
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                return `Expected a string, but received: ${typeof input}.`;
+            }
+        );
+    });
+
+    describe('assertSingleLineTrimmedString', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Single line trimmed string inputs',
+                inputs: singleLineTrimmedInputs,
+                expected: undefined
+            }
+        ];
+
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-string inputs',
+                inputs: nonStringInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Single line trimmed string failure inputs',
+                inputs: singleLineTrimmedFailureInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        testAssertMethod(
+            StringUtility.assertSingleLineTrimmedString.bind(StringUtility),
+            successScenarios,
+            failureScenarios,
+            (input: unknown): string => {
+                return `Expected a single-line trimmed string, but received: ${typeof input}.`;
+            }
+        );
+    });
 
     describe('isString', (): void => {
         const scenarios: Scenario[] = [

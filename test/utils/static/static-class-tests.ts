@@ -16,11 +16,13 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { describe, test, expect } from 'vitest';
 
-export function testStaticClassConstructor(name: string, Constructor: new() => unknown, ErrorType: new() => Error): void {
+export function testStaticClassConstructor(name: string, Constructor: new() => unknown, ErrorType: new () => Error): void {
     describe(`new ${name}()`, (): void => {
         describe('Runtime behavior guards', (): void => {
             test(`Constructor should throw ${ErrorType.name} when instantiated at runtime`, (): void => {

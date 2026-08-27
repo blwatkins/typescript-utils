@@ -16,6 +16,8 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 /**
@@ -42,12 +44,12 @@ export class StaticInstanceError extends TypeError {
     /**
      * Get the default error message.
      *
-     * @returns {string} - The default error message for {@link StaticInstanceError}.
+     * @returns {string} The default error message for {@link StaticInstanceError}.
      *
      * @public
      * @since 0.1.0
      */
     public static get defaultMessage(): string {
-        return 'This class is static and cannot be instantiated';
+        return 'This class is static and cannot be instantiated.';
     }
 }

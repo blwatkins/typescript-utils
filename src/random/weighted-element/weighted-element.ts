@@ -16,11 +16,47 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { Type } from 'typebox';
 
-import { Discriminators, discriminatedSchema } from '../../discriminator';
+/**
+ * Minimum value for a {@link WeightedElement.weight}.
+ *
+ * @type {0}
+ * @since 0.1.0
+ */
+export const minWeight: 0 = 0 as const;
+
+/**
+ * Maximum value for a {@link WeightedElement.weight}.
+ *
+ * @type {1}
+ * @since 0.1.0
+ */
+export const maxWeight: 1 = 1 as const;
+
+/**
+ * Minimum value for a {@link WeightedElement.weight}.
+ *
+ * @deprecated Replaced by {@link minWeight}. Will be removed in v0.1.0-alpha.4.
+ *
+ * @type {0}
+ * @since 0.1.0
+ */
+export const minElementWeight: 0 = 0 as const;
+
+/**
+ * Maximum value for a {@link WeightedElement.weight}.
+ *
+ * @deprecated Replaced by {@link maxWeight}. Will be removed in v0.1.0-alpha.4.
+ *
+ * @type {1}
+ * @since 0.1.0
+ */
+export const maxElementWeight: 1 = 1 as const;
 
 /**
  * TypeBox schema to validate a {@link WeightedElement} object.
@@ -29,50 +65,43 @@ import { Discriminators, discriminatedSchema } from '../../discriminator';
  */
 export const weightedElementSchema = Type.Generic(
     [Type.Parameter('T')],
-    Type.Intersect([
-        discriminatedSchema,
-        Type.Object(
-            {
-                /**
-                 * The value to be selected from the weighted list.
-                 *
-                 * @readonly
-                 */
-                value: Type.Readonly(Type.Ref('T')),
+    Type.Object(
+        {
+            /**
+             * The value to be selected from the weighted list.
+             *
+             * @readonly
+             */
+            value: Type.Readonly(Type.Ref('T')),
 
-                /**
-                 * The probability weight of the element.
-                 * Should be a number between 0 and 1, inclusive.
-                 *
-                 * @type {number}
-                 * @readonly
-                 */
-                weight: Type.Readonly(Type.Number({
-                    minimum: 0,
-                    maximum: 1
-                })),
-
-                /**
-                 * The discriminator for the weighted element.
-                 *
-                 * @type {Discriminators.WeightedElement}
-                 * @readonly
-                 */
-                discriminator: Type.Literal(Discriminators.WeightedElement)
-            },
-            { additionalProperties: false }
-        )
-    ])
+            /**
+             * The probability weight of the element.
+             * Should be a number between 0 and 1, inclusive.
+             *
+             * @type {number}
+             * @readonly
+             */
+            weight: Type.Readonly(Type.Number({
+                minimum: minWeight,
+                maximum: maxWeight
+            }))
+        },
+        { additionalProperties: false }
+    )
 );
 
 /**
  * Interface for a weighted element, which can be used for non-uniform random selection from a list.
+ *
+ * @template TValue The type of the {@link WeightedElement.value} property of the object.
  *
  * @since 0.1.0
  */
 export interface WeightedElement<TValue> {
     /**
      * The value to be selected from the weighted list.
+     *
+     * @template TValue
      *
      * @type {TValue}
      * @readonly
@@ -89,21 +118,12 @@ export interface WeightedElement<TValue> {
      * @since 0.1.0
      */
     readonly weight: number;
-
-    /**
-     * The discriminator for the weighted element.
-     *
-     * @type {Discriminators.WeightedElement}
-     * @readonly
-     * @since 0.1.0
-     */
-    readonly discriminator: Discriminators.WeightedElement;
 }
 
 /**
  * Type alias for a list of {@link WeightedElement} objects.
  *
- * @see {@link weightedElementSchema}
+ * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
  *
  * @since 0.1.0
  */

@@ -16,12 +16,18 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { Type, type Static } from 'typebox';
 
+/* ******************* TODO: DEPRECATED ******************* */
+
 /**
  * TypeBox schema for validating that an object implements the {@link Discriminated} type.
+ *
+ * @deprecated Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */
@@ -40,6 +46,8 @@ export const discriminatedSchema = Type.Object(
 
 /**
  * Discriminated objects can be type checked using the discriminator registry.
+ *
+ * @deprecated Will be removed in v0.1.0-alpha.4.
  *
  * @since 0.1.0
  */

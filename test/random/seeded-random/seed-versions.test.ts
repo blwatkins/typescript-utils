@@ -16,13 +16,20 @@
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 import { describe, test, expect } from 'vitest';
 
-import { SeedVersion, SeedVersions } from '../../../src';
+import { PrimitiveTypeError, SeedVersion, SeedVersions, ValueRangeError } from '../../../src';
 
-import { negativeNumberInputs, nonNumberInputs } from '../../utils/input/number-inputs';
+import {
+    floatInputs,
+    negativeIntegerInputs,
+    nonNumberInputs
+} from '../../utils/input/number-inputs';
+
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
@@ -65,23 +72,29 @@ describe('SeedVersions', () => {
         const scenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
-                inputs: [...nonNumberInputs],
-                expected: false
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
             },
             {
-                label: 'Invalid number indexes',
+                label: 'Float and negative integer inputs',
+                inputs: [
+                    ...floatInputs,
+                    ...negativeIntegerInputs
+                ],
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Out of bounds number indexes',
                 inputs: [
                     expectedSeedVersions.length,
                     expectedSeedVersions.length + 1,
-                    ...negativeNumberInputs
+                    Number.MAX_SAFE_INTEGER
                 ],
                 expected: false
             },
             {
                 label: 'Valid indexes',
-                inputs: [
-                    ...buildValidIndexes()
-                ],
+                inputs: buildValidIndexes(),
                 expected: true
             }
         ];
@@ -94,28 +107,62 @@ describe('SeedVersions', () => {
             test.each(
                 testCases
             )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(SeedVersions.isValidIndex(testInput as number)).toBe(testExpected);
+                if (typeof testExpected === 'boolean') {
+                    expect(SeedVersions.isValidIndex(testInput as number)).toBe(testExpected);
+                } else {
+                    expect(() => {
+                        SeedVersions.isValidIndex(testInput as number);
+                    }).toThrow(testExpected);
+                }
             });
         });
     });
 
     describe('getVersion', (): void => {
-        test.each([
-            ...buildValidIndexes()
-        ])('%# - Valid index (%i) should return the expected seed version.', (index: number): void => {
+        test.each(
+            buildValidIndexes()
+        )('%# - Valid index (%i) should return the expected seed version.', (index: number): void => {
             expect(SeedVersions.getVersion(index)).toEqual(expectedSeedVersions[index]);
         });
 
         describe('Input validation', (): void => {
-            test.each([
-                ...nonNumberInputs,
-                expectedSeedVersions.length,
-                expectedSeedVersions.length + 1,
-                ...negativeNumberInputs
-            ])('%# - Invalid index (%o) should throw a RangeError.', (input: unknown): void => {
-                expect((): void => {
-                    SeedVersions.getVersion(input as number);
-                }).toThrow(RangeError);
+            const scenarios: Scenario[] = [
+                {
+                    label: 'Non-number inputs',
+                    inputs: nonNumberInputs,
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Float and negative integer inputs',
+                    inputs: [
+                        ...floatInputs,
+                        ...negativeIntegerInputs
+                    ],
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Out of bounds number indexes',
+                    inputs: [
+                        expectedSeedVersions.length,
+                        expectedSeedVersions.length + 1,
+                        Number.MAX_SAFE_INTEGER
+                    ],
+                    expected: ValueRangeError
+                }
+            ];
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Invalid index $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(() => {
+                        SeedVersions.getVersion(testInput as number);
+                    }).toThrow(testExpected);
+                });
             });
         });
     });
