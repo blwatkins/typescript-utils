@@ -22,21 +22,27 @@ minima:
   social_links:
     - title: "@blwatkins/utils"
       icon: npm
+      icon_pack: brands
       url: "https://www.npmjs.com/package/@blwatkins/utils"
     - title: "Source Code"
       icon: git-alt
+      icon_pack: brands
       url: "https://github.com/blwatkins/typescript-utils"
     - title: "GitHub Pages"
       icon: square-github
+      icon_pack: brands
       url: "https://blwatkins.github.io/"
     - title: GitHub
       icon: github
+      icon_pack: brands
       url: "https://github.com/blwatkins"
     - title: YouTube
       icon: youtube
+      icon_pack: brands
       url: "https://www.youtube.com/channel/UCeJ-huUU2AWP0z4-HWr1BXQ"
     - title: LinkedIn
       icon: linkedin
+      icon_pack: brands
       url: "https://www.linkedin.com/in/brittni-watkins/"
   nav_pages:
     - index.md
