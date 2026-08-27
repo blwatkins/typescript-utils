@@ -29,6 +29,7 @@ import {
     WeightedListUtility
 } from '../../../src';
 
+import { testAssertMethod } from '../../utils/assert/assert-tests';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
@@ -204,39 +205,32 @@ describe('WeightedListUtility', (): void => {
     ];
 
     describe('assertGenericWeightedList', (): void => {
-        describe('Should correctly identify generic WeightedList objects', (): void => {
-            describe('Failure scenarios', (): void => {
-                describe.each(
-                    failureScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - Input $input should throw a SchemaTypeError', ({ input: testInput }: TestCase): void => {
-                        expect((): void => {
-                            WeightedListUtility.assertGenericWeightedList(testInput);
-                        }).toThrow(SchemaTypeError);
-                    });
-                });
-            });
-
-            describe('Success scenarios', (): void => {
-                describe.each(
-                    successScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - Input $input should not throw any errors', ({ input: testInput }: TestCase): void => {
-                        expect((): void => {
-                            WeightedListUtility.assertGenericWeightedList(testInput);
-                        }).not.toThrow();
-                    });
-                });
-            });
+        const assertSuccessScenarios: Scenario[] = [
+            ...successScenarios,
+            ...stringListSuccessScenarios,
+            ...stringListFailureScenarios
+        ].map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: undefined
+            }
         });
+
+        const assertFailureScenarios: Scenario[] = failureScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: SchemaTypeError
+            }
+        });
+
+        testAssertMethod(
+            WeightedListUtility.assertGenericWeightedList.bind(WeightedListUtility),
+            assertSuccessScenarios,
+            assertFailureScenarios,
+            (): string => {
+                return 'Input does not match schema requirements for generic WeightedList.';
+            }
+        );
     });
 
     describe('assertWeightedList', (): void => {
@@ -244,51 +238,38 @@ describe('WeightedListUtility', (): void => {
             return StringUtility.isSingleLineTrimmedString(input);
         };
 
-        describe('Should assert based on the value property of each element passing the given type guard', (): void => {
-            describe.each(
-                stringListFailureScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        function assertWeightedList(input: unknown, message?: string): void {
+            WeightedListUtility.assertWeightedList(input, typeGuard, message);
+        }
 
-                test.each(
-                    testCases
-                )('%# - Input $input should throw SchemaTypeError', ({ input: testInput }: TestCase): void => {
-                    expect((): void => {
-                        WeightedListUtility.assertWeightedList<string>(testInput, typeGuard);
-                    }).toThrow(SchemaTypeError);
-                });
-            });
-
-            describe.each(
-                stringListSuccessScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should not throw any errors', ({ input: testInput }: TestCase): void => {
-                    expect((): void => {
-                        WeightedListUtility.assertWeightedList<string>(testInput, typeGuard);
-                    }).not.toThrow();
-                });
-            });
+        const assertSuccessScenarios: Scenario[] = [
+            ...successScenarios,
+            ...stringListSuccessScenarios
+        ].map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: undefined
+            }
         });
 
-        describe('Should throw for invalid weighted lists', (): void => {
-            describe.each(
-                failureScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should throw SchemaTypeError', ({ input: testInput }: TestCase): void => {
-                    expect((): void => {
-                        WeightedListUtility.assertWeightedList(testInput, typeGuard);
-                    }).toThrow(SchemaTypeError);
-                });
-            });
+        const assertFailureScenarios: Scenario[] = [
+            ...failureScenarios,
+            ...stringListFailureScenarios
+        ].map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: SchemaTypeError
+            }
         });
+
+        testAssertMethod(
+            assertWeightedList,
+            assertSuccessScenarios,
+            assertFailureScenarios,
+            (): string => {
+                return 'Input does not match schema requirements for WeightedList.';
+            }
+        );
     });
 
     describe('isGenericWeightedList', (): void => {
