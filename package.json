@@ -1,6 +1,6 @@
 {
   "name": "@blwatkins/utils",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "license": "MIT",
   "private": false,
   "description": "A toolkit of general-purpose TypeScript and JavaScript utilities.",
