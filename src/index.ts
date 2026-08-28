@@ -21,7 +21,6 @@
  */
 
 export * from './assert';
-export * from './discriminator';
 export * from './error';
 export * from './math';
 export * from './number';
