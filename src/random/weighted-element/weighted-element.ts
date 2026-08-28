@@ -39,26 +39,6 @@ export const minWeight: 0 = 0 as const;
 export const maxWeight: 1 = 1 as const;
 
 /**
- * Minimum value for a {@link WeightedElement.weight}.
- *
- * @deprecated Replaced by {@link minWeight}. Will be removed in v0.1.0-alpha.4.
- *
- * @type {0}
- * @since 0.1.0
- */
-export const minElementWeight: 0 = 0 as const;
-
-/**
- * Maximum value for a {@link WeightedElement.weight}.
- *
- * @deprecated Replaced by {@link maxWeight}. Will be removed in v0.1.0-alpha.4.
- *
- * @type {1}
- * @since 0.1.0
- */
-export const maxElementWeight: 1 = 1 as const;
-
-/**
  * TypeBox schema to validate a {@link WeightedElement} object.
  *
  * @since 0.1.0
