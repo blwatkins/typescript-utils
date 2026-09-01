@@ -22,7 +22,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeError, StringUtility } from '../../src';
+import { PrimitiveTypeError, StaticInstanceError, StringUtility } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
 
@@ -45,7 +45,7 @@ import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('StringUtility', (): void => {
-    testStaticClassConstructor('StringUtility', StringUtility as unknown as new () => unknown, Error);
+    testStaticClassConstructor('StringUtility', StringUtility as unknown as new () => unknown, StaticInstanceError);
 
     describe('assertStringType', (): void => {
         const successScenarios: Scenario[] = [
