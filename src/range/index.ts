@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -20,10 +20,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-export * from './assert';
-export * from './error';
-export * from './math';
-export * from './number';
-export * from './random';
 export * from './range';
-export * from './string';
