@@ -49,23 +49,23 @@ export class RangeUtility {
     }
 
     /**
-     * Assert that the given input is a valid {@link Range} object.
+     * Assert that `input` is a valid {@link Range} object.
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
      *
      * @see {@link RangeUtility.isRange}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid {@link Range} object.
+     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid {@link Range} object.
      *
-     * @returns {asserts input is Range} Asserts that the given input is a valid {@link Range} object.
+     * @returns {asserts input is Range} Asserts that `input` is a valid {@link Range} object.
      *
-     * @throws {SchemaTypeError} When the given input is not a valid {@link Range} object.
+     * @throws {SchemaTypeError} When `input` is not a valid {@link Range} object.
      *
      * @public
      * @since 0.1.0
      */
-    public assertRange(input: unknown, message?: string): asserts input is Range {
+    public static assertRange(input: unknown, message?: string): asserts input is Range {
         if (!RangeUtility.isRange(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new SchemaTypeError(message);
@@ -76,7 +76,7 @@ export class RangeUtility {
     }
 
     /**
-     * Is the given input a valid {@link Range} object?
+     * Is `input` a valid {@link Range} object?
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
      *
@@ -84,7 +84,7 @@ export class RangeUtility {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is Range} `true` is the input is a valid {@link Range} object; `false` otherwise.
+     * @returns {input is Range} `true` if `input` is a valid {@link Range} object; `false` otherwise.
      *
      * @public
      * @since 0.1.0

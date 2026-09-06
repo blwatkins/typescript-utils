@@ -21,4 +21,5 @@
  */
 
 export * from './range';
+export * from './range-builder';
 export * from './range-utility';
