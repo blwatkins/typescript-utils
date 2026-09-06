@@ -108,10 +108,10 @@ describe('SeedVersions', () => {
                 testCases
             )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                 if (typeof testExpected === 'boolean') {
-                    expect(SeedVersions.isValidIndex(testInput as number)).toBe(testExpected);
+                    expect(SeedVersions.isValidIndex(testInput)).toBe(testExpected);
                 } else {
                     expect(() => {
-                        SeedVersions.isValidIndex(testInput as number);
+                        SeedVersions.isValidIndex(testInput);
                     }).toThrow(testExpected);
                 }
             });
