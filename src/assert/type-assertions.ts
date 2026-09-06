@@ -42,7 +42,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Validate and assert that the given input is an array.
+     * Assert that the given input is an array.
      *
      * @remarks This method does not enforce size requirements or type checking for any array elements.
      *
@@ -56,7 +56,7 @@ export class TypeAssertions {
      * @public
      * @since 0.1.0
      */
-    public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
+    public static assertArray(input: unknown, message?: string): asserts input is unknown[] {
         if (!Array.isArray(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);
@@ -67,7 +67,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Validate and assert that the given input is a callable function.
+     * Assert that the given input is a callable function.
      *
      * @remarks This method does not enforce type checking for function parameters or return type.
      *
@@ -81,7 +81,7 @@ export class TypeAssertions {
      * @public
      * @since 0.1.0
      */
-    public static assertFunctionType(input: unknown, message?: string): asserts input is (...args: unknown[]) => unknown {
+    public static assertFunction(input: unknown, message?: string): asserts input is (...args: unknown[]) => unknown {
         if (typeof input !== 'function') {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);
@@ -92,7 +92,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Validate and assert that the given input is a non-array object.
+     * Assert that the given input is a non-array object.
      *
      * @remarks This method does not enforce presence or type checking for any object properties.
      * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
@@ -107,7 +107,7 @@ export class TypeAssertions {
      * @public
      * @since 0.1.0
      */
-    public static assertObjectType(input: unknown, message?: string): asserts input is object {
+    public static assertObject(input: unknown, message?: string): asserts input is object {
         if (!input || typeof input !== 'object' || Array.isArray(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);
@@ -118,7 +118,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Validate and assert that the given input is a string.
+     * Assert that the given input is a string.
      *
      * @see {@link StringUtility.assertStringType}
      *
@@ -132,7 +132,94 @@ export class TypeAssertions {
      * @public
      * @since 0.1.0
      */
-    public static assertStringType(input: unknown, message?: string): asserts input is string {
+    public static assertString(input: unknown, message?: string): asserts input is string {
         StringUtility.assertStringType(input, message);
+    }
+
+    /* ==================== DEPRECATED ==================== */
+
+    /**
+     * Assert that the given input is an array.
+     *
+     * @remarks This method does not enforce size requirements or type checking for any array elements.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not an array.
+     *
+     * @returns {asserts input is unknown[]} Asserts that the given input is an array.
+     *
+     * @throws {PrimitiveTypeError} When the input is not an array.
+     *
+     * @deprecated Replaced by {@link TypeAssertions.assertArray}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertArrayType(input: unknown, message?: string): asserts input is unknown[] {
+        TypeAssertions.assertArray(input, message);
+    }
+
+    /**
+     * Assert that the given input is a callable function.
+     *
+     * @remarks This method does not enforce type checking for function parameters or return type.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a function.
+     *
+     * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that the given input is a callable function.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a callable function.
+     *
+     * @deprecated Replaced by {@link TypeAssertions.assertFunction}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertFunctionType(input: unknown, message?: string): asserts input is (...args: unknown[]) => unknown {
+        TypeAssertions.assertFunction(input, message);
+    }
+
+    /**
+     * Assert that the given input is a non-array object.
+     *
+     * @remarks This method does not enforce presence or type checking for any object properties.
+     * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a non-array object.
+     *
+     * @returns {asserts input is object} Asserts that the given input is a non-array object.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a non-array object.
+     *
+     * @deprecated Replaced by {@link TypeAssertions.assertObject}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertObjectType(input: unknown, message?: string): asserts input is object {
+        TypeAssertions.assertObject(input, message);
+    }
+
+    /**
+     * Assert that the given input is a string.
+     *
+     * @see {@link StringUtility.assertStringType}
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
+     *
+     * @returns {asserts input is string} Asserts that the given input is a string.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a string.
+     *
+     * @deprecated Replaced by {@link TypeAssertions.assertString}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertStringType(input: unknown, message?: string): asserts input is string {
+        TypeAssertions.assertString(input, message);
     }
 }

@@ -51,7 +51,7 @@ export class MathUtility {
      * @returns {number} `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
      *
      * @throws {PrimitiveTypeError} When `value`, `min`, and `max` are not all finite numbers.
-     * @throws {ValueRangeError} When `min` is not less than or equal to `max`.
+     * @throws {ValueRangeError} When `min` is not less than, or equal to, `max`.
      *
      * @public
      * @since 0.1.0

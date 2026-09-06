@@ -46,18 +46,19 @@ export class WeightedListUtility {
     }
 
     /**
-     * Validate and assert that the given input is a generic {@link WeightedList}.
+     * Assert that the given input is a valid generic {@link WeightedList} object.
      *
-     * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the given elements in the list.
+     * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
+     * For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      *
      * @param {unknown} input - The input to validate.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedList}.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedList} object.
      *
-     * @returns {asserts input is WeightedList<unknown>} Asserts that the given input is a valid generic {@link WeightedList}.
+     * @returns {asserts input is WeightedList<unknown>} Asserts that the given input is a valid generic {@link WeightedList} object.
      *
-     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedList}.
+     * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedList} object.
      *
      * @public
      * @since 0.1.0
@@ -73,7 +74,9 @@ export class WeightedListUtility {
     }
 
     /**
-     * Validate and assert that the given input is a {@link WeightedList}, where the {@link WeightedElement.value} property of each element passes the given type guard function.
+     * Assert that the given input is a valid {@link WeightedList} object, where the {@link WeightedElement.value} property of each element passes the given type guard function.
+     *
+     * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @see {@link WeightedListUtility.isWeightedList}
      *
@@ -104,16 +107,16 @@ export class WeightedListUtility {
     }
 
     /**
-     * Is the given input a generic {@link WeightedList} object?
+     * Is the given input a valid generic {@link WeightedList} object?
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
+     * For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
      *
      * @returns {input is WeightedList<unknown>} `true` if the given input is a valid {@link WeightedList} object; `false` otherwise.
-     * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @public
      * @since 0.1.0
@@ -137,7 +140,9 @@ export class WeightedListUtility {
     }
 
     /**
-     * Is the given input a {@link WeightedList} object, where the {@link WeightedElement.value} property of each element passes the given type guard function?
+     * Is the given input a valid {@link WeightedList} object, where the {@link WeightedElement.value} property of each element passes the given type guard function?
+     *
+     * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      * @see {@link WeightedElementUtility.isWeightedElement}

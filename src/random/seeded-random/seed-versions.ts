@@ -91,17 +91,17 @@ export class SeedVersions {
     }
 
     /**
-     * Validate and assert that the given index is a valid seed version index.
+     * Assert that the given index is a valid seed version index.
      *
      * @see {@link SeedVersions.isValidIndex}
      *
-     * @param {unknown} index - The index to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the index is not a valid index.
+     * @param {unknown} index - The given index to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the given index is not valid.
      *
      * @returns {void}
      *
-     * @throws {PrimitiveTypeError} When the index is not a positive integer or zero.
-     * @throws {ValueRangeError} When the index is not a valid seed version index.
+     * @throws {PrimitiveTypeError} When the given index is not a positive integer or zero.
+     * @throws {ValueRangeError} When the given index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0
@@ -119,11 +119,11 @@ export class SeedVersions {
     /**
      * Is the given index a valid seed version?
      *
-     * @param {number} index - The index to check.
+     * @param {number} index - The given index to check.
      *
      * @returns {boolean} `true` if the given index is a valid seed version; `false` otherwise.
      *
-     * @throws {PrimitiveTypeError} When index is not a positive integer or zero.
+     * @throws {PrimitiveTypeError} When the given index is not a positive integer or zero.
      *
      * @public
      * @since 0.1.0
@@ -141,8 +141,8 @@ export class SeedVersions {
      *
      * @returns {SeedVersion} The seed version with the given index.
      *
-     * @throws {PrimitiveTypeError} When the input is not a positive integer or zero.
-     * @throws {ValueRangeError} When the index is not a valid seed version index.
+     * @throws {PrimitiveTypeError} When the given index is not a positive integer or zero.
+     * @throws {ValueRangeError} When the given index is not a valid seed version index.
      *
      * @public
      * @since 0.1.0

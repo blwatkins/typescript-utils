@@ -42,7 +42,7 @@ export class NumberUtility {
     }
 
     /**
-     * Validates and asserts that the given input is a finite number.
+     * Assert that the given input is a finite number.
      *
      * @see {@link NumberUtility.isFiniteNumber}
      *
@@ -56,7 +56,7 @@ export class NumberUtility {
      * @public
      * @since 0.1.0
      */
-    public static assertFiniteNumber(input: unknown, message?: string): asserts input is number {
+    public static assertFinite(input: unknown, message?: string): asserts input is number {
         if (!NumberUtility.isFiniteNumber(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);
@@ -67,7 +67,7 @@ export class NumberUtility {
     }
 
     /**
-     * Validates and asserts that the given input is an integer.
+     * Assert that the given input is an integer.
      *
      * @see {@link NumberUtility.isInteger}
      *
@@ -92,7 +92,7 @@ export class NumberUtility {
     }
 
     /**
-     * Validates and asserts that the given input is a positive integer.
+     * Assert that the given input is a positive integer.
      *
      * @see {@link NumberUtility.isPositiveInteger}
      *
@@ -120,13 +120,13 @@ export class NumberUtility {
     }
 
     /**
-     * Validate and assert that the given value is greater than or equal to the given min and less than or equal to the given max.
+     * Assert that the given value is greater than, or equal to, the given min and less than, or equal to, the given max.
      *
      * @see {@link NumberUtility.isInRange}
      *
      * @param {number} value - The value to check. Must be a finite number.
-     * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
-     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
+     * @param {number} min - The minimum value (inclusive). Must be a finite number less than, or equal to, the given max.
+     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than, or equal to, the given min.
      * @param {string|undefined} message - Optional message for the error thrown when the given value is not within the range [min, max] (inclusive).
      *
      * @returns {void}
@@ -134,7 +134,7 @@ export class NumberUtility {
      * @throws {PrimitiveTypeError} When the given value is not a finite number.
      * @throws {PrimitiveTypeError} When the given min is not a finite number.
      * @throws {PrimitiveTypeError} When the given max is not a finite number.
-     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     * @throws {ValueRangeError} When the given min is not less than, or equal to, the given max.
      * @throws {ValueRangeError} When the given value is not in the range [min, max] (inclusive).
      *
      * @public
@@ -151,19 +151,19 @@ export class NumberUtility {
     }
 
     /**
-     * Validate and assert that the given min and max are finite numbers, where min is less than or equal to max.
+     * Assert that the given min and max are finite numbers, where min is less than, or equal to, max.
      *
      * @see {@link NumberUtility.isValidRange}
      *
      * @param {number} min - Minimum value to check.
      * @param {number} max - Maximum value to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the given min is not less than or equal to the given max.
+     * @param {string|undefined} message - Optional message for the error thrown when the given min is not less than, or equal to, the given max.
      *
      * @returns {void}
      *
      * @throws {PrimitiveTypeError} When the given min is not a finite number.
      * @throws {PrimitiveTypeError} When the given max is not a finite number.
-     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     * @throws {ValueRangeError} When the given min is not less than, or equal to, the given max.
      *
      * @public
      * @since 0.1.0
@@ -188,7 +188,7 @@ export class NumberUtility {
      * @public
      * @since 0.1.0
      */
-    public static isFiniteNumber(input: unknown): input is number {
+    public static isFinite(input: unknown): input is number {
         return Number.isFinite(input);
     }
 
@@ -232,18 +232,18 @@ export class NumberUtility {
     }
 
     /**
-     * Is the given value greater than or equal to the given min and less than or equal to the given max?
+     * Is the given value greater than, or equal to, the given min and less than, or equal to, the given max?
      *
      * @param {number} value - The value to check. Must be a finite number.
-     * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
-     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
+     * @param {number} min - The minimum value (inclusive). Must be a finite number less than, or equal to, the given max.
+     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than, or equal to, the given min.
      *
      * @returns {boolean} `true` if the given value is in the range [min, max] (inclusive).; `false` otherwise.
      *
      * @throws {PrimitiveTypeError} When the given value is not a finite number.
      * @throws {PrimitiveTypeError} When the given min is not a finite number.
      * @throws {PrimitiveTypeError} When the given max is not a finite number.
-     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     * @throws {ValueRangeError} When the given min is not less than, or equal to, the given max.
      *
      * @public
      * @since 0.1.0
@@ -257,12 +257,12 @@ export class NumberUtility {
     }
 
     /**
-     * Do the given min and max form a valid range, where min and max finite numbers and min is less than or equal to max?
+     * Do the given min and max form a valid range, where min and max finite numbers and min is less than, or equal to, max?
      *
      * @param {number} min - Minimum value to check.
      * @param {number} max - Maximum value to check.
      *
-     * @returns {boolean} `true` if the given min and max are finite numbers and min is less than or equal to max; `false` otherwise.
+     * @returns {boolean} `true` if the given min and max are finite numbers, and min is less than, or equal to, max; `false` otherwise.
      *
      * @throws {PrimitiveTypeError} When the given min is not a finite number.
      * @throws {PrimitiveTypeError} When the given max is not a finite number.
@@ -274,5 +274,44 @@ export class NumberUtility {
         NumberUtility.assertFiniteNumber(min, 'Min must be a finite number.');
         NumberUtility.assertFiniteNumber(max, 'Max must be a finite number.');
         return min <= max;
+    }
+
+    /* ==================== DEPRECATED ==================== */
+
+    /**
+     * Asserts that the given input is a finite number.
+     *
+     * @see {@link NumberUtility.isFiniteNumber}
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a finite number.
+     *
+     * @returns {asserts input is number} Asserts that the given input is a finite number.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a finite number.
+     *
+     * @deprecated Replaced by {@link NumberUtility.assertFinite}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertFiniteNumber(input: unknown, message?: string): asserts input is number {
+        NumberUtility.assertFinite(input, message);
+    }
+
+    /**
+     * Is the given input a finite number?
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
+     *
+     * @deprecated Replaced by {@link NumberUtility.isFinite}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isFiniteNumber(input: unknown): input is number {
+        return NumberUtility.isFinite(input);
     }
 }

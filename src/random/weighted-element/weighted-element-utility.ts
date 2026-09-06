@@ -49,16 +49,17 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Validate and assert that the given input is a generic {@link WeightedElement} object.
+     * Assert that the given input is a valid generic {@link WeightedElement} object.
      *
      * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     * For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedElement}.
+     * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid generic {@link WeightedElement} object.
      *
-     * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a generic {@link WeightedElement}.
+     * @returns {asserts input is WeightedElement<unknown>} Asserts that the given input is a valid generic {@link WeightedElement} object.
      *
      * @throws {SchemaTypeError} When the given input is not a valid generic {@link WeightedElement}.
      *
@@ -76,7 +77,9 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Validate and assert that the given input is a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function.
+     * Assert that the given input is valid a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function.
+     *
+     * @remarks For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *
      * @see {@link WeightedElementUtility.isWeightedElement}
      *
@@ -88,7 +91,7 @@ export class WeightedElementUtility {
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
      * @param {string|undefined} message - Optional message for the error thrown when the input is not a valid {@link WeightedElement}.
      *
-     * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a {@link WeightedElement} whose value matches the expected type or schema.
+     * @returns {asserts input is WeightedElement<TValue>} Asserts that the given input is a valid {@link WeightedElement} object whose value matches the expected type or schema.
      *
      * @throws {PrimitiveTypeError} When the given value type guard is not a function.
      * @throws {SchemaTypeError} When the given input is not a valid {@link WeightedElement}.
@@ -107,13 +110,14 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Is the given input a generic {@link WeightedElement} object?
+     * Is the given input a valid generic {@link WeightedElement} object?
      *
      * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
+     * For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is WeightedElement<unknown>} `true` if the given input is a generic {@link WeightedElement} object; `false` otherwise.
+     * @returns {input is WeightedElement<unknown>} `true` if the given input is a valid generic {@link WeightedElement} object; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -123,7 +127,9 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Is the given input a {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function?
+     * Is the given input a valid {@link WeightedElement} object, whose {@link WeightedElement.value} property passes the given type guard function?
+     *
+     * @remarks For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
@@ -134,7 +140,7 @@ export class WeightedElementUtility {
      * This method should return `true` if the value is of the expected type or schema, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
      *
-     * @returns {input is WeightedElement<TValue>} `true` if the given input is a {@link WeightedElement} whose value matches the expected type or schema; `false` otherwise.
+     * @returns {input is WeightedElement<TValue>} `true` if the given input is a valid {@link WeightedElement} object whose value matches the expected type or schema; `false` otherwise.
      *
      * @throws {PrimitiveTypeError} When the given value type guard is not a function.
      *

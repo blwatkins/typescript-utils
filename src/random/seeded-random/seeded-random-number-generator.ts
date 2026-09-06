@@ -111,11 +111,28 @@ export class SeededRandomNumberGenerator {
         return 0xFFFFFFFF;
     }
 
-    #assertState(state: unknown): asserts state is [number, number, number] {
-        TypeAssertions.assertArrayType(state);
-        if (state.length !== 4) throw new PrimitiveTypeError('State must have exactly 4 elements.');
+    /**
+     * Assert that the given input is a valid state array.
+     *
+     * @remarks For a state array to be valid, it must be an array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
+     * Additionally, a valid state array must have at least one element that is greater than zero.
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {asserts input is [number, number, number]} Asserts that the given input is a valid state array.
+     *
+     * @throws {PrimitiveTypeError} When the given input is not an array.
+     * @throws {PrimitiveTypeError} When the given input array does not have exactly 4 elements.
+     * @throws {ValueRangeError} When all elements of the given input array are not 32-bit unsigned integers less than 0xFFFFFFFF.
+     * @throws {ValueRangeError} When all elements of the given input array are equal to zero.
+     *
+     * @private
+     */
+    #assertState(input: unknown): asserts input is [number, number, number] {
+        TypeAssertions.assertArrayType(input);
+        if (input.length !== 4) throw new PrimitiveTypeError('State must have exactly 4 elements.');
 
-        const allValidStateValues: boolean = state.every((value: unknown): boolean => {
+        const allValidStateValues: boolean = input.every((value: unknown): boolean => {
             return NumberUtility.isPositiveInteger(value, true) && value <= SeededRandomNumberGenerator.#maxStateValue;
         });
 
@@ -123,7 +140,7 @@ export class SeededRandomNumberGenerator {
             throw new ValueRangeError('All elements of state array must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
         }
 
-        const allZeroValues: boolean = state.every((value: unknown): boolean => {
+        const allZeroValues: boolean = input.every((value: unknown): boolean => {
             return NumberUtility.isFiniteNumber(value) && value === 0;
         });
 
