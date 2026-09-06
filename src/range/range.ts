@@ -22,12 +22,65 @@
 
 import { Type, Static } from 'typebox';
 
+// TODO - unit tests - make sure min and max cannot be NaN or Infinity (finite numbers only).
+
+/**
+ * TypeBox schema to validate a {@link Range} object.
+ *
+ * @since 0.1.0
+ */
 export const rangeSchema = Type.Object(
     {
-        min: Type.Number(),
-        max: Type.Number(),
+        /**
+         * The minimum value of the range.
+         *
+         * @type {number}
+         * @readonly
+         */
+        min: Type.Readonly(
+            Type.Number()
+        ),
+
+        /**
+         * The maximum value of the range.
+         *
+         * @type {number}
+         * @readonly
+         */
+        max: Type.Readonly(
+            Type.Number()
+        ),
+
+        /**
+         * Should any values generated from the range include the minimum value?
+         *
+         * @type {boolean}
+         * @readonly
+         */
+        isMinInclusive: Type.Optional(
+            Type.Readonly(
+                Type.Boolean()
+            )
+        ),
+
+        /**
+         * Should any values generated from the range include the maximum value?
+         *
+         * @type {boolean}
+         * @readonly
+         */
+        isMaxInclusive: Type.Optional(
+            Type.Readonly(
+                Type.Boolean()
+            )
+        )
     },
-    { additionalProperties: false },
+    { additionalProperties: false }
 );
 
+/**
+ * Interface for a range of numbers, starting at `min` and ending at `max`.
+ *
+ * @since 0.1.0
+ */
 export type Range = Static<typeof rangeSchema>;
