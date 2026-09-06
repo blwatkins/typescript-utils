@@ -56,7 +56,7 @@ export const weightedElementSchema = Type.Generic(
 
             /**
              * The probability weight of the element.
-             * Should be a number between 0 and 1, inclusive.
+             * Must be a number between 0 and 1, inclusive.
              *
              * @type {number}
              * @readonly
@@ -91,7 +91,7 @@ export interface WeightedElement<TValue> {
 
     /**
      * The probability weight of the element.
-     * Should be a number between 0 and 1, inclusive.
+     * Must be a number between 0 and 1, inclusive.
      *
      * @type {number}
      * @readonly

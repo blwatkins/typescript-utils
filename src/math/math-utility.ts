@@ -42,7 +42,7 @@ export class MathUtility {
     }
 
     /**
-     * Constrain the given value between the given min and max.
+     * Constrain `value` between `min` and `max`.
      *
      * @param {number} value - The value to constrain.
      * @param {number} min - The minimum value to constrain to.
@@ -57,9 +57,9 @@ export class MathUtility {
      * @since 0.1.0
      */
     public static constrain(value: number, min: number, max: number): number {
-        NumberUtility.assertFiniteNumber(value, 'Value must be a finite number.');
-        NumberUtility.assertFiniteNumber(min, 'Min must be a finite number.');
-        NumberUtility.assertFiniteNumber(max, 'Max must be a finite number.');
+        NumberUtility.assertFiniteNumber(value, 'value must be a finite number.');
+        NumberUtility.assertFiniteNumber(min, 'min must be a finite number.');
+        NumberUtility.assertFiniteNumber(max, 'max must be a finite number.');
         NumberUtility.assertValidRange(min, max);
 
         if (value < min) return min;
@@ -68,35 +68,35 @@ export class MathUtility {
     }
 
     /**
-     * Convert the given (x, y) index coordinates to a one-dimensional index for an array with the given columns and rows.
+     * Convert the (`x`, `y`) index coordinates to a one-dimensional index for an array with the dimensions `columns` by `rows`.
      *
      * @param {number} x - The x-coordinate (column index) of the 2D array.
      * @param {number} y - The y-coordinate (row index) of the 2D array.
      * @param {number} columns - The number of columns in the 2D array.
      * @param {number} rows - The number of rows in the 2D array.
      *
-     * @returns {number} The one-dimensional index for the given (x, y) coordinates.
+     * @returns {number} The one-dimensional index for the (`x`, `y`) index coordinates.
      *
      * @throws {TypeError} When `x` or `y` are not positive integers or zero.
      * @throws {TypeError} When `columns` or `rows` are not positive integers greater than 0.
-     * @throws {RangeError} When the total grid size (`columns` * `rows`) exceeds `Number.MAX_SAFE_INTEGER`.
-     * @throws {RangeError} When the given (x, y) coordinates are out of bounds for the given grid dimensions.
+     * @throws {RangeError} When the total grid size (`columns * rows`) exceeds {@link Number.MAX_SAFE_INTEGER}.
+     * @throws {RangeError} When the (`x`, `y`) coordinates are out of bounds for the grid dimensions `columns` by `rows`.
      *
      * @public
      * @since 0.1.0
      */
     public static toFlatIndex(x: number, y: number, columns: number, rows: number): number {
-        NumberUtility.assertPositiveInteger(x, true, 'X must be a positive integer or zero.');
-        NumberUtility.assertPositiveInteger(y, true, 'Y must be a positive integer or zero.');
-        NumberUtility.assertPositiveInteger(columns, false, 'Columns must be a positive integer greater than 0.');
-        NumberUtility.assertPositiveInteger(rows, false, 'Rows must be a positive integer greater than 0.');
+        NumberUtility.assertPositiveInteger(x, true, 'x must be a positive integer or zero.');
+        NumberUtility.assertPositiveInteger(y, true, 'y must be a positive integer or zero.');
+        NumberUtility.assertPositiveInteger(columns, false, 'columns must be a positive integer greater than 0.');
+        NumberUtility.assertPositiveInteger(rows, false, 'rows must be a positive integer greater than 0.');
 
         if (columns * rows > Number.MAX_SAFE_INTEGER) {
-            throw new ValueRangeError(`The total size of the given grid (${columns} * ${rows}) exceeds the maximum safe integer value in JavaScript.`);
+            throw new ValueRangeError('The total size of the grid exceeds the maximum safe integer value in JavaScript.');
         }
 
         if (x >= columns || y >= rows) {
-            throw new ValueRangeError(`2D index (${x}, ${y}) is out of bounds for array dimensions (${columns}, ${rows})`);
+            throw new ValueRangeError('2D index is out of bounds for array dimensions.');
         }
 
         return ((y * columns) + x);

@@ -34,9 +34,9 @@ import { WeightedList, WeightedListUtility } from './weighted-element';
 export class Random {
     /**
      * The primary function used to generate random numbers.
-     * By default, this is set to `Math.random`, but it can be overridden for testing or seeded pseudorandom number generation.
+     * By default, this is set to {@link Math.random}, but it can be overridden for testing or seeded pseudorandom number generation.
      *
-     * @default Math.random
+     * @default {@link Math.random}
      *
      * @type {() => number}
      * @private
@@ -60,13 +60,13 @@ export class Random {
      *
      * @param {() => number} rng - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
-     * @throws {PrimitiveTypeError} When the given random number generator is not a function.
+     * @throws {PrimitiveTypeError} When `rng` is not a function.
      *
      * @public
      * @since 0.1.0
      */
     public static set randomNumberGenerator(rng: () => number) {
-        TypeAssertions.assertFunctionType(rng, 'Random number generator must be a function.');
+        TypeAssertions.assertFunctionType(rng, 'rng must be a function.');
         Random.#rng = rng;
     }
 
@@ -83,7 +83,7 @@ export class Random {
     }
 
     /**
-     * Get a random floating-point number within the given range.
+     * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
      * @param {number} min - The minimum value (inclusive).
      * @param {number} max - The maximum value (exclusive).
@@ -103,15 +103,15 @@ export class Random {
     }
 
     /**
-     * Get a random integer within the given range.
-     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
+     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
+     * If `min` or `max` is not an integer, it is rounded down with {@link Math.floor} before a value is generated.
      *
      * @param {number} min - The minimum value (inclusive).
-     * Non-integer values are rounded down with `Math.floor`.
+     * Non-integer values are rounded down with {@link Math.floor}.
      * @param {number} max - The maximum value (exclusive).
-     * Non-integer values are rounded down with `Math.floor`.
+     * Non-integer values are rounded down with {@link Math.floor}.
      *
-     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     * @returns {number} A random integer in the range [`Math.floor(min)`, `Math.floor(max)`) (min inclusive, max exclusive).
      *
      * @throws {PrimitiveTypeError} When `min` is not a finite number.
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
@@ -128,17 +128,17 @@ export class Random {
     }
 
     /**
-     * Get a random integer within the given range.
-     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
+     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
+     * If `min` or `max` is not an integer, it is rounded down with {@link Math.floor} before a value is generated.
      *
      * @see {@link Random.randomInt}
      *
      * @param {number} min - The minimum value (inclusive).
-     * Non-integer values are rounded down with `Math.floor`.
+     * Non-integer values are rounded down with {@link Math.floor}.
      * @param {number} max - The maximum value (exclusive).
-     * Non-integer values are rounded down with `Math.floor`.
+     * Non-integer values are rounded down with {@link Math.floor}.
      *
-     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     * @returns {number} A random integer in the range [`Math.floor(min)`, `Math.floor(max)`) (min inclusive, max exclusive).
      *
      * @throws {PrimitiveTypeError} When `min` is not a finite number.
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
@@ -166,18 +166,18 @@ export class Random {
      * @since 0.1.0
      */
     public static randomBoolean(chanceOfTrue: number = 0.5): boolean {
-        NumberUtility.assertInRange(chanceOfTrue, 0, 1, 'Chance of true must be between 0 and 1.');
+        NumberUtility.assertInRange(chanceOfTrue, 0, 1, 'chanceOfTrue must be between 0 and 1.');
         return Random.random() < chanceOfTrue;
     }
 
     /**
-     * Get a random element from the given array.
+     * Get a random element.
      *
      * @param {Type[]} elements - An array of elements to choose from.
      *
-     * @returns {Type} A random element from the array.
+     * @returns {Type} A random element from `elements`.
      *
-     * @throws {PrimitiveTypeError} When elements is not a non-empty array.
+     * @throws {PrimitiveTypeError} When `elements` is not a non-empty array.
      *
      * @public
      * @since 0.1.0
@@ -186,23 +186,23 @@ export class Random {
         TypeAssertions.assertArrayType(elements);
 
         if (elements.length === 0) {
-            throw new PrimitiveTypeError('Elements must be a non-empty array.');
+            throw new PrimitiveTypeError('elements must be a non-empty array.');
         }
 
         return elements[Random.randomInt(0, elements.length)];
     }
 
     /**
-     * Get a random element from the given {@link WeightedList}.
+     * Get a random element from a non-uniform distribution.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {WeightedList} elements - The {@link WeightedList} to select a random element from.
      *
-     * @returns {Type} A random element from the given {@link WeightedList}, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
+     * @returns {Type} A random element from `elements`, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
      *
-     * @throws {SchemaTypeError} When the given list is not a valid {@link WeightedList}.
+     * @throws {SchemaTypeError} When `elements` is not a valid {@link WeightedList} object.
      * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @public

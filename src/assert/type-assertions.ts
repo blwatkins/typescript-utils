@@ -42,16 +42,16 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is an array.
+     * Assert that `input` is an array.
      *
      * @remarks This method does not enforce size requirements or type checking for any array elements.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not an array.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not an array.
      *
-     * @returns {asserts input is unknown[]} Asserts that the given input is an array.
+     * @returns {asserts input is unknown[]} Asserts that `input` is an array.
      *
-     * @throws {PrimitiveTypeError} When the input is not an array.
+     * @throws {PrimitiveTypeError} When `input` is not an array.
      *
      * @public
      * @since 0.1.0
@@ -67,16 +67,39 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is a callable function.
+     * Assert that `input` is a boolean.
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a boolean.
+     *
+     * @returns {asserts input is boolean} Asserts that `input` is a boolean.
+     *
+     * @throws {PrimitiveTypeError} When `input` is not a boolean.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertBoolean(input: unknown, message?: string): asserts input is boolean {
+        if (typeof input !== 'boolean') {
+            if (StringUtility.isSingleLineTrimmedString(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError(`Expected a boolean, but received: ${typeof input}.`);
+        }
+    }
+
+    /**
+     * Assert that `input` is a callable function.
      *
      * @remarks This method does not enforce type checking for function parameters or return type.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a function.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a function.
      *
-     * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that the given input is a callable function.
+     * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that `input` is a callable function.
      *
-     * @throws {PrimitiveTypeError} When the input is not a callable function.
+     * @throws {PrimitiveTypeError} When `input` is not a callable function.
      *
      * @public
      * @since 0.1.0
@@ -92,17 +115,17 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is a non-array object.
+     * Assert that `input` is a non-array object.
      *
      * @remarks This method does not enforce presence or type checking for any object properties.
      * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a non-array object.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a non-array object.
      *
-     * @returns {asserts input is object} Asserts that the given input is a non-array object.
+     * @returns {asserts input is object} Asserts that `input` is a non-array object.
      *
-     * @throws {PrimitiveTypeError} When the input is not a non-array object.
+     * @throws {PrimitiveTypeError} When `input` is not a non-array object.
      *
      * @public
      * @since 0.1.0
@@ -118,16 +141,16 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is a string.
+     * Assert that `input` is a string.
      *
      * @see {@link StringUtility.assertStringType}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a string.
      *
-     * @returns {asserts input is string} Asserts that the given input is a string.
+     * @returns {asserts input is string} Asserts that `input` is a string.
      *
-     * @throws {PrimitiveTypeError} When the input is not a string.
+     * @throws {PrimitiveTypeError} When `input` is not a string.
      *
      * @public
      * @since 0.1.0
@@ -139,14 +162,14 @@ export class TypeAssertions {
     /* ==================== DEPRECATED ==================== */
 
     /**
-     * Assert that the given input is an array.
+     * Assert that input is an array.
      *
      * @remarks This method does not enforce size requirements or type checking for any array elements.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not an array.
+     * @param {string | undefined} message - Optional message for the error thrown when the input is not an array.
      *
-     * @returns {asserts input is unknown[]} Asserts that the given input is an array.
+     * @returns {asserts input is unknown[]} Asserts that input is an array.
      *
      * @throws {PrimitiveTypeError} When the input is not an array.
      *
@@ -160,14 +183,14 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is a callable function.
+     * Assert that input is a callable function.
      *
      * @remarks This method does not enforce type checking for function parameters or return type.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a function.
+     * @param {string | undefined} message - Optional message for the error thrown when the input is not a function.
      *
-     * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that the given input is a callable function.
+     * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that input is a callable function.
      *
      * @throws {PrimitiveTypeError} When the input is not a callable function.
      *
@@ -181,15 +204,15 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is a non-array object.
+     * Assert that input is a non-array object.
      *
      * @remarks This method does not enforce presence or type checking for any object properties.
      * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a non-array object.
+     * @param {string | undefined} message - Optional message for the error thrown when the input is not a non-array object.
      *
-     * @returns {asserts input is object} Asserts that the given input is a non-array object.
+     * @returns {asserts input is object} Asserts that input is a non-array object.
      *
      * @throws {PrimitiveTypeError} When the input is not a non-array object.
      *
@@ -203,14 +226,14 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that the given input is a string.
+     * Assert that input is a string.
      *
      * @see {@link StringUtility.assertStringType}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
+     * @param {string | undefined} message - Optional message for the error thrown when the input is not a string.
      *
-     * @returns {asserts input is string} Asserts that the given input is a string.
+     * @returns {asserts input is string} Asserts that input is a string.
      *
      * @throws {PrimitiveTypeError} When the input is not a string.
      *

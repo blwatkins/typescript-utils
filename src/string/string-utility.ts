@@ -89,16 +89,16 @@ export class StringUtility {
     }
 
     /**
-     * Assert that the given input is a string.
+     * Assert that `input` is a string.
      *
      * @see {@link StringUtility.isString}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
+     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a string.
      *
-     * @returns {asserts input is string} Asserts that the given input is a string.
+     * @returns {asserts input is string} Asserts that `input` is a string.
      *
-     * @throws {PrimitiveTypeError} When the input is not a string.
+     * @throws {PrimitiveTypeError} When `input` is not a string.
      *
      * @public
      * @since 0.1.0
@@ -114,16 +114,16 @@ export class StringUtility {
     }
 
     /**
-     * Assert that the given input is a single-line string that is trimmed (no leading or trailing whitespace).
+     * Assert that `input` is a single-line string that is trimmed (no leading or trailing whitespace).
      *
      * @see {@link StringUtility.isSingleLineTrimmedString}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a single-line trimmed string.
+     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a single-line trimmed string.
      *
-     * @returns {asserts input is string} Asserts that the given input is a single-line trimmed string.
+     * @returns {asserts input is string} Asserts that `input` is a single-line trimmed string.
      *
-     * @throws {PrimitiveTypeError} When the input is not a single-line string that is trimmed.
+     * @throws {PrimitiveTypeError} When `input` is not a single-line string that is trimmed.
      *
      * @public
      * @since 0.1.0
@@ -139,11 +139,11 @@ export class StringUtility {
     }
 
     /**
-     * Is the given input a string?
+     * Is `input` a string?
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if the given input is a string; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -153,12 +153,12 @@ export class StringUtility {
     }
 
     /**
-     * Is the given input a non-empty string?
+     * Is `input` a non-empty string?
      * Non-empty strings must contain at least one non-whitespace character.
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if the given input is a non-empty string; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a non-empty string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -168,13 +168,13 @@ export class StringUtility {
     }
 
     /**
-     * Is the given input a single-line lowercase string that is trimmed (no leading or trailing whitespace)?
+     * Is `input` a single-line lowercase string that is trimmed (no leading or trailing whitespace)?
      *
      * @see {@link StringUtility.singleLineLowercaseTrimmedPattern}
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if the given input is a single-line lowercase string that is trimmed; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a single-line lowercase string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -184,13 +184,13 @@ export class StringUtility {
     }
 
     /**
-     * Is the given input a single-line uppercase string that is trimmed (no leading or trailing whitespace)?
+     * Is `input` a single-line uppercase string that is trimmed (no leading or trailing whitespace)?
      *
      * @see {@link StringUtility.singleLineUppercaseTrimmedPattern}
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if the given input is a single-line uppercase string that is trimmed; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a single-line uppercase string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -200,13 +200,13 @@ export class StringUtility {
     }
 
     /**
-     * Is the given input a single-line string that is trimmed (no leading or trailing whitespace)?
+     * Is `input` a single-line string that is trimmed (no leading or trailing whitespace)?
      *
      * @see {@link StringUtility.singleLineTrimmedPattern}
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if the given input is a single-line string that is trimmed; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a single-line string that is trimmed; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -218,14 +218,14 @@ export class StringUtility {
     /* ==================== DEPRECATED ==================== */
 
     /**
-     * Assert that the given input is a string.
+     * Assert that input is a string.
      *
      * @see {@link StringUtility.isString}
      *
      * @param {unknown} input - The input to check.
      * @param {string|undefined} message - Optional message for the error thrown when the input is not a string.
      *
-     * @returns {asserts input is string} Asserts that the given input is a string.
+     * @returns {asserts input is string} Asserts that input is a string.
      *
      * @throws {PrimitiveTypeError} When the input is not a string.
      *

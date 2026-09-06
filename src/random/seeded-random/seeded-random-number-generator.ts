@@ -46,9 +46,9 @@ export class SeededRandomNumberGenerator {
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @throws {TypeError} When state is not an array with 4 elements.
-     * @throws {RangeError} When each element of state is not a 32-bit unsigned integer.
-     * @throws {RangeError} When state does not have at least one element that is greater than 0.
+     * @throws {TypeError} When `state` is not an array with 4 elements.
+     * @throws {RangeError} When each element of `state` is not a 32-bit unsigned integer.
+     * @throws {RangeError} When `state` does not have at least one element that is greater than 0.
      *
      * @public
      * @since 0.1.0
@@ -64,7 +64,7 @@ export class SeededRandomNumberGenerator {
      * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
      * Successive calls produce an independent, uniformly distributed sequence.
      *
-     * @returns {number} The next pseudorandom float in the range [0, 1).
+     * @returns {number} The next pseudorandom float in the range [0, 1) (zero inclusive, one exclusive).
      *
      * @public
      * @since 0.1.0
@@ -89,7 +89,7 @@ export class SeededRandomNumberGenerator {
     /**
      * Rotates the bits of a 32-bit unsigned integer left by k positions.
      *
-     * @param {number} x - The number to rotate. Must be a 32-bit unsigned integer.
+     * @param {number} x - The number to rotate. Should be a 32-bit unsigned integer.
      * @param {number} k - The number of bits to rotate.
      *
      * @returns {number} The rotated 32-bit unsigned integer.
@@ -112,32 +112,32 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
-     * Assert that the given input is a valid state array.
+     * Assert that `input` is a valid state array.
      *
      * @remarks For a state array to be valid, it must be an array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
      * Additionally, a valid state array must have at least one element that is greater than zero.
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {asserts input is [number, number, number]} Asserts that the given input is a valid state array.
+     * @returns {asserts input is [number, number, number]} Asserts that `input` is a valid state array.
      *
-     * @throws {PrimitiveTypeError} When the given input is not an array.
-     * @throws {PrimitiveTypeError} When the given input array does not have exactly 4 elements.
-     * @throws {ValueRangeError} When all elements of the given input array are not 32-bit unsigned integers less than 0xFFFFFFFF.
-     * @throws {ValueRangeError} When all elements of the given input array are equal to zero.
+     * @throws {PrimitiveTypeError} When `input` is not an array.
+     * @throws {PrimitiveTypeError} When `input` does not have exactly 4 elements.
+     * @throws {ValueRangeError} When all elements of `input` are not 32-bit unsigned integers less than 0xFFFFFFFF.
+     * @throws {ValueRangeError} When all elements of `input` are equal to zero.
      *
      * @private
      */
     #assertState(input: unknown): asserts input is [number, number, number] {
         TypeAssertions.assertArrayType(input);
-        if (input.length !== 4) throw new PrimitiveTypeError('State must have exactly 4 elements.');
+        if (input.length !== 4) throw new PrimitiveTypeError('Input must have exactly 4 elements.');
 
         const allValidStateValues: boolean = input.every((value: unknown): boolean => {
             return NumberUtility.isPositiveInteger(value, true) && value <= SeededRandomNumberGenerator.#maxStateValue;
         });
 
         if (!allValidStateValues) {
-            throw new ValueRangeError('All elements of state array must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
+            throw new ValueRangeError('All elements of input must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
         }
 
         const allZeroValues: boolean = input.every((value: unknown): boolean => {
@@ -145,7 +145,7 @@ export class SeededRandomNumberGenerator {
         });
 
         if (allZeroValues) {
-            throw new ValueRangeError('State must have at least one element that is greater than 0.');
+            throw new ValueRangeError('Input must have at least one element that is greater than 0.');
         }
     }
 }
