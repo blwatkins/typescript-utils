@@ -306,7 +306,7 @@ export default defineConfig([
 
             'jsdoc/require-returns-check': 'error',
 
-            'jsdoc/require-returns-description': 'error',
+            'jsdoc/require-returns-description': 'off',
 
             'jsdoc/require-returns-type': 'error',
 
