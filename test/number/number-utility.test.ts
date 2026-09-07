@@ -44,7 +44,7 @@ import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case
 describe('NumberUtility', (): void => {
     testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, StaticInstanceError);
 
-    describe('assertFiniteNumber', (): void => {
+    describe('Finite', (): void => {
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
@@ -70,14 +70,43 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        testAssertMethod(
-            NumberUtility.assertFiniteNumber.bind(NumberUtility),
-            successScenarios,
-            failureScenarios,
-            (input: unknown): string => {
-                return `Expected a finite number, but received: ${typeof input}.`;
-            }
-        );
+        const scenarios: Scenario[] = [
+            ...failureScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: false
+                };
+            }),
+            ...successScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: true
+                };
+            })
+        ];
+
+        describe('assertFinite', (): void => {
+            testAssertMethod(
+                NumberUtility.assertFinite.bind(NumberUtility),
+                successScenarios,
+                failureScenarios,
+                'Expected a finite number.'
+            );
+        });
+
+        describe('isFinite', (): void => {
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(NumberUtility.isFinite(testInput)).toBe(testExpected);
+                });
+            });
+        });
     });
 
     describe('assertInteger', (): void => {
@@ -488,42 +517,6 @@ describe('NumberUtility', (): void => {
         });
     });
 
-    describe('isFiniteNumber', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: [...nonNumberInputs],
-                expected: false
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: [...nonFiniteNumberInputs],
-                expected: false
-            },
-            {
-                label: 'Number inputs',
-                inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
-                    ...zeroInputs
-                ],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
-            });
-        });
-    });
-
     describe('isInteger', (): void => {
         const scenarios: Scenario[] = [
             {
@@ -627,6 +620,78 @@ describe('NumberUtility', (): void => {
             expect(NumberUtility.isPositiveInteger(0)).toBe(false);
             expect(NumberUtility.isPositiveInteger(0, false)).toBe(false);
             expect(NumberUtility.isPositiveInteger(0, true)).toBe(true);
+        });
+    });
+
+    /* ==================== DEPRECATED ==================== */
+
+    describe('[DEPRECATED] assertFiniteNumber', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: nonFiniteNumberInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Number inputs',
+                inputs: [
+                    ...positiveNumberInputs,
+                    ...negativeNumberInputs,
+                    ...zeroInputs
+                ],
+                expected: undefined
+            }
+        ];
+
+        testAssertMethod(
+            NumberUtility.assertFiniteNumber.bind(NumberUtility),
+            successScenarios,
+            failureScenarios,
+            'Expected a finite number.'
+        );
+    });
+
+    describe('[DEPRECATED] isFiniteNumber', (): void => {
+        const scenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: [...nonNumberInputs],
+                expected: false
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: [...nonFiniteNumberInputs],
+                expected: false
+            },
+            {
+                label: 'Number inputs',
+                inputs: [
+                    ...positiveNumberInputs,
+                    ...negativeNumberInputs,
+                    ...zeroInputs
+                ],
+                expected: true
+            }
+        ];
+
+        describe.each(
+            scenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+            test.each(
+                testCases
+            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
+            });
         });
     });
 });
