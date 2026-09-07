@@ -57,9 +57,9 @@ export class MathUtility {
      * @since 0.1.0
      */
     public static constrain(value: number, min: number, max: number): number {
-        NumberUtility.assertFiniteNumber(value, 'value must be a finite number.');
-        NumberUtility.assertFiniteNumber(min, 'min must be a finite number.');
-        NumberUtility.assertFiniteNumber(max, 'max must be a finite number.');
+        NumberUtility.assertFinite(value, 'value must be a finite number.');
+        NumberUtility.assertFinite(min, 'min must be a finite number.');
+        NumberUtility.assertFinite(max, 'max must be a finite number.');
         NumberUtility.assertValidRange(min, max);
 
         if (value < min) return min;

@@ -162,7 +162,7 @@ export class WeightedListUtility {
      * @since 0.1.0
      */
     public static isWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedList<TValue> {
-        TypeAssertions.assertFunctionType(valueTypeGuard, 'valueTyeGuard must be a function.');
+        TypeAssertions.assertFunction(valueTypeGuard, 'valueTyeGuard must be a function.');
 
         if (!WeightedListUtility.isGenericWeightedList(input)) {
             return false;

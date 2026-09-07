@@ -156,7 +156,7 @@ export class TypeAssertions {
      * @since 0.1.0
      */
     public static assertString(input: unknown, message?: string): asserts input is string {
-        StringUtility.assertStringType(input, message);
+        StringUtility.assertString(input, message);
     }
 
     /* ==================== DEPRECATED ==================== */

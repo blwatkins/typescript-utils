@@ -66,7 +66,7 @@ export class Random {
      * @since 0.1.0
      */
     public static set randomNumberGenerator(rng: () => number) {
-        TypeAssertions.assertFunctionType(rng, 'rng must be a function.');
+        TypeAssertions.assertFunction(rng, 'rng must be a function.');
         Random.#rng = rng;
     }
 
@@ -183,7 +183,7 @@ export class Random {
      * @since 0.1.0
      */
     public static randomElement<Type>(elements: Type[]): Type {
-        TypeAssertions.assertArrayType(elements);
+        TypeAssertions.assertArray(elements);
 
         if (elements.length === 0) {
             throw new PrimitiveTypeError('elements must be a non-empty array.');

@@ -129,7 +129,7 @@ export class SeededRandomNumberGenerator {
      * @private
      */
     #assertState(input: unknown): asserts input is [number, number, number] {
-        TypeAssertions.assertArrayType(input);
+        TypeAssertions.assertArray(input);
         if (input.length !== 4) throw new PrimitiveTypeError('Input must have exactly 4 elements.');
 
         const allValidStateValues: boolean = input.every((value: unknown): boolean => {
@@ -141,7 +141,7 @@ export class SeededRandomNumberGenerator {
         }
 
         const allZeroValues: boolean = input.every((value: unknown): boolean => {
-            return NumberUtility.isFiniteNumber(value) && value === 0;
+            return NumberUtility.isFinite(value) && value === 0;
         });
 
         if (allZeroValues) {

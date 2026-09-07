@@ -148,7 +148,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue): input is WeightedElement<TValue> {
-        TypeAssertions.assertFunctionType(valueTypeGuard, 'valueTypeGuard must be a function.');
+        TypeAssertions.assertFunction(valueTypeGuard, 'valueTypeGuard must be a function.');
         return WeightedElementUtility.isGenericWeightedElement(input) && valueTypeGuard(input.value);
     }
 }

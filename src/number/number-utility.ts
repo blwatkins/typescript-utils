@@ -57,7 +57,7 @@ export class NumberUtility {
      * @since 0.1.0
      */
     public static assertFinite(input: unknown, message?: string): asserts input is number {
-        if (!NumberUtility.isFiniteNumber(input)) {
+        if (!NumberUtility.isFinite(input)) {
             if (StringUtility.isSingleLineTrimmedString(message)) {
                 throw new PrimitiveTypeError(message);
             }
@@ -249,9 +249,9 @@ export class NumberUtility {
      * @since 0.1.0
      */
     public static isInRange(value: number, min: number, max: number): boolean {
-        NumberUtility.assertFiniteNumber(min);
-        NumberUtility.assertFiniteNumber(max);
-        NumberUtility.assertFiniteNumber(value);
+        NumberUtility.assertFinite(min);
+        NumberUtility.assertFinite(max);
+        NumberUtility.assertFinite(value);
         NumberUtility.assertValidRange(min, max);
         return value >= min && value <= max;
     }
@@ -271,8 +271,8 @@ export class NumberUtility {
      * @since 0.1.0
      */
     public static isValidRange(min: number, max: number): boolean {
-        NumberUtility.assertFiniteNumber(min, 'min must be a finite number.');
-        NumberUtility.assertFiniteNumber(max, 'max must be a finite number.');
+        NumberUtility.assertFinite(min, 'min must be a finite number.');
+        NumberUtility.assertFinite(max, 'max must be a finite number.');
         return min <= max;
     }
 
