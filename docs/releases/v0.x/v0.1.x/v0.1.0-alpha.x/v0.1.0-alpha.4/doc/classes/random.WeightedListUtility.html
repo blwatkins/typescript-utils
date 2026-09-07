@@ -19,7 +19,7 @@
 <h4 class="tsd-anchor-link" id="since">Since<a href="#since" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/b59b1d2c7bc8dfccdcecabe35b7e58af9315f35b/src/random/weighted-element/weighted-list-utility.ts#L35">src/random/weighted-element/weighted-list-utility.ts:35</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/093d0e754747e0f36a3745979e26ba6f7145a9c2/src/random/weighted-element/weighted-list-utility.ts#L35">src/random/weighted-element/weighted-list-utility.ts:35</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -41,7 +41,7 @@
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="assertgenericweightedlist-1"><span class="tsd-kind-call-signature">assertGenericWeightedList</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">input</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><a href="#assertgenericweightedlist-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Validate and assert that the given input is a generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
+<div class="tsd-comment tsd-typography"><p>Assert that <code>input</code> is a valid generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -50,32 +50,32 @@
 <div class="tsd-comment tsd-typography"><p>The input to validate.</p>
 </div></li>
 <li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
-<div class="tsd-comment tsd-typography"><p>Optional message for the error thrown when the input is not a valid generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
+<div class="tsd-comment tsd-typography"><p>Optional message for the error thrown when <code>input</code> is not a valid generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4><p>Asserts that the given input is a valid generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
-
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks">Remarks<a href="#remarks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not enforce type checking for the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of the given elements in the list.</p>
+<h4 class="tsd-anchor-link" id="remarks">Remarks<a href="#remarks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not enforce type checking for the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of the list elements.
+For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.</p>
 </div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see">See<a href="#see" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#isgenericweightedlist" class="tsd-kind-method">WeightedListUtility.isGenericWeightedList</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When the given input is not a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
+<h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>input</code> is not a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-1">Since<a href="#since-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/b59b1d2c7bc8dfccdcecabe35b7e58af9315f35b/src/random/weighted-element/weighted-list-utility.ts#L65">src/random/weighted-element/weighted-list-utility.ts:65</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/093d0e754747e0f36a3745979e26ba6f7145a9c2/src/random/weighted-element/weighted-list-utility.ts#L66">src/random/weighted-element/weighted-list-utility.ts:66</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertweightedlist"><code class="tsd-tag">Static</code><span>assert<wbr/>Weighted<wbr/>List</span><a href="#assertweightedlist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="assertweightedlist-1"><span class="tsd-kind-call-signature">assertWeightedList</span><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">input</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">valueTypeGuard</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-kind-parameter">value</span> <span class="tsd-signature-keyword">is</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span><a href="#assertweightedlist-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Validate and assert that the given input is a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>, where the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element passes the given type guard function.</p>
+<div class="tsd-comment tsd-typography"><p>Assert that <code>input</code> is a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object.</p>
 </div>
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
@@ -91,36 +91,38 @@
 </div></li>
 <li><span><span class="tsd-kind-parameter">valueTypeGuard</span>: <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-kind-parameter">value</span> <span class="tsd-signature-keyword">is</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a></span>
 <div class="tsd-comment tsd-typography"><p>The type guard function used to validate the type or schema of the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element in the list.
-This method should return <code>true</code> if the value is of the expected type or schema, and <code>false</code> otherwise.
+This method should return <code>true</code> if the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property matches the expected type or schema, and <code>false</code> otherwise.
 The type validated by the function should match the assigned type of the <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
 </div></li>
 <li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
-<div class="tsd-comment tsd-typography"><p>Optional message for the error thrown when the input is not a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
+<div class="tsd-comment tsd-typography"><p>Optional message for the error thrown when <code>input</code> is not a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span></h4><p>Asserts that the given input is a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>, where the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element passes the given type guard function.</p>
-
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
+<div class="tsd-tag-remarks">
+<h4 class="tsd-anchor-link" id="remarks-1">Remarks<a href="#remarks-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.</p>
+</div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see-1">See<a href="#see-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#isweightedlist" class="tsd-kind-method">WeightedListUtility.isWeightedList</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-1">Throws<a href="#throws-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When the given value type guard is not a function.</p>
+<h4 class="tsd-anchor-link" id="throws-1">Throws<a href="#throws-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>valueTypeGuard</code> is not a function.</p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-2">Throws<a href="#throws-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When the given input is not a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>, or when the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of any element does not pass the given type guard function.</p>
+<h4 class="tsd-anchor-link" id="throws-2">Throws<a href="#throws-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>input</code> is not a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>, or when the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of any element does not match the expected type or schema.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-2">Since<a href="#since-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/b59b1d2c7bc8dfccdcecabe35b7e58af9315f35b/src/random/weighted-element/weighted-list-utility.ts#L96">src/random/weighted-element/weighted-list-utility.ts:96</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/093d0e754747e0f36a3745979e26ba6f7145a9c2/src/random/weighted-element/weighted-list-utility.ts#L99">src/random/weighted-element/weighted-list-utility.ts:99</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isgenericweightedlist"><code class="tsd-tag">Static</code><span>is<wbr/>Generic<wbr/>Weighted<wbr/>List</span><a href="#isgenericweightedlist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="isgenericweightedlist-1"><span class="tsd-kind-call-signature">isGenericWeightedList</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">input</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><a href="#isgenericweightedlist-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Is the given input a generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object?</p>
+<div class="tsd-comment tsd-typography"><p>Is <code>input</code> a valid generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object?</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
@@ -128,12 +130,12 @@ The type validated by the function should match the assigned type of the <a href
 <li><span><span class="tsd-kind-parameter">input</span>: <span class="tsd-signature-type">unknown</span></span>
 <div class="tsd-comment tsd-typography"><p>The input to check.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4><p><code>true</code> if the given input is a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object; <code>false</code> otherwise.
-For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4><p><code>true</code> if <code>input</code> is a valid generic <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object; <code>false</code> otherwise.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-1">Remarks<a href="#remarks-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not enforce type checking for the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of the list elements.</p>
+<h4 class="tsd-anchor-link" id="remarks-2">Remarks<a href="#remarks-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not enforce type checking for the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of the list elements.
+For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.</p>
 </div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see-2">See<a href="#see-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="random.WeightedElementUtility.html#isgenericweightedelement" class="tsd-kind-method">WeightedElementUtility.isGenericWeightedElement</a></p>
@@ -142,14 +144,14 @@ For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">We
 <h4 class="tsd-anchor-link" id="since-3">Since<a href="#since-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/b59b1d2c7bc8dfccdcecabe35b7e58af9315f35b/src/random/weighted-element/weighted-list-utility.ts#L121">src/random/weighted-element/weighted-list-utility.ts:121</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/093d0e754747e0f36a3745979e26ba6f7145a9c2/src/random/weighted-element/weighted-list-utility.ts#L124">src/random/weighted-element/weighted-list-utility.ts:124</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isweightedlist"><code class="tsd-tag">Static</code><span>is<wbr/>Weighted<wbr/>List</span><a href="#isweightedlist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
 <div class="tsd-signature tsd-anchor-link" id="isweightedlist-1"><span class="tsd-kind-call-signature">isWeightedList</span><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#isweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">input</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">valueTypeGuard</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-kind-parameter">value</span> <span class="tsd-signature-keyword">is</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#isweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#isweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span><a href="#isweightedlist-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Is the given input a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object, where the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element passes the given type guard function?</p>
+<div class="tsd-comment tsd-typography"><p>Is <code>input</code> a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object?</p>
 </div>
 <section class="tsd-panel">
 <h4>Type Parameters</h4>
@@ -165,12 +167,15 @@ For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">We
 </div></li>
 <li><span><span class="tsd-kind-parameter">valueTypeGuard</span>: <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">value</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-kind-parameter">value</span> <span class="tsd-signature-keyword">is</span> <a class="tsd-signature-type tsd-kind-type-parameter" href="#isweightedlisttvalue">TValue</a></span>
 <div class="tsd-comment tsd-typography"><p>The type guard function used to validate the type or schema of the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element in the list.
-This method should return <code>true</code> if the value is of the expected type or schema, and <code>false</code> otherwise.
+This method should return <code>true</code> if the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property matches the expected type or schema, and <code>false</code> otherwise.
 The type validated by the function should match the assigned type of the <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a>.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#isweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span></h4><p><code>true</code> if the given input is a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object, where the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element passes the given type guard function; <code>false</code> otherwise.</p>
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#isweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span></h4><p><code>true</code> if <code>input</code> is a valid <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object, where the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of each element matches the expected type or schema; <code>false</code> otherwise.</p>
 
 <div class="tsd-comment tsd-typography">
+<div class="tsd-tag-remarks">
+<h4 class="tsd-anchor-link" id="remarks-3">Remarks<a href="#remarks-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.</p>
+</div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see-3">See<a href="#see-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
 <li><a href="#isgenericweightedlist" class="tsd-kind-method">WeightedListUtility.isGenericWeightedList</a></li>
@@ -178,13 +183,13 @@ The type validated by the function should match the assigned type of the <a href
 </ul>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-3">Throws<a href="#throws-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When the given value type guard is not a function.</p>
+<h4 class="tsd-anchor-link" id="throws-3">Throws<a href="#throws-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>valueTypeGuard</code> is not a function.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-4">Since<a href="#since-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/b59b1d2c7bc8dfccdcecabe35b7e58af9315f35b/src/random/weighted-element/weighted-list-utility.ts#L159">src/random/weighted-element/weighted-list-utility.ts:159</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/093d0e754747e0f36a3745979e26ba6f7145a9c2/src/random/weighted-element/weighted-list-utility.ts#L164">src/random/weighted-element/weighted-list-utility.ts:164</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -211,5 +216,5 @@ The type validated by the function should match the assigned type of the <a href
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
 <li>Loading...</li></ul></nav></div></div></div><footer>
 <p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-<p><br/>Copyright &copy; 2022-2026 Brittni Watkins. All rights reserved.</p></footer>
+<p><br/>Copyright &copy; 2022-2026 Brittni Watkins.</p></footer>
 <div class="overlay"></div></body></html>
