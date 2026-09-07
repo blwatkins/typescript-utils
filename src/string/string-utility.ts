@@ -56,7 +56,7 @@ export class StringUtility {
      * @public
      * @since 0.1.0
      */
-    public static get singleLineLowercaseTrimmedPattern(): RegExp {
+    public static get singleLineLowercase(): RegExp {
         return regularExpressions.singleLineLowercaseTrimmed;
     }
 
@@ -70,7 +70,7 @@ export class StringUtility {
      * @public
      * @since 0.1.0
      */
-    public static get singleLineUppercaseTrimmedPattern(): RegExp {
+    public static get singleLineUppercase(): RegExp {
         return regularExpressions.singleLineUppercaseTrimmed;
     }
 
@@ -84,7 +84,7 @@ export class StringUtility {
      * @public
      * @since 0.1.0
      */
-    public static get singleLineTrimmedPattern(): RegExp {
+    public static get singleLine(): RegExp {
         return regularExpressions.singleLineTrimmed;
     }
 
@@ -168,19 +168,21 @@ export class StringUtility {
     }
 
     /**
-     * Is `input` a single-line lowercase string that is trimmed (no leading or trailing whitespace)?
+     * Is `input` a single-line lowercase string?
      *
-     * @see {@link StringUtility.singleLineLowercaseTrimmedPattern}
+     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     *
+     * @see {@link StringUtility.singleLineLowercase}
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if `input` is a single-line lowercase string that is trimmed; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a single-line lowercase string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
      */
-    public static isSingleLineLowercaseTrimmedString(input: unknown): input is string {
-        return StringUtility.isString(input) && StringUtility.singleLineLowercaseTrimmedPattern.test(input);
+    public static isSingleLineLowercase(input: unknown): input is string {
+        return StringUtility.isString(input) && StringUtility.singleLineLowercase.test(input);
     }
 
     /**
@@ -200,22 +202,72 @@ export class StringUtility {
     }
 
     /**
-     * Is `input` a single-line string that is trimmed (no leading or trailing whitespace)?
+     * Is `input` a single-line string?
      *
-     * @see {@link StringUtility.singleLineTrimmedPattern}
+     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     *
+     * @see {@link StringUtility.singleLine}
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is string} `true` if `input` is a single-line string that is trimmed; `false` otherwise.
+     * @returns {input is string} `true` if `input` is a single-line string; `false` otherwise.
      *
      * @public
      * @since 0.1.0
      */
-    public static isSingleLineTrimmedString(input: unknown): input is string {
-        return StringUtility.isString(input) && StringUtility.singleLineTrimmedPattern.test(input);
+    public static isSingleLine(input: unknown): input is string {
+        return StringUtility.isString(input) && StringUtility.singleLine.test(input);
     }
 
     /* ==================== DEPRECATED ==================== */
+
+    /**
+     * Get the regular expression for single-line lowercase strings.
+     *
+     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     *
+     * @returns {RegExp} Regular expression pattern for validating single-line lowercase strings.
+     *
+     * @deprecated Replaced by {@link StringUtility.singleLineLowercase}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get singleLineLowercaseTrimmedPattern(): RegExp {
+        return StringUtility.singleLineLowercase;
+    }
+
+    /**
+     * Get the regular expression for single-line uppercase strings.
+     *
+     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     *
+     * @returns {RegExp} Regular expression pattern for validating single-line uppercase strings.
+     *
+     * @deprecated Replaced by {@link StringUtility.singleLineUppercase}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get singleLineUppercaseTrimmedPattern(): RegExp {
+        return StringUtility.singleLineUppercase;
+    }
+
+    /**
+     * Get the regular expression for single-line mixed-case strings.
+     *
+     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     *
+     * @returns {RegExp} Regular expression pattern for validating single-line mixed-case strings.
+     *
+     * @deprecated Replaced by {@link StringUtility.singleLine}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get singleLineTrimmedPattern(): RegExp {
+        return StringUtility.singleLine;
+    }
 
     /**
      * Assert that input is a string.
@@ -236,5 +288,41 @@ export class StringUtility {
      */
     public static assertStringType(input: unknown, message?: string): asserts input is string {
         StringUtility.assertString(input, message);
+    }
+
+    /**
+     * Is `input` a single-line lowercase string that is trimmed (no leading or trailing whitespace)?
+     *
+     * @see {@link StringUtility.singleLineLowercaseTrimmedPattern}
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {input is string} `true` if `input` is a single-line lowercase string that is trimmed; `false` otherwise.
+     *
+     * @deprecated Replaced by {@link StringUtility.isSingleLineLowercase}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isSingleLineLowercaseTrimmedString(input: unknown): input is string {
+        return StringUtility.isSingleLineLowercase(input);
+    }
+
+    /**
+     * Is `input` a single-line string that is trimmed (no leading or trailing whitespace)?
+     *
+     * @see {@link StringUtility.singleLineTrimmedPattern}
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {input is string} `true` if `input` is a single-line string that is trimmed; `false` otherwise.
+     *
+     * @deprecated Replaced by {@link StringUtility.isSingleLine}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isSingleLineTrimmedString(input: unknown): input is string {
+        return StringUtility.isSingleLine(input);
     }
 }
