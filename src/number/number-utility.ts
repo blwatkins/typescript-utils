@@ -49,7 +49,7 @@ export class NumberUtility {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a finite number.
      *
-     * @returns {asserts input is number} Asserts that `input` is a finite number.
+     * @returns {asserts input is number}
      *
      * @throws {PrimitiveTypeError} When `input` is not a finite number.
      *
@@ -58,11 +58,11 @@ export class NumberUtility {
      */
     public static assertFinite(input: unknown, message?: string): asserts input is number {
         if (!NumberUtility.isFinite(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a finite number, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a finite number.');
         }
     }
 
@@ -74,7 +74,7 @@ export class NumberUtility {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not an integer.
      *
-     * @returns {asserts input is number} Asserts that `input` is an integer.
+     * @returns {asserts input is number}
      *
      * @throws {PrimitiveTypeError} When `input` is not an integer.
      *
@@ -83,11 +83,11 @@ export class NumberUtility {
      */
     public static assertInteger(input: unknown, message?: string): asserts input is number {
         if (!NumberUtility.isInteger(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected an integer, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected an integer.');
         }
     }
 
@@ -102,7 +102,7 @@ export class NumberUtility {
      * Default value is `false`.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a positive integer.
      *
-     * @returns {asserts input is number} Asserts that `input` is a positive integer.
+     * @returns {asserts input is number}
      *
      * @throws {PrimitiveTypeError} When `input` is not a positive integer.
      *
@@ -111,11 +111,11 @@ export class NumberUtility {
      */
     public static assertPositiveInteger(input: unknown, zeroInclusive: boolean = false, message?: string): asserts input is number {
         if (!NumberUtility.isPositiveInteger(input, zeroInclusive)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a positive integer (zeroInclusive=${zeroInclusive}), but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a positive integer or zero if zeroInclusive is true.');
         }
     }
 
@@ -142,7 +142,7 @@ export class NumberUtility {
      */
     public static assertInRange(value: number, min: number, max: number, message?: string): void {
         if (!NumberUtility.isInRange(value, min, max)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
 
@@ -170,7 +170,7 @@ export class NumberUtility {
      */
     public static assertValidRange(min: number, max: number, message?: string): void {
         if (!NumberUtility.isValidRange(min, max)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
 

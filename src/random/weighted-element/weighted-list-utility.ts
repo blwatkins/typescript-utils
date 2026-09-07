@@ -54,9 +54,9 @@ export class WeightedListUtility {
      * @see {@link WeightedListUtility.isGenericWeightedList}
      *
      * @param {unknown} input - The input to validate.
-     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid generic {@link WeightedList} object.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid generic {@link WeightedList} object.
      *
-     * @returns {asserts input is WeightedList<unknown>} Asserts that `input` is a valid generic {@link WeightedList} object.
+     * @returns {asserts input is WeightedList<unknown>}
      *
      * @throws {SchemaTypeError} When `input` is not a valid {@link WeightedList} object.
      *
@@ -65,7 +65,7 @@ export class WeightedListUtility {
      */
     public static assertGenericWeightedList(input: unknown, message?: string): asserts input is WeightedList<unknown> {
         if (!WeightedListUtility.isGenericWeightedList(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new SchemaTypeError(message);
             }
 
@@ -88,7 +88,7 @@ export class WeightedListUtility {
      * The type validated by the function should match the assigned type of the {@link WeightedList}.
      * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid {@link WeightedList} object.
      *
-     * @returns {asserts input is WeightedList<TValue>} Asserts that `input` is a valid {@link WeightedList} object, where the {@link WeightedElement.value} property of each element matches the expected type or schema.
+     * @returns {asserts input is WeightedList<TValue>}
      *
      * @throws {PrimitiveTypeError} When `valueTypeGuard` is not a function.
      * @throws {SchemaTypeError} When `input` is not a valid {@link WeightedList}, or when the {@link WeightedElement.value} property of any element does not match the expected type or schema.
@@ -98,7 +98,7 @@ export class WeightedListUtility {
      */
     public static assertWeightedList<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue, message?: string): asserts input is WeightedList<TValue> {
         if (!WeightedListUtility.isWeightedList(input, valueTypeGuard)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new SchemaTypeError(message);
             }
 

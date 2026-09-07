@@ -56,9 +56,9 @@ export class RangeUtility {
      * @see {@link RangeUtility.isRange}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid {@link Range} object.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid {@link Range} object.
      *
-     * @returns {asserts input is Range} Asserts that `input` is a valid {@link Range} object.
+     * @returns {asserts input is Range}
      *
      * @throws {SchemaTypeError} When `input` is not a valid {@link Range} object.
      *
@@ -67,7 +67,7 @@ export class RangeUtility {
      */
     public static assertRange(input: unknown, message?: string): asserts input is Range {
         if (!RangeUtility.isRange(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new SchemaTypeError(message);
             }
 

@@ -57,9 +57,9 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid generic {@link WeightedElement} object.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid generic {@link WeightedElement} object.
      *
-     * @returns {asserts input is WeightedElement<unknown>} Asserts that `input` is a valid generic {@link WeightedElement} object.
+     * @returns {asserts input is WeightedElement<unknown>}
      *
      * @throws {SchemaTypeError} When `input` is not a valid generic {@link WeightedElement} object.
      *
@@ -68,7 +68,7 @@ export class WeightedElementUtility {
      */
     public static assertGenericWeightedElement(input: unknown, message?: string): asserts input is WeightedElement<unknown> {
         if (!WeightedElementUtility.isGenericWeightedElement(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new SchemaTypeError(message);
             }
 
@@ -91,7 +91,7 @@ export class WeightedElementUtility {
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
      * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid {@link WeightedElement} object.
      *
-     * @returns {asserts input is WeightedElement<TValue>} Asserts that `input` is a valid {@link WeightedElement} object whose value matches the expected type or schema.
+     * @returns {asserts input is WeightedElement<TValue>}
      *
      * @throws {PrimitiveTypeError} When `valueTypeGuard` is not a function.
      * @throws {SchemaTypeError} When `input` is not a valid {@link WeightedElement} object.
@@ -101,7 +101,7 @@ export class WeightedElementUtility {
      */
     public static assertWeightedElement<TValue>(input: unknown, valueTypeGuard: (value: unknown) => value is TValue, message?: string): asserts input is WeightedElement<TValue> {
         if (!WeightedElementUtility.isWeightedElement(input, valueTypeGuard)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new SchemaTypeError(message);
             }
 

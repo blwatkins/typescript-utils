@@ -49,7 +49,7 @@ export class TypeAssertions {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not an array.
      *
-     * @returns {asserts input is unknown[]} Asserts that `input` is an array.
+     * @returns {asserts input is unknown[]}
      *
      * @throws {PrimitiveTypeError} When `input` is not an array.
      *
@@ -58,11 +58,11 @@ export class TypeAssertions {
      */
     public static assertArray(input: unknown, message?: string): asserts input is unknown[] {
         if (!Array.isArray(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected an array.');
         }
     }
 
@@ -72,7 +72,7 @@ export class TypeAssertions {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a boolean.
      *
-     * @returns {asserts input is boolean} Asserts that `input` is a boolean.
+     * @returns {asserts input is boolean}
      *
      * @throws {PrimitiveTypeError} When `input` is not a boolean.
      *
@@ -81,11 +81,11 @@ export class TypeAssertions {
      */
     public static assertBoolean(input: unknown, message?: string): asserts input is boolean {
         if (typeof input !== 'boolean') {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a boolean, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a boolean.');
         }
     }
 
@@ -106,11 +106,11 @@ export class TypeAssertions {
      */
     public static assertFunction(input: unknown, message?: string): asserts input is (...args: unknown[]) => unknown {
         if (typeof input !== 'function') {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a function, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a function.');
         }
     }
 
@@ -132,23 +132,23 @@ export class TypeAssertions {
      */
     public static assertObject(input: unknown, message?: string): asserts input is object {
         if (!input || typeof input !== 'object' || Array.isArray(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a non-array object, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a non-array object.');
         }
     }
 
     /**
      * Assert that `input` is a string.
      *
-     * @see {@link StringUtility.assertStringType}
+     * @see {@link StringUtility.assertString}
      *
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a string.
      *
-     * @returns {asserts input is string} Asserts that `input` is a string.
+     * @returns {asserts input is string}
      *
      * @throws {PrimitiveTypeError} When `input` is not a string.
      *

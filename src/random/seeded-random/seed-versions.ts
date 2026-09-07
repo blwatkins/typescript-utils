@@ -98,7 +98,7 @@ export class SeedVersions {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid seed version index.
      *
-     * @returns {asserts input is number} Asserts that `input` is a valid seed version index.
+     * @returns {asserts input is number}
      *
      * @throws {PrimitiveTypeError} When `input` is not a positive integer or zero.
      * @throws {ValueRangeError} When `input` is not a valid seed version index.
@@ -108,11 +108,11 @@ export class SeedVersions {
      */
     static assertValidIndex(input: unknown, message?: string): asserts input is number {
         if (!SeedVersions.isValidIndex(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError(`Input is out of bounds for valid seed version index [0-${SeedVersions.size - 1}].`);
+            throw new ValueRangeError('Input is out of bounds for valid seed version index.');
         }
     }
 
@@ -121,14 +121,14 @@ export class SeedVersions {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {boolean} `true` if `input` is a valid seed version; `false` otherwise.
+     * @returns {input is number} `true` if `input` is a valid seed version; `false` otherwise.
      *
      * @throws {PrimitiveTypeError} When `input` is not a positive integer or zero.
      *
      * @public
      * @since 0.1.0
      */
-    static isValidIndex(input: unknown): boolean {
+    static isValidIndex(input: unknown): input is number {
         NumberUtility.assertPositiveInteger(input, true);
         return input < seedVersions.length;
     }
