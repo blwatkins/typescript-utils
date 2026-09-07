@@ -109,7 +109,7 @@ export class StringUtility {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a string, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a string.');
         }
     }
 
@@ -190,7 +190,7 @@ export class StringUtility {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a single-line string.`);
+            throw new PrimitiveTypeError('Expected a single-line string.');
         }
     }
 
