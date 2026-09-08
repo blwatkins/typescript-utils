@@ -180,7 +180,7 @@ describe('NumberUtility', (): void => {
         });
     });
 
-    describe('assertPositiveInteger', (): void => {
+    describe('PositiveInteger', (): void => {
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
@@ -212,48 +212,102 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        describe('assertPositiveInteger with zero inclusive', () => {
-            function assertPositiveIntegerWithZeroInclusive(input: unknown, message?: string): void {
-                NumberUtility.assertPositiveInteger(input, true, message);
-            }
+        const scenarios: Scenario[] = [
+            ...failureScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: false
+                };
+            }),
+            ...successScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: true
+                };
+            })
+        ];
 
-            testAssertMethod(
-                assertPositiveIntegerWithZeroInclusive,
-                [
-                    ...successScenarios,
+        describe('zeroInclusive = false/undefined', (): void => {
+            describe('assertPositiveInteger', (): void => {
+                function assertPositiveInteger(input: unknown, message?: string): void {
+                    NumberUtility.assertPositiveInteger(input, false, message);
+                }
+
+                testAssertMethod(
+                    assertPositiveInteger,
+                    successScenarios,
+                    [
+                        ...failureScenarios,
+                        {
+                            label: 'Zero inputs',
+                            inputs: zeroInputs,
+                            expected: PrimitiveTypeError
+                        }
+                    ],
+                    'Expected a positive integer or zero if zeroInclusive is true.'
+                );
+            });
+
+            describe('isPositiveInteger', (): void => {
+                describe.each([
+                    ...scenarios,
                     {
                         label: 'Zero inputs',
                         inputs: zeroInputs,
-                        expected: undefined
+                        expected: false
                     }
-                ],
-                failureScenarios,
-                (input: unknown): string => {
-                    return `Expected a positive integer (zeroInclusive=true), but received: ${typeof input}.`;
-                }
-            );
+                ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    test.each(
+                        testCases
+                    )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect(NumberUtility.isPositiveInteger(testInput)).toBe(testExpected);
+                        expect(NumberUtility.isPositiveInteger(testInput, false)).toBe(testExpected);
+                    });
+                });
+            });
         });
 
-        describe('assertPositiveInteger', (): void => {
-            function assertPositiveInteger(input: unknown, message?: string): void {
-                NumberUtility.assertPositiveInteger(input, false, message);
-            }
+        describe('zeroInclusive = true', (): void => {
+            describe('assertPositiveInteger', (): void => {
+                function assertPositiveInteger(input: unknown, message?: string): void {
+                    NumberUtility.assertPositiveInteger(input, true, message);
+                }
 
-            testAssertMethod(
-                assertPositiveInteger,
-                successScenarios,
-                [
-                    ...failureScenarios,
+                testAssertMethod(
+                    assertPositiveInteger,
+                    [
+                        ...successScenarios,
+                        {
+                            label: 'Zero inputs',
+                            inputs: zeroInputs,
+                            expected: undefined
+                        }
+                    ],
+                    failureScenarios,
+                    'Expected a positive integer or zero if zeroInclusive is true.'
+                );
+            });
+
+            describe('isPositiveInteger', (): void => {
+                describe.each([
+                    ...scenarios,
                     {
                         label: 'Zero inputs',
                         inputs: zeroInputs,
-                        expected: PrimitiveTypeError
+                        expected: true
                     }
-                ],
-                (input: unknown): string => {
-                    return `Expected a positive integer (zeroInclusive=false), but received: ${typeof input}.`;
-                }
-            );
+                ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    test.each(
+                        testCases
+                    )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect(NumberUtility.isPositiveInteger(testInput, true)).toBe(testExpected);
+                    });
+                });
+            });
         });
     });
 
