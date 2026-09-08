@@ -21,6 +21,7 @@
  */
 
 // TODO - RangeBuilder - static buildFrom(min, max) method
+// TODO - RangeUtility.isIn(value, range)
 
 import Value from 'typebox/value';
 
