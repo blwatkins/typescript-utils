@@ -109,7 +109,7 @@ describe('NumberUtility', (): void => {
         });
     });
 
-    describe('assertInteger', (): void => {
+    describe('Integer', (): void => {
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
@@ -141,14 +141,43 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        testAssertMethod(
-            NumberUtility.assertInteger.bind(NumberUtility),
-            successScenarios,
-            failureScenarios,
-            (input: unknown): string => {
-                return `Expected an integer, but received: ${typeof input}.`;
-            }
-        );
+        const scenarios: Scenario[] = [
+            ...failureScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: false
+                };
+            }),
+            ...successScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: true
+                };
+            })
+        ];
+
+        describe('assertInteger', (): void => {
+            testAssertMethod(
+                NumberUtility.assertInteger.bind(NumberUtility),
+                successScenarios,
+                failureScenarios,
+                'Expected an integer.'
+            );
+        });
+
+        describe('isInteger', (): void => {
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(NumberUtility.isInteger(testInput)).toBe(testExpected);
+                });
+            });
+        });
     });
 
     describe('assertPositiveInteger', (): void => {
@@ -513,54 +542,6 @@ describe('NumberUtility', (): void => {
                         }).toThrow(testExpected);
                     });
                 });
-            });
-        });
-    });
-
-    describe('isInteger', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: [...nonNumberInputs],
-                expected: false
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: [...nonFiniteNumberInputs],
-                expected: false
-            },
-            {
-                label: 'Float inputs',
-                inputs: [
-                    ...floatInputs
-                ],
-                expected: false
-            },
-            {
-                label: 'Zero inputs',
-                inputs: [
-                    ...zeroInputs
-                ],
-                expected: true
-            },
-            {
-                label: 'Integer inputs',
-                inputs: [
-                    ...integerInputs
-                ],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(NumberUtility.isInteger(testInput)).toBe(testExpected);
             });
         });
     });
