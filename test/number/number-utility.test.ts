@@ -542,6 +542,10 @@ describe('NumberUtility', (): void => {
         });
     });
 
+    describe('ValidRange', (): void => {
+       test.todo('ValidRange');
+    });
+
     describe('assertValidRange', (): void => {
         const successScenarios: Scenario[] = [
             {
