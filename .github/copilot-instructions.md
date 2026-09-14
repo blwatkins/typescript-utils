@@ -70,6 +70,7 @@ test/                     # Vitest test suites (mirrors src/ module structure)
   random/                 # Tests for the random module
     seeded-random/        # Tests for the seeded-random module
     weighted-element/     # Tests for the weighted-element module
+  range/                  # Tests for the range module
   string/                 # Tests for the string module
   utils/                  # Shared test fixtures and scenario helpers for use across test suites
     assert/               # Shared contract test suites for assertion methods and type guards

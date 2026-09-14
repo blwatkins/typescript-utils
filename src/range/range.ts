@@ -22,8 +22,6 @@
 
 import { Type, Static } from 'typebox';
 
-// TODO - unit tests - make sure min and max cannot be NaN or Infinity (finite numbers only).
-
 /**
  * TypeBox schema to validate a {@link Range} object.
  *
