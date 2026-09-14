@@ -86,7 +86,7 @@
     "number",
     "random",
     "seeded-random",
-    "weighted-element",
+    "non-uniform random",
     "range",
     "string"
   ]
