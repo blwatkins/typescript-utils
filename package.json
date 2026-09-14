@@ -85,6 +85,8 @@
     "math",
     "number",
     "random",
+    "seeded-random",
+    "weighted-element",
     "range",
     "string"
   ]
