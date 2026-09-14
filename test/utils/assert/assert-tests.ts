@@ -147,3 +147,36 @@ export function testAssertMethod(
         });
     });
 }
+
+export function testIsMethod(
+    method: (input: unknown) => boolean,
+    successScenarios: Scenario[],
+    failureScenarios: Scenario[]
+): void {
+    const scenarios: Scenario[] = [
+        ...failureScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: false
+            };
+        }),
+        ...successScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: true
+            };
+        })
+    ];
+
+    describe.each(
+        scenarios
+    )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+        test.each(
+            testCases
+        )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            expect(method(testInput)).toBe(testExpected);
+        });
+    });
+}

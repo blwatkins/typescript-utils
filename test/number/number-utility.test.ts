@@ -24,7 +24,7 @@ import { describe, test, expect } from 'vitest';
 
 import { NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
-import { testAssertMethod } from '../utils/assert/assert-tests';
+import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
     floatInputs,
@@ -70,21 +70,6 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const scenarios: Scenario[] = [
-            ...failureScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: false
-                };
-            }),
-            ...successScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: true
-                };
-            })
-        ];
-
         describe('assertFinite', (): void => {
             testAssertMethod(
                 NumberUtility.assertFinite.bind(NumberUtility),
@@ -95,17 +80,7 @@ describe('NumberUtility', (): void => {
         });
 
         describe('isFinite', (): void => {
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(NumberUtility.isFinite(testInput)).toBe(testExpected);
-                });
-            });
+            testIsMethod(NumberUtility.isFinite.bind(NumberUtility), successScenarios, failureScenarios);
         });
     });
 
@@ -141,21 +116,6 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const scenarios: Scenario[] = [
-            ...failureScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: false
-                };
-            }),
-            ...successScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: true
-                };
-            })
-        ];
-
         describe('assertInteger', (): void => {
             testAssertMethod(
                 NumberUtility.assertInteger.bind(NumberUtility),
@@ -166,17 +126,7 @@ describe('NumberUtility', (): void => {
         });
 
         describe('isInteger', (): void => {
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(NumberUtility.isInteger(testInput)).toBe(testExpected);
-                });
-            });
+            testIsMethod(NumberUtility.isInteger.bind(NumberUtility), successScenarios, failureScenarios);
         });
     });
 
@@ -212,22 +162,16 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const scenarios: Scenario[] = [
-            ...failureScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: false
-                };
-            }),
-            ...successScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: true
-                };
-            })
-        ];
-
         describe('zeroInclusive = false/undefined', (): void => {
+            const zeroExclusiveFailureScenarios: Scenario[] = [
+                ...failureScenarios,
+                {
+                    label: 'Zero inputs',
+                    inputs: zeroInputs,
+                    expected: PrimitiveTypeError
+                }
+            ];
+
             describe('assertPositiveInteger', (): void => {
                 function assertPositiveInteger(input: unknown, message?: string): void {
                     NumberUtility.assertPositiveInteger(input, false, message);
@@ -236,40 +180,40 @@ describe('NumberUtility', (): void => {
                 testAssertMethod(
                     assertPositiveInteger,
                     successScenarios,
-                    [
-                        ...failureScenarios,
-                        {
-                            label: 'Zero inputs',
-                            inputs: zeroInputs,
-                            expected: PrimitiveTypeError
-                        }
-                    ],
+                    zeroExclusiveFailureScenarios,
                     'Expected a positive integer or zero if zeroInclusive is true.'
                 );
             });
 
             describe('isPositiveInteger', (): void => {
-                describe.each([
-                    ...scenarios,
-                    {
-                        label: 'Zero inputs',
-                        inputs: zeroInputs,
-                        expected: false
+                describe('zeroInclusive argument omitted', (): void => {
+                    function isPositiveInteger(input: unknown): boolean {
+                        return NumberUtility.isPositiveInteger(input);
                     }
-                ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                    test.each(
-                        testCases
-                    )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        expect(NumberUtility.isPositiveInteger(testInput)).toBe(testExpected);
-                        expect(NumberUtility.isPositiveInteger(testInput, false)).toBe(testExpected);
-                    });
+                    testIsMethod(isPositiveInteger, successScenarios, zeroExclusiveFailureScenarios);
+                });
+
+                describe('zeroInclusive argument given', (): void => {
+                    function isPositiveInteger(input: unknown): boolean {
+                        return NumberUtility.isPositiveInteger(input, false);
+                    }
+
+                    testIsMethod(isPositiveInteger, successScenarios, zeroExclusiveFailureScenarios);
                 });
             });
         });
 
         describe('zeroInclusive = true', (): void => {
+            const zeroInclusiveSuccessScenarios: Scenario[] = [
+                ...successScenarios,
+                {
+                    label: 'Zero inputs',
+                    inputs: zeroInputs,
+                    expected: undefined
+                }
+            ];
+
             describe('assertPositiveInteger', (): void => {
                 function assertPositiveInteger(input: unknown, message?: string): void {
                     NumberUtility.assertPositiveInteger(input, true, message);
@@ -277,36 +221,18 @@ describe('NumberUtility', (): void => {
 
                 testAssertMethod(
                     assertPositiveInteger,
-                    [
-                        ...successScenarios,
-                        {
-                            label: 'Zero inputs',
-                            inputs: zeroInputs,
-                            expected: undefined
-                        }
-                    ],
+                    zeroInclusiveSuccessScenarios,
                     failureScenarios,
                     'Expected a positive integer or zero if zeroInclusive is true.'
                 );
             });
 
             describe('isPositiveInteger', (): void => {
-                describe.each([
-                    ...scenarios,
-                    {
-                        label: 'Zero inputs',
-                        inputs: zeroInputs,
-                        expected: true
-                    }
-                ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+                function isPositiveInteger(input: unknown): boolean {
+                    return NumberUtility.isPositiveInteger(input, true);
+                }
 
-                    test.each(
-                        testCases
-                    )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        expect(NumberUtility.isPositiveInteger(testInput, true)).toBe(testExpected);
-                    });
-                });
+                testIsMethod(isPositiveInteger, zeroInclusiveSuccessScenarios, failureScenarios);
             });
         });
     });
@@ -419,21 +345,6 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const scenarios: Scenario[] = [
-            ...failureScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: false
-                };
-            }),
-            ...successScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: true
-                };
-            })
-        ];
-
         describe('assertInRange', (): void => {
             function assertInRange(input: unknown, message?: string): void {
                 const args = input as { value: number; min: number; max: number; };
@@ -454,17 +365,7 @@ describe('NumberUtility', (): void => {
                 return NumberUtility.isInRange(args.value, args.min, args.max);
             }
 
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(isInRange(testInput)).toBe(testExpected);
-                });
-            });
+            testIsMethod(isInRange, successScenarios, failureScenarios);
         });
 
         describe('Argument Errors', (): void => {
@@ -474,12 +375,12 @@ describe('NumberUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { value: unknown; min: number; max: number; } =>{
+                    ].map((input: unknown): { value: unknown; min: number; max: number; } => {
                         return {
                             value: input,
                             min: Number.MIN_SAFE_INTEGER,
                             max: Number.MAX_SAFE_INTEGER
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -488,12 +389,12 @@ describe('NumberUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { value: number; min: unknown; max: number; } =>{
+                    ].map((input: unknown): { value: number; min: unknown; max: number; } => {
                         return {
                             value: 0,
                             min: input,
                             max: Number.MAX_SAFE_INTEGER
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -502,12 +403,12 @@ describe('NumberUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { value: number; min: number; max: unknown; } =>{
+                    ].map((input: unknown): { value: number; min: number; max: unknown; } => {
                         return {
                             value: 0,
                             min: Number.MIN_SAFE_INTEGER,
                             max: input
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -533,7 +434,7 @@ describe('NumberUtility', (): void => {
                     test.each(
                         testCases
                     )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown };
+                        const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                         expect((): void => {
                             NumberUtility.assertInRange(args.value as number, args.min as number, args.max as number);
@@ -545,7 +446,7 @@ describe('NumberUtility', (): void => {
                     test.each(
                         testCases
                     )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown };
+                        const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                         expect((): void => {
                             NumberUtility.isInRange(args.value as number, args.min as number, args.max as number);
@@ -607,21 +508,6 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const scenarios: Scenario[] = [
-            ...failureScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: false
-                };
-            }),
-            ...successScenarios.map((scenario: Scenario): Scenario => {
-                return {
-                    ...scenario,
-                    expected: true
-                };
-            })
-        ];
-
         describe('assertValidRange', (): void => {
             function assertValidRange(input: unknown, message?: string): void {
                 const args = input as { min: number; max: number; };
@@ -642,17 +528,7 @@ describe('NumberUtility', (): void => {
                 return NumberUtility.isValidRange(args.min, args.max);
             }
 
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(isValidRange(testInput)).toBe(testExpected);
-                });
-            });
+            testIsMethod(isValidRange, successScenarios, failureScenarios);
         });
 
         describe('Argument errors', (): void => {
@@ -662,11 +538,11 @@ describe('NumberUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { min: unknown; max: number; } =>{
+                    ].map((input: unknown): { min: unknown; max: number; } => {
                         return {
                             min: input,
                             max: Number.MAX_SAFE_INTEGER
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -675,11 +551,11 @@ describe('NumberUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { min: number; max: unknown; } =>{
+                    ].map((input: unknown): { min: number; max: unknown; } => {
                         return {
                             min: Number.MIN_SAFE_INTEGER,
                             max: input
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 }
@@ -694,7 +570,7 @@ describe('NumberUtility', (): void => {
                     test.each(
                         testCases
                     )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown };
+                        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
                         expect((): void => {
                             NumberUtility.assertValidRange(args.min as number, args.max as number);
@@ -706,7 +582,7 @@ describe('NumberUtility', (): void => {
                     test.each(
                         testCases
                     )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown };
+                        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
                         expect((): void => {
                             NumberUtility.isValidRange(args.min as number, args.max as number);
@@ -752,17 +628,20 @@ describe('NumberUtility', (): void => {
     });
 
     describe('[DEPRECATED] isFiniteNumber', (): void => {
-        const scenarios: Scenario[] = [
+        const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
-                inputs: [...nonNumberInputs],
-                expected: false
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
             },
             {
                 label: 'Non-finite number inputs',
-                inputs: [...nonFiniteNumberInputs],
-                expected: false
-            },
+                inputs: nonFiniteNumberInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
             {
                 label: 'Number inputs',
                 inputs: [
@@ -770,20 +649,10 @@ describe('NumberUtility', (): void => {
                     ...negativeNumberInputs,
                     ...zeroInputs
                 ],
-                expected: true
+                expected: undefined
             }
         ];
 
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(NumberUtility.isFiniteNumber(testInput)).toBe(testExpected);
-            });
-        });
+        testIsMethod(NumberUtility.isFiniteNumber.bind(NumberUtility), successScenarios, failureScenarios);
     });
 });

@@ -31,6 +31,7 @@ import {
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
 import { nonArrayInputs } from '../utils/input/array-inputs';
+import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
 import { emptyStringInputs, nonEmptyStringInputs, nonStringInputs } from '../utils/input/string-inputs';
@@ -41,6 +42,14 @@ describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
 
     describe('assertArray', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-array inputs',
+                inputs: nonArrayInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         const successScenarios: Scenario[] = [
             {
                 label: 'Array inputs',
@@ -55,14 +64,6 @@ describe('TypeAssertions', (): void => {
             }
         ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-array inputs',
-                inputs: nonArrayInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertArray.bind(TypeAssertions),
             successScenarios,
@@ -71,7 +72,43 @@ describe('TypeAssertions', (): void => {
         );
     });
 
+    describe('assertBoolean', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-boolean inputs',
+                inputs: nonBooleanInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Boolean inputs',
+                inputs: [
+                    true,
+                    false
+                ],
+                expected: undefined
+            }
+        ];
+
+        testAssertMethod(
+            TypeAssertions.assertBoolean.bind(TypeAssertions),
+            successScenarios,
+            failureScenarios,
+            'Expected a boolean.'
+        );
+    });
+
     describe('assertFunction', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-function inputs',
+                inputs: nonFunctionInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         const successScenarios: Scenario[] = [
             {
                 label: 'Functions',
@@ -88,14 +125,6 @@ describe('TypeAssertions', (): void => {
                     }
                 ],
                 expected: undefined
-            }
-        ];
-
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-function inputs',
-                inputs: nonFunctionInputs,
-                expected: PrimitiveTypeError
             }
         ];
 
@@ -108,21 +137,6 @@ describe('TypeAssertions', (): void => {
     });
 
     describe('assertObject', (): void => {
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Non-array objects',
-                inputs: [
-                    {},
-                    { key: 'value' },
-                    { 'other key': 'other value' },
-                    RandomNumberGeneratorFactory.build('seed'),
-                    new Error(),
-                    new Set<string>()
-                ],
-                expected: undefined
-            }
-        ];
-
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-object inputs',
@@ -142,6 +156,21 @@ describe('TypeAssertions', (): void => {
             }
         ];
 
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Non-array objects',
+                inputs: [
+                    {},
+                    { key: 'value' },
+                    { 'other key': 'other value' },
+                    RandomNumberGeneratorFactory.build('seed'),
+                    new Error(),
+                    new Set<string>()
+                ],
+                expected: undefined
+            }
+        ];
+
         testAssertMethod(
             TypeAssertions.assertObject.bind(TypeAssertions),
             successScenarios,
@@ -151,6 +180,14 @@ describe('TypeAssertions', (): void => {
     });
 
     describe('assertString', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-string inputs',
+                inputs: nonStringInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         const successScenarios: Scenario[] = [
             {
                 label: 'String inputs',
@@ -162,14 +199,6 @@ describe('TypeAssertions', (): void => {
             }
         ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: nonStringInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertString.bind(TypeAssertions),
             successScenarios,
@@ -178,9 +207,15 @@ describe('TypeAssertions', (): void => {
         );
     });
 
-    /* ==================== DEPRECATED ==================== */
-
     describe('[DEPRECATED] assertArrayType', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-array inputs',
+                inputs: nonArrayInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         const successScenarios: Scenario[] = [
             {
                 label: 'Array inputs',
@@ -195,14 +230,6 @@ describe('TypeAssertions', (): void => {
             }
         ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-array inputs',
-                inputs: nonArrayInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertArrayType.bind(TypeAssertions),
             successScenarios,
@@ -212,6 +239,14 @@ describe('TypeAssertions', (): void => {
     });
 
     describe('[DEPRECATED] assertFunctionType', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-function inputs',
+                inputs: nonFunctionInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         const successScenarios: Scenario[] = [
             {
                 label: 'Functions',
@@ -231,14 +266,6 @@ describe('TypeAssertions', (): void => {
             }
         ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-function inputs',
-                inputs: nonFunctionInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertFunctionType.bind(TypeAssertions),
             successScenarios,
@@ -248,21 +275,6 @@ describe('TypeAssertions', (): void => {
     });
 
     describe('[DEPRECATED] assertObjectType', (): void => {
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Non-array objects',
-                inputs: [
-                    {},
-                    { key: 'value' },
-                    { 'other key': 'other value' },
-                    RandomNumberGeneratorFactory.build('seed'),
-                    new Error(),
-                    new Set<string>()
-                ],
-                expected: undefined
-            }
-        ];
-
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-object inputs',
@@ -282,6 +294,21 @@ describe('TypeAssertions', (): void => {
             }
         ];
 
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Non-array objects',
+                inputs: [
+                    {},
+                    { key: 'value' },
+                    { 'other key': 'other value' },
+                    RandomNumberGeneratorFactory.build('seed'),
+                    new Error(),
+                    new Set<string>()
+                ],
+                expected: undefined
+            }
+        ];
+
         testAssertMethod(
             TypeAssertions.assertObjectType.bind(TypeAssertions),
             successScenarios,
@@ -291,6 +318,14 @@ describe('TypeAssertions', (): void => {
     });
 
     describe('[DEPRECATED] assertStringType', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-string inputs',
+                inputs: nonStringInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         const successScenarios: Scenario[] = [
             {
                 label: 'String inputs',
@@ -299,14 +334,6 @@ describe('TypeAssertions', (): void => {
                     ...nonEmptyStringInputs
                 ],
                 expected: undefined
-            }
-        ];
-
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: nonStringInputs,
-                expected: PrimitiveTypeError
             }
         ];
 

@@ -22,7 +22,15 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeError, SeedVersion, SeedVersions, ValueRangeError } from '../../../src';
+import {
+    PrimitiveTypeError,
+    SeedVersion,
+    SeedVersions,
+    StaticInstanceError,
+    ValueRangeError
+} from '../../../src';
+
+import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 
 import {
     floatInputs,
@@ -33,8 +41,8 @@ import {
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
-describe('SeedVersions', () => {
-    testStaticClassConstructor('SeedVersions', SeedVersions as unknown as new () => unknown, Error);
+describe('SeedVersions', (): void => {
+    testStaticClassConstructor('SeedVersions', SeedVersions as unknown as new () => unknown, StaticInstanceError);
 
     /**
      * @remarks Once a seed version has been published, it should NEVER be changed or updated.
@@ -52,7 +60,7 @@ describe('SeedVersions', () => {
         }
     ];
 
-    function buildValidIndexes() {
+    function buildValidIndexes(): number[] {
         const indexes: number[] = [];
 
         for (let i = 0; i < expectedSeedVersions.length; i++) {
@@ -62,58 +70,89 @@ describe('SeedVersions', () => {
         return indexes;
     }
 
-    describe('size', () => {
-        test(`Size should be ${expectedSeedVersions.length}`, () => {
+    const argumentFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-number inputs',
+            inputs: nonNumberInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Float and negative integer inputs',
+            inputs: [
+                ...floatInputs,
+                ...negativeIntegerInputs
+            ],
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const outOfBoundsInputs: number[] = [
+        expectedSeedVersions.length,
+        expectedSeedVersions.length + 1,
+        Number.MAX_SAFE_INTEGER
+    ];
+
+    describe('size', (): void => {
+        test(`Size should be ${expectedSeedVersions.length}`, (): void => {
             expect(SeedVersions.size).toBe(expectedSeedVersions.length);
         });
     });
 
-    describe('isValidIndex', () => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: nonNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Float and negative integer inputs',
-                inputs: [
-                    ...floatInputs,
-                    ...negativeIntegerInputs
-                ],
-                expected: PrimitiveTypeError
-            },
+    describe('ValidIndex', (): void => {
+        const failureScenarios: Scenario[] = [
             {
                 label: 'Out of bounds number indexes',
-                inputs: [
-                    expectedSeedVersions.length,
-                    expectedSeedVersions.length + 1,
-                    Number.MAX_SAFE_INTEGER
-                ],
-                expected: false
-            },
-            {
-                label: 'Valid indexes',
-                inputs: buildValidIndexes(),
-                expected: true
+                inputs: outOfBoundsInputs,
+                expected: ValueRangeError
             }
         ];
 
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Valid indexes',
+                inputs: buildValidIndexes(),
+                expected: undefined
+            }
+        ];
 
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                if (typeof testExpected === 'boolean') {
-                    expect(SeedVersions.isValidIndex(testInput)).toBe(testExpected);
-                } else {
-                    expect(() => {
-                        SeedVersions.isValidIndex(testInput);
-                    }).toThrow(testExpected);
-                }
+        describe('assertValidIndex', (): void => {
+            testAssertMethod(
+                SeedVersions.assertValidIndex.bind(SeedVersions),
+                successScenarios,
+                failureScenarios,
+                'Input is out of bounds for valid seed version index.'
+            );
+        });
+
+        describe('isValidIndex', (): void => {
+            testIsMethod(SeedVersions.isValidIndex.bind(SeedVersions), successScenarios, failureScenarios);
+        });
+
+        describe('Argument Errors', (): void => {
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('Argument errors - assertValidIndex', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            SeedVersions.assertValidIndex(testInput);
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Argument errors - isValidIndex', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            SeedVersions.isValidIndex(testInput);
+                        }).toThrow(testExpected);
+                    });
+                });
             });
         });
     });
@@ -127,26 +166,10 @@ describe('SeedVersions', () => {
 
         describe('Input validation', (): void => {
             const scenarios: Scenario[] = [
-                {
-                    label: 'Non-number inputs',
-                    inputs: nonNumberInputs,
-                    expected: PrimitiveTypeError
-                },
-                {
-                    label: 'Float and negative integer inputs',
-                    inputs: [
-                        ...floatInputs,
-                        ...negativeIntegerInputs
-                    ],
-                    expected: PrimitiveTypeError
-                },
+                ...argumentFailureScenarios,
                 {
                     label: 'Out of bounds number indexes',
-                    inputs: [
-                        expectedSeedVersions.length,
-                        expectedSeedVersions.length + 1,
-                        Number.MAX_SAFE_INTEGER
-                    ],
+                    inputs: outOfBoundsInputs,
                     expected: ValueRangeError
                 }
             ];
@@ -159,7 +182,7 @@ describe('SeedVersions', () => {
                 test.each(
                     testCases
                 )('%# - Invalid index $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(() => {
+                    expect((): void => {
                         SeedVersions.getVersion(testInput as number);
                     }).toThrow(testExpected);
                 });

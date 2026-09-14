@@ -31,7 +31,7 @@ import {
     WeightedListUtility
 } from '../../../src';
 
-import { testAssertMethod } from '../../utils/assert/assert-tests';
+import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
@@ -40,20 +40,22 @@ import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-c
 describe('WeightedListUtility', (): void => {
     testStaticClassConstructor('WeightedListUtility', WeightedListUtility as unknown as new () => unknown, StaticInstanceError);
 
+    const typeGuard: (input: unknown) => input is string = (input: unknown): input is string => {
+        return StringUtility.isSingleLineTrimmedString(input);
+    };
+
     const failureScenarios: Scenario[] = [
         {
             label: 'Non-array type inputs',
-            inputs: [
-                ...nonArrayInputs
-            ],
-            expected: false
+            inputs: nonArrayInputs,
+            expected: SchemaTypeError
         },
         {
             label: 'Empty array inputs',
             inputs: [
                 []
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Array inputs do not contain weighted elements',
@@ -61,7 +63,7 @@ describe('WeightedListUtility', (): void => {
                 [1, 2, 3],
                 ['a', 'b', 'c']
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Array inputs contain weighted elements and other type',
@@ -87,7 +89,7 @@ describe('WeightedListUtility', (): void => {
                     [5, 6, 7]
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Weighted elements weight sum is not equal to 1',
@@ -114,7 +116,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 'hi', weight: -2 }
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Weighted elements sum is equal to 1 but contains invalid weights',
@@ -124,7 +126,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 'hi', weight: 2 }
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         }
     ];
 
@@ -146,7 +148,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 'howdy', weight: 0.25 }
                 ]
             ],
-            expected: true
+            expected: undefined
         }
     ];
 
@@ -159,7 +161,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 'another\nmulti\nline', weight: 0 }
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Mixed single and multi line values',
@@ -169,7 +171,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 'multi\nline', weight: 0 }
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Non-string values',
@@ -179,7 +181,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 200, weight: 0 }
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         },
         {
             label: 'Mixed string and non-string values',
@@ -189,7 +191,7 @@ describe('WeightedListUtility', (): void => {
                     { value: 200, weight: 0 }
                 ]
             ],
-            expected: false
+            expected: SchemaTypeError
         }
     ];
 
@@ -202,177 +204,115 @@ describe('WeightedListUtility', (): void => {
                     { value: 'another single line', weight: 0 }
                 ]
             ],
-            expected: true
+            expected: undefined
         }
     ];
 
-    describe('assertGenericWeightedList', (): void => {
-        const assertSuccessScenarios: Scenario[] = [
+    describe('GenericWeightedList', (): void => {
+        const genericSuccessScenarios: Scenario[] = [
             ...successScenarios,
             ...stringListSuccessScenarios,
             ...stringListFailureScenarios
-        ].map((scenario: Scenario): Scenario => {
-            return {
-                ...scenario,
-                expected: undefined
-            };
+        ];
+
+        describe('assertGenericWeightedList', (): void => {
+            testAssertMethod(
+                WeightedListUtility.assertGenericWeightedList.bind(WeightedListUtility),
+                genericSuccessScenarios,
+                failureScenarios,
+                'Input does not match schema requirements for generic WeightedList.'
+            );
         });
 
-        const assertFailureScenarios: Scenario[] = failureScenarios.map((scenario: Scenario): Scenario => {
-            return {
-                ...scenario,
-                expected: SchemaTypeError
-            };
+        describe('isGenericWeightedList', (): void => {
+            testIsMethod(
+                WeightedListUtility.isGenericWeightedList.bind(WeightedListUtility),
+                genericSuccessScenarios,
+                failureScenarios
+            );
         });
-
-        testAssertMethod(
-            WeightedListUtility.assertGenericWeightedList.bind(WeightedListUtility),
-            assertSuccessScenarios,
-            assertFailureScenarios,
-            'Input does not match schema requirements for generic WeightedList.'
-        );
     });
 
-    describe('assertWeightedList', (): void => {
-        const typeGuard: (input: unknown) => input is string = (input: unknown): input is string => {
-            return StringUtility.isSingleLineTrimmedString(input);
-        };
-
-        function assertWeightedList(input: unknown, message?: string): void {
-            WeightedListUtility.assertWeightedList(input, typeGuard, message);
-        }
-
-        const assertSuccessScenarios: Scenario[] = [
+    describe('WeightedList', (): void => {
+        const typedSuccessScenarios: Scenario[] = [
             ...successScenarios,
             ...stringListSuccessScenarios
-        ].map((scenario: Scenario): Scenario => {
-            return {
-                ...scenario,
-                expected: undefined
-            };
-        });
+        ];
 
-        const assertFailureScenarios: Scenario[] = [
+        const typedFailureScenarios: Scenario[] = [
             ...failureScenarios,
             ...stringListFailureScenarios
-        ].map((scenario: Scenario): Scenario => {
-            return {
-                ...scenario,
-                expected: SchemaTypeError
-            };
-        });
+        ];
 
-        testAssertMethod(
-            assertWeightedList,
-            assertSuccessScenarios,
-            assertFailureScenarios,
-            'Input does not match schema requirements for WeightedList.'
-        );
-    });
-
-    describe('isGenericWeightedList', (): void => {
-        describe('Should correctly identify WeightedList objects', (): void => {
-            describe.each([
-                ...failureScenarios,
-                ...successScenarios
-            ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(WeightedListUtility.isGenericWeightedList(testInput)).toBe(testExpected);
-                });
-            });
-        });
-    });
-
-    describe('isWeightedList', (): void => {
-        const typeGuard: (input: unknown) => input is string = (input: unknown): input is string => {
-            return StringUtility.isSingleLineTrimmedString(input);
-        };
-
-        describe('Should test the value property of each element based on the given type guard', (): void => {
-            describe.each([
-                ...stringListFailureScenarios,
-                ...stringListSuccessScenarios
-            ])('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(WeightedListUtility.isWeightedList<string>(testInput, typeGuard)).toBe(testExpected);
-                });
-            });
-        });
-
-        test('Should successfully narrow value property based on the given type guard', (): void => {
-            const input: unknown = [
-                { value: 'single line', weight: 1 },
-                { value: 'another single line', weight: 0 }
-            ];
-
-            if (WeightedListUtility.isWeightedList<string>(input, typeGuard)) {
-                expect(input[0]).toBeTruthy();
-                expect(input[0].value).toBeTruthy();
-                expectTypeOf(input[0].value).toBeString();
-                expectTypeOf(input[0].value.toLowerCase()).toBeString();
-            } else {
-                fail('WeightedList type narrowing failed');
+        describe('assertWeightedList', (): void => {
+            function assertWeightedList(input: unknown, message?: string): void {
+                WeightedListUtility.assertWeightedList(input, typeGuard, message);
             }
+
+            testAssertMethod(
+                assertWeightedList,
+                typedSuccessScenarios,
+                typedFailureScenarios,
+                'Input does not match schema requirements for WeightedList.'
+            );
         });
 
-        describe('Should return false for invalid weighted lists', (): void => {
-            describe.each(
-                failureScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        describe('isWeightedList', (): void => {
+            function isWeightedList(input: unknown): boolean {
+                return WeightedListUtility.isWeightedList<string>(input, typeGuard);
+            }
 
-                test.each(
-                    testCases
-                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect(WeightedListUtility.isWeightedList(testInput, typeGuard)).toBe(testExpected);
-                });
+            testIsMethod(isWeightedList, typedSuccessScenarios, typedFailureScenarios);
+
+            test('Should successfully narrow value property based on the given type guard', (): void => {
+                const input: unknown = [
+                    { value: 'single line', weight: 1 },
+                    { value: 'another single line', weight: 0 }
+                ];
+
+                if (WeightedListUtility.isWeightedList<string>(input, typeGuard)) {
+                    expect(input[0]).toBeTruthy();
+                    expect(input[0].value).toBeTruthy();
+                    expectTypeOf(input[0].value).toBeString();
+                    expectTypeOf(input[0].value.toLowerCase()).toBeString();
+                } else {
+                    fail('WeightedList type narrowing failed');
+                }
             });
         });
     });
 
-    describe('Input validation', (): void => {
-        describe('Function type guard input validation', (): void => {
-            const scenarios: Scenario[] = [
-                {
-                    label: 'Non-function type inputs',
-                    inputs: [
-                        ...nonFunctionInputs
-                    ],
-                    expected: PrimitiveTypeError
-                }
-            ];
+    describe('Argument Errors', (): void => {
+        const argumentFailureScenarios: Scenario[] = [
+            {
+                label: 'Non-function type guard inputs',
+                inputs: nonFunctionInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
 
-            describe.each(
-                scenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        describe.each(
+            argumentFailureScenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                describe('isWeightedList', (): void => {
-                    test.each(
-                        testCases
-                    )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        expect((): void => {
-                            WeightedListUtility.isWeightedList({}, testInput as ((value: unknown) => value is unknown));
-                        }).toThrow(testExpected);
-                    });
+            describe('Argument errors - assertWeightedList', (): void => {
+                test.each(
+                    testCases
+                )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        WeightedListUtility.assertWeightedList({}, testInput as ((value: unknown) => value is unknown));
+                    }).toThrow(testExpected);
                 });
+            });
 
-                describe('assertWeightedList', (): void => {
-                    test.each(
-                        testCases
-                    )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        expect((): void => {
-                            WeightedListUtility.assertWeightedList({}, testInput as ((value: unknown) => value is unknown));
-                        }).toThrow(testExpected);
-                    });
+            describe('Argument errors - isWeightedList', (): void => {
+                test.each(
+                    testCases
+                )('%# - Type guard input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        WeightedListUtility.isWeightedList({}, testInput as ((value: unknown) => value is unknown));
+                    }).toThrow(testExpected);
                 });
             });
         });
