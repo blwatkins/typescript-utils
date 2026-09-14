@@ -156,9 +156,7 @@ describe('WeightedElementUtility', (): void => {
             WeightedElementUtility.assertGenericWeightedElement.bind(WeightedElementUtility),
             assertSuccessScenarios,
             assertFailureScenarios,
-            (): string => {
-                return 'Input does not match schema requirements for generic WeightedElement.';
-            }
+            'Input does not match schema requirements for generic WeightedElement.'
         );
     });
 
@@ -196,9 +194,7 @@ describe('WeightedElementUtility', (): void => {
                     expected: SchemaTypeError
                 }
             ],
-            (): string => {
-                return 'Input does not match schema requirements for WeightedElement.';
-            }
+            'Input does not match schema requirements for WeightedElement.'
         );
     });
 

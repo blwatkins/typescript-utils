@@ -229,9 +229,7 @@ describe('WeightedListUtility', (): void => {
             WeightedListUtility.assertGenericWeightedList.bind(WeightedListUtility),
             assertSuccessScenarios,
             assertFailureScenarios,
-            (): string => {
-                return 'Input does not match schema requirements for generic WeightedList.';
-            }
+            'Input does not match schema requirements for generic WeightedList.'
         );
     });
 
@@ -268,9 +266,7 @@ describe('WeightedListUtility', (): void => {
             assertWeightedList,
             assertSuccessScenarios,
             assertFailureScenarios,
-            (): string => {
-                return 'Input does not match schema requirements for WeightedList.';
-            }
+            'Input does not match schema requirements for WeightedList.'
         );
     });
 
