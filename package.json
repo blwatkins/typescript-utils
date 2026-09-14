@@ -79,6 +79,13 @@
     "utility",
     "utilities",
     "utils",
-    "esm"
+    "esm",
+    "assert",
+    "error",
+    "math",
+    "number",
+    "random",
+    "range",
+    "string"
   ]
 }
