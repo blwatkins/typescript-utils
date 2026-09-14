@@ -168,7 +168,7 @@ describe('RangeUtility', (): void => {
                 { min: -10, max: 10 },
                 { min: -10, max: -1 },
                 { min: -1.5, max: 1.5 },
-                { min: -0, max: 0 },
+                { min: -Number.MIN_VALUE, max: 0 }
                 { min: Number.MIN_VALUE, max: Number.MAX_VALUE },
                 { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
             ],
