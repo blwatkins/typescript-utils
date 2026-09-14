@@ -529,24 +529,52 @@ describe('NumberUtility', (): void => {
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                test.each(
-                    testCases
-                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown };
+                describe('Argument errors - assertInRange', (): void => {
+                    test.each(
+                        testCases
+                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown };
 
-                    expect((): void => {
-                        NumberUtility.assertInRange(args.value as number, args.min as number, args.max as number);
-                    }).toThrow(testExpected);
+                        expect((): void => {
+                            NumberUtility.assertInRange(args.value as number, args.min as number, args.max as number);
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Argument errors - isInRange', (): void => {
+                    test.each(
+                        testCases
+                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown };
+
+                        expect((): void => {
+                            NumberUtility.isInRange(args.value as number, args.min as number, args.max as number);
+                        }).toThrow(testExpected);
+                    });
                 });
             });
         });
     });
 
     describe('ValidRange', (): void => {
-       test.todo('ValidRange');
-    });
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Min greater than max',
+                inputs: [
+                    { max: 0, min: 10 },
+                    { max: Number.MIN_SAFE_INTEGER, min: 0 },
+                    { max: 0, min: Number.MAX_SAFE_INTEGER },
+                    { max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER },
+                    { max: -Number.MAX_VALUE, min: Number.MAX_VALUE },
+                    { max: -500, min: -100 },
+                    { max: -5.123, min: -3.123 },
+                    { max: 10, min: 100 },
+                    { max: 10.123, min: 100.123 }
+                ],
+                expected: ValueRangeError
+            }
+        ];
 
-    describe('assertValidRange', (): void => {
         const successScenarios: Scenario[] = [
             {
                 label: 'Unequal min and max',
@@ -579,49 +607,80 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Min greater than max',
-                inputs: [
-                    { max: 0, min: 10 },
-                    { max: Number.MIN_SAFE_INTEGER, min: 0 },
-                    { max: 0, min: Number.MAX_SAFE_INTEGER },
-                    { max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER },
-                    { max: -Number.MAX_VALUE, min: Number.MAX_VALUE },
-                    { max: -500, min: -100 },
-                    { max: -5.123, min: -3.123 },
-                    { max: 10, min: 100 },
-                    { max: 10.123, min: 100.123 }
-                ],
-                expected: ValueRangeError
-            }
+        const scenarios: Scenario[] = [
+            ...failureScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: false
+                };
+            }),
+            ...successScenarios.map((scenario: Scenario): Scenario => {
+                return {
+                    ...scenario,
+                    expected: true
+                };
+            })
         ];
 
-        function assertValidRange(input: unknown, message?: string): void {
-            const inputObject = input as { min: number; max: number; };
-            NumberUtility.assertValidRange(inputObject.min, inputObject.max, message);
-        }
-
-        testAssertMethod(
-            assertValidRange,
-            successScenarios,
-            failureScenarios,
-            (input: unknown): string => {
-                const inputObject = input as { min: number; max: number; };
-                return `Min (${inputObject.min}) must be less than or equal to max (${inputObject.max}).`;
+        describe('assertValidRange', (): void => {
+            function assertValidRange(input: unknown, message?: string): void {
+                const args = input as { min: number; max: number; };
+                NumberUtility.assertValidRange(args.min, args.max, message);
             }
-        );
 
-        describe('Should throw the correct error when arguments are not finite numbers', (): void => {
+            testAssertMethod(
+                assertValidRange,
+                successScenarios,
+                failureScenarios,
+                'min must be less than or equal to max.'
+            );
+        });
+
+        describe('isValidRange', (): void => {
+            function isValidRange(input: unknown): boolean {
+                const args = input as { min: number; max: number; };
+                return NumberUtility.isValidRange(args.min, args.max);
+            }
+
+            describe.each(
+                scenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(isValidRange(testInput)).toBe(testExpected);
+                });
+            });
+        });
+
+        describe('Argument errors', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
-                    label: 'Non-number inputs',
-                    inputs: nonNumberInputs,
+                    label: 'Invalid min argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs
+                    ].map((input: unknown): { min: unknown; max: number; } =>{
+                        return {
+                            min: input,
+                            max: Number.MAX_SAFE_INTEGER
+                        }
+                    }),
                     expected: PrimitiveTypeError
                 },
                 {
-                    label: 'Non-finite number inputs',
-                    inputs: nonFiniteNumberInputs,
+                    label: 'Invalid max argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs
+                    ].map((input: unknown): { min: number; max: unknown; } =>{
+                        return {
+                            min: Number.MIN_SAFE_INTEGER,
+                            max: input
+                        }
+                    }),
                     expected: PrimitiveTypeError
                 }
             ];
@@ -631,30 +690,32 @@ describe('NumberUtility', (): void => {
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                describe('Min argument', (): void => {
+                describe('Argument errors - assertValidRange', (): void => {
                     test.each(
                         testCases
-                    )('assertValidRange($input, max) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown };
+
                         expect((): void => {
-                            NumberUtility.assertValidRange(testInput as number, Number.MAX_SAFE_INTEGER);
+                            NumberUtility.assertValidRange(args.min as number, args.max as number);
                         }).toThrow(testExpected);
                     });
                 });
 
-                describe('Max argument', (): void => {
+                describe('Argument errors - isValidRange', (): void => {
                     test.each(
                         testCases
-                    )('assertValidRange(min, $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown };
+
                         expect((): void => {
-                            NumberUtility.assertValidRange(Number.MIN_SAFE_INTEGER, testInput as number);
+                            NumberUtility.isValidRange(args.min as number, args.max as number);
                         }).toThrow(testExpected);
                     });
                 });
             });
         });
     });
-
-    /* ==================== DEPRECATED ==================== */
 
     describe('[DEPRECATED] assertFiniteNumber', (): void => {
         const failureScenarios: Scenario[] = [
