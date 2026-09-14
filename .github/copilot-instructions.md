@@ -268,7 +268,7 @@ A page whose content did not change keeps its existing `modified_date`.
 - Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
 - Shared test fixtures and scenario helpers live under `test/utils`.
 - Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
-- Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file (e.g., `testErrorType` in `test/utils/error/error-tests.ts`, `testStaticClassConstructor` in `test/utils/static/static-class-tests.ts`, and `testAssertMethod`/`testIsMethod` in `test/utils/assert/assert-tests.ts`).
+- Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file.
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
