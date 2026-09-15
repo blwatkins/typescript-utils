@@ -74,29 +74,30 @@ export class RangeUtility {
     }
 
     /**
-     * Assert that `input` is within `range`.
+     * Assert that `value` is within `range`.
      *
      * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the range.
-     * When `isMinInclusive` is `false` or `undefined`, `input` must be greater than `range.min`.
-     * When `isMaxInclusive` is `false` or `undefined`, `input` must be less than `range.max`.
+     * Each property defaults to `true` when it is `undefined`.
+     * When `isMinInclusive` is `false`, `value` must be greater than `range.min`.
+     * When `isMaxInclusive` is `false`, `value` must be less than `range.max`.
      *
      * @see {@link RangeUtility.isIn}
      *
-     * @param {number} input - The input to check.
+     * @param {number} value - The value to check.
      * @param {Range} range - The {@link Range} object to check against.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not within `range`.
+     * @param {string | undefined} message - Optional message for the error thrown when `value` is not within `range`.
      *
      * @returns {void}
      *
-     * @throws {PrimitiveTypeError} When `input` is not a finite number.
+     * @throws {PrimitiveTypeError} When `value` is not a finite number.
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
-     * @throws {ValueRangeError} When `input` is not within `range`.
+     * @throws {ValueRangeError} When `value` is not within `range`.
      *
      * @public
      * @since 0.1.0
      */
-    public static assertIn(input: number, range: Range, message?: string): void {
-        if (!RangeUtility.isIn(input, range)) {
+    public static assertIn(value: number, range: Range, message?: string): void {
+        if (!RangeUtility.isIn(value, range)) {
             if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
@@ -134,8 +135,9 @@ export class RangeUtility {
      * Is `value` within `range`?
      *
      * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the range.
-     * When `isMinInclusive` is `false` or `undefined`, `value` must be greater than `range.min`.
-     * When `isMaxInclusive` is `false` or `undefined`, `value` must be less than `range.max`.
+     * Each property defaults to `true` when it is `undefined`.
+     * When `isMinInclusive` is `false`, `value` must be greater than `range.min`.
+     * When `isMaxInclusive` is `false`, `value` must be less than `range.max`.
      *
      * @see {@link RangeUtility.assertRange}
      *
@@ -154,11 +156,22 @@ export class RangeUtility {
         NumberUtility.assertFinite(value);
         RangeUtility.assertRange(range);
 
-        if (range.isMinInclusive && range.isMaxInclusive) {
+        let isMinInclusive: boolean = true;
+        let isMaxInclusive: boolean = true;
+
+        if (range.isMinInclusive !== undefined) {
+            isMinInclusive = range.isMinInclusive;
+        }
+
+        if (range.isMaxInclusive !== undefined) {
+            isMaxInclusive = range.isMaxInclusive;
+        }
+
+        if (isMinInclusive && isMaxInclusive) {
             return NumberUtility.isInRange(value, range.min, range.max);
-        } else if (range.isMinInclusive) {
+        } else if (isMinInclusive) {
             return NumberUtility.isInRange(value, range.min, range.max) && value !== range.max;
-        } else if (range.isMaxInclusive) {
+        } else if (isMaxInclusive) {
             return NumberUtility.isInRange(value, range.min, range.max) && value !== range.min;
         } else {
             return NumberUtility.isInRange(value, range.min, range.max) && value !== range.min && value !== range.max;

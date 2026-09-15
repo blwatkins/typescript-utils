@@ -280,6 +280,7 @@ describe('RangeUtility', (): void => {
                     { value: 0, range: { min: 0, max: 10, isMinInclusive: false } },
                     { value: 0, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true } },
                     { value: 0, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: undefined } },
                     { value: -10, range: { min: -10, max: 10, isMinInclusive: false } },
                     { value: -0.5, range: { min: -0.5, max: 0.5, isMinInclusive: false, isMaxInclusive: true } }
                 ],
@@ -291,40 +292,20 @@ describe('RangeUtility', (): void => {
                     { value: 10, range: { min: 0, max: 10, isMaxInclusive: false } },
                     { value: 10, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false } },
                     { value: 10, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false } },
                     { value: 10, range: { min: -10, max: 10, isMaxInclusive: false } },
                     { value: 0.5, range: { min: -0.5, max: 0.5, isMinInclusive: true, isMaxInclusive: false } }
                 ],
                 expected: ValueRangeError
             },
             {
-                label: 'Values equal to the min bound of a range with an undefined min inclusivity',
+                label: 'Values equal to the bounds of a single value range with an exclusive bound',
                 inputs: [
-                    { value: 0, range: { min: 0, max: 10 } },
-                    { value: 0, range: { min: 0, max: 10, isMaxInclusive: true } },
-                    { value: 0, range: { min: 0, max: 10, isMinInclusive: undefined } },
-                    { value: 0, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: true } },
-                    { value: -10, range: { min: -10, max: 10 } }
-                ],
-                expected: ValueRangeError
-            },
-            {
-                label: 'Values equal to the max bound of a range with an undefined max inclusivity',
-                inputs: [
-                    { value: 10, range: { min: 0, max: 10 } },
-                    { value: 10, range: { min: 0, max: 10, isMinInclusive: true } },
-                    { value: 10, range: { min: 0, max: 10, isMaxInclusive: undefined } },
-                    { value: 10, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined } },
-                    { value: 10, range: { min: -10, max: 10 } }
-                ],
-                expected: ValueRangeError
-            },
-            {
-                label: 'Values equal to the bounds of a single value range without two inclusive bounds',
-                inputs: [
-                    { value: 0, range: { min: 0, max: 0 } },
-                    { value: 5, range: { min: 5, max: 5, isMinInclusive: true } },
-                    { value: 5, range: { min: 5, max: 5, isMaxInclusive: true } },
-                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: false } }
+                    { value: 0, range: { min: 0, max: 0, isMinInclusive: false } },
+                    { value: 0, range: { min: 0, max: 0, isMaxInclusive: false } },
+                    { value: 5, range: { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: false } },
+                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true } }
                 ],
                 expected: ValueRangeError
             }
@@ -360,6 +341,19 @@ describe('RangeUtility', (): void => {
                 expected: undefined
             },
             {
+                label: 'Values equal to the min bound of a range with an undefined min inclusivity',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 10 } },
+                    { value: 0, range: { min: 0, max: 10, isMaxInclusive: true } },
+                    { value: 0, range: { min: 0, max: 10, isMaxInclusive: false } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: undefined } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined } },
+                    { value: -10, range: { min: -10, max: 10 } },
+                    { value: -0.5, range: { min: -0.5, max: 0.5 } }
+                ],
+                expected: undefined
+            },
+            {
                 label: 'Values equal to the max bound of a range with an inclusive max bound',
                 inputs: [
                     { value: 10, range: { min: 0, max: 10, isMaxInclusive: true } },
@@ -372,11 +366,27 @@ describe('RangeUtility', (): void => {
                 expected: undefined
             },
             {
-                label: 'Values equal to the bounds of a single value range with two inclusive bounds',
+                label: 'Values equal to the max bound of a range with an undefined max inclusivity',
                 inputs: [
+                    { value: 10, range: { min: 0, max: 10 } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: true } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: false } },
+                    { value: 10, range: { min: 0, max: 10, isMaxInclusive: undefined } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined } },
+                    { value: 10, range: { min: -10, max: 10 } },
+                    { value: 0.5, range: { min: -0.5, max: 0.5 } }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Values equal to the bounds of a single value range without an exclusive bound',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 0 } },
                     { value: 0, range: { min: 0, max: 0, isMinInclusive: true, isMaxInclusive: true } },
-                    { value: 5, range: { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: true } },
-                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: true } }
+                    { value: 5, range: { min: 5, max: 5, isMinInclusive: true } },
+                    { value: 5, range: { min: 5, max: 5, isMaxInclusive: true } },
+                    { value: 5, range: { min: 5, max: 5, isMinInclusive: undefined, isMaxInclusive: undefined } },
+                    { value: -5.5, range: { min: -5.5, max: -5.5 } }
                 ],
                 expected: undefined
             }
