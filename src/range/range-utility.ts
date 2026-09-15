@@ -76,17 +76,17 @@ export class RangeUtility {
     /**
      * Assert that `input` is within `range`.
      *
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the range.
+     * When `isMinInclusive` is `false` or `undefined`, `input` must be greater than `range.min`.
+     * When `isMaxInclusive` is `false` or `undefined`, `input` must be less than `range.max`.
+     *
      * @see {@link RangeUtility.isIn}
      *
      * @param {number} input - The input to check.
      * @param {Range} range - The {@link Range} object to check against.
-     * @param {number} range.min - The minimum value of the range.
-     * @param {number} range.max - The maximum value of the range.
-     * @param {boolean} range.isMinInclusive - Should the minimum value be included in the range?
-     * When `false` or `undefined`, `value` must be greater than `range.min`.
-     * @param {boolean} range.isMaxInclusive - Should the maximum value be included in the range?
-     * When `false` or `undefined`, `value` must be less than `range.max`.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not within `range`.
+     *
+     * @returns {void}
      *
      * @throws {PrimitiveTypeError} When `input` is not a finite number.
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
@@ -133,19 +133,18 @@ export class RangeUtility {
     /**
      * Is `value` within `range`?
      *
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the range.
+     * When `isMinInclusive` is `false` or `undefined`, `value` must be greater than `range.min`.
+     * When `isMaxInclusive` is `false` or `undefined`, `value` must be less than `range.max`.
+     *
      * @see {@link RangeUtility.assertRange}
      *
      * @param {number} value - The value to check.
      * @param {Range} range - The {@link Range} object to check against.
-     * @param {number} range.min - The minimum value of the range.
-     * @param {number} range.max - The maximum value of the range.
-     * @param {boolean} range.isMinInclusive - Should the minimum value be included in the range?
-     * When `false` or `undefined`, `value` must be greater than `range.min`.
-     * @param {boolean} range.isMaxInclusive - Should the maximum value be included in the range?
-     * When `false` or `undefined`, `value` must be less than `range.max`.
+     *
      * @returns {boolean} `true` if the number is within the range based on the inclusivity settings; `false` otherwise.
      *
-     * @throws {PrimitiveTypeError} When `input` is not a finite number.
+     * @throws {PrimitiveTypeError} When `value` is not a finite number.
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
      *
      * @public
