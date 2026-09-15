@@ -402,7 +402,7 @@ describe('RangeUtility', (): void => {
                 assertIn,
                 inSuccessScenarios,
                 inFailureScenarios,
-                'Input is not within range.'
+                'value must be within range.'
             );
         });
 

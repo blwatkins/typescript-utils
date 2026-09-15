@@ -102,7 +102,7 @@ export class RangeUtility {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError('Input is not within range.');
+            throw new ValueRangeError('value must be within range.');
         }
     }
 
