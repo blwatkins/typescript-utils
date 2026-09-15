@@ -41,7 +41,7 @@ describe('WeightedListUtility', (): void => {
     testStaticClassConstructor('WeightedListUtility', WeightedListUtility as unknown as new () => unknown, StaticInstanceError);
 
     const typeGuard: (input: unknown) => input is string = (input: unknown): input is string => {
-        return StringUtility.isSingleLineTrimmedString(input);
+        return StringUtility.isSingleLine(input);
     };
 
     const failureScenarios: Scenario[] = [

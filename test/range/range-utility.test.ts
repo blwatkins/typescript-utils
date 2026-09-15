@@ -168,7 +168,7 @@ describe('RangeUtility', (): void => {
                 { min: -10, max: 10 },
                 { min: -10, max: -1 },
                 { min: -1.5, max: 1.5 },
-                { min: -Number.MIN_VALUE, max: 0 }
+                { min: -Number.MIN_VALUE, max: 0 },
                 { min: Number.MIN_VALUE, max: Number.MAX_VALUE },
                 { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
             ],
@@ -178,6 +178,8 @@ describe('RangeUtility', (): void => {
             label: 'Range objects where min is equal to max',
             inputs: [
                 { min: 0, max: 0 },
+                { min: -0, max: 0 },
+                { min: 0, max: -0 },
                 { min: 5, max: 5 },
                 { min: -5.5, max: -5.5 },
                 { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
@@ -219,6 +221,7 @@ describe('RangeUtility', (): void => {
                 { min: 0, max: 10, isMinInclusive: undefined },
                 { min: 0, max: 10, isMaxInclusive: undefined },
                 { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined },
+                { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false },
                 { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined }
             ],
             expected: undefined
