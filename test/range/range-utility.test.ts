@@ -20,16 +20,23 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
-import { RangeUtility, SchemaTypeError, StaticInstanceError } from '../../src';
+import {
+    PrimitiveTypeError,
+    Range,
+    RangeUtility,
+    SchemaTypeError,
+    StaticInstanceError,
+    ValueRangeError
+} from '../../src';
 
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
-import { Scenario } from '../utils/test-case/test-case';
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('RangeUtility', (): void => {
     testStaticClassConstructor('RangeUtility', RangeUtility as unknown as new () => unknown, StaticInstanceError);
@@ -240,6 +247,234 @@ describe('RangeUtility', (): void => {
 
         describe('isRange', (): void => {
             testIsMethod(RangeUtility.isRange.bind(RangeUtility), successScenarios, failureScenarios);
+        });
+    });
+
+    describe('In', (): void => {
+        const inFailureScenarios: Scenario[] = [
+            {
+                label: 'Values less than the min bound',
+                inputs: [
+                    { value: -1, range: { min: 0, max: 10 } },
+                    { value: -11, range: { min: -10, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                    { value: -Number.EPSILON, range: { min: 0, max: 1, isMinInclusive: true } },
+                    { value: Number.MIN_SAFE_INTEGER, range: { min: 0, max: 10 } },
+                    { value: -5.5, range: { min: -5, max: 5, isMinInclusive: false, isMaxInclusive: false } }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'Values greater than the max bound',
+                inputs: [
+                    { value: 11, range: { min: 0, max: 10 } },
+                    { value: 11, range: { min: -10, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                    { value: 1 + Number.EPSILON, range: { min: 0, max: 1, isMaxInclusive: true } },
+                    { value: Number.MAX_SAFE_INTEGER, range: { min: 0, max: 10 } },
+                    { value: 5.5, range: { min: -5, max: 5, isMinInclusive: false, isMaxInclusive: false } }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'Values equal to the min bound of a range with an exclusive min bound',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: false } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: undefined } },
+                    { value: -10, range: { min: -10, max: 10, isMinInclusive: false } },
+                    { value: -0.5, range: { min: -0.5, max: 0.5, isMinInclusive: false, isMaxInclusive: true } }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'Values equal to the max bound of a range with an exclusive max bound',
+                inputs: [
+                    { value: 10, range: { min: 0, max: 10, isMaxInclusive: false } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false } },
+                    { value: 10, range: { min: -10, max: 10, isMaxInclusive: false } },
+                    { value: 0.5, range: { min: -0.5, max: 0.5, isMinInclusive: true, isMaxInclusive: false } }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'Values equal to the bounds of a single value range with an exclusive bound',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 0, isMinInclusive: false } },
+                    { value: 0, range: { min: 0, max: 0, isMaxInclusive: false } },
+                    { value: 5, range: { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: false } },
+                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true } }
+                ],
+                expected: ValueRangeError
+            }
+        ];
+
+        const inSuccessScenarios: Scenario[] = [
+            {
+                label: 'Values between the min and max bounds',
+                inputs: [
+                    { value: 5, range: { min: 0, max: 10 } },
+                    { value: 5, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                    { value: 5, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false } },
+                    { value: 5, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true } },
+                    { value: 5, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false } },
+                    { value: 0, range: { min: -10, max: 10 } },
+                    { value: -5, range: { min: -10, max: 0 } },
+                    { value: 0.5, range: { min: 0, max: 1 } },
+                    { value: -0.5, range: { min: -1, max: 0 } },
+                    { value: 0, range: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER } }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Values equal to the min bound of a range with an inclusive min bound',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: true } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined } },
+                    { value: -10, range: { min: -10, max: 10, isMinInclusive: true } },
+                    { value: -0.5, range: { min: -0.5, max: 0.5, isMinInclusive: true } }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Values equal to the min bound of a range with an undefined min inclusivity',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 10 } },
+                    { value: 0, range: { min: 0, max: 10, isMaxInclusive: true } },
+                    { value: 0, range: { min: 0, max: 10, isMaxInclusive: false } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: undefined } },
+                    { value: 0, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined } },
+                    { value: -10, range: { min: -10, max: 10 } },
+                    { value: -0.5, range: { min: -0.5, max: 0.5 } }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Values equal to the max bound of a range with an inclusive max bound',
+                inputs: [
+                    { value: 10, range: { min: 0, max: 10, isMaxInclusive: true } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: true } },
+                    { value: 10, range: { min: -10, max: 10, isMaxInclusive: true } },
+                    { value: 0.5, range: { min: -0.5, max: 0.5, isMaxInclusive: true } }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Values equal to the max bound of a range with an undefined max inclusivity',
+                inputs: [
+                    { value: 10, range: { min: 0, max: 10 } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: true } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: false } },
+                    { value: 10, range: { min: 0, max: 10, isMaxInclusive: undefined } },
+                    { value: 10, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined } },
+                    { value: 10, range: { min: -10, max: 10 } },
+                    { value: 0.5, range: { min: -0.5, max: 0.5 } }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Values equal to the bounds of a single value range without an exclusive bound',
+                inputs: [
+                    { value: 0, range: { min: 0, max: 0 } },
+                    { value: 0, range: { min: 0, max: 0, isMinInclusive: true, isMaxInclusive: true } },
+                    { value: 5, range: { min: 5, max: 5, isMinInclusive: true } },
+                    { value: 5, range: { min: 5, max: 5, isMaxInclusive: true } },
+                    { value: 5, range: { min: 5, max: 5, isMinInclusive: undefined, isMaxInclusive: undefined } },
+                    { value: -5.5, range: { min: -5.5, max: -5.5 } }
+                ],
+                expected: undefined
+            }
+        ];
+
+        describe('assertIn', (): void => {
+            function assertIn(input: unknown, message?: string): void {
+                const args = input as { value: number; range: Range; };
+                RangeUtility.assertIn(args.value, args.range, message);
+            }
+
+            testAssertMethod(
+                assertIn,
+                inSuccessScenarios,
+                inFailureScenarios,
+                'value must be within range.'
+            );
+        });
+
+        describe('isIn', (): void => {
+            function isIn(input: unknown): boolean {
+                const args = input as { value: number; range: Range; };
+                return RangeUtility.isIn(args.value, args.range);
+            }
+
+            testIsMethod(isIn, inSuccessScenarios, inFailureScenarios);
+        });
+
+        describe('Argument errors', (): void => {
+            const invalidRangeInputs: unknown[] = failureScenarios.flatMap((scenario: Scenario): unknown[] => {
+                return scenario.inputs;
+            });
+
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid value argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs
+                    ].map((input: unknown): { value: unknown; range: Range; } => {
+                        return {
+                            value: input,
+                            range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true }
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid range argument',
+                    inputs: invalidRangeInputs.map((input: unknown): { value: number; range: unknown; } => {
+                        return {
+                            value: 5,
+                            range: input
+                        };
+                    }),
+                    expected: SchemaTypeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('Argument errors - assertIn', (): void => {
+                    test.each(
+                        testCases
+                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { value: unknown; range: unknown; } = testInput as { value: unknown; range: unknown; };
+
+                        expect((): void => {
+                            RangeUtility.assertIn(args.value as number, args.range as Range);
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Argument errors - isIn', (): void => {
+                    test.each(
+                        testCases
+                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { value: unknown; range: unknown; } = testInput as { value: unknown; range: unknown; };
+
+                        expect((): void => {
+                            RangeUtility.isIn(args.value as number, args.range as Range);
+                        }).toThrow(testExpected);
+                    });
+                });
+            });
         });
     });
 });
