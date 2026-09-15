@@ -21,11 +21,10 @@
  */
 
 // TODO - RangeBuilder - static buildFrom(min, max) method
-// TODO - RangeUtility.isIn(value, range)
 
 import Value from 'typebox/value';
 
-import { SchemaTypeError, StaticInstanceError } from '../error';
+import { SchemaTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
 import { StringUtility } from '../string';
 
@@ -77,6 +76,38 @@ export class RangeUtility {
     }
 
     /**
+     * Assert that `input` is within `range`.
+     *
+     * @see {@link RangeUtility.isIn}
+     *
+     * @param {number} input - The input to check.
+     * @param {Range} range - The {@link Range} object to check against.
+     * @param {number} range.min - The minimum value of the range.
+     * @param {number} range.max - The maximum value of the range.
+     * @param {boolean} range.isMinInclusive - Should the minimum value be included in the range?
+     * When `false` or `undefined`, `value` must be greater than `range.min`.
+     * @param {boolean} range.isMaxInclusive - Should the maximum value be included in the range?
+     * When `false` or `undefined`, `value` must be less than `range.max`.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not within `range`.
+     *
+     * @throws {PrimitiveTypeError} When `input` is not a finite number.
+     * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
+     * @throws {ValueRangeError} When `input` is not within `range`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertIn(input: number, range: Range, message?: string): void {
+        if (!RangeUtility.isIn(input, range)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError('Input is not within range.');
+        }
+    }
+
+    /**
      * Is `input` a valid {@link Range} object?
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
@@ -99,5 +130,41 @@ export class RangeUtility {
         }
 
         return false;
+    }
+
+    /**
+     * Is `value` within `range`?
+     *
+     * @see {@link RangeUtility.assertRange}
+     *
+     * @param {number} value - The value to check.
+     * @param {Range} range - The {@link Range} object to check against.
+     * @param {number} range.min - The minimum value of the range.
+     * @param {number} range.max - The maximum value of the range.
+     * @param {boolean} range.isMinInclusive - Should the minimum value be included in the range?
+     * When `false` or `undefined`, `value` must be greater than `range.min`.
+     * @param {boolean} range.isMaxInclusive - Should the maximum value be included in the range?
+     * When `false` or `undefined`, `value` must be less than `range.max`.
+     * @returns {boolean} `true` if the number is within the range based on the inclusivity settings; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `input` is not a finite number.
+     * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isIn(value: number, range: Range): boolean {
+        NumberUtility.assertFinite(value);
+        RangeUtility.assertRange(range);
+
+        if (range.isMinInclusive && range.isMaxInclusive) {
+            return NumberUtility.isInRange(value, range.min, range.max);
+        } else if (range.isMinInclusive) {
+            return NumberUtility.isInRange(value, range.min, range.max) && value !== range.max;
+        } else if (range.isMaxInclusive) {
+            return NumberUtility.isInRange(value, range.min, range.max) && value !== range.min;
+        } else {
+            return NumberUtility.isInRange(value, range.min, range.max) && value !== range.min && value !== range.max;
+        }
     }
 }
