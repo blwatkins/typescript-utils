@@ -45,7 +45,7 @@ describe('RangeUtility', (): void => {
         return input !== undefined;
     });
 
-    const failureScenarios: Scenario[] = [
+    const rangeFailureScenarios: Scenario[] = [
         {
             label: 'Non-object type inputs',
             inputs: nonObjectInputs,
@@ -167,7 +167,7 @@ describe('RangeUtility', (): void => {
         }
     ];
 
-    const successScenarios: Scenario[] = [
+    const rangeSuccessScenarios: Scenario[] = [
         {
             label: 'Range objects where min is less than max',
             inputs: [
@@ -239,14 +239,14 @@ describe('RangeUtility', (): void => {
         describe('assertRange', (): void => {
             testAssertMethod(
                 RangeUtility.assertRange.bind(RangeUtility),
-                successScenarios,
-                failureScenarios,
+                rangeSuccessScenarios,
+                rangeFailureScenarios,
                 'Input does not match schema requirements for Range.'
             );
         });
 
         describe('isRange', (): void => {
-            testIsMethod(RangeUtility.isRange.bind(RangeUtility), successScenarios, failureScenarios);
+            testIsMethod(RangeUtility.isRange.bind(RangeUtility), rangeSuccessScenarios, rangeFailureScenarios);
         });
     });
 
@@ -416,7 +416,7 @@ describe('RangeUtility', (): void => {
         });
 
         describe('Argument errors', (): void => {
-            const invalidRangeInputs: unknown[] = failureScenarios.flatMap((scenario: Scenario): unknown[] => {
+            const invalidRangeInputs: unknown[] = rangeFailureScenarios.flatMap((scenario: Scenario): unknown[] => {
                 return scenario.inputs;
             });
 
