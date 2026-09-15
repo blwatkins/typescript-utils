@@ -155,17 +155,8 @@ export class RangeUtility {
     public static isIn(value: number, range: Range): boolean {
         NumberUtility.assertFinite(value);
         RangeUtility.assertRange(range);
-
-        let isMinInclusive: boolean = true;
-        let isMaxInclusive: boolean = true;
-
-        if (range.isMinInclusive !== undefined) {
-            isMinInclusive = range.isMinInclusive;
-        }
-
-        if (range.isMaxInclusive !== undefined) {
-            isMaxInclusive = range.isMaxInclusive;
-        }
+        const isMinInclusive: boolean = range.isMinInclusive ?? true;
+        const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
 
         if (isMinInclusive && isMaxInclusive) {
             return NumberUtility.isInRange(value, range.min, range.max);
