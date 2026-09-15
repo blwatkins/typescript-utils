@@ -20,8 +20,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-// TODO - RangeBuilder - static buildFrom(min, max) method
-
 import Value from 'typebox/value';
 
 import { SchemaTypeError, StaticInstanceError, ValueRangeError } from '../error';

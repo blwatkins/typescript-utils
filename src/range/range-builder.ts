@@ -73,6 +73,29 @@ export class RangeBuilder {
     #isMaxInclusive: boolean | undefined = true;
 
     /**
+     * Build a {@link Range} object.
+     *
+     * @param {number} min - The minimum value of the range.
+     * @param {number} max - The maximum value of the range.
+     * @param {boolean} isMinInclusive - Should the minimum value be included in the range?
+     * @param {boolean} isMaxInclusive - Should the maximum value be included in the range?
+     *
+     * @returns {Range} - The {@link Range} object.
+     *
+     * @throws {PrimitiveTypeError} - When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} - When `max` is not a finite number.
+     * @throws {PrimitiveTypeError} - When `isMinInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} - When `isMaxInclusive` is not a boolean or undefined.
+     * @throws {SchemaTypeError} When the resulting object is not a valid {@link Range}.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static buildFrom(min: number, max: number, isMinInclusive?: boolean, isMaxInclusive?: boolean): Range {
+        return new RangeBuilder().setMin(min).setMax(max).setMinInclusive(isMinInclusive).setMaxInclusive(isMaxInclusive).build();
+    }
+
+    /**
      * Set the `min` property of the {@link Range} object.
      * The `min` property should be less than, or equal to, the `max` property.
      *
