@@ -665,5 +665,56 @@ describe('RangeBuilder', (): void => {
                 RangeUtility.assertRange(range);
             }).not.toThrow();
         });
+
+        describe('Valid arguments should build a Range object', (): void => {
+            describe.each(
+                validRangeScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should build a valid Range object', ({ input: testInput }: TestCase): void => {
+                    const args: { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; } = testInput as { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; };
+
+                    const builder: RangeBuilder = new RangeBuilder();
+                    builder.setMin(args.min as number)
+                        .setMax(args.max as number)
+                        .setMinInclusive(args.isMinInclusive as boolean)
+                        .setMaxInclusive(args.isMaxInclusive as boolean);
+
+                    const range: Range = builder.build();
+                    expect(range).toBeDefined();
+                    expect(range.min).toBe(args.min);
+                    expect(range.max).toBe(args.max);
+                    expect(range.isMinInclusive).toBe(args.isMinInclusive);
+                    expect(range.isMaxInclusive).toBe(args.isMaxInclusive);
+                });
+            });
+        });
+
+        describe('Invalid range should throw an error', (): void => {
+            describe.each(
+                invalidRangeScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; } = testInput as { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; };
+
+                    const builder: RangeBuilder = new RangeBuilder();
+                    builder.setMin(args.min as number)
+                        .setMax(args.max as number)
+                        .setMinInclusive(args.isMinInclusive as boolean)
+                        .setMaxInclusive(args.isMaxInclusive as boolean);
+
+                    expect((): void => {
+                        builder.build();
+                    }).toThrow(testExpected);
+                });
+            });
+        });
     });
 });
