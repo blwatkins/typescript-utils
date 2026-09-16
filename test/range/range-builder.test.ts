@@ -717,4 +717,42 @@ describe('RangeBuilder', (): void => {
             });
         });
     });
+    describe('Single value ranges', (): void => {
+        describe('build and buildFrom should reject a single value range with an excluded bound', (): void => {
+            test.each([
+                { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: true },
+                { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: false },
+                { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false },
+                { min: 0, max: 0, isMinInclusive: false, isMaxInclusive: undefined },
+                { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: false }
+            ])('%# - buildFrom($min, $max, $isMinInclusive, $isMaxInclusive) should throw SchemaTypeError', ({ min, max, isMinInclusive, isMaxInclusive }: { min: number; max: number; isMinInclusive: boolean | undefined; isMaxInclusive: boolean | undefined; }): void => {
+                expect((): Range => {
+                    return RangeBuilder.buildFrom(min, max, isMinInclusive, isMaxInclusive);
+                }).toThrow(SchemaTypeError);
+
+                expect((): Range => {
+                    return new RangeBuilder()
+                        .setMin(min)
+                        .setMax(max)
+                        .setMinInclusive(isMinInclusive)
+                        .setMaxInclusive(isMaxInclusive)
+                        .build();
+                }).toThrow(SchemaTypeError);
+            });
+        });
+
+        describe('build and buildFrom should accept a single value range without an excluded bound', (): void => {
+            test.each([
+                { min: 5, max: 5, isMinInclusive: undefined, isMaxInclusive: undefined },
+                { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: true },
+                { min: 0, max: 0, isMinInclusive: true, isMaxInclusive: undefined },
+                { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: true }
+            ])('%# - buildFrom($min, $max, $isMinInclusive, $isMaxInclusive) should return a valid Range', ({ min, max, isMinInclusive, isMaxInclusive }: { min: number; max: number; isMinInclusive: boolean | undefined; isMaxInclusive: boolean | undefined; }): void => {
+                const range: Range = RangeBuilder.buildFrom(min, max, isMinInclusive, isMaxInclusive);
+                expect(RangeUtility.isRange(range)).toBe(true);
+                expect(range.min).toBe(min);
+                expect(range.max).toBe(max);
+            });
+        });
+    });
 });

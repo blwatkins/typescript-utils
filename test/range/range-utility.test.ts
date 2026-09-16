@@ -20,10 +20,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { describe, test, afterEach, expect } from 'vitest';
 
 import {
     PrimitiveTypeError,
+    Random,
     Range,
     RangeUtility,
     SchemaTypeError,
@@ -164,6 +165,20 @@ describe('RangeUtility', (): void => {
                 { min: 10, max: 0, isMinInclusive: true, isMaxInclusive: true }
             ],
             expected: SchemaTypeError
+        },
+        {
+            label: 'Object inputs where min is equal to max and a bound is excluded',
+            inputs: [
+                { min: 0, max: 0, isMinInclusive: false },
+                { min: 0, max: 0, isMaxInclusive: false },
+                { min: -0, max: 0, isMaxInclusive: false },
+                { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false },
+                { min: -5, max: -5, isMaxInclusive: false },
+                { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: false },
+                { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true },
+                { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false }
+            ],
+            expected: SchemaTypeError
         }
     ];
 
@@ -208,7 +223,7 @@ describe('RangeUtility', (): void => {
             inputs: [
                 { min: 0, max: 10, isMaxInclusive: true },
                 { min: 0, max: 10, isMaxInclusive: false },
-                { min: -5, max: -5, isMaxInclusive: false }
+                { min: -5, max: -5, isMaxInclusive: true }
             ],
             expected: undefined
         },
@@ -295,17 +310,6 @@ describe('RangeUtility', (): void => {
                     { value: 10, range: { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false } },
                     { value: 10, range: { min: -10, max: 10, isMaxInclusive: false } },
                     { value: 0.5, range: { min: -0.5, max: 0.5, isMinInclusive: true, isMaxInclusive: false } }
-                ],
-                expected: ValueRangeError
-            },
-            {
-                label: 'Values equal to the bounds of a single value range with an exclusive bound',
-                inputs: [
-                    { value: 0, range: { min: 0, max: 0, isMinInclusive: false } },
-                    { value: 0, range: { min: 0, max: 0, isMaxInclusive: false } },
-                    { value: 5, range: { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false } },
-                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: false } },
-                    { value: -5.5, range: { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true } }
                 ],
                 expected: ValueRangeError
             }
@@ -473,6 +477,221 @@ describe('RangeUtility', (): void => {
                             RangeUtility.isIn(args.value as number, args.range as Range);
                         }).toThrow(testExpected);
                     });
+                });
+            });
+        });
+    });
+    describe('Random', (): void => {
+        const testRepeatTotal: number = 50;
+
+        // The largest value that Math.random may return, used to pin the bound opposite the anchor.
+        const nearOne: number = 1 - (Number.EPSILON / 2);
+
+        afterEach((): void => {
+            Random.randomNumberGenerator = Math.random;
+        });
+
+        describe('randomFloat', (): void => {
+            describe('randomFloat should only return values that are within the range', (): void => {
+                test.each([
+                    { min: 0, max: 10 },
+                    { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true },
+                    { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false },
+                    { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true },
+                    { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false },
+                    { min: -10, max: -1 },
+                    { min: -0.5, max: 0.5, isMinInclusive: false },
+                    { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
+                ])('%# - randomFloat($min, $max) should return values within the range', (range: Range): void => {
+                    for (let i: number = 0; i < testRepeatTotal; i++) {
+                        const value: number = RangeUtility.randomFloat(range);
+                        expect(Number.isNaN(value)).toBe(false);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                    }
+                });
+            });
+
+            describe('randomFloat should never return an excluded bound', (): void => {
+                const boundScenarios: { range: Range; rng: () => number; expected: number; }[] = [
+                    { range: { min: 0, max: 10 }, rng: (): number => 0, expected: 0 },
+                    { range: { min: 0, max: 10, isMinInclusive: true }, rng: (): number => 0, expected: 0 },
+                    { range: { min: 0, max: 10, isMinInclusive: false }, rng: (): number => 0, expected: 10 },
+                    {
+                        range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true },
+                        rng: (): number => 0,
+                        expected: 10
+                    },
+                    {
+                        range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false },
+                        rng: (): number => 0,
+                        expected: 5
+                    }
+                ];
+
+                test.each(
+                    boundScenarios
+                )('%# - randomFloat($range) should return $expected', ({ range, rng, expected }: { range: Range; rng: () => number; expected: number; }): void => {
+                    Random.randomNumberGenerator = rng;
+                    expect(RangeUtility.randomFloat(range)).toBe(expected);
+                });
+            });
+
+            describe('randomFloat should respect the opposite bound when the generator returns a value near one', (): void => {
+                test.each([
+                    { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false },
+                    { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true },
+                    { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false }
+                ])('%# - randomFloat($min, $max) should stay within the range', (range: Range): void => {
+                    Random.randomNumberGenerator = (): number => nearOne;
+                    const value: number = RangeUtility.randomFloat(range);
+                    expect(RangeUtility.isIn(value, range)).toBe(true);
+                });
+            });
+
+            describe('randomFloat should return min when min and max are equal', (): void => {
+                test.each([
+                    { min: 0, max: 0 },
+                    { min: 5, max: 5 },
+                    { min: 1.8, max: 1.8 },
+                    { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: true }
+                ])('%# - randomFloat($min, $max) should return $min', (range: Range): void => {
+                    for (let i: number = 0; i < testRepeatTotal; i++) {
+                        const value: number = RangeUtility.randomFloat(range);
+                        expect(value).toBe(range.min);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                    }
+                });
+            });
+
+            describe('randomFloat should match Random.randomFloat for a single value range', (): void => {
+                test.each([
+                    { min: 5, max: 5 },
+                    { min: 1.8, max: 1.8 }
+                ])('%# - randomFloat($min, $max) should equal Random.randomFloat($min, $max)', (range: Range): void => {
+                    expect(RangeUtility.randomFloat(range)).toBe(Random.randomFloat(range.min, range.max));
+                });
+            });
+        });
+
+        describe('randomInteger', (): void => {
+            describe('randomInteger should only return integers that are within the range', (): void => {
+                test.each([
+                    { range: { min: 0, max: 5 }, lowest: 0, highest: 5 },
+                    { range: { min: 0, max: 5, isMaxInclusive: false }, lowest: 0, highest: 4 },
+                    { range: { min: 0, max: 5, isMinInclusive: false }, lowest: 1, highest: 5 },
+                    { range: { min: 0, max: 5, isMinInclusive: false, isMaxInclusive: false }, lowest: 1, highest: 4 },
+                    { range: { min: 2.3, max: 5.7 }, lowest: 3, highest: 5 },
+                    { range: { min: 2.3, max: 5.7, isMinInclusive: false, isMaxInclusive: false }, lowest: 3, highest: 5 },
+                    { range: { min: -3.75, max: -0.5 }, lowest: -3, highest: -1 },
+                    { range: { min: -10, max: 10 }, lowest: -10, highest: 10 }
+                ])('%# - randomInteger($range) should return an integer in [$lowest, $highest]', ({ range, lowest, highest }: { range: Range; lowest: number; highest: number; }): void => {
+                    const values: number[] = [];
+
+                    for (let i: number = 0; i < testRepeatTotal; i++) {
+                        const value: number = RangeUtility.randomInteger(range);
+                        expect(Number.isInteger(value)).toBe(true);
+                        expect(value).toBeGreaterThanOrEqual(lowest);
+                        expect(value).toBeLessThanOrEqual(highest);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                        values.push(value);
+                    }
+
+                    const valuesSet: Set<number> = new Set<number>(values);
+
+                    if (highest > lowest) {
+                        expect(valuesSet.size).toBeGreaterThan(1);
+                        expect(valuesSet.size).toBeLessThanOrEqual((highest - lowest) + 1);
+                    } else {
+                        expect(valuesSet.size).toBe(1);
+                    }
+                });
+            });
+
+            describe('randomInteger should return min when min and max are equal integers', (): void => {
+                test.each([
+                    { min: 0, max: 0 },
+                    { min: 5, max: 5 },
+                    { min: -10, max: -10, isMinInclusive: true, isMaxInclusive: true }
+                ])('%# - randomInteger($min, $max) should return $min', (range: Range): void => {
+                    for (let i: number = 0; i < testRepeatTotal; i++) {
+                        const value: number = RangeUtility.randomInteger(range);
+                        expect(value).toBe(range.min);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                    }
+                });
+            });
+
+            describe('randomInteger should throw when the range contains no integer values', (): void => {
+                test.each([
+                    { min: 1.8, max: 1.8 },
+                    { min: -0.5, max: -0.5 },
+                    { min: 1.5, max: 1.89 },
+                    { min: 0.5, max: 0.75 },
+                    { min: 5, max: 6, isMinInclusive: false, isMaxInclusive: false },
+                    { min: -0.5, max: 0, isMaxInclusive: false }
+                ])('%# - randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
+                    expect((): void => {
+                        RangeUtility.randomInteger(range);
+                    }).toThrow(ValueRangeError);
+                });
+            });
+
+            describe('randomInteger should match Random.randomInt for an explicitly half open range', (): void => {
+                const drawFractions: number[] = [0, 0.25, 0.5, 0.75, nearOne];
+
+                test.each([
+                    { min: 0, max: 10 },
+                    { min: -5, max: 5 },
+                    { min: 2.3, max: 5.7 },
+                    { min: -3.75, max: -0.5 }
+                ])('%# - randomInteger($min, $max) with an exclusive max should match Random.randomInt($min, $max)', ({ min, max }: { min: number; max: number; }): void => {
+                    const range: Range = { min: min, max: max, isMaxInclusive: false };
+
+                    for (const fraction of drawFractions) {
+                        Random.randomNumberGenerator = (): number => fraction;
+                        const rangeValue: number = RangeUtility.randomInteger(range);
+
+                        Random.randomNumberGenerator = (): number => fraction;
+                        const randomValue: number = Random.randomInt(min, max);
+
+                        expect(rangeValue).toBe(randomValue);
+                    }
+                });
+            });
+
+            describe('randomInteger should include max by default where Random.randomInt excludes it', (): void => {
+                test('randomInteger({ min: 0, max: 1 }) should be able to return 1', (): void => {
+                    Random.randomNumberGenerator = (): number => 0.99;
+                    expect(RangeUtility.randomInteger({ min: 0, max: 1 })).toBe(1);
+                    expect(Random.randomInt(0, 1)).toBe(0);
+                });
+            });
+        });
+
+        describe('Argument errors', (): void => {
+            const invalidRangeInputs: unknown[] = rangeFailureScenarios.flatMap((scenario: Scenario): unknown[] => {
+                return scenario.inputs;
+            });
+
+            const testCases: TestCase[] = buildTestCases(invalidRangeInputs, SchemaTypeError);
+
+            describe('Argument errors - randomFloat', (): void => {
+                test.each(
+                    testCases
+                )('%# - randomFloat($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        RangeUtility.randomFloat(testInput as Range);
+                    }).toThrow(testExpected);
+                });
+            });
+
+            describe('Argument errors - randomInteger', (): void => {
+                test.each(
+                    testCases
+                )('%# - randomInteger($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        RangeUtility.randomInteger(testInput as Range);
+                    }).toThrow(testExpected);
                 });
             });
         });
