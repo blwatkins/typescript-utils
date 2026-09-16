@@ -22,7 +22,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeError, Range, RangeBuilder, RangeUtility } from '../../src';
+import { PrimitiveTypeError, Range, RangeBuilder, RangeUtility, SchemaTypeError } from '../../src';
 
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 
@@ -87,10 +87,351 @@ describe('RangeBuilder', (): void => {
         }
     ];
 
-    describe('buildFrom', (): void => {
-        test.todo('buildFrom - success');
+    const validRangeScenarios: Scenario[] = [
+        {
+            label: 'Minimum less than maximum',
+            inputs: [
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 5.5,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 5,
+                    max: 10.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5.5,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5,
+                    max: 10.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5.5,
+                    max: 10.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10,
+                    max: -5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10.5,
+                    max: -5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10,
+                    max: -5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.12345678912344,
+                    max: 10.12345678912345,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10.12345678912345,
+                    max: -10.12345678912344,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                }
+            ],
+            expected: undefined
+        },
+        {
+            label: 'Minimum equal to maximum',
+            inputs: [
+                {
+                    min: 10,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10,
+                    max: -10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.12345678912345,
+                    max: 10.12345678912345,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10.12345678912345,
+                    max: -10.12345678912345,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 0,
+                    max: 0,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -0,
+                    max: -0,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -0,
+                    max: 0,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 0,
+                    max: -0,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                }
+            ],
+            expected: undefined
+        },
+        {
+            label: 'Defined inclusive values',
+            inputs: [
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: true,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: false,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: true
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 5,
+                    max: 10,
+                    isMinInclusive: true,
+                    isMaxInclusive: true
+                }
+            ],
+            expected: undefined
+        }
+    ];
 
-        test.todo('buildFrom - invalid Range due to min > max');
+    const invalidRangeScenarios: Scenario[] = [
+        {
+            label: 'Minimum greater than maximum',
+            inputs: [
+                {
+                    min: 0,
+                    max: -5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 0,
+                    max: -5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 5,
+                    max: 0,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 5.5,
+                    max: 0,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10,
+                    max: 5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10,
+                    max: 5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.5,
+                    max: 5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.5,
+                    max: 5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10,
+                    max: -5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10,
+                    max: -5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.5,
+                    max: -5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.5,
+                    max: -5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5,
+                    max: -10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5.5,
+                    max: -10,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5,
+                    max: -10.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5.5,
+                    max: -10.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: 10.12345678912345,
+                    max: 10.12345678912344,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -10.12345678912344,
+                    max: -10.12345678912345,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: undefined
+                }
+            ],
+            expected: SchemaTypeError
+        }
+    ];
+
+    describe('buildFrom', (): void => {
+        describe('Valid arguments should build a Range object', (): void => {
+            describe.each(
+                validRangeScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should build a valid Range object', ({ input: testInput }: TestCase): void => {
+                    const args: { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; } = testInput as { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; };
+
+                    const range: Range = RangeBuilder.buildFrom(args.min as number, args.max as number, args.isMinInclusive as boolean, args.isMaxInclusive as boolean);
+                    expect(range).toBeDefined();
+                    expect(range.min).toBe(args.min);
+                    expect(range.max).toBe(args.max);
+                    expect(range.isMinInclusive).toBe(args.isMinInclusive);
+                    expect(range.isMaxInclusive).toBe(args.isMaxInclusive);
+                });
+            });
+        });
+
+        describe('Invalid range should throw an error', (): void => {
+            describe.each(
+                invalidRangeScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; } = testInput as { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; };
+
+                    expect((): void => {
+                        RangeBuilder.buildFrom(args.min as number, args.max as number, args.isMinInclusive as boolean, args.isMaxInclusive as boolean);
+                    }).toThrow(testExpected);
+                });
+            });
+        });
 
         describe('Argument errors', (): void => {
             const argumentFailureScenarios: Scenario[] = [
@@ -99,7 +440,7 @@ describe('RangeBuilder', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { min: unknown; max: number; isMinInclusive: undefined; isMaxInclusive: undefined } => {
+                    ].map((input: unknown): { min: unknown; max: number; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
                         return {
                             min: input,
                             max: Number.MAX_SAFE_INTEGER,
@@ -114,7 +455,7 @@ describe('RangeBuilder', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs
-                    ].map((input: unknown): { min: number; max: unknown; isMinInclusive: undefined; isMaxInclusive: undefined } => {
+                    ].map((input: unknown): { min: number; max: unknown; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
                         return {
                             min: Number.MIN_SAFE_INTEGER,
                             max: input,
@@ -127,20 +468,20 @@ describe('RangeBuilder', (): void => {
                 {
                     label: 'Invalid isMinInclusive argument',
                     inputs: nonBooleanInputs.filter(input => input !== undefined)
-                        .map((input: unknown): { min: number; max: number; isMinInclusive: unknown; isMaxInclusive: undefined } => {
-                        return {
-                            min: Number.MIN_SAFE_INTEGER,
-                            max: Number.MAX_SAFE_INTEGER,
-                            isMinInclusive: input,
-                            isMaxInclusive: undefined
-                        };
-                    }),
+                        .map((input: unknown): { min: number; max: number; isMinInclusive: unknown; isMaxInclusive: undefined; } => {
+                            return {
+                                min: Number.MIN_SAFE_INTEGER,
+                                max: Number.MAX_SAFE_INTEGER,
+                                isMinInclusive: input,
+                                isMaxInclusive: undefined
+                            };
+                        }),
                     expected: PrimitiveTypeError
                 },
                 {
                     label: 'Invalid isMaxInclusive argument',
                     inputs: nonBooleanInputs.filter(input => input !== undefined)
-                        .map((input: unknown): { min: number; max: number; isMinInclusive: undefined; isMaxInclusive: unknown } => {
+                        .map((input: unknown): { min: number; max: number; isMinInclusive: undefined; isMaxInclusive: unknown; } => {
                             return {
                                 min: Number.MIN_SAFE_INTEGER,
                                 max: Number.MAX_SAFE_INTEGER,
@@ -315,14 +656,14 @@ describe('RangeBuilder', (): void => {
     });
 
     describe('build', (): void => {
-       test('Default build should build a Range object', (): void => {
-          const builder: RangeBuilder = new RangeBuilder();
-          const range: Range = builder.build();
-          expect(RangeUtility.isRange(range)).toBeTruthy();
+        test('Default build should build a Range object', (): void => {
+            const builder: RangeBuilder = new RangeBuilder();
+            const range: Range = builder.build();
+            expect(RangeUtility.isRange(range)).toBeTruthy();
 
-          expect((): void => {
-              RangeUtility.assertRange(range);
-          }).not.toThrow();
-       });
+            expect((): void => {
+                RangeUtility.assertRange(range);
+            }).not.toThrow();
+        });
     });
 });
