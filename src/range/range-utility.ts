@@ -30,8 +30,10 @@ import { StringUtility } from '../string';
 import { Range, rangeSchema } from './range';
 
 /**
- * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw lands
- * on an excluded bound of the range.
+ * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw falls
+ * outside the range.
+ *
+ * @default 8
  *
  * @type {number}
  * @private
@@ -313,7 +315,9 @@ export class RangeUtility {
     /**
      * Assert that both bounds of `range` lie within the safe integer range.
      *
-     * @remarks Both bounds of a {@link Range} may be inclusive, so both must themselves be safe integers.
+     * @remarks Both bounds of a {@link Range} may be inclusive, so both must lie within the safe integer
+     * range. This is an interval check rather than a test for an integer value: a fractional bound such
+     * as `0.5` is accepted, because only its magnitude matters here.
      * Restricting the bounds keeps the span of `range` small enough that it cannot overflow, and keeps
      * every generated value close enough to zero to truncate to an exact integer.
      *

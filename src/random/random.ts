@@ -27,8 +27,10 @@ import { NumberUtility } from '../number';
 import { WeightedList, WeightedListUtility } from './weighted-element';
 
 /**
- * The maximum number of times {@link Random.randomFloat} draws a new value when a draw rounds up to
- * the exclusive maximum of the range.
+ * The maximum number of times {@link Random.randomFloat} draws a new value when a draw falls outside
+ * the range.
+ *
+ * @default 8
  *
  * @type {number}
  * @private
@@ -94,8 +96,9 @@ export class Random {
     /**
      * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
-     * @remarks `max` is never returned. Rounding can land the scaled draw exactly on `max`, so such a
-     * draw is discarded and replaced.
+     * @remarks A draw that falls outside the range is discarded and replaced, and `min` is returned when
+     * no draw succeeds. Rounding can land the scaled draw exactly on `max`, and a generator that breaks
+     * its documented [0, 1) contract can carry the draw below `min` or make it `NaN`.
      * The range [min, max) contains no values when `min` is equal to `max`, so that range throws.
      * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
      * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
@@ -128,16 +131,37 @@ export class Random {
         let value: number = (Random.random() * (max - min)) + min;
         let attempts: number = 1;
 
-        while (value >= max && attempts < maxDrawAttempts) {
+        while (!Random.#isInHalfOpenRange(value, min, max) && attempts < maxDrawAttempts) {
             value = (Random.random() * (max - min)) + min;
             attempts++;
         }
 
-        if (value >= max) {
+        if (!Random.#isInHalfOpenRange(value, min, max)) {
             return min;
         }
 
         return value;
+    }
+
+    /**
+     * Is `value` within the half-open range [min, max) (min inclusive, max exclusive)?
+     *
+     * @remarks The condition is written in positive form on purpose. The negated form,
+     * `value < min || value >= max`, is `false` for a non-finite value and would accept one.
+     * {@link Random.randomNumberGenerator} validates only that its argument is a function, so a
+     * generator that returns a value outside its documented [0, 1) contract reaches the draw and can
+     * carry the result below `min` or make it `NaN`.
+     *
+     * @param {number} value - The value to check.
+     * @param {number} min - The minimum value of the range (inclusive).
+     * @param {number} max - The maximum value of the range (exclusive).
+     *
+     * @returns {boolean} `true` if `value` is within the range; `false` otherwise.
+     *
+     * @private
+     */
+    static #isInHalfOpenRange(value: number, min: number, max: number): boolean {
+        return value >= min && value < max;
     }
 
     /**

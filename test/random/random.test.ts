@@ -291,6 +291,33 @@ describe('Random', (): void => {
             });
         });
 
+        describe('randomFloat and randomInt should stay in range for a generator outside its contract', (): void => {
+            // randomNumberGenerator validates only that its argument is a function, so a generator
+            // that breaks its documented [0, 1) contract reaches the draw. A guard on the upper bound
+            // alone does not see a draw carried below min, and no comparison sees NaN.
+            test.each([
+                { draw: -1 },
+                { draw: -0.5 },
+                { draw: NaN },
+                { draw: 2 },
+                { draw: Infinity },
+                { draw: -Infinity }
+            ])('%# - a generator returning $draw should still yield a value within [0, 10)', ({ draw }: { draw: number; }): void => {
+                Random.randomNumberGenerator = (): number => draw;
+
+                const floatValue: number = Random.randomFloat(0, 10);
+                const intValue: number = Random.randomInt(0, 10);
+
+                expect(Number.isFinite(floatValue)).toBe(true);
+                expect(floatValue).toBeGreaterThanOrEqual(0);
+                expect(floatValue).toBeLessThan(10);
+
+                expect(Number.isSafeInteger(intValue)).toBe(true);
+                expect(intValue).toBeGreaterThanOrEqual(0);
+                expect(intValue).toBeLessThan(10);
+            });
+        });
+
         describe('randomFloat should never return the exclusive max', (): void => {
             // 1 + (1 - 2^-53) lands exactly halfway between the largest double below 2 and 2
             // itself, and ties-to-even rounds it up, so the raw affine draw returns exactly 2.
