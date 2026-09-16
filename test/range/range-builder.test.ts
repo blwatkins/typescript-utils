@@ -22,7 +22,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeError, Range, RangeBuilder } from '../../src';
+import { PrimitiveTypeError, Range, RangeBuilder, RangeUtility } from '../../src';
 
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 
@@ -88,7 +88,86 @@ describe('RangeBuilder', (): void => {
     ];
 
     describe('buildFrom', (): void => {
-        test.todo('buildFrom');
+        test.todo('buildFrom - success');
+
+        test.todo('buildFrom - invalid Range due to min > max');
+
+        describe('Argument errors', (): void => {
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid min argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs
+                    ].map((input: unknown): { min: unknown; max: number; isMinInclusive: undefined; isMaxInclusive: undefined } => {
+                        return {
+                            min: input,
+                            max: Number.MAX_SAFE_INTEGER,
+                            isMinInclusive: undefined,
+                            isMaxInclusive: undefined
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid max argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs
+                    ].map((input: unknown): { min: number; max: unknown; isMinInclusive: undefined; isMaxInclusive: undefined } => {
+                        return {
+                            min: Number.MIN_SAFE_INTEGER,
+                            max: input,
+                            isMinInclusive: undefined,
+                            isMaxInclusive: undefined
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid isMinInclusive argument',
+                    inputs: nonBooleanInputs.filter(input => input !== undefined)
+                        .map((input: unknown): { min: number; max: number; isMinInclusive: unknown; isMaxInclusive: undefined } => {
+                        return {
+                            min: Number.MIN_SAFE_INTEGER,
+                            max: Number.MAX_SAFE_INTEGER,
+                            isMinInclusive: input,
+                            isMaxInclusive: undefined
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid isMaxInclusive argument',
+                    inputs: nonBooleanInputs.filter(input => input !== undefined)
+                        .map((input: unknown): { min: number; max: number; isMinInclusive: undefined; isMaxInclusive: unknown } => {
+                            return {
+                                min: Number.MIN_SAFE_INTEGER,
+                                max: Number.MAX_SAFE_INTEGER,
+                                isMinInclusive: undefined,
+                                isMaxInclusive: input
+                            };
+                        }),
+                    expected: PrimitiveTypeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; } = testInput as { min: unknown; max: unknown; isMinInclusive: unknown; isMaxInclusive: unknown; };
+
+                    expect((): void => {
+                        RangeBuilder.buildFrom(args.min as number, args.max as number, args.isMinInclusive as boolean, args.isMaxInclusive as boolean);
+                    }).toThrow(testExpected);
+                });
+            });
+        });
     });
 
     describe('setMin', (): void => {
@@ -102,7 +181,7 @@ describe('RangeBuilder', (): void => {
                     testCases
                 )('%# - Input $input should build a valid Range', ({ input: testInput }: TestCase): void => {
                     const builder: RangeBuilder = new RangeBuilder();
-                    builder.setMin(testInput as number);
+                    expect(builder.setMin(testInput as number)).toBe(builder);
                     const range: Range = builder.build();
                     expect(range.min).toBe(testInput);
                 });
@@ -138,7 +217,7 @@ describe('RangeBuilder', (): void => {
                     testCases
                 )('%# - Input $input should build a valid Range', ({ input: testInput }: TestCase): void => {
                     const builder: RangeBuilder = new RangeBuilder();
-                    builder.setMax(testInput as number);
+                    expect(builder.setMax(testInput as number)).toBe(builder);
                     const range: Range = builder.build();
                     expect(range.max).toBe(testInput);
                 });
@@ -174,7 +253,7 @@ describe('RangeBuilder', (): void => {
                     testCases
                 )('%# - Input $input should build a valid Range', ({ input: testInput }: TestCase): void => {
                     const builder: RangeBuilder = new RangeBuilder();
-                    builder.setMinInclusive(testInput as boolean);
+                    expect(builder.setMinInclusive(testInput as boolean)).toBe(builder);
                     const range: Range = builder.build();
                     expect(range.isMinInclusive).toBe(testInput);
                 });
@@ -210,7 +289,7 @@ describe('RangeBuilder', (): void => {
                     testCases
                 )('%# - Input $input should build a valid Range', ({ input: testInput }: TestCase): void => {
                     const builder: RangeBuilder = new RangeBuilder();
-                    builder.setMaxInclusive(testInput as boolean);
+                    expect(builder.setMaxInclusive(testInput as boolean)).toBe(builder);
                     const range: Range = builder.build();
                     expect(range.isMaxInclusive).toBe(testInput);
                 });
@@ -233,5 +312,17 @@ describe('RangeBuilder', (): void => {
                 });
             });
         });
+    });
+
+    describe('build', (): void => {
+       test('Default build should build a Range object', (): void => {
+          const builder: RangeBuilder = new RangeBuilder();
+          const range: Range = builder.build();
+          expect(RangeUtility.isRange(range)).toBeTruthy();
+
+          expect((): void => {
+              RangeUtility.assertRange(range);
+          }).not.toThrow();
+       });
     });
 });
