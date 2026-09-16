@@ -28,6 +28,8 @@ import { StringUtility } from '../string';
 
 import { Range, rangeSchema } from './range';
 
+// TODO - Random float and int from range
+
 /**
  * Static methods and properties for validating {@link Range} objects.
  *
