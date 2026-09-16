@@ -158,14 +158,17 @@ describe('Random', (): void => {
             });
 
             test('randomFloat', (): void => {
+                // The generator contract is [0, 1), and randomFloat never returns its exclusive
+                // max, so the injected value must be a legal draw.
+                const random: number = 0.25;
                 const expected: number = 2;
 
                 Random.randomNumberGenerator = (): number => {
-                    return expected;
+                    return random;
                 };
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    expect(Random.randomFloat(0, 1)).toBe(expected);
+                    expect(Random.randomFloat(0, 8)).toBe(expected);
                 }
             });
 
@@ -285,6 +288,33 @@ describe('Random', (): void => {
                 }
 
                 validateRandomFloatValues(numbers, min, max);
+            });
+        });
+
+        describe('randomFloat should never return the exclusive max', (): void => {
+            // 1 + (1 - 2^-53) lands exactly halfway between the largest double below 2 and 2
+            // itself, and ties-to-even rounds it up, so the raw affine draw returns exactly 2.
+            const roundsUp: number = 1 - (Number.EPSILON / 2);
+
+            test.each([
+                { min: 1, max: 2 },
+                { min: 0, max: 1 },
+                { min: -2, max: -1 },
+                { min: 0.5, max: 0.75 },
+                { min: -1e300, max: 1e300 }
+            ])('%# - randomFloat($min, $max) should stay below $max', ({ min, max }: { min: number; max: number; }): void => {
+                for (const draw of [roundsUp, 0.9999999999999999, 0.9, 0.5, 0]) {
+                    Random.randomNumberGenerator = (): number => draw;
+                    const value: number = Random.randomFloat(min, max);
+
+                    expect(value).toBeGreaterThanOrEqual(min);
+                    expect(value).toBeLessThan(max);
+                }
+            });
+
+            test('randomFloat should fall back to min when every draw rounds up to max', (): void => {
+                Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
+                expect(Random.randomFloat(1, 2)).toBe(1);
             });
         });
 

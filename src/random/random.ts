@@ -22,10 +22,18 @@
 
 import { TypeAssertions } from '../assert';
 import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
-import { MathUtility } from '../math';
 import { NumberUtility } from '../number';
 
 import { WeightedList, WeightedListUtility } from './weighted-element';
+
+/**
+ * The maximum number of times {@link Random.randomFloat} draws a new value when a draw rounds up to
+ * the exclusive maximum of the range.
+ *
+ * @type {number}
+ * @private
+ */
+const maxDrawAttempts: number = 8;
 
 /**
  * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
@@ -86,6 +94,9 @@ export class Random {
     /**
      * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
+     * @remarks `max` is never returned. Rounding can land the scaled draw exactly on `max`, so such a
+     * draw is discarded and replaced. When `min` is equal to `max`, `min` is returned.
+     *
      * @param {number} min - The minimum value (inclusive).
      * @param {number} max - The maximum value (exclusive).
      *
@@ -100,7 +111,24 @@ export class Random {
      */
     public static randomFloat(min: number, max: number): number {
         NumberUtility.assertValidRange(min, max);
-        return (Random.random() * (max - min)) + min;
+
+        if (min === max) {
+            return min;
+        }
+
+        let value: number = (Random.random() * (max - min)) + min;
+        let attempts: number = 1;
+
+        while (value >= max && attempts < maxDrawAttempts) {
+            value = (Random.random() * (max - min)) + min;
+            attempts++;
+        }
+
+        if (value >= max) {
+            return min;
+        }
+
+        return value;
     }
 
     /**
@@ -150,10 +178,7 @@ export class Random {
             throw new ValueRangeError('The range contains integer values that are not safe integers.');
         }
 
-        // Rounding in the affine draw can land exactly on the exclusive upper bound, so the result
-        // is constrained to the integers the range actually contains.
-        const value: number = Math.floor(Random.randomFloat(lowest, highest + 1));
-        return MathUtility.constrain(value, lowest, highest);
+        return Math.floor(Random.randomFloat(lowest, highest + 1));
     }
 
     /**
