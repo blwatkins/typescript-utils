@@ -95,7 +95,8 @@ export class Random {
      * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
      * @remarks `max` is never returned. Rounding can land the scaled draw exactly on `max`, so such a
-     * draw is discarded and replaced. When `min` is equal to `max`, `min` is returned.
+     * draw is discarded and replaced.
+     * The range [min, max) contains no values when `min` is equal to `max`, so that range throws.
      *
      * @param {number} min - The minimum value (inclusive).
      * @param {number} max - The maximum value (exclusive).
@@ -105,6 +106,7 @@ export class Random {
      * @throws {PrimitiveTypeError} When `min` is not a finite number.
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
      * @throws {ValueRangeError} When `min` is not less than or equal `max`.
+     * @throws {ValueRangeError} When the range contains no values.
      *
      * @public
      * @since 0.1.0
@@ -113,7 +115,7 @@ export class Random {
         NumberUtility.assertValidRange(min, max);
 
         if (min === max) {
-            return min;
+            throw new ValueRangeError('The range contains no values.');
         }
 
         let value: number = (Random.random() * (max - min)) + min;
@@ -136,11 +138,13 @@ export class Random {
      *
      * @remarks Non-integer bounds are rounded inward, to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
-     * When `min` is equal to `max`, the range is treated as closed, so that `randomInt(n, n)` returns `n` for an
-     * integer `n` and throws for a non-integer `n`.
+     * The range [min, max) contains no integers when `min` is equal to `max`, so that range throws.
      * Every integer the range contains must be a safe integer.
      * Beyond {@link Number.MAX_SAFE_INTEGER} the gap between representable numbers exceeds 1, so consecutive
      * integers do not exist and a uniform selection over them is not meaningful.
+     * `RangeUtility.randomInteger` in the range module takes a `Range` instead of a pair of numbers, and
+     * treats an unset `isMaxInclusive` as inclusive, so `randomInteger({ min: 0, max: 10 })` may return
+     * `10` while `randomInt(0, 10)` may not. Set `isMaxInclusive` to `false` to match this method.
      *
      * @param {number} min - The minimum value (inclusive).
      * Non-integer values are rounded up with {@link Math.ceil}.
@@ -160,13 +164,7 @@ export class Random {
     public static randomInt(min: number, max: number): number {
         NumberUtility.assertValidRange(min, max);
         const lowest: number = Math.ceil(min);
-        let highest: number;
-
-        if (min === max) {
-            highest = Math.floor(max);
-        } else {
-            highest = Math.ceil(max) - 1;
-        }
+        const highest: number = Math.ceil(max) - 1;
 
         if (lowest > highest) {
             throw new ValueRangeError('The range contains no integer values.');
@@ -186,11 +184,13 @@ export class Random {
      *
      * @remarks Non-integer bounds are rounded inward, to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
-     * When `min` is equal to `max`, the range is treated as closed, so that `randomInt(n, n)` returns `n` for an
-     * integer `n` and throws for a non-integer `n`.
+     * The range [min, max) contains no integers when `min` is equal to `max`, so that range throws.
      * Every integer the range contains must be a safe integer.
      * Beyond {@link Number.MAX_SAFE_INTEGER} the gap between representable numbers exceeds 1, so consecutive
      * integers do not exist and a uniform selection over them is not meaningful.
+     * `RangeUtility.randomInteger` in the range module takes a `Range` instead of a pair of numbers, and
+     * treats an unset `isMaxInclusive` as inclusive, so `randomInteger({ min: 0, max: 10 })` may return
+     * `10` while `randomInt(0, 10)` may not. Set `isMaxInclusive` to `false` to match this method.
      *
      * @see {@link Random.randomInt}
      *

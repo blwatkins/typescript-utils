@@ -195,7 +195,7 @@ export class RangeUtility {
      * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max`
      * bounds may be returned. Each property defaults to `true` when it is `undefined`, matching {@link RangeUtility.isIn}.
      * For floating-point values, inclusivity is a boundary guarantee rather than a change in distribution:
-     * an exclusive bound is never returned, while an inclusive bound is merely permitted.
+     * an exclusive bound is never returned, while an inclusive bound is merely permitted and may be unreachable.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * When the endpoints of `range` are adjacent representable numbers, the only candidate values are the
      * bounds themselves, and an included bound is returned. If both bounds are excluded, no representable
@@ -219,12 +219,12 @@ export class RangeUtility {
         const isMinInclusive: boolean = range.isMinInclusive ?? true;
         const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
 
-        let value: number = RangeUtility.#drawFloat(range.min, range.max, isMinInclusive);
+        let value: number = range.min + (Random.random() * (range.max - range.min));
         let attempts: number = 1;
 
         while (RangeUtility.#isExcludedBound(value, range, isMinInclusive, isMaxInclusive)
             && attempts < maxDrawAttempts) {
-            value = RangeUtility.#drawFloat(range.min, range.max, isMinInclusive);
+            value = range.min + (Random.random() * (range.max - range.min));
             attempts++;
         }
 
@@ -299,29 +299,6 @@ export class RangeUtility {
         }
 
         return Random.randomInt(lowest, highest + 1);
-    }
-
-    /**
-     * Draw a random floating-point number between `min` and `max`, anchored at the inclusive bound.
-     *
-     * @remarks {@link Random.random} returns a value in the range [0, 1), so the anchored bound is the only
-     * one that a draw can land on. Anchoring at the inclusive bound therefore keeps the excluded bound
-     * unreachable without rejecting draws.
-     *
-     * @param {number} min - The minimum value of the range.
-     * @param {number} max - The maximum value of the range.
-     * @param {boolean} isMinInclusive - Is the `min` bound of the range inclusive?
-     *
-     * @returns {number} A random floating-point number between `min` and `max`.
-     *
-     * @private
-     */
-    static #drawFloat(min: number, max: number, isMinInclusive: boolean): number {
-        if (isMinInclusive) {
-            return min + (Random.random() * (max - min));
-        }
-
-        return max - (Random.random() * (max - min));
     }
 
     /**

@@ -318,7 +318,8 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomFloat should return min when min and max are equal', (): void => {
+        describe('randomFloat should throw when min and max are equal', (): void => {
+            // The range [min, max) contains no values when min is equal to max.
             test.each([
                 { min: 0, max: 0 },
                 { min: 1, max: 1 },
@@ -326,15 +327,10 @@ describe('Random', (): void => {
                 { min: -10, max: -10 },
                 { min: 0.5, max: 0.5 },
                 { min: -0.5, max: -0.5 }
-            ])('%# - randomFloat($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
-
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomFloat(min, max);
-                    numbers.push(r);
-                }
-
-                validateRandomFloatValues(numbers, min, max);
+            ])('%# - randomFloat($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomFloat(min, max);
+                }).toThrow(ValueRangeError);
             });
         });
     });
@@ -392,29 +388,15 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomInt and randomInteger should return min when min and max are equal', (): void => {
+        describe('randomInt and randomInteger should throw when min and max are equal', (): void => {
+            // The range [min, max) contains no integers when min is equal to max, whether or not
+            // min is itself an integer.
             test.each([
                 { min: 0, max: 0 },
                 { min: 1, max: 1 },
                 { min: -1, max: -1 },
                 { min: 10, max: 10 },
-                { min: -10, max: -10 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const intNumbers: number[] = [];
-                const integerNumbers: number[] = [];
-
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    intNumbers.push(Random.randomInt(min, max));
-                    integerNumbers.push(Random.randomInteger(min, max));
-                }
-
-                validateRandomIntValues(intNumbers, min, max);
-                validateRandomIntValues(integerNumbers, min, max);
-            });
-        });
-
-        describe('randomInt and randomInteger should throw when min and max are equal and not integers', (): void => {
-            test.each([
+                { min: -10, max: -10 },
                 { min: 1.8, max: 1.8 },
                 { min: 10.5, max: 10.5 },
                 { min: -10.5, max: -10.5 },

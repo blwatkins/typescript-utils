@@ -512,20 +512,24 @@ describe('RangeUtility', (): void => {
             });
 
             describe('randomFloat should never return an excluded bound', (): void => {
+                // A generator pinned to 0 always draws min. Where min is included that is the
+                // answer; where it is excluded every draw is rejected and the midpoint is returned.
                 const boundScenarios: { range: Range; rng: () => number; expected: number; }[] = [
                     { range: { min: 0, max: 10 }, rng: (): number => 0, expected: 0 },
                     { range: { min: 0, max: 10, isMinInclusive: true }, rng: (): number => 0, expected: 0 },
-                    { range: { min: 0, max: 10, isMinInclusive: false }, rng: (): number => 0, expected: 10 },
+                    { range: { min: 0, max: 10, isMinInclusive: false }, rng: (): number => 0, expected: 5 },
                     {
                         range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true },
                         rng: (): number => 0,
-                        expected: 10
+                        expected: 5
                     },
                     {
                         range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false },
                         rng: (): number => 0,
                         expected: 5
-                    }
+                    },
+                    { range: { min: 0, max: 10 }, rng: (): number => 0.25, expected: 2.5 },
+                    { range: { min: 0, max: 10, isMinInclusive: false }, rng: (): number => 0.25, expected: 2.5 }
                 ];
 
                 test.each(
@@ -610,12 +614,20 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('randomFloat should match Random.randomFloat for a single value range', (): void => {
+            describe('randomFloat should differ from Random.randomFloat for a single value range', (): void => {
+                // A Range defaults to closed, so [n, n] holds one value. Random is half open, so the
+                // same pair of numbers describes the empty range [n, n) and throws. Each class obeys
+                // its own documented interval; they are deliberately not interchangeable here.
                 test.each([
                     { min: 5, max: 5 },
-                    { min: 1.8, max: 1.8 }
-                ])('%# - randomFloat($min, $max) should equal Random.randomFloat($min, $max)', (range: Range): void => {
-                    expect(RangeUtility.randomFloat(range)).toBe(Random.randomFloat(range.min, range.max));
+                    { min: 1.8, max: 1.8 },
+                    { min: 0, max: 0 }
+                ])('%# - randomFloat($min, $max) should return $min where Random.randomFloat throws', (range: Range): void => {
+                    expect(RangeUtility.randomFloat(range)).toBe(range.min);
+
+                    expect((): void => {
+                        Random.randomFloat(range.min, range.max);
+                    }).toThrow(ValueRangeError);
                 });
             });
         });
