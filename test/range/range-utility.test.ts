@@ -552,6 +552,65 @@ describe('RangeUtility', (): void => {
                 });
             });
 
+            describe('randomFloat and randomInteger should throw for bounds outside the safe integer range', (): void => {
+                test.each([
+                    { min: 0, max: 1e16 },
+                    { min: 0, max: 1e100 },
+                    { min: -1e300, max: 1e300 },
+                    { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                    // A Range bound may be inclusive, so 2 ** 53 is itself out of range here even
+                    // though it is a legal exclusive max for Random.randomInt.
+                    { min: 0, max: Math.pow(2, 53) },
+                    { min: -Number.MAX_VALUE, max: 0 }
+                ])('%# - randomFloat($min, $max) and randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
+                    Random.randomNumberGenerator = (): number => 0;
+
+                    expect((): void => {
+                        RangeUtility.randomFloat(range);
+                    }).toThrow(ValueRangeError);
+
+                    expect((): void => {
+                        RangeUtility.randomInteger(range);
+                    }).toThrow(ValueRangeError);
+                });
+            });
+
+            describe('randomFloat should return safely truncatable values at the safe integer limits', (): void => {
+                test.each([
+                    { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { min: 0, max: Number.MAX_SAFE_INTEGER },
+                    { min: Number.MIN_SAFE_INTEGER, max: 0 }
+                ])('%# - randomFloat($min, $max) should return a safely truncatable value', (range: Range): void => {
+                    for (let i: number = 0; i < testRepeatTotal; i++) {
+                        const value: number = RangeUtility.randomFloat(range);
+
+                        expect(Number.isFinite(value)).toBe(true);
+                        expect(Number.isSafeInteger(Math.floor(value))).toBe(true);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                    }
+                });
+            });
+
+            describe('the safe integer restriction applies to the generators only', (): void => {
+                // isIn and assertIn only compare values, so a Range with large bounds is still a
+                // valid Range that simply cannot be drawn from.
+                test.each([
+                    { min: -1e300, max: 1e300 },
+                    { min: 0, max: Number.MAX_VALUE }
+                ])('%# - isIn and assertIn should accept the range $min to $max', (range: Range): void => {
+                    expect(RangeUtility.isRange(range)).toBe(true);
+                    expect(RangeUtility.isIn(0, range)).toBe(true);
+
+                    expect((): void => {
+                        RangeUtility.assertIn(0, range);
+                    }).not.toThrow();
+
+                    expect((): void => {
+                        RangeUtility.randomFloat(range);
+                    }).toThrow(ValueRangeError);
+                });
+            });
+
             describe('randomFloat should throw when the range contains no representable values', (): void => {
                 // The bounds of each range below are adjacent representable numbers with both bounds
                 // excluded, so no representable value satisfies the range.

@@ -301,7 +301,7 @@ describe('Random', (): void => {
                 { min: 0, max: 1 },
                 { min: -2, max: -1 },
                 { min: 0.5, max: 0.75 },
-                { min: -1e300, max: 1e300 }
+                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
             ])('%# - randomFloat($min, $max) should stay below $max', ({ min, max }: { min: number; max: number; }): void => {
                 for (const draw of [roundsUp, 0.9999999999999999, 0.9, 0.5, 0]) {
                     Random.randomNumberGenerator = (): number => draw;
@@ -315,6 +315,57 @@ describe('Random', (): void => {
             test('randomFloat should fall back to min when every draw rounds up to max', (): void => {
                 Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
                 expect(Random.randomFloat(1, 2)).toBe(1);
+            });
+        });
+
+        describe('randomFloat and randomInt should throw for bounds outside the safe integer range', (): void => {
+            test.each([
+                { min: 0, max: 1e16 },
+                { min: 0, max: 1e100 },
+                { min: -1e300, max: 1e300 },
+                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                { min: Number.MIN_SAFE_INTEGER - 2, max: 0 },
+                // Number.MAX_SAFE_INTEGER + 2 is not representable and rounds down to 2 ** 53, which
+                // is the largest exclusive max this method accepts, so it must be stepped past.
+                { min: 0, max: Math.pow(2, 53) + 2 }
+            ])('%# - randomFloat($min, $max) and randomInt($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomFloat(min, max);
+                }).toThrow(ValueRangeError);
+
+                expect((): void => {
+                    Random.randomInt(min, max);
+                }).toThrow(ValueRangeError);
+            });
+
+            test('randomFloat should throw rather than return NaN when the span would overflow', (): void => {
+                // max - min overflows to Infinity for these bounds, and Infinity multiplied by a
+                // draw of 0 is NaN, which no comparison against max would have caught.
+                Random.randomNumberGenerator = (): number => 0;
+
+                expect((): void => {
+                    Random.randomFloat(-Number.MAX_VALUE, Number.MAX_VALUE);
+                }).toThrow(ValueRangeError);
+            });
+        });
+
+        describe('randomFloat and randomInt should accept bounds at the safe integer limits', (): void => {
+            test.each([
+                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                { min: 0, max: Number.MAX_SAFE_INTEGER },
+                { min: Number.MIN_SAFE_INTEGER, max: 0 },
+                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
+            ])('%# - randomFloat($min, $max) should return a safely truncatable value', ({ min, max }: { min: number; max: number; }): void => {
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    const value: number = Random.randomFloat(min, max);
+
+                    expect(Number.isFinite(value)).toBe(true);
+                    expect(Number.isSafeInteger(Math.floor(value))).toBe(true);
+                    expect(value).toBeGreaterThanOrEqual(min);
+                    expect(value).toBeLessThan(max);
+
+                    expect(Number.isSafeInteger(Random.randomInt(min, max))).toBe(true);
+                }
             });
         });
 
