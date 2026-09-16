@@ -197,8 +197,9 @@ export class RangeUtility {
      * For floating-point values, inclusivity is a boundary guarantee rather than a change in distribution:
      * an exclusive bound is never returned, while an inclusive bound is merely permitted.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
-     * When the endpoints of `range` are adjacent representable numbers and both bounds are exclusive,
-     * no representable value satisfies `range`, and the midpoint of `range` is returned.
+     * When the endpoints of `range` are adjacent representable numbers, the only candidate values are the
+     * bounds themselves, and an included bound is returned. If both bounds are excluded, no representable
+     * value satisfies `range` and this method throws rather than returning an excluded bound.
      *
      * @see {@link RangeUtility.isIn}
      * @see {@link Random.randomFloat}
@@ -208,6 +209,7 @@ export class RangeUtility {
      * @returns {number} A random floating-point number within `range`.
      *
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
+     * @throws {ValueRangeError} When `range` contains no representable values.
      *
      * @public
      * @since 0.1.0
@@ -227,7 +229,21 @@ export class RangeUtility {
         }
 
         if (RangeUtility.#isExcludedBound(value, range, isMinInclusive, isMaxInclusive)) {
-            return range.min + ((range.max - range.min) / 2);
+            const midpoint: number = range.min + ((range.max - range.min) / 2);
+
+            if (!RangeUtility.#isExcludedBound(midpoint, range, isMinInclusive, isMaxInclusive)) {
+                return midpoint;
+            }
+
+            // The midpoint rounds to a bound, so the bounds are adjacent representable numbers and
+            // the only candidate values are the bounds themselves.
+            if (isMaxInclusive) {
+                return range.max;
+            } else if (isMinInclusive) {
+                return range.min;
+            }
+
+            throw new ValueRangeError('The range contains no representable values.');
         }
 
         return value;

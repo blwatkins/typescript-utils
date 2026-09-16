@@ -22,6 +22,7 @@
 
 import { TypeAssertions } from '../assert';
 import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
+import { MathUtility } from '../math';
 import { NumberUtility } from '../number';
 
 import { WeightedList, WeightedListUtility } from './weighted-element';
@@ -109,6 +110,9 @@ export class Random {
      * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
      * When `min` is equal to `max`, the range is treated as closed, so that `randomInt(n, n)` returns `n` for an
      * integer `n` and throws for a non-integer `n`.
+     * Every integer the range contains must be a safe integer.
+     * Beyond {@link Number.MAX_SAFE_INTEGER} the gap between representable numbers exceeds 1, so consecutive
+     * integers do not exist and a uniform selection over them is not meaningful.
      *
      * @param {number} min - The minimum value (inclusive).
      * Non-integer values are rounded up with {@link Math.ceil}.
@@ -120,6 +124,7 @@ export class Random {
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
      * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
+     * @throws {ValueRangeError} When the range contains integer values that are not safe integers.
      *
      * @public
      * @since 0.1.0
@@ -139,7 +144,16 @@ export class Random {
             throw new ValueRangeError('The range contains no integer values.');
         }
 
-        return Math.floor(Random.randomFloat(lowest, highest + 1));
+        // Beyond the safe integer range the gap between representable numbers exceeds 1,
+        // so the bounds above cannot be trusted and consecutive integers do not exist.
+        if (lowest < Number.MIN_SAFE_INTEGER || highest > Number.MAX_SAFE_INTEGER) {
+            throw new ValueRangeError('The range contains integer values that are not safe integers.');
+        }
+
+        // Rounding in the affine draw can land exactly on the exclusive upper bound, so the result
+        // is constrained to the integers the range actually contains.
+        const value: number = Math.floor(Random.randomFloat(lowest, highest + 1));
+        return MathUtility.constrain(value, lowest, highest);
     }
 
     /**
@@ -149,6 +163,9 @@ export class Random {
      * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
      * When `min` is equal to `max`, the range is treated as closed, so that `randomInt(n, n)` returns `n` for an
      * integer `n` and throws for a non-integer `n`.
+     * Every integer the range contains must be a safe integer.
+     * Beyond {@link Number.MAX_SAFE_INTEGER} the gap between representable numbers exceeds 1, so consecutive
+     * integers do not exist and a uniform selection over them is not meaningful.
      *
      * @see {@link Random.randomInt}
      *
@@ -162,6 +179,7 @@ export class Random {
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
      * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
+     * @throws {ValueRangeError} When the range contains integer values that are not safe integers.
      *
      * @public
      * @since 0.1.0

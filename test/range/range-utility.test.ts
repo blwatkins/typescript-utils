@@ -548,6 +548,53 @@ describe('RangeUtility', (): void => {
                 });
             });
 
+            describe('randomFloat should throw when the range contains no representable values', (): void => {
+                // The bounds of each range below are adjacent representable numbers with both bounds
+                // excluded, so no representable value satisfies the range.
+                test.each([
+                    { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: false },
+                    { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
+                    { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: false }
+                ])('%# - randomFloat($min, $max) should throw ValueRangeError', (range: Range): void => {
+                    Random.randomNumberGenerator = (): number => 0;
+
+                    expect((): void => {
+                        RangeUtility.randomFloat(range);
+                    }).toThrow(ValueRangeError);
+                });
+            });
+
+            describe('randomFloat should return the single representable value of an adjacent bound range', (): void => {
+                test.each([
+                    {
+                        range: { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: true },
+                        expected: 1 + Number.EPSILON
+                    },
+                    {
+                        range: { min: 1, max: 1 + Number.EPSILON, isMinInclusive: true, isMaxInclusive: false },
+                        expected: 1
+                    },
+                    {
+                        // The midpoint of these adjacent bounds rounds up to the excluded max,
+                        // so the included min is the only value the range can yield.
+                        range: {
+                            min: 1 + Number.EPSILON,
+                            max: 1 + (2 * Number.EPSILON),
+                            isMinInclusive: true,
+                            isMaxInclusive: false
+                        },
+                        expected: 1 + Number.EPSILON
+                    }
+                ])('%# - randomFloat($range) should return $expected', ({ range, expected }: { range: Range; expected: number; }): void => {
+                    for (const draw of [0, 0.5, 1 - (Number.EPSILON / 2)]) {
+                        Random.randomNumberGenerator = (): number => draw;
+                        const value: number = RangeUtility.randomFloat(range);
+                        expect(value).toBe(expected);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                    }
+                });
+            });
+
             describe('randomFloat should return min when min and max are equal', (): void => {
                 test.each([
                     { min: 0, max: 0 },
@@ -630,6 +677,21 @@ describe('RangeUtility', (): void => {
                     { min: 5, max: 6, isMinInclusive: false, isMaxInclusive: false },
                     { min: -0.5, max: 0, isMaxInclusive: false }
                 ])('%# - randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
+                    expect((): void => {
+                        RangeUtility.randomInteger(range);
+                    }).toThrow(ValueRangeError);
+                });
+            });
+
+            describe('randomInteger should throw when the range contains unsafe integers', (): void => {
+                test.each([
+                    { min: 0, max: 1e20 },
+                    { min: -Number.MAX_VALUE, max: 0, isMinInclusive: false },
+                    { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                    { min: 1e20, max: 1e20 + 16384 }
+                ])('%# - randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
+                    Random.randomNumberGenerator = (): number => 0;
+
                     expect((): void => {
                         RangeUtility.randomInteger(range);
                     }).toThrow(ValueRangeError);
