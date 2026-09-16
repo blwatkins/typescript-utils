@@ -25,7 +25,8 @@ import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 import {
     Random,
     RandomNumberGeneratorFactory,
-    SeededRandomNumberGenerator
+    SeededRandomNumberGenerator,
+    ValueRangeError
 } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
@@ -74,29 +75,39 @@ describe('Random', (): void => {
         }
     }
 
+    function getLowestInt(min: number): number {
+        return Math.ceil(min);
+    }
+
+    function getHighestInt(min: number, max: number): number {
+        if (min === max) {
+            return Math.floor(max);
+        }
+
+        return Math.ceil(max) - 1;
+    }
+
     function validateRandomIntValues(numbers: number[], min: number, max: number): void {
-        const sameMinMax: boolean = Math.floor(max) - Math.floor(min) > 1;
+        const lowest: number = getLowestInt(min);
+        const highest: number = getHighestInt(min, max);
+        const multipleValues: boolean = highest > lowest;
 
         for (const num of numbers) {
             expectTypeOf(num).toBeNumber();
             expect(num).not.toBeNaN();
             expect(Number.isInteger(num)).toBe(true);
-
-            if (sameMinMax) {
-                expect(num).toBeGreaterThanOrEqual(Math.floor(min));
-                expect(num).toBeLessThan(Math.floor(max));
-            } else {
-                expect(num).toBe(Math.floor(min));
-            }
+            expect(num).toBeGreaterThanOrEqual(lowest);
+            expect(num).toBeLessThanOrEqual(highest);
         }
 
         const numbersSet: Set<number> = new Set<number>(numbers);
 
-        if (sameMinMax) {
+        if (multipleValues) {
             expect(numbersSet.size).toBeGreaterThan(1);
-            expect(numbersSet.size).toBeLessThanOrEqual(Math.floor(max) - Math.floor(min));
+            expect(numbersSet.size).toBeLessThanOrEqual((highest - lowest) + 1);
         } else {
             expect(numbersSet.size).toBe(1);
+            expect(numbersSet.has(lowest)).toBe(true);
         }
     }
 
@@ -147,40 +158,45 @@ describe('Random', (): void => {
             });
 
             test('randomFloat', (): void => {
+                // The generator contract is [0, 1), and randomFloat never returns its exclusive
+                // max, so the injected value must be a legal draw.
+                const random: number = 0.25;
                 const expected: number = 2;
 
                 Random.randomNumberGenerator = (): number => {
-                    return expected;
+                    return random;
                 };
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    expect(Random.randomFloat(0, 1)).toBe(expected);
+                    expect(Random.randomFloat(0, 8)).toBe(expected);
                 }
             });
 
             test('randomInt', (): void => {
-                const random: number = 2.5;
-                const expected: number = Math.floor(random);
+                // The generator contract is [0, 1), and randomInt constrains its result to the
+                // integers the range contains, so the injected value must be a legal draw.
+                const random: number = 0.75;
+                const expected: number = 3;
 
                 Random.randomNumberGenerator = (): number => {
                     return random;
                 };
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    expect(Random.randomInt(0, 1)).toBe(expected);
+                    expect(Random.randomInt(0, 4)).toBe(expected);
                 }
             });
 
             test('randomInteger', (): void => {
-                const random: number = 3.5;
-                const expected: number = Math.floor(random);
+                const random: number = 0.5;
+                const expected: number = 2;
 
                 Random.randomNumberGenerator = (): number => {
                     return random;
                 };
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
-                    expect(Random.randomInteger(0, 1)).toBe(expected);
+                    expect(Random.randomInteger(0, 4)).toBe(expected);
                 }
             });
         });
@@ -275,7 +291,113 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomFloat should return min when min and max are equal', (): void => {
+        describe('randomFloat and randomInt should stay in range for a generator outside its contract', (): void => {
+            // randomNumberGenerator validates only that its argument is a function, so a generator
+            // that breaks its documented [0, 1) contract reaches the draw. A guard on the upper bound
+            // alone does not see a draw carried below min, and no comparison sees NaN.
+            test.each([
+                { draw: -1 },
+                { draw: -0.5 },
+                { draw: NaN },
+                { draw: 2 },
+                { draw: Infinity },
+                { draw: -Infinity }
+            ])('%# - a generator returning $draw should still yield a value within [0, 10)', ({ draw }: { draw: number; }): void => {
+                Random.randomNumberGenerator = (): number => draw;
+
+                const floatValue: number = Random.randomFloat(0, 10);
+                const intValue: number = Random.randomInt(0, 10);
+
+                expect(Number.isFinite(floatValue)).toBe(true);
+                expect(floatValue).toBeGreaterThanOrEqual(0);
+                expect(floatValue).toBeLessThan(10);
+
+                expect(Number.isSafeInteger(intValue)).toBe(true);
+                expect(intValue).toBeGreaterThanOrEqual(0);
+                expect(intValue).toBeLessThan(10);
+            });
+        });
+
+        describe('randomFloat should never return the exclusive max', (): void => {
+            // 1 + (1 - 2^-53) lands exactly halfway between the largest double below 2 and 2
+            // itself, and ties-to-even rounds it up, so the raw affine draw returns exactly 2.
+            const roundsUp: number = 1 - (Number.EPSILON / 2);
+
+            test.each([
+                { min: 1, max: 2 },
+                { min: 0, max: 1 },
+                { min: -2, max: -1 },
+                { min: 0.5, max: 0.75 },
+                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
+            ])('%# - randomFloat($min, $max) should stay below $max', ({ min, max }: { min: number; max: number; }): void => {
+                for (const draw of [roundsUp, 0.9999999999999999, 0.9, 0.5, 0]) {
+                    Random.randomNumberGenerator = (): number => draw;
+                    const value: number = Random.randomFloat(min, max);
+
+                    expect(value).toBeGreaterThanOrEqual(min);
+                    expect(value).toBeLessThan(max);
+                }
+            });
+
+            test('randomFloat should fall back to min when every draw rounds up to max', (): void => {
+                Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
+                expect(Random.randomFloat(1, 2)).toBe(1);
+            });
+        });
+
+        describe('randomFloat and randomInt should throw for bounds outside the safe integer range', (): void => {
+            test.each([
+                { min: 0, max: 1e16 },
+                { min: 0, max: 1e100 },
+                { min: -1e300, max: 1e300 },
+                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                { min: Number.MIN_SAFE_INTEGER - 2, max: 0 },
+                // Number.MAX_SAFE_INTEGER + 2 is not representable and rounds down to 2 ** 53, which
+                // is the largest exclusive max this method accepts, so it must be stepped past.
+                { min: 0, max: Math.pow(2, 53) + 2 }
+            ])('%# - randomFloat($min, $max) and randomInt($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomFloat(min, max);
+                }).toThrow(ValueRangeError);
+
+                expect((): void => {
+                    Random.randomInt(min, max);
+                }).toThrow(ValueRangeError);
+            });
+
+            test('randomFloat should throw rather than return NaN when the span would overflow', (): void => {
+                // max - min overflows to Infinity for these bounds, and Infinity multiplied by a
+                // draw of 0 is NaN, which no comparison against max would have caught.
+                Random.randomNumberGenerator = (): number => 0;
+
+                expect((): void => {
+                    Random.randomFloat(-Number.MAX_VALUE, Number.MAX_VALUE);
+                }).toThrow(ValueRangeError);
+            });
+        });
+
+        describe('randomFloat and randomInt should accept bounds at the safe integer limits', (): void => {
+            test.each([
+                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                { min: 0, max: Number.MAX_SAFE_INTEGER },
+                { min: Number.MIN_SAFE_INTEGER, max: 0 },
+                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
+            ])('%# - randomFloat($min, $max) should return a safely truncatable value', ({ min, max }: { min: number; max: number; }): void => {
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    const value: number = Random.randomFloat(min, max);
+
+                    expect(Number.isFinite(value)).toBe(true);
+                    expect(Number.isSafeInteger(Math.floor(value))).toBe(true);
+                    expect(value).toBeGreaterThanOrEqual(min);
+                    expect(value).toBeLessThan(max);
+
+                    expect(Number.isSafeInteger(Random.randomInt(min, max))).toBe(true);
+                }
+            });
+        });
+
+        describe('randomFloat should throw when min and max are equal', (): void => {
+            // The range [min, max) contains no values when min is equal to max.
             test.each([
                 { min: 0, max: 0 },
                 { min: 1, max: 1 },
@@ -283,15 +405,10 @@ describe('Random', (): void => {
                 { min: -10, max: -10 },
                 { min: 0.5, max: 0.5 },
                 { min: -0.5, max: -0.5 }
-            ])('%# - randomFloat($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const numbers: number[] = [];
-
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const r: number = Random.randomFloat(min, max);
-                    numbers.push(r);
-                }
-
-                validateRandomFloatValues(numbers, min, max);
+            ])('%# - randomFloat($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomFloat(min, max);
+                }).toThrow(ValueRangeError);
             });
         });
     });
@@ -320,7 +437,7 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomInt and randomInteger should return a number between Math.floor(min) and Math.floor(max) when the given min and max are float number types', (): void => {
+        describe('randomInt and randomInteger should round float bounds inward to the integers the range contains', (): void => {
             test.each([
                 { min: 0.33, max: 1.5 },
                 { min: 0.5, max: 50.34 },
@@ -331,11 +448,11 @@ describe('Random', (): void => {
                 { min: 0.5, max: 10.314 },
                 { min: 1.5, max: 9.75 },
                 { min: 0, max: 5.5 },
-                { min: -0.5, max: 0 },
+                { min: 2.3, max: 5.7 },
                 { min: -3.75, max: -0.5 },
                 { min: -100.777, max: 100.222 },
                 { min: -0.5, max: 0.5 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return a number between Math.floor($min) and Math.floor($max)', ({ min, max }: { min: number; max: number; }): void => {
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return an integer within [$min, $max)', ({ min, max }: { min: number; max: number; }): void => {
                 const intNumbers: number[] = [];
                 const integerNumbers: number[] = [];
 
@@ -349,49 +466,32 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomInt and randomInteger should return min when min and max are equal', (): void => {
+        describe('randomInt and randomInteger should throw when min and max are equal', (): void => {
+            // The range [min, max) contains no integers when min is equal to max, whether or not
+            // min is itself an integer.
             test.each([
                 { min: 0, max: 0 },
                 { min: 1, max: 1 },
                 { min: -1, max: -1 },
                 { min: 10, max: 10 },
-                { min: -10, max: -10 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return $min', ({ min, max }: { min: number; max: number; }): void => {
-                const intNumbers: number[] = [];
-                const integerNumbers: number[] = [];
-
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    intNumbers.push(Random.randomInt(min, max));
-                    integerNumbers.push(Random.randomInteger(min, max));
-                }
-
-                validateRandomIntValues(intNumbers, min, max);
-                validateRandomIntValues(integerNumbers, min, max);
-            });
-        });
-
-        describe('randomInt and randomInteger should return Math.floor(min) when min and max are equal and float number types', (): void => {
-            test.each([
+                { min: -10, max: -10 },
                 { min: 1.8, max: 1.8 },
                 { min: 10.5, max: 10.5 },
                 { min: -10.5, max: -10.5 },
                 { min: 0.5, max: 0.5 },
                 { min: -0.5, max: -0.5 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
-                const intNumbers: number[] = [];
-                const integerNumbers: number[] = [];
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomInt(min, max);
+                }).toThrow(ValueRangeError);
 
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    intNumbers.push(Random.randomInt(min, max));
-                    integerNumbers.push(Random.randomInteger(min, max));
-                }
-
-                validateRandomIntValues(intNumbers, min, max);
-                validateRandomIntValues(integerNumbers, min, max);
+                expect((): void => {
+                    Random.randomInteger(min, max);
+                }).toThrow(ValueRangeError);
             });
         });
 
-        describe('randomInt and randomInteger should return Math.floor(min) when Math.floor(min) and Math.floor(max) are equal', (): void => {
+        describe('randomInt and randomInteger should throw when the range contains no integer values', (): void => {
             test.each([
                 { min: 1.5, max: 1.89 },
                 { min: 10.01, max: 10.99 },
@@ -399,18 +499,99 @@ describe('Random', (): void => {
                 { min: -10.4, max: -10.25 },
                 { min: 0.5, max: 0.75 },
                 { min: 0.99, max: 0.999 },
-                { min: -0.999, max: -0.99 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return Math.floor($min)', ({ min, max }: { min: number; max: number; }): void => {
-                const intNumbers: number[] = [];
-                const integerNumbers: number[] = [];
+                { min: -0.999, max: -0.99 },
+                { min: -0.5, max: 0 }
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomInt(min, max);
+                }).toThrow(ValueRangeError);
 
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    intNumbers.push(Random.randomInt(min, max));
-                    integerNumbers.push(Random.randomInteger(min, max));
+                expect((): void => {
+                    Random.randomInteger(min, max);
+                }).toThrow(ValueRangeError);
+            });
+        });
+
+        describe('randomInt and randomInteger should throw when the range contains unsafe integers', (): void => {
+            const oneUlpAbove1e20: number = 1e20 + 16384;
+
+            test.each([
+                { min: 0, max: 1e20 },
+                { min: 1e20, max: oneUlpAbove1e20 },
+                { min: -Number.MAX_VALUE, max: 0 },
+                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                { min: Number.MAX_SAFE_INTEGER + 2, max: Number.MAX_VALUE }
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomInt(min, max);
+                }).toThrow(ValueRangeError);
+
+                expect((): void => {
+                    Random.randomInteger(min, max);
+                }).toThrow(ValueRangeError);
+            });
+
+            test('randomInt should not return a value outside a one ULP span of large integers', (): void => {
+                const min: number = 1e20;
+                const max: number = oneUlpAbove1e20;
+
+                for (const draw of [0, 0.5, 0.9, 1 - (Number.EPSILON / 2)]) {
+                    Random.randomNumberGenerator = (): number => draw;
+
+                    expect((): void => {
+                        Random.randomInt(min, max);
+                    }).toThrow(ValueRangeError);
                 }
+            });
+        });
 
-                validateRandomIntValues(intNumbers, min, max);
-                validateRandomIntValues(integerNumbers, min, max);
+        describe('randomInt and randomInteger should not return the exclusive max when the draw rounds up to it', (): void => {
+            // Random.randomFloat(1, 2) returns exactly 2 for this draw: 1 + (1 - 2^-53) sits halfway
+            // between the largest double below 2 and 2 itself, and ties-to-even rounds it up.
+            const roundsUp: number = 1 - (Number.EPSILON / 2);
+
+            test.each([
+                { min: 1, max: 2 },
+                { min: 0, max: 1 },
+                { min: -2, max: -1 },
+                { min: 5, max: 9 }
+            ])('%# - randomInt($min, $max) should stay below $max', ({ min, max }: { min: number; max: number; }): void => {
+                Random.randomNumberGenerator = (): number => roundsUp;
+
+                const intValue: number = Random.randomInt(min, max);
+                const integerValue: number = Random.randomInteger(min, max);
+
+                expect(intValue).toBeGreaterThanOrEqual(min);
+                expect(intValue).toBeLessThan(max);
+                expect(integerValue).toBeGreaterThanOrEqual(min);
+                expect(integerValue).toBeLessThan(max);
+            });
+        });
+
+        describe('randomInt and randomInteger should accept bounds at the safe integer limits', (): void => {
+            test.each([
+                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                { min: 0, max: Number.MAX_SAFE_INTEGER },
+                { min: Number.MIN_SAFE_INTEGER, max: 0 }
+            ])('%# - randomInt($min, $max) should return a safe integer', ({ min, max }: { min: number; max: number; }): void => {
+                const value: number = Random.randomInt(min, max);
+                expect(Number.isSafeInteger(value)).toBe(true);
+                expect(value).toBeGreaterThanOrEqual(min);
+                expect(value).toBeLessThan(max);
+            });
+        });
+
+        describe('randomInt and randomInteger should round non-integer bounds inward to an exact value', (): void => {
+            test.each([
+                { min: 0.33, max: 1.5, expected: 1 },
+                { min: 1.2, max: 2.8, expected: 2 },
+                { min: -1.5, max: -0.4, expected: -1 },
+                { min: 4.01, max: 5.99, expected: 5 }
+            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return $expected', ({ min, max, expected }: { min: number; max: number; expected: number; }): void => {
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    expect(Random.randomInt(min, max)).toBe(expected);
+                    expect(Random.randomInteger(min, max)).toBe(expected);
+                }
             });
         });
     });
