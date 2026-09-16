@@ -97,9 +97,10 @@ export class Random {
      * @remarks `max` is never returned. Rounding can land the scaled draw exactly on `max`, so such a
      * draw is discarded and replaced.
      * The range [min, max) contains no values when `min` is equal to `max`, so that range throws.
-     * Both bounds must lie within the safe integer range, so that no span can overflow and every
-     * returned value truncates to a safe integer. `max` is exclusive, so it may be one greater than
-     * {@link Number.MAX_SAFE_INTEGER}.
+     * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
+     * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
+     * {@link Number.MAX_SAFE_INTEGER}. Restricting the bounds this way keeps any span from overflowing
+     * and keeps every returned value close enough to zero to truncate to an exact integer.
      *
      * @param {number} min - The minimum value (inclusive).
      * @param {number} max - The maximum value (exclusive).
@@ -110,7 +111,7 @@ export class Random {
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
      * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      * @throws {ValueRangeError} When the range contains no values.
-     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is outside the safe integer range, or `max` is greater than one more than {@link Number.MAX_SAFE_INTEGER}.
      *
      * @public
      * @since 0.1.0
@@ -118,7 +119,7 @@ export class Random {
     public static randomFloat(min: number, max: number): number {
         NumberUtility.assertValidRange(min, max);
         NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
-        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, 'max must be within the safe integer range.');
+        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, 'max must not be greater than one more than Number.MAX_SAFE_INTEGER.');
 
         if (min === max) {
             throw new ValueRangeError('The range contains no values.');
@@ -145,10 +146,10 @@ export class Random {
      * @remarks Non-integer bounds are rounded inward, to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
      * The range [min, max) contains no integers when `min` is equal to `max`, so that range throws.
-     * Both bounds must lie within the safe integer range. Beyond {@link Number.MAX_SAFE_INTEGER} the gap
-     * between representable numbers exceeds 1, so consecutive integers do not exist and a uniform
-     * selection over them is not meaningful. `max` is exclusive, so it may be one greater than
-     * {@link Number.MAX_SAFE_INTEGER}.
+     * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
+     * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
+     * {@link Number.MAX_SAFE_INTEGER}. Beyond that, the gap between representable numbers exceeds 1, so
+     * consecutive integers do not exist and a uniform selection over them is not meaningful.
      * `RangeUtility.randomInteger` in the range module takes a `Range` instead of a pair of numbers, and
      * treats an unset `isMaxInclusive` as inclusive, so `randomInteger({ min: 0, max: 10 })` may return
      * `10` while `randomInt(0, 10)` may not. Set `isMaxInclusive` to `false` to match this method.
@@ -163,7 +164,7 @@ export class Random {
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
      * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
-     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is outside the safe integer range, or `max` is greater than one more than {@link Number.MAX_SAFE_INTEGER}.
      *
      * @public
      * @since 0.1.0
@@ -171,7 +172,7 @@ export class Random {
     public static randomInt(min: number, max: number): number {
         NumberUtility.assertValidRange(min, max);
         NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
-        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, 'max must be within the safe integer range.');
+        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, 'max must not be greater than one more than Number.MAX_SAFE_INTEGER.');
         const lowest: number = Math.ceil(min);
         const highest: number = Math.ceil(max) - 1;
 
@@ -188,10 +189,10 @@ export class Random {
      * @remarks Non-integer bounds are rounded inward, to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
      * The range [min, max) contains no integers when `min` is equal to `max`, so that range throws.
-     * Both bounds must lie within the safe integer range. Beyond {@link Number.MAX_SAFE_INTEGER} the gap
-     * between representable numbers exceeds 1, so consecutive integers do not exist and a uniform
-     * selection over them is not meaningful. `max` is exclusive, so it may be one greater than
-     * {@link Number.MAX_SAFE_INTEGER}.
+     * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
+     * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
+     * {@link Number.MAX_SAFE_INTEGER}. Beyond that, the gap between representable numbers exceeds 1, so
+     * consecutive integers do not exist and a uniform selection over them is not meaningful.
      * `RangeUtility.randomInteger` in the range module takes a `Range` instead of a pair of numbers, and
      * treats an unset `isMaxInclusive` as inclusive, so `randomInteger({ min: 0, max: 10 })` may return
      * `10` while `randomInt(0, 10)` may not. Set `isMaxInclusive` to `false` to match this method.
@@ -208,7 +209,7 @@ export class Random {
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
      * @throws {ValueRangeError} When `min` is not less than or equal `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
-     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is outside the safe integer range, or `max` is greater than one more than {@link Number.MAX_SAFE_INTEGER}.
      *
      * @public
      * @since 0.1.0

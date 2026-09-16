@@ -552,6 +552,23 @@ describe('RangeUtility', (): void => {
                 });
             });
 
+            describe('a Range may not use the exclusive max allowance that Random accepts', (): void => {
+                // Random's max is exclusive, so it may be one past MAX_SAFE_INTEGER. A Range bound may
+                // be inclusive, so the same value is out of range here.
+                test('Number.MAX_SAFE_INTEGER + 1 is accepted by Random and rejected by RangeUtility', (): void => {
+                    expect(Number.isSafeInteger(Random.randomInt(0, Number.MAX_SAFE_INTEGER + 1))).toBe(true);
+                    expect(Number.isFinite(Random.randomFloat(0, Number.MAX_SAFE_INTEGER + 1))).toBe(true);
+
+                    expect((): void => {
+                        RangeUtility.randomFloat({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
+                    }).toThrow(ValueRangeError);
+
+                    expect((): void => {
+                        RangeUtility.randomInteger({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
+                    }).toThrow(ValueRangeError);
+                });
+            });
+
             describe('randomFloat and randomInteger should throw for bounds outside the safe integer range', (): void => {
                 test.each([
                     { min: 0, max: 1e16 },
@@ -608,6 +625,50 @@ describe('RangeUtility', (): void => {
                     expect((): void => {
                         RangeUtility.randomFloat(range);
                     }).toThrow(ValueRangeError);
+                });
+            });
+
+            describe('randomFloat should discard a draw that lands past a bound, not only on it', (): void => {
+                // A generator returning a value at or above 1 is outside its documented [0, 1)
+                // contract, but it drives the affine draw strictly past max, which a check for
+                // equality with an excluded bound cannot see. The same technique is used in the
+                // weighted element suite.
+                test.each([
+                    { range: { min: 0, max: 10 }, draw: 1.5 },
+                    { range: { min: 0, max: 10 }, draw: 2 },
+                    { range: { min: 0, max: 10, isMaxInclusive: false }, draw: 1.5 },
+                    { range: { min: -5, max: 5, isMinInclusive: false, isMaxInclusive: false }, draw: 3 }
+                ])('%# - randomFloat($range) with a draw of $draw should stay within the range', ({ range, draw }: { range: Range; draw: number; }): void => {
+                    Random.randomNumberGenerator = (): number => draw;
+                    const rawDraw: number = range.min + (draw * (range.max - range.min));
+                    const value: number = RangeUtility.randomFloat(range);
+
+                    expect(rawDraw).toBeGreaterThan(range.max);
+                    expect(value).not.toBe(rawDraw);
+                    expect(RangeUtility.isIn(value, range)).toBe(true);
+                });
+            });
+
+            describe('randomFloat should stay within the range for bounds with a coarse gap between representable numbers', (): void => {
+                // Regression guard rather than a reproduction: no known in-contract draw rounds past a
+                // bound, but the draw is checked against the full range condition rather than for
+                // equality with an excluded bound, and this pins that.
+                const coarseMin: number = 0.75;
+                const coarseMax: number = Math.pow(2, 51) + 0.5;
+
+                test.each([
+                    { min: coarseMin, max: coarseMax },
+                    { min: coarseMin, max: coarseMax, isMaxInclusive: false },
+                    { min: coarseMin, max: coarseMax, isMinInclusive: false },
+                    { min: coarseMin, max: coarseMax, isMinInclusive: false, isMaxInclusive: false }
+                ])('%# - randomFloat($min, $max) should return a value within the range', (range: Range): void => {
+                    for (const draw of [1 - (Number.EPSILON / 2), 0.9999999999999999, 0.5, 0]) {
+                        Random.randomNumberGenerator = (): number => draw;
+                        const value: number = RangeUtility.randomFloat(range);
+
+                        expect(Number.isFinite(value)).toBe(true);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                    }
                 });
             });
 

@@ -196,6 +196,8 @@ export class RangeUtility {
      * bounds may be returned. Each property defaults to `true` when it is `undefined`, matching {@link RangeUtility.isIn}.
      * For floating-point values, inclusivity is a boundary guarantee rather than a change in distribution:
      * an exclusive bound is never returned, while an inclusive bound is merely permitted and may be unreachable.
+     * Each draw is checked against the full range condition, so a value that rounds past a bound is
+     * discarded along with one that lands on it.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * Both bounds of `range` must lie within the safe integer range, so that every returned value
      * truncates to a safe integer. {@link RangeUtility.isIn} places no such restriction.
@@ -226,16 +228,16 @@ export class RangeUtility {
         let value: number = range.min + (Random.random() * (range.max - range.min));
         let attempts: number = 1;
 
-        while (RangeUtility.#isExcludedBound(value, range, isMinInclusive, isMaxInclusive)
+        while (!RangeUtility.#isInRange(value, range, isMinInclusive, isMaxInclusive)
             && attempts < maxDrawAttempts) {
             value = range.min + (Random.random() * (range.max - range.min));
             attempts++;
         }
 
-        if (RangeUtility.#isExcludedBound(value, range, isMinInclusive, isMaxInclusive)) {
+        if (!RangeUtility.#isInRange(value, range, isMinInclusive, isMaxInclusive)) {
             const midpoint: number = range.min + ((range.max - range.min) / 2);
 
-            if (!RangeUtility.#isExcludedBound(midpoint, range, isMinInclusive, isMaxInclusive)) {
+            if (RangeUtility.#isInRange(midpoint, range, isMinInclusive, isMaxInclusive)) {
                 return midpoint;
             }
 
@@ -329,22 +331,42 @@ export class RangeUtility {
     }
 
     /**
-     * Does `value` fall on a bound that `range` excludes?
+     * Is `value` within `range`, given the resolved inclusivity of each bound?
+     *
+     * @remarks This is the full range condition rather than a test for equality with an excluded bound.
+     * Rounding in the draw could in principle carry a value past a bound without landing on it, and a
+     * test for equality would not see that. The condition is written in positive form on purpose: the
+     * negated form accepts a non-finite value, because every comparison against `NaN` is `false`.
      *
      * @param {number} value - The value to check.
      * @param {Range} range - The {@link Range} object to check against.
      * @param {boolean} isMinInclusive - Is the `min` bound of `range` inclusive?
      * @param {boolean} isMaxInclusive - Is the `max` bound of `range` inclusive?
      *
-     * @returns {boolean} `true` if `value` falls on an excluded bound of `range`; `false` otherwise.
+     * @returns {boolean} `true` if `value` is within `range`; `false` otherwise.
      *
      * @private
      */
-    static #isExcludedBound(value: number,
-                            range: Range,
-                            isMinInclusive: boolean,
-                            isMaxInclusive: boolean): boolean {
-        return (!isMinInclusive && value === range.min)
-            || (!isMaxInclusive && value === range.max);
+    static #isInRange(value: number,
+                      range: Range,
+                      isMinInclusive: boolean,
+                      isMaxInclusive: boolean): boolean {
+        let aboveMin: boolean;
+
+        if (isMinInclusive) {
+            aboveMin = value >= range.min;
+        } else {
+            aboveMin = value > range.min;
+        }
+
+        let belowMax: boolean;
+
+        if (isMaxInclusive) {
+            belowMax = value <= range.max;
+        } else {
+            belowMax = value < range.max;
+        }
+
+        return aboveMin && belowMax;
     }
 }
