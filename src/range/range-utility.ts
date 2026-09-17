@@ -63,6 +63,7 @@ export class RangeUtility {
      * Assert that `input` is a valid {@link Range} object.
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
+     * Both `min` and `max` must be numbers within the safe integer range.
      * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
      *
      * @see {@link RangeUtility.isRange}
@@ -90,7 +91,7 @@ export class RangeUtility {
     /**
      * Assert that `value` is within `range`.
      *
-     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the range.
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the tested range.
      * Each property defaults to `true` when it is `undefined`.
      * When `isMinInclusive` is `false`, `value` must be greater than `range.min`.
      * When `isMaxInclusive` is `false`, `value` must be less than `range.max`.
@@ -124,6 +125,7 @@ export class RangeUtility {
      * Is `input` a valid {@link Range} object?
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
+     * Both `min` and `max` must be numbers within the safe integer range.
      * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
      *
      * @see {@link NumberUtility.isValidRange}
@@ -141,10 +143,6 @@ export class RangeUtility {
         if (validSchema) {
             const range: Range = input as Range;
 
-            if (!(NumberUtility.isSafe(range.min) && NumberUtility.isSafe(range.max))) {
-                return false;
-            }
-
             if (!NumberUtility.isValidRange(range.min, range.max)) {
                 return false;
             }
@@ -159,7 +157,7 @@ export class RangeUtility {
     /**
      * Is `value` within `range`?
      *
-     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the range.
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds of `range` are within the tested range.
      * Each property defaults to `true` when it is `undefined`.
      * When `isMinInclusive` is `false`, `value` must be greater than `range.min`.
      * When `isMaxInclusive` is `false`, `value` must be less than `range.max`.
@@ -197,15 +195,9 @@ export class RangeUtility {
     /**
      * Constrain `value` to the bounds of `range`.
      *
-     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` are ignored: both bounds
-     * are treated as inclusive, so a returned bound is the bound itself rather than the nearest
-     * representable value inside it. Stepping off an excluded bound has no exact answer at
-     * floating-point precision, and the value it produced would depend on the magnitude of the bound.
-     * A value returned by this method therefore satisfies {@link RangeUtility.isIn} for `range` only
-     * when the bound it was constrained to is inclusive.
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` are ignored: the range is treated as inclusive, regardless of their current values.
      *
      * @see {@link MathUtility.constrain}
-     * @see {@link RangeUtility.isIn}
      *
      * @param {number} value - The value to constrain.
      * @param {Range} range - The {@link Range} object to constrain `value` to.

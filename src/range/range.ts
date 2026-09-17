@@ -36,7 +36,10 @@ export const rangeSchema = Type.Object(
          * @readonly
          */
         min: Type.Readonly(
-            Type.Number()
+            Type.Number({
+                minimum: Number.MIN_SAFE_INTEGER,
+                maximum: Number.MAX_SAFE_INTEGER
+            })
         ),
 
         /**
@@ -46,7 +49,10 @@ export const rangeSchema = Type.Object(
          * @readonly
          */
         max: Type.Readonly(
-            Type.Number()
+            Type.Number({
+                minimum: Number.MIN_SAFE_INTEGER,
+                maximum: Number.MAX_SAFE_INTEGER
+            })
         ),
 
         /**
