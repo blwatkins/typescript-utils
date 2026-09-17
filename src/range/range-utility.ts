@@ -29,6 +29,8 @@ import { StringUtility } from '../string';
 
 import { Range, rangeSchema } from './range';
 
+// TODO - constrain method (value, range)
+
 /**
  * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw falls
  * outside the range.
