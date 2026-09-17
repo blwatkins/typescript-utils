@@ -348,7 +348,7 @@ export class StringUtility {
         return StringUtility.isString(input) && StringUtility.singleLineUppercase.test(input);
     }
 
-    /* ==================== DEPRECATED ==================== */
+    /* ******************* TODO: DEPRECATED ******************* */
 
     /**
      * Get the regular expression for single-line lowercase strings.

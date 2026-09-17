@@ -324,7 +324,7 @@ export class NumberUtility {
         return min <= max;
     }
 
-    /* ==================== DEPRECATED ==================== */
+    /* ******************* TODO: DEPRECATED ******************* */
 
     /**
      * Asserts that input is a finite number.
