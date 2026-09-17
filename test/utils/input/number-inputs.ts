@@ -67,18 +67,14 @@ export const zeroInputs: number[] = [0, -0];
 
 export const negativeUnsafeNumberInputs: number[] = [
     -Number.MAX_VALUE,
-    (-Number.MAX_SAFE_INTEGER) - 1,
     Number.MIN_SAFE_INTEGER - 1,
-    (-Number.MAX_SAFE_INTEGER) - 1.5,
     Number.MIN_SAFE_INTEGER - 1.5
 ];
 
 export const positiveUnsafeNumberInputs: number[] = [
     Number.MAX_VALUE,
     Number.MAX_SAFE_INTEGER + 1,
-    (-Number.MIN_SAFE_INTEGER) + 1,
-    Number.MAX_SAFE_INTEGER + 1.5,
-    (-Number.MIN_SAFE_INTEGER) + 1.5
+    Number.MAX_SAFE_INTEGER + 1.5
 ];
 
 export const unsafeNumberInputs: number[] = [
