@@ -304,12 +304,6 @@ describe('WeightedListUtility', (): void => {
                         WeightedListUtility.assertWeightedList({}, testInput as ((value: unknown) => value is unknown));
                     }).toThrow(testExpected);
                 });
-
-                test('Should throw a consistent error message when valueTypeGuard is not a function', (): void => {
-                    expect((): void => {
-                        WeightedListUtility.assertWeightedList({}, null as unknown as (value: unknown) => value is unknown);
-                    }).toThrow('valueTypeGuard must be a function.');
-                });
             });
 
             describe('Argument errors - isWeightedList', (): void => {
@@ -319,12 +313,6 @@ describe('WeightedListUtility', (): void => {
                     expect((): void => {
                         WeightedListUtility.isWeightedList({}, testInput as ((value: unknown) => value is unknown));
                     }).toThrow(testExpected);
-                });
-
-                test('Should throw a consistent error message when valueTypeGuard is not a function', (): void => {
-                    expect((): void => {
-                        WeightedListUtility.isWeightedList({}, null as unknown as (value: unknown) => value is unknown);
-                    }).toThrow('valueTypeGuard must be a function.');
                 });
             });
         });
