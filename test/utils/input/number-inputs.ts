@@ -71,14 +71,14 @@ export const zeroInputs: number[] = [0, -0];
 
 export const negativeUnsafeNumberInputs: number[] = [
     -Number.MAX_VALUE,
-    -Number.MAX_SAFE_INTEGER,
-    -Number.MAX_SAFE_INTEGER - 1
+    (-Number.MAX_SAFE_INTEGER) - 1,
+    Number.MIN_SAFE_INTEGER - 1
 ];
 
 export const positiveUnsafeNumberInputs: number[] = [
     Number.MAX_VALUE,
     Number.MAX_SAFE_INTEGER + 1,
-    -Number.MIN_SAFE_INTEGER
+    (-Number.MIN_SAFE_INTEGER) + 1
 ];
 
 export const negativeSafeFloatInputs: number[] = [

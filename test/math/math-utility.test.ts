@@ -40,7 +40,7 @@ describe('MathUtility', (): void => {
     testStaticClassConstructor('MathUtility', MathUtility as unknown as new () => unknown, StaticInstanceError);
 
     describe('constrain', (): void => {
-        describe('constrain should return the proper value for finite number arguments', (): void => {
+        describe('constrain should return the proper value for number arguments within the safe integer range', (): void => {
             test.each([
                 { value: 5, min: 0, max: 10, expected: 5 },
                 { value: 2, min: 1, max: 3, expected: 2 },
@@ -63,88 +63,104 @@ describe('MathUtility', (): void => {
                 { value: Number.MAX_SAFE_INTEGER, min: 5, max: 500, expected: 500 },
                 { value: Number.MIN_SAFE_INTEGER, min: 5, max: 500, expected: 5 },
                 { value: 5, min: 0, max: Number.MAX_SAFE_INTEGER, expected: 5 },
-                { value: 5, min: Number.MIN_SAFE_INTEGER, max: 10, expected: 5 }
+                { value: 5, min: Number.MIN_SAFE_INTEGER, max: 10, expected: 5 },
+                { value: 5, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, expected: 5 }
             ])('%# - constrain($value, $min, $max) should return $expected', ({ value, min, max, expected }: { value: number; min: number; max: number; expected: number; }): void => {
                 expect(MathUtility.constrain(value, min, max)).toBe(expected);
             });
         });
 
-        // TODO - update argument validation to match pattern established in RangeBuilder unit tests
-        // TODO - Establish or update convention in copilot-instructions.md
-        describe('Input validation', (): void => {
-            describe('All parameters must be numbers within the safe integer range', (): void => {
-                const scenarios: Scenario[] = [
-                    {
-                        label: 'Non-number inputs',
-                        inputs: nonNumberInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Non-finite number inputs',
-                        inputs: nonFiniteNumberInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Unsafe number inputs',
-                        inputs: [
-                            ...negativeUnsafeNumberInputs,
-                            ...positiveUnsafeNumberInputs
-                        ],
-                        expected: PrimitiveTypeError
-                    }
-                ];
+        describe('Argument errors', (): void => {
+            const defaultValue: number = 5;
+            const defaultMin: number = Number.MIN_SAFE_INTEGER;
+            const defaultMax: number = Number.MAX_SAFE_INTEGER;
 
-                describe.each(
-                    scenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-                    const defaultValue: number = 5;
-                    const defaultMin: number = 0;
-                    const defaultMax: number = 10;
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid value argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs
+                    ].map((input: unknown): { value: unknown, min: number, max: number } => {
+                        return {
+                            value: input,
+                            min: defaultMin,
+                            max: defaultMax
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid min argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs
+                    ].map((input: unknown): { value: number, min: unknown, max: number } => {
+                        return {
+                            value: defaultValue,
+                            min: input,
+                            max: defaultMax
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid max argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs
+                    ].map((input: unknown): { value: number, min: number, max: unknown } => {
+                        return {
+                            value: defaultValue,
+                            min: defaultMin,
+                            max: input
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid min/max range',
+                    inputs: [
+                        { value: defaultValue, min: defaultMax, max: defaultMin },
+                        { value: defaultValue, min: defaultMax, max: 0 },
+                        { value: defaultValue, min: 0, max: defaultMin },
+                        { value: defaultValue, min: 0, max: -1 },
+                        { value: defaultValue, min: 1, max: -1 },
+                        { value: defaultValue, min: 1, max: 0 },
+                        { value: defaultValue, min: 50, max: 10 },
+                        { value: defaultValue, min: -10, max: -50 },
+                        { value: defaultValue, min: 50.5, max: 10.5 },
+                        { value: defaultValue, min: -10.5, max: -50.5 },
+                        { value: defaultValue, min: 50, max: 10.5 },
+                        { value: defaultValue, min: -10, max: -50.5 },
+                        { value: defaultValue, min: 50.5, max: 10 },
+                        { value: defaultValue, min: -10.5, max: -50 },
+                        { value: defaultValue, min: 1.12345678912345, max: 1.12345678912344 },
+                        { value: defaultValue, min: -1.12345678912344, max: -1.12345678912345 }
+                    ],
+                    expected: ValueRangeError
+                }
+            ];
 
-                    describe('value parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - constrain($input, ${defaultMin}, ${defaultMax}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.constrain(testInput as number, defaultMin, defaultMax);
-                            }).toThrow(testExpected);
-                        });
-                    });
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                    describe('min parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - constrain(${defaultValue}, $input, ${defaultMax}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.constrain(defaultValue, testInput as number, defaultMax);
-                            }).toThrow(testExpected);
-                        });
-                    });
+                test.each(
+                    testCases
+                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { value: unknown, min: unknown, max: unknown } = testInput as { value: unknown, min: unknown, max: unknown };
 
-                    describe('max parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - constrain(${defaultValue}, ${defaultMin}, $input) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.constrain(defaultValue, defaultMin, testInput as number);
-                            }).toThrow(testExpected);
-                        });
-                    });
-                });
-            });
-
-            describe('Minimum constraint must be less than or equal to maximum constraint', (): void => {
-                const defaultValue: number = 0;
-
-                test.each([
-                    { min: 0, max: -1 },
-                    { min: 1, max: -1 },
-                    { min: 1, max: 0 }
-                ])(`%# - constrain(${defaultValue}, $min, $max) should throw ValueRangeError`, ({ min, max }: { min: number; max: number; }): void => {
                     expect((): void => {
-                        MathUtility.constrain(defaultValue, min, max);
-                    }).toThrow(ValueRangeError);
+                        MathUtility.constrain(args.value as number, args.min as number, args.max as number);
+                    }).toThrow(testExpected);
                 });
             });
         });
