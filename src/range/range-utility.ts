@@ -142,6 +142,10 @@ export class RangeUtility {
         if (validSchema) {
             const range: Range = input as Range;
 
+            if (!(NumberUtility.isSafe(range.min) && NumberUtility.isSafe(range.max))) {
+                return false;
+            }
+
             if (!NumberUtility.isValidRange(range.min, range.max)) {
                 return false;
             }
