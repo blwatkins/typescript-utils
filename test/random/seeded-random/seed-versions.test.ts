@@ -33,9 +33,11 @@ import {
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 
 import {
-    safeFloatInputs,
     negativeSafeIntegerInputs,
-    nonNumberInputs
+    nonFiniteNumberInputs,
+    nonNumberInputs,
+    safeFloatInputs,
+    unsafeNumberInputs
 } from '../../utils/input/number-inputs';
 
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
@@ -77,11 +79,23 @@ describe('SeedVersions', (): void => {
             expected: PrimitiveTypeError
         },
         {
-            label: 'Float and negative integer inputs',
-            inputs: [
-                ...safeFloatInputs,
-                ...negativeSafeIntegerInputs
-            ],
+            label: 'Non-finite number inputs',
+            inputs: nonFiniteNumberInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Number inputs outside the safe integer range',
+            inputs: unsafeNumberInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Float inputs',
+            inputs: safeFloatInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Negative integer inputs',
+            inputs: negativeSafeIntegerInputs,
             expected: PrimitiveTypeError
         }
     ];

@@ -33,10 +33,11 @@ import {
 import { nonStringInputs } from '../../utils/input/string-inputs';
 
 import {
-    safeFloatInputs,
     negativeSafeIntegerInputs,
     nonFiniteNumberInputs,
-    nonNumberInputs
+    nonNumberInputs,
+    safeFloatInputs,
+    unsafeNumberInputs
 } from '../../utils/input/number-inputs';
 
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
@@ -155,12 +156,23 @@ describe('RandomNumberGeneratorFactory', (): void => {
             describe('Invalid version inputs', (): void => {
                 const testScenarios: Scenario[] = [
                     {
-                        label: 'Non-number, non-finite, and float versions',
-                        inputs: [
-                            ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
-                            ...nonFiniteNumberInputs,
-                            ...safeFloatInputs
-                        ],
+                        label: 'Non-number versions',
+                        inputs: nonNumberInputs.filter((input: unknown): boolean => input !== undefined),
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Non-finite versions',
+                        inputs: nonFiniteNumberInputs,
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Versions outside of safe integer range',
+                        inputs: unsafeNumberInputs,
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Float versions',
+                        inputs: safeFloatInputs,
                         expected: PrimitiveTypeError
                     },
                     {
