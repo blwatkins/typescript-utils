@@ -88,12 +88,12 @@ describe('MathUtility', (): void => {
                         ...nonFiniteNumberInputs,
                         ...positiveUnsafeNumberInputs,
                         ...negativeUnsafeNumberInputs
-                    ].map((input: unknown): { value: unknown, min: number, max: number } => {
+                    ].map((input: unknown): { value: unknown; min: number; max: number; } => {
                         return {
                             value: input,
                             min: defaultMin,
                             max: defaultMax
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -104,12 +104,12 @@ describe('MathUtility', (): void => {
                         ...nonFiniteNumberInputs,
                         ...positiveUnsafeNumberInputs,
                         ...negativeUnsafeNumberInputs
-                    ].map((input: unknown): { value: number, min: unknown, max: number } => {
+                    ].map((input: unknown): { value: number; min: unknown; max: number; } => {
                         return {
                             value: defaultValue,
                             min: input,
                             max: defaultMax
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -120,12 +120,12 @@ describe('MathUtility', (): void => {
                         ...nonFiniteNumberInputs,
                         ...positiveUnsafeNumberInputs,
                         ...negativeUnsafeNumberInputs
-                    ].map((input: unknown): { value: number, min: number, max: unknown } => {
+                    ].map((input: unknown): { value: number; min: number; max: unknown; } => {
                         return {
                             value: defaultValue,
                             min: defaultMin,
                             max: input
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -161,7 +161,7 @@ describe('MathUtility', (): void => {
                 test.each(
                     testCases
                 )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    const args: { value: unknown, min: unknown, max: unknown } = testInput as { value: unknown, min: unknown, max: unknown };
+                    const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                     expect((): void => {
                         MathUtility.constrain(args.value as number, args.min as number, args.max as number);
@@ -206,13 +206,13 @@ describe('MathUtility', (): void => {
                         ...negativeUnsafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs
-                    ].map((input: unknown): { x: unknown, y: number, columns: number, rows: number } => {
+                    ].map((input: unknown): { x: unknown; y: number; columns: number; rows: number; } => {
                         return {
                             x: input,
                             y: defaultY,
                             columns: defaultColumns,
                             rows: defaultRows
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -225,13 +225,13 @@ describe('MathUtility', (): void => {
                         ...negativeUnsafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs
-                    ].map((input: unknown): { x: number, y: unknown, columns: number, rows: number } => {
+                    ].map((input: unknown): { x: number; y: unknown; columns: number; rows: number; } => {
                         return {
                             x: defaultX,
                             y: input,
                             columns: defaultColumns,
                             rows: defaultRows
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -245,13 +245,13 @@ describe('MathUtility', (): void => {
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs,
                         ...zeroInputs
-                    ].map((input: unknown): { x: number, y: number, columns: unknown, rows: number } => {
+                    ].map((input: unknown): { x: number; y: number; columns: unknown; rows: number; } => {
                         return {
                             x: defaultX,
                             y: defaultY,
                             columns: input,
                             rows: defaultRows
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -265,13 +265,13 @@ describe('MathUtility', (): void => {
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs,
                         ...zeroInputs
-                    ].map((input: unknown): { x: number, y: number, columns: number, rows: unknown } => {
+                    ].map((input: unknown): { x: number; y: number; columns: number; rows: unknown; } => {
                         return {
                             x: defaultX,
                             y: defaultY,
                             columns: defaultColumns,
                             rows: input
-                        }
+                        };
                     }),
                     expected: PrimitiveTypeError
                 },
@@ -313,7 +313,7 @@ describe('MathUtility', (): void => {
                 test.each(
                     testCases
                 )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    const args: { x: unknown, y: unknown, columns: unknown, rows: unknown } = testInput as { x: unknown, y: unknown, columns: unknown, rows: unknown };
+                    const args: { x: unknown; y: unknown; columns: unknown; rows: unknown; } = testInput as { x: unknown; y: unknown; columns: unknown; rows: unknown; };
 
                     expect((): void => {
                         MathUtility.toFlatIndex(args.x as number, args.y as number, args.columns as number, args.rows as number);

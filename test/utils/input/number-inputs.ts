@@ -80,7 +80,7 @@ export const positiveUnsafeNumberInputs: number[] = [
 export const unsafeNumberInputs: number[] = [
     ...negativeUnsafeNumberInputs,
     ...positiveUnsafeNumberInputs
-]
+];
 
 export const negativeSafeFloatInputs: number[] = [
     -Number.MIN_VALUE,
