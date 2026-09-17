@@ -30,7 +30,8 @@ import {
     nonFiniteNumberInputs,
     nonNumberInputs,
     positiveUnsafeNumberInputs,
-    negativeUnsafeNumberInputs
+    negativeUnsafeNumberInputs,
+    zeroInputs
 } from '../utils/input/number-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
@@ -64,7 +65,11 @@ describe('MathUtility', (): void => {
                 { value: Number.MIN_SAFE_INTEGER, min: 5, max: 500, expected: 5 },
                 { value: 5, min: 0, max: Number.MAX_SAFE_INTEGER, expected: 5 },
                 { value: 5, min: Number.MIN_SAFE_INTEGER, max: 10, expected: 5 },
-                { value: 5, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, expected: 5 }
+                { value: 5, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, expected: 5 },
+                { value: 1.12345678912343, min: 1.12345678912344, max: 2.12345678912345, expected: 1.12345678912344 },
+                { value: 2.12345678912346, min: 1.12345678912344, max: 2.12345678912345, expected: 2.12345678912345 },
+                { value: 1.12345678912344, min: 1.12345678912344, max: 2.12345678912345, expected: 1.12345678912344 },
+                { value: 2.12345678912345, min: 1.12345678912344, max: 2.12345678912345, expected: 2.12345678912345 }
             ])('%# - constrain($value, $min, $max) should return $expected', ({ value, min, max, expected }: { value: number; min: number; max: number; expected: number; }): void => {
                 expect(MathUtility.constrain(value, min, max)).toBe(expected);
             });
@@ -155,7 +160,7 @@ describe('MathUtility', (): void => {
 
                 test.each(
                     testCases
-                )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     const args: { value: unknown, min: unknown, max: unknown } = testInput as { value: unknown, min: unknown, max: unknown };
 
                     expect((): void => {
@@ -185,127 +190,134 @@ describe('MathUtility', (): void => {
             });
         });
 
-        // TODO - update argument validation to match pattern established in RangeBuilder unit tests
-        // TODO - Establish or update convention in copilot-instructions.md
-        describe('Input validation', (): void => {
-            describe('All parameters must be positive integers', (): void => {
-                const scenarios: Scenario[] = [
-                    {
-                        label: 'Non-number inputs',
-                        inputs: nonNumberInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Non-finite number inputs',
-                        inputs: nonFiniteNumberInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Float number inputs',
-                        inputs: safeFloatInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Negative integer inputs',
-                        inputs: negativeSafeIntegerInputs,
-                        expected: PrimitiveTypeError
-                    }
-                ];
+        describe('Argument errors', (): void => {
+            const defaultX: number = 0;
+            const defaultY: number = 0;
+            const defaultColumns: number = 1;
+            const defaultRows: number = 1;
 
-                describe.each(
-                    scenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-                    const defaultX: number = 0;
-                    const defaultY: number = 0;
-                    const defaultColumns: number = 1;
-                    const defaultRows: number = 1;
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid x argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs,
+                        ...safeFloatInputs,
+                        ...negativeSafeIntegerInputs
+                    ].map((input: unknown): { x: unknown, y: number, columns: number, rows: number } => {
+                        return {
+                            x: input,
+                            y: defaultY,
+                            columns: defaultColumns,
+                            rows: defaultRows
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid y argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs,
+                        ...safeFloatInputs,
+                        ...negativeSafeIntegerInputs
+                    ].map((input: unknown): { x: number, y: unknown, columns: number, rows: number } => {
+                        return {
+                            x: defaultX,
+                            y: input,
+                            columns: defaultColumns,
+                            rows: defaultRows
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid columns argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs,
+                        ...safeFloatInputs,
+                        ...negativeSafeIntegerInputs,
+                        ...zeroInputs
+                    ].map((input: unknown): { x: number, y: number, columns: unknown, rows: number } => {
+                        return {
+                            x: defaultX,
+                            y: defaultY,
+                            columns: input,
+                            rows: defaultRows
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid rows argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...positiveUnsafeNumberInputs,
+                        ...negativeUnsafeNumberInputs,
+                        ...safeFloatInputs,
+                        ...negativeSafeIntegerInputs,
+                        ...zeroInputs
+                    ].map((input: unknown): { x: number, y: number, columns: number, rows: unknown } => {
+                        return {
+                            x: defaultX,
+                            y: defaultY,
+                            columns: defaultColumns,
+                            rows: input
+                        }
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid coordinates for the given columns and rows',
+                    inputs: [
+                        { x: 1, y: 0, columns: 1, rows: 1 },
+                        { x: 0, y: 1, columns: 1, rows: 1 },
+                        { x: 1, y: 1, columns: 1, rows: 1 },
+                        { x: 2, y: 0, columns: 1, rows: 1 },
+                        { x: 0, y: 2, columns: 1, rows: 1 },
+                        { x: 2, y: 2, columns: 1, rows: 1 },
+                        { x: 5, y: 0, columns: 5, rows: 1 },
+                        { x: 0, y: 5, columns: 1, rows: 5 },
+                        { x: 5, y: 5, columns: 5, rows: 5 },
+                        { x: 5, y: 10, columns: 10, rows: 5 },
+                        { x: 4, y: 9, columns: 10, rows: 5 },
+                        { x: 10, y: 5, columns: 5, rows: 10 },
+                        { x: 9, y: 4, columns: 5, rows: 10 }
+                    ],
+                    expected: ValueRangeError
+                },
+                {
+                    label: 'Grid size larger than the maximum safe integer',
+                    inputs: [
+                        { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 2 },
+                        { x: 0, y: 0, columns: 2, rows: Number.MAX_SAFE_INTEGER },
+                        { x: 0, y: 0, columns: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)), rows: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)) }
+                    ],
+                    expected: ValueRangeError
+                }
+            ];
 
-                    describe('x parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - toFlatIndex($input, ${defaultY}, ${defaultColumns}, ${defaultRows}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.toFlatIndex(testInput as number, defaultY, defaultColumns, defaultRows);
-                            }).toThrow(testExpected);
-                        });
-                    });
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                    describe('y parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - toFlatIndex(${defaultX}, $input, ${defaultColumns}, ${defaultRows}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.toFlatIndex(defaultX, testInput as number, defaultColumns, defaultRows);
-                            }).toThrow(testExpected);
-                        });
-                    });
+                test.each(
+                    testCases
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { x: unknown, y: unknown, columns: unknown, rows: unknown } = testInput as { x: unknown, y: unknown, columns: unknown, rows: unknown };
 
-                    describe('columns parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - toFlatIndex(${defaultX}, ${defaultY}, $input, ${defaultRows}) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.toFlatIndex(defaultX, defaultY, testInput as number, defaultRows);
-                            }).toThrow(testExpected);
-                        });
-                    });
-
-                    describe('rows parameter', (): void => {
-                        test.each(
-                            testCases
-                        )(`%# - toFlatIndex(${defaultX}, ${defaultY}, ${defaultColumns}, $input) should throw $expected`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                MathUtility.toFlatIndex(defaultX, defaultY, defaultColumns, testInput as number);
-                            }).toThrow(testExpected);
-                        });
-                    });
-
-                    test('columns and rows parameters cannot be zero', (): void => {
-                        expect((): void => {
-                            MathUtility.toFlatIndex(defaultX, defaultY, 0, defaultRows);
-                        }).toThrow(PrimitiveTypeError);
-
-                        expect((): void => {
-                            MathUtility.toFlatIndex(defaultX, defaultY, defaultColumns, 0);
-                        }).toThrow(PrimitiveTypeError);
-                    });
-                });
-            });
-
-            describe('toFlatIndex should not accept coordinates outside the valid index range for the given columns and rows', (): void => {
-                test.each([
-                    { x: 1, y: 0, columns: 1, rows: 1 },
-                    { x: 0, y: 1, columns: 1, rows: 1 },
-                    { x: 1, y: 1, columns: 1, rows: 1 },
-                    { x: 2, y: 0, columns: 1, rows: 1 },
-                    { x: 0, y: 2, columns: 1, rows: 1 },
-                    { x: 2, y: 2, columns: 1, rows: 1 },
-                    { x: 5, y: 0, columns: 5, rows: 1 },
-                    { x: 0, y: 5, columns: 1, rows: 5 },
-                    { x: 5, y: 5, columns: 5, rows: 5 },
-                    { x: 5, y: 10, columns: 10, rows: 5 },
-                    { x: 4, y: 9, columns: 10, rows: 5 },
-                    { x: 10, y: 5, columns: 5, rows: 10 },
-                    { x: 9, y: 4, columns: 5, rows: 10 }
-                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw ValueRangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
                     expect((): void => {
-                        MathUtility.toFlatIndex(x, y, columns, rows);
-                    }).toThrow(ValueRangeError);
-                });
-            });
-
-            describe('toFlatIndex should not accept a grid size larger than the maximum safe integer in JavaScript', (): void => {
-                test.each([
-                    { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER + 1, rows: 1 },
-                    { x: 0, y: 0, columns: 1, rows: Number.MAX_SAFE_INTEGER + 1 },
-                    { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 2 },
-                    { x: 0, y: 0, columns: 2, rows: Number.MAX_SAFE_INTEGER },
-                    { x: 0, y: 0, columns: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)), rows: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)) }
-                ])('%# - toFlatIndex($x, $y, $columns, $rows) should throw ValueRangeError', ({ x, y, columns, rows }: { x: number; y: number; columns: number; rows: number; }): void => {
-                    expect((): void => {
-                        MathUtility.toFlatIndex(x, y, columns, rows);
-                    }).toThrow(ValueRangeError);
+                        MathUtility.toFlatIndex(args.x as number, args.y as number, args.columns as number, args.rows as number);
+                    }).toThrow(testExpected);
                 });
             });
         });
