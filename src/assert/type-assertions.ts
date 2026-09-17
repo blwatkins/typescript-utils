@@ -159,7 +159,7 @@ export class TypeAssertions {
         StringUtility.assertString(input, message);
     }
 
-    /* ==================== DEPRECATED ==================== */
+    /* ******************* TODO: DEPRECATED ******************* */
 
     /**
      * Assert that input is an array.

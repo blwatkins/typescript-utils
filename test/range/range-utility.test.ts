@@ -552,12 +552,15 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('a Range may not use the exclusive max allowance that Random accepts', (): void => {
-                // Random's max is exclusive, so it may be one past MAX_SAFE_INTEGER. A Range bound may
-                // be inclusive, so the same value is out of range here.
-                test('Number.MAX_SAFE_INTEGER + 1 is accepted by Random and rejected by RangeUtility', (): void => {
-                    expect(Number.isSafeInteger(Random.randomInt(0, Number.MAX_SAFE_INTEGER + 1))).toBe(true);
-                    expect(Number.isFinite(Random.randomFloat(0, Number.MAX_SAFE_INTEGER + 1))).toBe(true);
+            describe('a Range bound past MAX_SAFE_INTEGER is rejected', (): void => {
+                test('Number.MAX_SAFE_INTEGER + 1 is rejected by Random and by RangeUtility', (): void => {
+                    expect((): void => {
+                        Random.randomFloat(0, Number.MAX_SAFE_INTEGER + 1);
+                    }).toThrow(ValueRangeError);
+
+                    expect((): void => {
+                        Random.randomInt(0, Number.MAX_SAFE_INTEGER + 1);
+                    }).toThrow(ValueRangeError);
 
                     expect((): void => {
                         RangeUtility.randomFloat({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
@@ -575,8 +578,6 @@ describe('RangeUtility', (): void => {
                     { min: 0, max: 1e100 },
                     { min: -1e300, max: 1e300 },
                     { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
-                    // A Range bound may be inclusive, so 2 ** 53 is itself out of range here even
-                    // though it is a legal exclusive max for Random.randomInt.
                     { min: 0, max: Math.pow(2, 53) },
                     { min: -Number.MAX_VALUE, max: 0 }
                 ])('%# - randomFloat($min, $max) and randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {

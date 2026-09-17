@@ -179,6 +179,34 @@ export class NumberUtility {
     }
 
     /**
+     * Assert that `a` is less than `b`.
+     *
+     * @see {@link NumberUtility.isLessThan}
+     *
+     * @param {number} a - The value that must be the lesser of the two.
+     * @param {number} b - The value that must be the greater of the two.
+     * @param {string | undefined} message - Optional message for the error thrown when `a` is not less than `b`.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When `a` is not a finite number.
+     * @throws {PrimitiveTypeError} When `b` is not a finite number.
+     * @throws {ValueRangeError} When `a` is not less than `b`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertLessThan(a: number, b: number, message?: string): void {
+        if (!NumberUtility.isLessThan(a, b)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError('a must be less than b.');
+        }
+    }
+
+    /**
      * Is `input` a finite number?
      *
      * @param {unknown} input - The input to check.
@@ -232,6 +260,26 @@ export class NumberUtility {
     }
 
     /**
+     * Is `a` less than `b`?
+     *
+     * @param {number} a - The value that must be the lesser of the two.
+     * @param {number} b - The value that must be the greater of the two.
+     *
+     * @returns {boolean} `true` if `a` is less than `b`; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `a` is not a finite number.
+     * @throws {PrimitiveTypeError} When `b` is not a finite number.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isLessThan(a: number, b: number): boolean {
+        NumberUtility.assertFinite(a, 'a must be a finite number.');
+        NumberUtility.assertFinite(b, 'b must be a finite number.');
+        return a < b;
+    }
+
+    /**
      * Is `value` greater than, or equal to, `min` and less than, or equal to, `max`?
      *
      * @param {number} value - The value to check. Must be a finite number.
@@ -276,7 +324,7 @@ export class NumberUtility {
         return min <= max;
     }
 
-    /* ==================== DEPRECATED ==================== */
+    /* ******************* TODO: DEPRECATED ******************* */
 
     /**
      * Asserts that input is a finite number.
