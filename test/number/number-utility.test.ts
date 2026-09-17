@@ -27,14 +27,14 @@ import { NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
-    floatInputs,
-    integerInputs,
-    negativeIntegerInputs,
-    negativeNumberInputs,
+    safeFloatInputs,
+    safeIntegerInputs,
+    negativeSafeIntegerInputs,
+    negativeSafeNumberInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
-    positiveIntegerInputs,
-    positiveNumberInputs,
+    positiveSafeIntegerInputs,
+    positiveSafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
@@ -62,8 +62,8 @@ describe('NumberUtility', (): void => {
             {
                 label: 'Number inputs',
                 inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
+                    ...positiveSafeNumberInputs,
+                    ...negativeSafeNumberInputs,
                     ...zeroInputs
                 ],
                 expected: undefined
@@ -98,7 +98,7 @@ describe('NumberUtility', (): void => {
             },
             {
                 label: 'Float inputs',
-                inputs: floatInputs,
+                inputs: safeFloatInputs,
                 expected: PrimitiveTypeError
             }
         ];
@@ -111,7 +111,7 @@ describe('NumberUtility', (): void => {
             },
             {
                 label: 'Integer inputs',
-                inputs: integerInputs,
+                inputs: safeIntegerInputs,
                 expected: undefined
             }
         ];
@@ -121,7 +121,7 @@ describe('NumberUtility', (): void => {
                 NumberUtility.assertInteger.bind(NumberUtility),
                 successScenarios,
                 failureScenarios,
-                'Expected an integer.'
+                'Expected an integer within the safe integer range.'
             );
         });
 
@@ -144,12 +144,12 @@ describe('NumberUtility', (): void => {
             },
             {
                 label: 'Float inputs',
-                inputs: floatInputs,
+                inputs: safeFloatInputs,
                 expected: PrimitiveTypeError
             },
             {
                 label: 'Negative integer inputs',
-                inputs: negativeIntegerInputs,
+                inputs: negativeSafeIntegerInputs,
                 expected: PrimitiveTypeError
             }
         ];
@@ -157,7 +157,7 @@ describe('NumberUtility', (): void => {
         const successScenarios: Scenario[] = [
             {
                 label: 'Positive integer inputs',
-                inputs: positiveIntegerInputs,
+                inputs: positiveSafeIntegerInputs,
                 expected: undefined
             }
         ];
@@ -181,7 +181,7 @@ describe('NumberUtility', (): void => {
                     assertPositiveInteger,
                     successScenarios,
                     zeroExclusiveFailureScenarios,
-                    'Expected a positive integer or zero if zeroInclusive is true.'
+                    'Expected a positive integer within the safe integer range or zero if zeroInclusive is true.'
                 );
             });
 
@@ -223,7 +223,7 @@ describe('NumberUtility', (): void => {
                     assertPositiveInteger,
                     zeroInclusiveSuccessScenarios,
                     failureScenarios,
-                    'Expected a positive integer or zero if zeroInclusive is true.'
+                    'Expected a positive integer within the safe integer range or zero if zeroInclusive is true.'
                 );
             });
 
@@ -611,8 +611,8 @@ describe('NumberUtility', (): void => {
             {
                 label: 'Number inputs',
                 inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
+                    ...positiveSafeNumberInputs,
+                    ...negativeSafeNumberInputs,
                     ...zeroInputs
                 ],
                 expected: undefined
@@ -645,8 +645,8 @@ describe('NumberUtility', (): void => {
             {
                 label: 'Number inputs',
                 inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
+                    ...positiveSafeNumberInputs,
+                    ...negativeSafeNumberInputs,
                     ...zeroInputs
                 ],
                 expected: undefined

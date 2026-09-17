@@ -27,10 +27,10 @@ import { PrimitiveTypeError, Range, RangeBuilder, RangeUtility, SchemaTypeError 
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 
 import {
-    negativeNumberInputs,
+    negativeSafeNumberInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
-    positiveNumberInputs,
+    positiveSafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
@@ -46,8 +46,8 @@ describe('RangeBuilder', (): void => {
         {
             label: 'Finite number inputs',
             inputs: [
-                ...positiveNumberInputs.filter(input => input !== Number.MAX_VALUE),
-                ...negativeNumberInputs.filter(input => input !== -Number.MAX_VALUE)
+                ...positiveSafeNumberInputs.filter(input => input !== Number.MAX_VALUE),
+                ...negativeSafeNumberInputs.filter(input => input !== -Number.MAX_VALUE)
             ],
             expected: undefined
         }

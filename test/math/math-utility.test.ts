@@ -24,7 +24,15 @@ import { describe, test, expect } from 'vitest';
 
 import { MathUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
-import { floatInputs, negativeIntegerInputs, nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
+import {
+    safeFloatInputs,
+    negativeSafeIntegerInputs,
+    nonFiniteNumberInputs,
+    nonNumberInputs,
+    positiveUnsafeNumberInputs,
+    negativeUnsafeNumberInputs
+} from '../utils/input/number-inputs';
+
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
@@ -62,7 +70,7 @@ describe('MathUtility', (): void => {
         });
 
         describe('Input validation', (): void => {
-            describe('All parameters must be finite numbers', (): void => {
+            describe('All parameters must be numbers within the safe integer range', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-number inputs',
@@ -72,6 +80,14 @@ describe('MathUtility', (): void => {
                     {
                         label: 'Non-finite number inputs',
                         inputs: nonFiniteNumberInputs,
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Unsafe number inputs',
+                        inputs: [
+                            ...negativeUnsafeNumberInputs,
+                            ...positiveUnsafeNumberInputs
+                        ],
                         expected: PrimitiveTypeError
                     }
                 ];
@@ -166,12 +182,12 @@ describe('MathUtility', (): void => {
                     },
                     {
                         label: 'Float number inputs',
-                        inputs: floatInputs,
+                        inputs: safeFloatInputs,
                         expected: PrimitiveTypeError
                     },
                     {
                         label: 'Negative integer inputs',
-                        inputs: negativeIntegerInputs,
+                        inputs: negativeSafeIntegerInputs,
                         expected: PrimitiveTypeError
                     }
                 ];

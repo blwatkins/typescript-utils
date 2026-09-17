@@ -33,8 +33,8 @@ import {
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 
 import {
-    floatInputs,
-    negativeIntegerInputs,
+    safeFloatInputs,
+    negativeSafeIntegerInputs,
     nonNumberInputs
 } from '../../utils/input/number-inputs';
 
@@ -79,8 +79,8 @@ describe('SeedVersions', (): void => {
         {
             label: 'Float and negative integer inputs',
             inputs: [
-                ...floatInputs,
-                ...negativeIntegerInputs
+                ...safeFloatInputs,
+                ...negativeSafeIntegerInputs
             ],
             expected: PrimitiveTypeError
         }

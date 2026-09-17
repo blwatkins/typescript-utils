@@ -33,8 +33,8 @@ import {
 import { nonStringInputs } from '../../utils/input/string-inputs';
 
 import {
-    floatInputs,
-    negativeIntegerInputs,
+    safeFloatInputs,
+    negativeSafeIntegerInputs,
     nonFiniteNumberInputs,
     nonNumberInputs
 } from '../../utils/input/number-inputs';
@@ -159,13 +159,13 @@ describe('RandomNumberGeneratorFactory', (): void => {
                         inputs: [
                             ...nonNumberInputs.filter((s: unknown): boolean => s !== undefined),
                             ...nonFiniteNumberInputs,
-                            ...floatInputs
+                            ...safeFloatInputs
                         ],
                         expected: PrimitiveTypeError
                     },
                     {
                         label: 'Negative integer versions',
-                        inputs: negativeIntegerInputs,
+                        inputs: negativeSafeIntegerInputs,
                         expected: PrimitiveTypeError
                     },
                     {
