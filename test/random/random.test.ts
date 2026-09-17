@@ -352,9 +352,7 @@ describe('Random', (): void => {
                 { min: -1e300, max: 1e300 },
                 { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
                 { min: Number.MIN_SAFE_INTEGER - 2, max: 0 },
-                // Number.MAX_SAFE_INTEGER + 2 is not representable and rounds down to 2 ** 53, which
-                // is the largest exclusive max this method accepts, so it must be stepped past.
-                { min: 0, max: Math.pow(2, 53) + 2 }
+                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
             ])('%# - randomFloat($min, $max) and randomInt($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
                 expect((): void => {
                     Random.randomFloat(min, max);
@@ -380,8 +378,7 @@ describe('Random', (): void => {
             test.each([
                 { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
                 { min: 0, max: Number.MAX_SAFE_INTEGER },
-                { min: Number.MIN_SAFE_INTEGER, max: 0 },
-                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
+                { min: Number.MIN_SAFE_INTEGER, max: 0 }
             ])('%# - randomFloat($min, $max) should return a safely truncatable value', ({ min, max }: { min: number; max: number; }): void => {
                 for (let i: number = 0; i < testRepeatTotal; i++) {
                     const value: number = Random.randomFloat(min, max);
@@ -393,6 +390,28 @@ describe('Random', (): void => {
 
                     expect(Number.isSafeInteger(Random.randomInt(min, max))).toBe(true);
                 }
+            });
+        });
+
+        describe('randomFloat and randomInt should hold min and max to the same limit', (): void => {
+            // max is exclusive, so it could have been allowed one past MAX_SAFE_INTEGER. It is held to
+            // the same bound as min instead, which makes MAX_SAFE_INTEGER itself unreachable.
+            test.each([
+                { min: Number.MIN_SAFE_INTEGER - 1, max: 0 },
+                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
+            ])('%# - randomFloat($min, $max) and randomInt($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
+                expect((): void => {
+                    Random.randomFloat(min, max);
+                }).toThrow(ValueRangeError);
+
+                expect((): void => {
+                    Random.randomInt(min, max);
+                }).toThrow(ValueRangeError);
+            });
+
+            test('randomInt should not return Number.MAX_SAFE_INTEGER', (): void => {
+                Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
+                expect(Random.randomInt(0, Number.MAX_SAFE_INTEGER)).toBeLessThan(Number.MAX_SAFE_INTEGER);
             });
         });
 
