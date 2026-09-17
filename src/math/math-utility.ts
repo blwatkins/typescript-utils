@@ -50,16 +50,16 @@ export class MathUtility {
      *
      * @returns {number} `min` if `value` is less than `min`, `max` if `value` is greater than `max`, `value` otherwise.
      *
-     * @throws {PrimitiveTypeError} When `value`, `min`, and `max` are not all finite numbers.
+     * @throws {PrimitiveTypeError} When `value`, `min`, and `max` are not all numbers within the safe integer range.
      * @throws {ValueRangeError} When `min` is not less than, or equal to, `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static constrain(value: number, min: number, max: number): number {
-        NumberUtility.assertFinite(value, 'value must be a finite number.');
-        NumberUtility.assertFinite(min, 'min must be a finite number.');
-        NumberUtility.assertFinite(max, 'max must be a finite number.');
+        NumberUtility.assertSafe(value, 'value must be within the safe integer range.');
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
         NumberUtility.assertValidRange(min, max);
 
         if (value < min) return min;
@@ -77,8 +77,8 @@ export class MathUtility {
      *
      * @returns {number} The one-dimensional index for the (`x`, `y`) index coordinates.
      *
-     * @throws {TypeError} When `x` or `y` are not positive integers or zero.
-     * @throws {TypeError} When `columns` or `rows` are not positive integers greater than 0.
+     * @throws {TypeError} When `x` or `y` are not positive integers within the safe integer range or zero.
+     * @throws {TypeError} When `columns` or `rows` are not positive integers within the safe integer range greater than 0.
      * @throws {RangeError} When the total grid size (`columns * rows`) exceeds {@link Number.MAX_SAFE_INTEGER}.
      * @throws {RangeError} When the (`x`, `y`) coordinates are out of bounds for the grid dimensions `columns` by `rows`.
      *

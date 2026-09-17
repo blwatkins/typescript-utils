@@ -33,15 +33,15 @@ import { Range, rangeSchema } from './range';
  * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw falls
  * outside the range.
  *
- * @default 8
+ * @default 10
  *
  * @type {number}
  * @private
  */
-const maxDrawAttempts: number = 8;
+const maxDrawAttempts: number = 10;
 
 /**
- * Static methods and properties for validating {@link Range} objects.
+ * Static methods and properties for validating and using {@link Range} objects.
  *
  * @since 0.1.0
  */
@@ -62,8 +62,7 @@ export class RangeUtility {
      * Assert that `input` is a valid {@link Range} object.
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
-     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`,
-     * because such a range would contain no values.
+     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
      *
      * @see {@link RangeUtility.isRange}
      *
