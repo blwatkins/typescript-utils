@@ -65,7 +65,24 @@ export const nonFiniteNumberInputs: number[] = [
 
 export const zeroInputs: number[] = [0, -0];
 
-export const negativeFloatInputs: number[] = [
+export const negativeUnsafeNumberInputs: number[] = [
+    -Number.MAX_VALUE,
+    Number.MIN_SAFE_INTEGER - 1,
+    Number.MIN_SAFE_INTEGER - 1.5
+];
+
+export const positiveUnsafeNumberInputs: number[] = [
+    Number.MAX_VALUE,
+    Number.MAX_SAFE_INTEGER + 1,
+    Number.MAX_SAFE_INTEGER + 1.5
+];
+
+export const unsafeNumberInputs: number[] = [
+    ...negativeUnsafeNumberInputs,
+    ...positiveUnsafeNumberInputs
+];
+
+export const negativeSafeFloatInputs: number[] = [
     -Number.MIN_VALUE,
     -Number.EPSILON,
     -10.01,
@@ -73,7 +90,7 @@ export const negativeFloatInputs: number[] = [
     -(1.0 / 3)
 ];
 
-export const positiveFloatInputs: number[] = [
+export const positiveSafeFloatInputs: number[] = [
     Number.MIN_VALUE,
     Number.EPSILON,
     10.01,
@@ -81,14 +98,12 @@ export const positiveFloatInputs: number[] = [
     (1.0 / 3)
 ];
 
-export const floatInputs: number[] = [
-    ...negativeFloatInputs,
-    ...positiveFloatInputs
+export const safeFloatInputs: number[] = [
+    ...negativeSafeFloatInputs,
+    ...positiveSafeFloatInputs
 ];
 
-export const negativeIntegerInputs: number[] = [
-    -Number.MAX_VALUE,
-    -Number.MAX_SAFE_INTEGER,
+export const negativeSafeIntegerInputs: number[] = [
     Number.MIN_SAFE_INTEGER,
     -1,
     -10,
@@ -97,8 +112,7 @@ export const negativeIntegerInputs: number[] = [
     -1000.0
 ];
 
-export const positiveIntegerInputs: number[] = [
-    Number.MAX_VALUE,
+export const positiveSafeIntegerInputs: number[] = [
     Number.MAX_SAFE_INTEGER,
     1,
     10,
@@ -107,17 +121,22 @@ export const positiveIntegerInputs: number[] = [
     1000.0
 ];
 
-export const integerInputs: number[] = [
-    ...negativeIntegerInputs,
-    ...positiveIntegerInputs
+export const safeIntegerInputs: number[] = [
+    ...negativeSafeIntegerInputs,
+    ...positiveSafeIntegerInputs
 ];
 
-export const positiveNumberInputs: number[] = [
-    ...positiveFloatInputs,
-    ...positiveIntegerInputs
+export const positiveSafeNumberInputs: number[] = [
+    ...positiveSafeFloatInputs,
+    ...positiveSafeIntegerInputs
 ];
 
-export const negativeNumberInputs: number[] = [
-    ...negativeFloatInputs,
-    ...negativeIntegerInputs
+export const negativeSafeNumberInputs: number[] = [
+    ...negativeSafeFloatInputs,
+    ...negativeSafeIntegerInputs
+];
+
+export const safeNumberInputs: number[] = [
+    ...positiveSafeNumberInputs,
+    ...negativeSafeNumberInputs
 ];

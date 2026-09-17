@@ -105,9 +105,7 @@ export class Random {
      *
      * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
      *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
      * @throws {ValueRangeError} When `min` is not less than `max`.
      *
      * @public
@@ -130,9 +128,7 @@ export class Random {
      *
      * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
      *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
      * @throws {ValueRangeError} When `min` is not less than `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
      *
@@ -140,8 +136,8 @@ export class Random {
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
-        NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
-        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'max must be within the safe integer range.');
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
         NumberUtility.assertLessThan(min, max, 'min must be less than max.');
 
         const lowest: number = Math.ceil(min);
@@ -167,9 +163,7 @@ export class Random {
      *
      * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
      *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
      * @throws {ValueRangeError} When `min` is not less than `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
      *
@@ -188,7 +182,7 @@ export class Random {
      *
      * @returns {boolean} A random boolean value.
      *
-     * @throws {PrimitiveTypeError} When `chanceOfTrue` is not a finite number.
+     * @throws {PrimitiveTypeError} When `chanceOfTrue` is not a number within the safe integer range.
      * @throws {ValueRangeError} When `chanceOfTrue` is not in the range [0, 1] (inclusive).
      *
      * @public
@@ -224,6 +218,8 @@ export class Random {
     /**
      * Get a random element from a non-uniform distribution.
      *
+     * @remarks For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
@@ -232,7 +228,6 @@ export class Random {
      * @returns {Type} A random element from `elements`, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
      *
      * @throws {SchemaTypeError} When `elements` is not a valid {@link WeightedList} object.
-     * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @public
      * @since 0.1.0
@@ -266,8 +261,8 @@ export class Random {
      * @private
      */
     static #drawValidRandomFloat(min: number, max: number): number {
-        NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
-        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'max must be within the safe integer range.');
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
         NumberUtility.assertLessThan(min, max, 'min must be less than max.');
 
         let value: number = Random.#draw(min, max);

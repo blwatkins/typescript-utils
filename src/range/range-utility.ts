@@ -23,6 +23,7 @@
 import Value from 'typebox/value';
 
 import { SchemaTypeError, StaticInstanceError, ValueRangeError } from '../error';
+import { MathUtility } from '../math';
 import { NumberUtility } from '../number';
 import { Random } from '../random';
 import { StringUtility } from '../string';
@@ -33,15 +34,15 @@ import { Range, rangeSchema } from './range';
  * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw falls
  * outside the range.
  *
- * @default 8
+ * @default 10
  *
  * @type {number}
  * @private
  */
-const maxDrawAttempts: number = 8;
+const maxDrawAttempts: number = 10;
 
 /**
- * Static methods and properties for validating {@link Range} objects.
+ * Static methods and properties for validating and using {@link Range} objects.
  *
  * @since 0.1.0
  */
@@ -62,8 +63,7 @@ export class RangeUtility {
      * Assert that `input` is a valid {@link Range} object.
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
-     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`,
-     * because such a range would contain no values.
+     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
      *
      * @see {@link RangeUtility.isRange}
      *
@@ -103,7 +103,7 @@ export class RangeUtility {
      *
      * @returns {void}
      *
-     * @throws {PrimitiveTypeError} When `value` is not a finite number.
+     * @throws {PrimitiveTypeError} When `value` is not a number within the safe integer range.
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
      * @throws {ValueRangeError} When `value` is not within `range`.
      *
@@ -124,8 +124,7 @@ export class RangeUtility {
      * Is `input` a valid {@link Range} object?
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
-     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`,
-     * because such a range would contain no values.
+     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
      *
      * @see {@link NumberUtility.isValidRange}
      *
@@ -141,6 +140,10 @@ export class RangeUtility {
 
         if (validSchema) {
             const range: Range = input as Range;
+
+            if (!(NumberUtility.isSafe(range.min) && NumberUtility.isSafe(range.max))) {
+                return false;
+            }
 
             if (!NumberUtility.isValidRange(range.min, range.max)) {
                 return false;
@@ -168,14 +171,14 @@ export class RangeUtility {
      *
      * @returns {boolean} `true` if the number is within the range based on the inclusivity settings; `false` otherwise.
      *
-     * @throws {PrimitiveTypeError} When `value` is not a finite number.
+     * @throws {PrimitiveTypeError} When `value` is not a number within the safe integer range.
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
      *
      * @public
      * @since 0.1.0
      */
     public static isIn(value: number, range: Range): boolean {
-        NumberUtility.assertFinite(value);
+        NumberUtility.assertSafe(value, 'value must be within the safe integer range.');
         RangeUtility.assertRange(range);
         const isMinInclusive: boolean = range.isMinInclusive ?? true;
         const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
@@ -192,6 +195,35 @@ export class RangeUtility {
     }
 
     /**
+     * Constrain `value` to the bounds of `range`.
+     *
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` are ignored: both bounds
+     * are treated as inclusive, so a returned bound is the bound itself rather than the nearest
+     * representable value inside it. Stepping off an excluded bound has no exact answer at
+     * floating-point precision, and the value it produced would depend on the magnitude of the bound.
+     * A value returned by this method therefore satisfies {@link RangeUtility.isIn} for `range` only
+     * when the bound it was constrained to is inclusive.
+     *
+     * @see {@link MathUtility.constrain}
+     * @see {@link RangeUtility.isIn}
+     *
+     * @param {number} value - The value to constrain.
+     * @param {Range} range - The {@link Range} object to constrain `value` to.
+     *
+     * @returns {number} `range.min` if `value` is less than `range.min`, `range.max` if `value` is greater than `range.max`, `value` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `value` is not a number within the safe integer range.
+     * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static constrain(value: number, range: Range): number {
+        RangeUtility.assertRange(range);
+        return MathUtility.constrain(value, range.min, range.max);
+    }
+
+    /**
      * Get a random floating-point number within `range`.
      *
      * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max`
@@ -201,8 +233,6 @@ export class RangeUtility {
      * Each draw is checked against the full range condition, so a value that rounds past a bound is
      * discarded along with one that lands on it.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
-     * Both bounds of `range` must lie within the safe integer range, so that every returned value
-     * truncates to a safe integer. {@link RangeUtility.isIn} places no such restriction.
      * When the endpoints of `range` are adjacent representable numbers, the only candidate values are the
      * bounds themselves, and an included bound is returned. If both bounds are excluded, no representable
      * value satisfies `range` and this method throws rather than returning an excluded bound.
@@ -215,7 +245,6 @@ export class RangeUtility {
      * @returns {number} A random floating-point number within `range`.
      *
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
-     * @throws {ValueRangeError} When a bound of `range` is outside the safe integer range.
      * @throws {ValueRangeError} When `range` contains no representable values.
      *
      * @public
@@ -223,7 +252,6 @@ export class RangeUtility {
      */
     public static randomFloat(range: Range): number {
         RangeUtility.assertRange(range);
-        RangeUtility.#assertSafeBounds(range);
         const isMinInclusive: boolean = range.isMinInclusive ?? true;
         const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
 
@@ -264,7 +292,6 @@ export class RangeUtility {
      * bounds may be returned. Each property defaults to `true` when it is `undefined`, matching {@link RangeUtility.isIn}.
      * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
-     * Both bounds of `range` must lie within the safe integer range.
      * Note that {@link Random.randomInt} treats a bare pair of numbers as the half-open range [min, max),
      * so `RangeUtility.randomInteger({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` may not.
      * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt}.
@@ -277,7 +304,6 @@ export class RangeUtility {
      * @returns {number} A random integer within `range`.
      *
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
-     * @throws {ValueRangeError} When a bound of `range` is outside the safe integer range.
      * @throws {ValueRangeError} When `range` contains no integer values.
      *
      * @public
@@ -285,7 +311,6 @@ export class RangeUtility {
      */
     public static randomInteger(range: Range): number {
         RangeUtility.assertRange(range);
-        RangeUtility.#assertSafeBounds(range);
         const isMinInclusive: boolean = range.isMinInclusive ?? true;
         const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
 
@@ -310,28 +335,6 @@ export class RangeUtility {
         }
 
         return Random.randomInt(lowest, highest + 1);
-    }
-
-    /**
-     * Assert that both bounds of `range` lie within the safe integer range.
-     *
-     * @remarks Both bounds of a {@link Range} may be inclusive, so both must lie within the safe integer
-     * range. This is an interval check rather than a test for an integer value: a fractional bound such
-     * as `0.5` is accepted, because only its magnitude matters here.
-     * Restricting the bounds keeps the span of `range` small enough that it cannot overflow, and keeps
-     * every generated value close enough to zero to truncate to an exact integer.
-     *
-     * @param {Range} range - The {@link Range} object to check.
-     *
-     * @returns {void}
-     *
-     * @throws {ValueRangeError} When a bound of `range` is outside the safe integer range.
-     *
-     * @private
-     */
-    static #assertSafeBounds(range: Range): void {
-        NumberUtility.assertInRange(range.min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'range.min must be within the safe integer range.');
-        NumberUtility.assertInRange(range.max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'range.max must be within the safe integer range.');
     }
 
     /**

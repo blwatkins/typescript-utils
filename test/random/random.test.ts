@@ -23,6 +23,7 @@
 import { describe, test, afterEach, expect, expectTypeOf } from 'vitest';
 
 import {
+    PrimitiveTypeError,
     Random,
     RandomNumberGeneratorFactory,
     SeededRandomNumberGenerator,
@@ -31,7 +32,7 @@ import {
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
-import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
+import { nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 import {
@@ -240,10 +241,10 @@ describe('Random', (): void => {
             describe('randomNumberGenerator must be a function', (): void => {
                 test.each(
                     nonFunctionInputs
-                )('%# - Random.randomNumberGenerator = %o should throw a TypeError', (input: unknown): void => {
+                )('%# - Random.randomNumberGenerator = %o should throw a PrimitiveTypeError', (input: unknown): void => {
                     expect((): void => {
                         Random.randomNumberGenerator = input as (() => number);
-                    }).toThrow(TypeError);
+                    }).toThrow(PrimitiveTypeError);
                 });
             });
         });
@@ -345,24 +346,7 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomFloat and randomInt should throw for bounds outside the safe integer range', (): void => {
-            test.each([
-                { min: 0, max: 1e16 },
-                { min: 0, max: 1e100 },
-                { min: -1e300, max: 1e300 },
-                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
-                { min: Number.MIN_SAFE_INTEGER - 2, max: 0 },
-                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
-            ])('%# - randomFloat($min, $max) and randomInt($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
-                expect((): void => {
-                    Random.randomFloat(min, max);
-                }).toThrow(ValueRangeError);
-
-                expect((): void => {
-                    Random.randomInt(min, max);
-                }).toThrow(ValueRangeError);
-            });
-
+        describe('randomFloat should reject bounds before drawing from them', (): void => {
             test('randomFloat should throw rather than return NaN when the span would overflow', (): void => {
                 // max - min overflows to Infinity for these bounds, and Infinity multiplied by a
                 // draw of 0 is NaN, which no comparison against max would have caught.
@@ -370,7 +354,7 @@ describe('Random', (): void => {
 
                 expect((): void => {
                     Random.randomFloat(-Number.MAX_VALUE, Number.MAX_VALUE);
-                }).toThrow(ValueRangeError);
+                }).toThrow(PrimitiveTypeError);
             });
         });
 
@@ -393,41 +377,12 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomFloat and randomInt should hold min and max to the same limit', (): void => {
+        describe('randomFloat should hold min and max to the same limit', (): void => {
             // max is exclusive, so it could have been allowed one past MAX_SAFE_INTEGER. It is held to
             // the same bound as min instead, which makes MAX_SAFE_INTEGER itself unreachable.
-            test.each([
-                { min: Number.MIN_SAFE_INTEGER - 1, max: 0 },
-                { min: 0, max: Number.MAX_SAFE_INTEGER + 1 }
-            ])('%# - randomFloat($min, $max) and randomInt($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
-                expect((): void => {
-                    Random.randomFloat(min, max);
-                }).toThrow(ValueRangeError);
-
-                expect((): void => {
-                    Random.randomInt(min, max);
-                }).toThrow(ValueRangeError);
-            });
-
             test('randomInt should not return Number.MAX_SAFE_INTEGER', (): void => {
                 Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
                 expect(Random.randomInt(0, Number.MAX_SAFE_INTEGER)).toBeLessThan(Number.MAX_SAFE_INTEGER);
-            });
-        });
-
-        describe('randomFloat should throw when min and max are equal', (): void => {
-            // The range [min, max) contains no values when min is equal to max.
-            test.each([
-                { min: 0, max: 0 },
-                { min: 1, max: 1 },
-                { min: 10, max: 10 },
-                { min: -10, max: -10 },
-                { min: 0.5, max: 0.5 },
-                { min: -0.5, max: -0.5 }
-            ])('%# - randomFloat($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
-                expect((): void => {
-                    Random.randomFloat(min, max);
-                }).toThrow(ValueRangeError);
             });
         });
     });
@@ -485,81 +440,56 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomInt and randomInteger should throw when min and max are equal', (): void => {
-            // The range [min, max) contains no integers when min is equal to max, whether or not
-            // min is itself an integer.
-            test.each([
-                { min: 0, max: 0 },
-                { min: 1, max: 1 },
-                { min: -1, max: -1 },
-                { min: 10, max: 10 },
-                { min: -10, max: -10 },
-                { min: 1.8, max: 1.8 },
-                { min: 10.5, max: 10.5 },
-                { min: -10.5, max: -10.5 },
-                { min: 0.5, max: 0.5 },
-                { min: -0.5, max: -0.5 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
-                expect((): void => {
-                    Random.randomInt(min, max);
-                }).toThrow(ValueRangeError);
+        describe('Argument errors', (): void => {
+            const noIntegerValueScenarios: Scenario[] = [
+                {
+                    label: 'Ranges that contain no integer values',
+                    inputs: [
+                        { min: 1.5, max: 1.89 },
+                        { min: 10.01, max: 10.99 },
+                        { min: 10.001, max: 10.999 },
+                        { min: -10.4, max: -10.25 },
+                        { min: 0.5, max: 0.75 },
+                        { min: 0.99, max: 0.999 },
+                        { min: -0.999, max: -0.99 },
+                        { min: -0.5, max: 0 }
+                    ],
+                    expected: ValueRangeError
+                }
+            ];
 
-                expect((): void => {
-                    Random.randomInteger(min, max);
-                }).toThrow(ValueRangeError);
-            });
-        });
+            describe.each(
+                noIntegerValueScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-        describe('randomInt and randomInteger should throw when the range contains no integer values', (): void => {
-            test.each([
-                { min: 1.5, max: 1.89 },
-                { min: 10.01, max: 10.99 },
-                { min: 10.001, max: 10.999 },
-                { min: -10.4, max: -10.25 },
-                { min: 0.5, max: 0.75 },
-                { min: 0.99, max: 0.999 },
-                { min: -0.999, max: -0.99 },
-                { min: -0.5, max: 0 }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
-                expect((): void => {
-                    Random.randomInt(min, max);
-                }).toThrow(ValueRangeError);
+                test.each(
+                    testCases
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { min: number; max: number; } = testInput as { min: number; max: number; };
 
-                expect((): void => {
-                    Random.randomInteger(min, max);
-                }).toThrow(ValueRangeError);
-            });
-        });
+                    expect((): void => {
+                        Random.randomInt(args.min, args.max);
+                    }).toThrow(testExpected);
 
-        describe('randomInt and randomInteger should throw when the range contains unsafe integers', (): void => {
-            const oneUlpAbove1e20: number = 1e20 + 16384;
-
-            test.each([
-                { min: 0, max: 1e20 },
-                { min: 1e20, max: oneUlpAbove1e20 },
-                { min: -Number.MAX_VALUE, max: 0 },
-                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
-                { min: Number.MAX_SAFE_INTEGER + 2, max: Number.MAX_VALUE }
-            ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw ValueRangeError', ({ min, max }: { min: number; max: number; }): void => {
-                expect((): void => {
-                    Random.randomInt(min, max);
-                }).toThrow(ValueRangeError);
-
-                expect((): void => {
-                    Random.randomInteger(min, max);
-                }).toThrow(ValueRangeError);
+                    expect((): void => {
+                        Random.randomInteger(args.min, args.max);
+                    }).toThrow(testExpected);
+                });
             });
 
-            test('randomInt should not return a value outside a one ULP span of large integers', (): void => {
+            test('randomInt should reject an unsafe bound before drawing from it', (): void => {
+                // A one ULP span of large integers contains no representable integer between its
+                // bounds, so the bounds must be rejected whatever the generator returns.
                 const min: number = 1e20;
-                const max: number = oneUlpAbove1e20;
+                const max: number = 1e20 + 16384;
 
                 for (const draw of [0, 0.5, 0.9, 1 - (Number.EPSILON / 2)]) {
                     Random.randomNumberGenerator = (): number => draw;
 
                     expect((): void => {
                         Random.randomInt(min, max);
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(PrimitiveTypeError);
                 }
             });
         });
@@ -651,12 +581,17 @@ describe('Random', (): void => {
                 {
                     label: 'Non-number type inputs',
                     inputs: [...nonNumberInputs.filter((input: unknown): boolean => input !== undefined)],
-                    expected: TypeError
+                    expected: PrimitiveTypeError
                 },
                 {
                     label: 'Non-finite number inputs',
                     inputs: [...nonFiniteNumberInputs],
-                    expected: TypeError
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Unsafe number inputs',
+                    inputs: [...unsafeNumberInputs],
+                    expected: PrimitiveTypeError
                 },
                 {
                     label: 'Out of range finite number inputs',
@@ -670,7 +605,7 @@ describe('Random', (): void => {
                         -10,
                         10
                     ],
-                    expected: RangeError
+                    expected: ValueRangeError
                 }
             ];
 
@@ -733,14 +668,14 @@ describe('Random', (): void => {
                     {
                         label: 'Non-array type inputs',
                         inputs: [...nonArrayInputs],
-                        expected: TypeError
+                        expected: PrimitiveTypeError
                     },
                     {
                         label: 'Empty array input',
                         inputs: [
                             []
                         ],
-                        expected: TypeError
+                        expected: PrimitiveTypeError
                     }
                 ];
 
@@ -1030,142 +965,94 @@ describe('Random', (): void => {
         });
     });
 
-    describe('Range input validation', (): void => {
-        describe('Min and max range validation', (): void => {
-            describe('Min and max parameters must be a finite number', (): void => {
-                const scenarios: Scenario[] = [
-                    {
-                        label: 'Non-number inputs',
-                        inputs: [...nonNumberInputs],
-                        expected: TypeError
-                    },
-                    {
-                        label: 'Non-finite number inputs',
-                        inputs: [...nonFiniteNumberInputs],
-                        expected: TypeError
-                    }
-                ];
+    describe('Shared min and max argument errors', (): void => {
+        // randomFloat, randomInt, and randomInteger validate their bounds identically, so the same
+        // scenarios are asserted against all three.
+        const safeMin: number = 0;
+        const safeMax: number = 10;
 
-                describe.each(
-                    scenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+        const invalidBoundInputs: unknown[] = [
+            ...nonNumberInputs,
+            ...nonFiniteNumberInputs,
+            ...unsafeNumberInputs
+        ];
 
-                    describe('Min parameter validation', (): void => {
-                        test.each(
-                            testCases
-                        )('%# - Min ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                Random.randomFloat(testInput as number, Number.MAX_SAFE_INTEGER);
-                            }).toThrow(testExpected);
+        const argumentFailureScenarios: Scenario[] = [
+            {
+                label: 'Invalid min argument',
+                inputs: invalidBoundInputs.map((input: unknown): { min: unknown; max: number; } => {
+                    return { min: input, max: safeMax };
+                }),
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Invalid max argument',
+                inputs: invalidBoundInputs.map((input: unknown): { min: number; max: unknown; } => {
+                    return { min: safeMin, max: input };
+                }),
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'min is equal to max',
+                inputs: [
+                    { min: 0, max: 0 },
+                    { min: 1, max: 1 },
+                    { min: -1, max: -1 },
+                    { min: 10, max: 10 },
+                    { min: -10, max: -10 },
+                    { min: 1.8, max: 1.8 },
+                    { min: 10.5, max: 10.5 },
+                    { min: -10.5, max: -10.5 },
+                    { min: 0.5, max: 0.5 },
+                    { min: -0.5, max: -0.5 },
+                    { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
+                    { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'min is greater than max',
+                inputs: [
+                    { min: 0, max: -1 },
+                    { min: 10, max: 9 },
+                    { min: 10, max: 0 },
+                    { min: 10, max: -10 },
+                    { min: -10, max: -11 },
+                    { min: -10, max: -20 },
+                    { min: 0.123, max: -1.123 },
+                    { min: 10.123, max: 9.123 },
+                    { min: 10.123, max: -10.123 },
+                    { min: -10.123, max: -11.123 },
+                    { min: 0.456, max: 0.123 },
+                    { min: 10.456, max: 10.1234 },
+                    { min: -10.123, max: -10.456 },
+                    { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER }
+                ],
+                expected: ValueRangeError
+            }
+        ];
 
-                            expect((): void => {
-                                Random.randomInt(testInput as number, Number.MAX_SAFE_INTEGER);
-                            }).toThrow(testExpected);
+        describe.each(
+            argumentFailureScenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                            expect((): void => {
-                                Random.randomInteger(testInput as number, Number.MAX_SAFE_INTEGER);
-                            }).toThrow(testExpected);
-                        });
-                    });
+            test.each(
+                testCases
+            )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
-                    describe('Max parameter validation', (): void => {
-                        test.each(
-                            testCases
-                        )('%# - Max ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            expect((): void => {
-                                Random.randomFloat(Number.MIN_SAFE_INTEGER, testInput as number);
-                            }).toThrow(testExpected);
+                expect((): void => {
+                    Random.randomFloat(args.min as number, args.max as number);
+                }).toThrow(testExpected);
 
-                            expect((): void => {
-                                Random.randomInt(Number.MIN_SAFE_INTEGER, testInput as number);
-                            }).toThrow(testExpected);
+                expect((): void => {
+                    Random.randomInt(args.min as number, args.max as number);
+                }).toThrow(testExpected);
 
-                            expect((): void => {
-                                Random.randomInteger(Number.MIN_SAFE_INTEGER, testInput as number);
-                            }).toThrow(testExpected);
-                        });
-                    });
-                });
-            });
-
-            describe('Min must be less than max', (): void => {
-                const scenarios: Scenario[] = [
-                    {
-                        label: 'Integer min and max',
-                        inputs: [
-                            { min: 0, max: -1 },
-                            { min: 10, max: 9 },
-                            { min: 10, max: 0 },
-                            { min: 10, max: 1 },
-                            { min: 10, max: -10 },
-                            { min: -10, max: -11 },
-                            { min: -10, max: -20 }
-                        ],
-                        expected: RangeError
-                    },
-                    {
-                        label: 'Float min and max',
-                        inputs: [
-                            { min: 0.123, max: -1.123 },
-                            { min: 10.123, max: 9.123 },
-                            { min: 10.123, max: 0.123 },
-                            { min: 10.123, max: 1.123 },
-                            { min: 10.123, max: -10.123 },
-                            { min: -10.123, max: -11.123 },
-                            { min: -10.123, max: -20.123 }
-                        ],
-                        expected: RangeError
-                    },
-                    {
-                        label: 'Float min and max with equal floors',
-                        inputs: [
-                            { min: 0.456, max: 0.123 },
-                            { min: 10.456, max: 10.1234 },
-                            { min: -10.123, max: -10.456 }
-                        ],
-                        expected: RangeError
-                    }
-                ];
-
-                describe.each(
-                    scenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    describe('randomFloat', (): void => {
-                        test.each(
-                            testCases
-                        )('%# - randomFloat with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            const { min, max } = testInput as { min: number; max: number; };
-                            expect((): void => {
-                                Random.randomFloat(min, max);
-                            }).toThrow(testExpected);
-                        });
-                    });
-
-                    describe('randomInt', (): void => {
-                        test.each(
-                            testCases
-                        )('%# - randomInt with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            const { min, max } = testInput as { min: number; max: number; };
-                            expect((): void => {
-                                Random.randomInt(min, max);
-                            }).toThrow(testExpected);
-                        });
-                    });
-
-                    describe('randomInteger', (): void => {
-                        test.each(
-                            testCases
-                        )('%# - randomInteger with input ($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                            const { min, max } = testInput as { min: number; max: number; };
-                            expect((): void => {
-                                Random.randomInteger(min, max);
-                            }).toThrow(testExpected);
-                        });
-                    });
-                });
+                expect((): void => {
+                    Random.randomInteger(args.min as number, args.max as number);
+                }).toThrow(testExpected);
             });
         });
     });

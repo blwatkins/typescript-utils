@@ -273,6 +273,90 @@ A page whose content did not change keeps its existing `modified_date`.
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
+#### The Scenario Pattern
+
+Table-driven tests are written through the scenario types in `test/utils/test-case/test-case.ts` rather than through ad-hoc `test.each` arrays of literals.
+
+A `Scenario` groups a set of `inputs` that share an outcome under a `label`, with the `expected` outcome for all of them.
+`buildTestCases` expands a scenario into `TestCase` objects, one per input, and a `describe.each` over the scenarios wraps a `test.each` over the cases:
+
+```typescript
+const scenarios: Scenario[] = [
+    {
+        label: 'Non-number type inputs',
+        inputs: nonNumberInputs,
+        expected: false
+    }
+];
+
+describe.each(
+    scenarios
+)('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+    test.each(
+        testCases
+    )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+        expect(MethodUnderTest(testInput)).toBe(testExpected);
+    });
+});
+```
+
+The label carries the reason a group of inputs belongs together, so the reason survives in the test output and a new input can be added to an existing group without restating it.
+
+Conventions for the pattern:
+
+- Title a `describe.each` over scenarios with `'%# - $label'`, and a `test.each` over cases with `'%# - ...$input...$expected...'`. The index prefix keeps output readable when inputs render alike.
+- Draw inputs from the shared fixtures in `test/utils/input/` (e.g. `nonNumberInputs`, `nonFiniteNumberInputs`, `unsafeNumberInputs`, `nonBooleanInputs`) instead of restating literal lists, so a fixture change reaches every suite that depends on it.
+- Declare a scenario array once in the widest scope that needs it and reuse it across every method that shares those inputs, rather than repeating it per method. `test/range/range-builder.test.ts` reuses `finiteNumberScenarios`, `booleanScenarios`, `validRangeScenarios`, and `invalidRangeScenarios` across its methods this way.
+- Derive a related set from an existing array with `filter` or `map` rather than writing a near-copy. `test/string/string-utility.test.ts` derives `stringFailureScenarios` from `failureScenarios`; `test/range/range-utility.test.ts` flat-maps `rangeFailureScenarios` into the invalid-argument scenarios of every method that takes a `Range`.
+- Use `SingleInputScenario` when a scenario describes one input rather than a set, so a `test.each` can run over the scenarios directly. `test/random/seeded-random/random-number-generator-factory.test.ts` uses it for seed, namespace, and version combinations paired with an expected sequence.
+- Put a scenario set shared across files in `test/utils/test-case/scenarios/`, exported for the suites that consume it.
+- `assert*` and `is*` methods taking a single input use the shared `testAssertMethod` and `testIsMethod` helpers in `test/utils/assert/assert-tests.ts`, which take `Scenario[]` for success and failure directly and emit their own `describe`/`test` blocks. Prefer those over hand-written scenario blocks where the method's shape fits.
+
+##### Argument Validation
+
+Argument validation is the most common use of the pattern, and has conventions of its own.
+Here `expected` holds the error constructor the call should throw, and each input is an object naming the full argument list:
+
+```typescript
+const argumentFailureScenarios: Scenario[] = [
+    {
+        label: 'Invalid min argument',
+        inputs: [
+            ...nonNumberInputs,
+            ...nonFiniteNumberInputs,
+            ...unsafeNumberInputs
+        ].map((input: unknown): { min: unknown; max: number; } => {
+            return { min: input, max: defaultMax };
+        }),
+        expected: PrimitiveTypeError
+    }
+];
+
+describe.each(
+    argumentFailureScenarios
+)('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+    test.each(
+        testCases
+    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+        const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
+
+        expect((): void => {
+            MethodUnderTest(args.min as number, args.max as number);
+        }).toThrow(testExpected);
+    });
+});
+```
+
+- Group the scenarios under a `describe('Argument errors')` block within the suite for the method under test.
+- For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`). This attributes a failure to one argument rather than leaving it ambiguous.
+- Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
+- Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method. `Random.randomFloat`, `Random.randomInt`, and `Random.randomInteger` share one such block.
+- Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks, or as their own scenarios when the inputs group meaningfully. The argument-validation conventions above do not apply to them.
+
 ### Validation Steps
 
 Run `npm ci`, then `npm run validate`, which runs lint, documentation generation, build, and tests in sequence.

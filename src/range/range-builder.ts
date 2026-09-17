@@ -87,8 +87,6 @@ export class RangeBuilder {
      * @throws {PrimitiveTypeError} - When `isMinInclusive` is not a boolean or undefined.
      * @throws {PrimitiveTypeError} - When `isMaxInclusive` is not a boolean or undefined.
      * @throws {SchemaTypeError} When the resulting object is not a valid {@link Range}.
-     * A {@link Range} is not valid when `min` is greater than `max`, or when `min` is equal to `max`
-     * and either bound is excluded, because such a range would contain no values.
      *
      * @public
      * @since 0.1.0
@@ -189,8 +187,6 @@ export class RangeBuilder {
      * @returns {Range} A {@link Range} object.
      *
      * @throws {SchemaTypeError} When the resulting object is not a valid {@link Range}.
-     * A {@link Range} is not valid when `min` is greater than `max`, or when `min` is equal to `max`
-     * and either bound is excluded, because such a range would contain no values.
      *
      * @public
      * @since 0.1.0

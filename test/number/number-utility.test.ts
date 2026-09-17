@@ -27,14 +27,16 @@ import { NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
-    floatInputs,
-    integerInputs,
-    negativeIntegerInputs,
-    negativeNumberInputs,
+    negativeSafeIntegerInputs,
+    negativeSafeNumberInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
-    positiveIntegerInputs,
-    positiveNumberInputs,
+    positiveSafeIntegerInputs,
+    positiveSafeNumberInputs,
+    safeFloatInputs,
+    safeIntegerInputs,
+    safeNumberInputs,
+    unsafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
@@ -60,12 +62,18 @@ describe('NumberUtility', (): void => {
 
         const successScenarios: Scenario[] = [
             {
-                label: 'Number inputs',
-                inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
-                    ...zeroInputs
-                ],
+                label: 'Number inputs within the safe integer range',
+                inputs: safeNumberInputs,
+                expected: undefined
+            },
+            {
+                label: 'Number inputs outside the safe integer range',
+                inputs: unsafeNumberInputs,
+                expected: undefined
+            },
+            {
+                label: 'Zero inputs',
+                inputs: zeroInputs,
                 expected: undefined
             }
         ];
@@ -97,8 +105,13 @@ describe('NumberUtility', (): void => {
                 expected: PrimitiveTypeError
             },
             {
+                label: 'Number inputs outside the safe integer range',
+                inputs: unsafeNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
                 label: 'Float inputs',
-                inputs: floatInputs,
+                inputs: safeFloatInputs,
                 expected: PrimitiveTypeError
             }
         ];
@@ -111,7 +124,7 @@ describe('NumberUtility', (): void => {
             },
             {
                 label: 'Integer inputs',
-                inputs: integerInputs,
+                inputs: safeIntegerInputs,
                 expected: undefined
             }
         ];
@@ -121,7 +134,7 @@ describe('NumberUtility', (): void => {
                 NumberUtility.assertInteger.bind(NumberUtility),
                 successScenarios,
                 failureScenarios,
-                'Expected an integer.'
+                'Expected an integer within the safe integer range.'
             );
         });
 
@@ -143,13 +156,18 @@ describe('NumberUtility', (): void => {
                 expected: PrimitiveTypeError
             },
             {
+                label: 'Number inputs outside the safe integer range',
+                inputs: unsafeNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
                 label: 'Float inputs',
-                inputs: floatInputs,
+                inputs: safeFloatInputs,
                 expected: PrimitiveTypeError
             },
             {
                 label: 'Negative integer inputs',
-                inputs: negativeIntegerInputs,
+                inputs: negativeSafeIntegerInputs,
                 expected: PrimitiveTypeError
             }
         ];
@@ -157,7 +175,7 @@ describe('NumberUtility', (): void => {
         const successScenarios: Scenario[] = [
             {
                 label: 'Positive integer inputs',
-                inputs: positiveIntegerInputs,
+                inputs: positiveSafeIntegerInputs,
                 expected: undefined
             }
         ];
@@ -181,7 +199,7 @@ describe('NumberUtility', (): void => {
                     assertPositiveInteger,
                     successScenarios,
                     zeroExclusiveFailureScenarios,
-                    'Expected a positive integer or zero if zeroInclusive is true.'
+                    'Expected a positive integer within the safe integer range or zero if zeroInclusive is true.'
                 );
             });
 
@@ -223,7 +241,7 @@ describe('NumberUtility', (): void => {
                     assertPositiveInteger,
                     zeroInclusiveSuccessScenarios,
                     failureScenarios,
-                    'Expected a positive integer or zero if zeroInclusive is true.'
+                    'Expected a positive integer within the safe integer range or zero if zeroInclusive is true.'
                 );
             });
 
@@ -242,8 +260,6 @@ describe('NumberUtility', (): void => {
             {
                 label: 'Unequal min and max, value not in range',
                 inputs: [
-                    { value: Number.MIN_SAFE_INTEGER - 1, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { value: Number.MAX_SAFE_INTEGER + 1, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
                     { value: -100, min: -10, max: 10 },
                     { value: 100, min: -10, max: 10 },
                     { value: -10 - 1, min: -10, max: 10 },
@@ -288,7 +304,7 @@ describe('NumberUtility', (): void => {
                     { value: 100.123001, min: 100.123, max: 100.123 },
                     { value: -100.123001, min: -100.123, max: -100.123 },
                     { value: Number.MIN_SAFE_INTEGER + 1, min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
-                    { value: Number.MAX_SAFE_INTEGER + 1, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER - 1, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
                     { value: Number.MIN_VALUE + Number.EPSILON, min: Number.MIN_VALUE, max: Number.MIN_VALUE },
                     { value: Number.EPSILON + Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
                 ],
@@ -337,7 +353,6 @@ describe('NumberUtility', (): void => {
                     { value: -100.123, min: -100.123, max: -100.123 },
                     { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
                     { value: Number.MAX_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { value: Number.MAX_VALUE, min: Number.MAX_VALUE, max: Number.MAX_VALUE },
                     { value: Number.MIN_VALUE, min: Number.MIN_VALUE, max: Number.MIN_VALUE },
                     { value: Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
                 ],
@@ -374,7 +389,8 @@ describe('NumberUtility', (): void => {
                     label: 'Invalid value argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: unknown; min: number; max: number; } => {
                         return {
                             value: input,
@@ -388,7 +404,8 @@ describe('NumberUtility', (): void => {
                     label: 'Invalid min argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: number; min: unknown; max: number; } => {
                         return {
                             value: 0,
@@ -402,7 +419,8 @@ describe('NumberUtility', (): void => {
                     label: 'Invalid max argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: number; min: number; max: unknown; } => {
                         return {
                             value: 0,
@@ -433,7 +451,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - assertInRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -445,7 +463,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - isInRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -466,7 +484,6 @@ describe('NumberUtility', (): void => {
                     { max: Number.MIN_SAFE_INTEGER, min: 0 },
                     { max: 0, min: Number.MAX_SAFE_INTEGER },
                     { max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER },
-                    { max: -Number.MAX_VALUE, min: Number.MAX_VALUE },
                     { max: -500, min: -100 },
                     { max: -5.123, min: -3.123 },
                     { max: 10, min: 100 },
@@ -484,7 +501,6 @@ describe('NumberUtility', (): void => {
                     { min: Number.MIN_SAFE_INTEGER, max: 0 },
                     { min: 0, max: Number.MAX_SAFE_INTEGER },
                     { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
                     { min: -500, max: -100 },
                     { min: -5.123, max: -3.123 },
                     { min: 10, max: 100 },
@@ -498,7 +514,6 @@ describe('NumberUtility', (): void => {
                     { min: 0, max: 0 },
                     { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
                     { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { min: Number.MAX_VALUE, max: Number.MAX_VALUE },
                     { min: 5, max: 5 },
                     { min: 5.123, max: 5.123 },
                     { min: -5, max: -5 },
@@ -537,7 +552,8 @@ describe('NumberUtility', (): void => {
                     label: 'Invalid min argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { min: unknown; max: number; } => {
                         return {
                             min: input,
@@ -550,7 +566,8 @@ describe('NumberUtility', (): void => {
                     label: 'Invalid max argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { min: number; max: unknown; } => {
                         return {
                             min: Number.MIN_SAFE_INTEGER,
@@ -569,7 +586,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - assertValidRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -581,7 +598,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - isValidRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -611,8 +628,8 @@ describe('NumberUtility', (): void => {
             {
                 label: 'Number inputs',
                 inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
+                    ...positiveSafeNumberInputs,
+                    ...negativeSafeNumberInputs,
                     ...zeroInputs
                 ],
                 expected: undefined
@@ -645,8 +662,8 @@ describe('NumberUtility', (): void => {
             {
                 label: 'Number inputs',
                 inputs: [
-                    ...positiveNumberInputs,
-                    ...negativeNumberInputs,
+                    ...positiveSafeNumberInputs,
+                    ...negativeSafeNumberInputs,
                     ...zeroInputs
                 ],
                 expected: undefined
