@@ -34,7 +34,7 @@ import {
 
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
-import { nonFiniteNumberInputs, nonNumberInputs } from '../utils/input/number-inputs';
+import { nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
@@ -158,6 +158,24 @@ describe('RangeUtility', (): void => {
             expected: SchemaTypeError
         },
         {
+            label: 'Object inputs with a bound outside the safe integer range',
+            inputs: [
+                ...unsafeNumberInputs.map((input: number): { min: number; max: number; } => {
+                    return { min: input, max: Number.MAX_SAFE_INTEGER };
+                }),
+                ...unsafeNumberInputs.map((input: number): { min: number; max: number; } => {
+                    return { min: Number.MIN_SAFE_INTEGER, max: input };
+                }),
+                { min: 0, max: 1e16 },
+                { min: 0, max: 1e100 },
+                { min: -1e300, max: 1e300 },
+                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
+                { min: -Number.MAX_VALUE, max: 0 },
+                { min: 0, max: Math.pow(2, 53) }
+            ],
+            expected: SchemaTypeError
+        },
+        {
             label: 'Object inputs where min is greater than max',
             inputs: [
                 { min: 10, max: 0 },
@@ -194,7 +212,7 @@ describe('RangeUtility', (): void => {
                 { min: -10, max: -1 },
                 { min: -1.5, max: 1.5 },
                 { min: -Number.MIN_VALUE, max: 0 },
-                { min: Number.MIN_VALUE, max: Number.MAX_VALUE },
+                { min: Number.MIN_VALUE, max: Number.MAX_SAFE_INTEGER },
                 { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
             ],
             expected: undefined
@@ -432,7 +450,8 @@ describe('RangeUtility', (): void => {
                     label: 'Invalid value argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: unknown; range: Range; } => {
                         return {
                             value: input,
@@ -484,6 +503,117 @@ describe('RangeUtility', (): void => {
             });
         });
     });
+    describe('constrain', (): void => {
+        describe('constrain should return the proper value for a range', (): void => {
+            test.each([
+                { value: 5, range: { min: 0, max: 10 }, expected: 5 },
+                { value: 0, range: { min: 0, max: 10 }, expected: 0 },
+                { value: 10, range: { min: 0, max: 10 }, expected: 10 },
+                { value: 100, range: { min: 0, max: 10 }, expected: 10 },
+                { value: -100, range: { min: 0, max: 10 }, expected: 0 },
+                { value: 0, range: { min: -5, max: 5 }, expected: 0 },
+                { value: -2, range: { min: -3, max: -1 }, expected: -2 },
+                { value: -400, range: { min: -300, max: -200 }, expected: -300 },
+                { value: -100, range: { min: -300, max: -200 }, expected: -200 },
+                { value: 5.5, range: { min: 0.5, max: 10.5 }, expected: 5.5 },
+                { value: 0.25, range: { min: 0.5, max: 10.5 }, expected: 0.5 },
+                { value: 10.75, range: { min: 0.5, max: 10.5 }, expected: 10.5 },
+                { value: 5, range: { min: 1, max: 1 }, expected: 1 },
+                { value: 0, range: { min: 1, max: 1 }, expected: 1 },
+                { value: Number.MAX_SAFE_INTEGER, range: { min: 5, max: 500 }, expected: 500 },
+                { value: Number.MIN_SAFE_INTEGER, range: { min: 5, max: 500 }, expected: 5 },
+                { value: 5, range: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }, expected: 5 },
+                { value: 1.12345678912343, range: { min: 1.12345678912344, max: 2.12345678912345 }, expected: 1.12345678912344 },
+                { value: 2.12345678912346, range: { min: 1.12345678912344, max: 2.12345678912345 }, expected: 2.12345678912345 }
+            ])('%# - constrain($value, $range) should return $expected', ({ value, range, expected }: { value: number; range: Range; expected: number; }): void => {
+                expect(RangeUtility.constrain(value, range)).toBe(expected);
+            });
+        });
+
+        describe('constrain should ignore the inclusivity flags of the range', (): void => {
+            // Both bounds are treated as inclusive, so an excluded bound is still returned rather
+            // than the nearest representable value inside it.
+            test.each([
+                { value: 100, range: { min: 0, max: 10, isMaxInclusive: false }, expected: 10 },
+                { value: -100, range: { min: 0, max: 10, isMinInclusive: false }, expected: 0 },
+                { value: 100, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false }, expected: 10 },
+                { value: -100, range: { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false }, expected: 0 },
+                { value: 100, range: { min: 0.5, max: 10.5, isMaxInclusive: false }, expected: 10.5 },
+                { value: -100, range: { min: 0.5, max: 10.5, isMinInclusive: false }, expected: 0.5 }
+            ])('%# - constrain($value, $range) should return $expected', ({ value, range, expected }: { value: number; range: Range; expected: number; }): void => {
+                expect(RangeUtility.constrain(value, range)).toBe(expected);
+            });
+
+            test.each([
+                { value: 100, range: { min: 0, max: 10, isMaxInclusive: false } },
+                { value: -100, range: { min: 0, max: 10, isMinInclusive: false } }
+            ])('%# - constrain($value, $range) should return a value that isIn rejects', ({ value, range }: { value: number; range: Range; }): void => {
+                expect(RangeUtility.isIn(RangeUtility.constrain(value, range), range)).toBe(false);
+            });
+        });
+
+        describe('constrain should return a value within the range when both bounds are inclusive', (): void => {
+            test.each([
+                { value: 100, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                { value: -100, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                { value: 5, range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true } },
+                { value: 0.25, range: { min: 0.5, max: 10.5 } },
+                { value: Number.MAX_SAFE_INTEGER, range: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER } }
+            ])('%# - constrain($value, $range) should satisfy isIn', ({ value, range }: { value: number; range: Range; }): void => {
+                expect(RangeUtility.isIn(RangeUtility.constrain(value, range), range)).toBe(true);
+            });
+        });
+
+        describe('Argument errors', (): void => {
+            const invalidRangeInputs: unknown[] = rangeFailureScenarios.flatMap((scenario: Scenario): unknown[] => {
+                return scenario.inputs;
+            });
+
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid value argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
+                    ].map((input: unknown): { value: unknown; range: Range; } => {
+                        return {
+                            value: input,
+                            range: { min: 0, max: 10 }
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid range argument',
+                    inputs: invalidRangeInputs.map((input: unknown): { value: number; range: unknown; } => {
+                        return {
+                            value: 5,
+                            range: input
+                        };
+                    }),
+                    expected: SchemaTypeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { value: unknown; range: unknown; } = testInput as { value: unknown; range: unknown; };
+
+                    expect((): void => {
+                        RangeUtility.constrain(args.value as number, args.range as Range);
+                    }).toThrow(testExpected);
+                });
+            });
+        });
+    });
+
     describe('Random', (): void => {
         const testRepeatTotal: number = 50;
 
@@ -556,43 +686,25 @@ describe('RangeUtility', (): void => {
             });
 
             describe('a Range bound past MAX_SAFE_INTEGER is rejected', (): void => {
+                // Random validates a bare pair of bounds, so an unsafe bound is a type error there.
+                // A Range carries its bounds in the schema, so the same value fails the Range
+                // contract before either generator runs.
                 test('Number.MAX_SAFE_INTEGER + 1 is rejected by Random and by RangeUtility', (): void => {
                     expect((): void => {
                         Random.randomFloat(0, Number.MAX_SAFE_INTEGER + 1);
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(PrimitiveTypeError);
 
                     expect((): void => {
                         Random.randomInt(0, Number.MAX_SAFE_INTEGER + 1);
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(PrimitiveTypeError);
 
                     expect((): void => {
                         RangeUtility.randomFloat({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(SchemaTypeError);
 
                     expect((): void => {
                         RangeUtility.randomInteger({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
-                    }).toThrow(ValueRangeError);
-                });
-            });
-
-            describe('randomFloat and randomInteger should throw for bounds outside the safe integer range', (): void => {
-                test.each([
-                    { min: 0, max: 1e16 },
-                    { min: 0, max: 1e100 },
-                    { min: -1e300, max: 1e300 },
-                    { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
-                    { min: 0, max: Math.pow(2, 53) },
-                    { min: -Number.MAX_VALUE, max: 0 }
-                ])('%# - randomFloat($min, $max) and randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
-                    Random.randomNumberGenerator = (): number => 0;
-
-                    expect((): void => {
-                        RangeUtility.randomFloat(range);
-                    }).toThrow(ValueRangeError);
-
-                    expect((): void => {
-                        RangeUtility.randomInteger(range);
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(SchemaTypeError);
                 });
             });
 
@@ -612,23 +724,34 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('the safe integer restriction applies to the generators only', (): void => {
-                // isIn and assertIn only compare values, so a Range with large bounds is still a
-                // valid Range that simply cannot be drawn from.
+            describe('the safe integer restriction applies to the whole Range contract', (): void => {
+                // A bound outside the safe integer range makes the object an invalid Range, so it is
+                // rejected by every method that takes one, not only by the generators.
                 test.each([
                     { min: -1e300, max: 1e300 },
                     { min: 0, max: Number.MAX_VALUE }
-                ])('%# - isIn and assertIn should accept the range $min to $max', (range: Range): void => {
-                    expect(RangeUtility.isRange(range)).toBe(true);
-                    expect(RangeUtility.isIn(0, range)).toBe(true);
+                ])('%# - the range $min to $max should be rejected by every Range method', (range: Range): void => {
+                    expect(RangeUtility.isRange(range)).toBe(false);
+
+                    expect((): void => {
+                        RangeUtility.isIn(0, range);
+                    }).toThrow(SchemaTypeError);
 
                     expect((): void => {
                         RangeUtility.assertIn(0, range);
-                    }).not.toThrow();
+                    }).toThrow(SchemaTypeError);
+
+                    expect((): void => {
+                        RangeUtility.constrain(0, range);
+                    }).toThrow(SchemaTypeError);
 
                     expect((): void => {
                         RangeUtility.randomFloat(range);
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(SchemaTypeError);
+
+                    expect((): void => {
+                        RangeUtility.randomInteger(range);
+                    }).toThrow(SchemaTypeError);
                 });
             });
 
@@ -805,32 +928,61 @@ describe('RangeUtility', (): void => {
             });
 
             describe('randomInteger should throw when the range contains no integer values', (): void => {
-                test.each([
-                    { min: 1.8, max: 1.8 },
-                    { min: -0.5, max: -0.5 },
-                    { min: 1.5, max: 1.89 },
-                    { min: 0.5, max: 0.75 },
-                    { min: 5, max: 6, isMinInclusive: false, isMaxInclusive: false },
-                    { min: -0.5, max: 0, isMaxInclusive: false }
-                ])('%# - randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
-                    expect((): void => {
-                        RangeUtility.randomInteger(range);
-                    }).toThrow(ValueRangeError);
+                const noIntegerValueScenarios: Scenario[] = [
+                    {
+                        label: 'Ranges between two consecutive integers',
+                        inputs: [
+                            { min: 1.5, max: 1.89 },
+                            { min: 0.5, max: 0.75 },
+                            { min: 10.01, max: 10.99 },
+                            { min: -10.4, max: -10.25 }
+                        ],
+                        expected: ValueRangeError
+                    },
+                    {
+                        label: 'Ranges holding a single non-integer value',
+                        inputs: [
+                            { min: 1.8, max: 1.8 },
+                            { min: -0.5, max: -0.5 }
+                        ],
+                        expected: ValueRangeError
+                    },
+                    {
+                        label: 'Ranges whose only integers sit on an excluded bound',
+                        inputs: [
+                            { min: 5, max: 6, isMinInclusive: false, isMaxInclusive: false },
+                            { min: -0.5, max: 0, isMaxInclusive: false }
+                        ],
+                        expected: ValueRangeError
+                    }
+                ];
+
+                describe.each(
+                    noIntegerValueScenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    test.each(
+                        testCases
+                    )('%# - randomInteger($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            RangeUtility.randomInteger(testInput as Range);
+                        }).toThrow(testExpected);
+                    });
                 });
             });
 
-            describe('randomInteger should throw when the range contains unsafe integers', (): void => {
+            describe('randomInteger should reject an unsafe bound before drawing from it', (): void => {
                 test.each([
                     { min: 0, max: 1e20 },
                     { min: -Number.MAX_VALUE, max: 0, isMinInclusive: false },
-                    { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
                     { min: 1e20, max: 1e20 + 16384 }
-                ])('%# - randomInteger($min, $max) should throw ValueRangeError', (range: Range): void => {
+                ])('%# - randomInteger($min, $max) should throw SchemaTypeError', (range: Range): void => {
                     Random.randomNumberGenerator = (): number => 0;
 
                     expect((): void => {
                         RangeUtility.randomInteger(range);
-                    }).toThrow(ValueRangeError);
+                    }).toThrow(SchemaTypeError);
                 });
             });
 

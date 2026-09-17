@@ -77,10 +77,10 @@ export class MathUtility {
      *
      * @returns {number} The one-dimensional index for the (`x`, `y`) index coordinates.
      *
-     * @throws {TypeError} When `x` or `y` are not positive integers within the safe integer range or zero.
-     * @throws {TypeError} When `columns` or `rows` are not positive integers within the safe integer range greater than 0.
-     * @throws {RangeError} When the total grid size (`columns * rows`) exceeds {@link Number.MAX_SAFE_INTEGER}.
-     * @throws {RangeError} When the (`x`, `y`) coordinates are out of bounds for the grid dimensions `columns` by `rows`.
+     * @throws {PrimitiveTypeError} When `x` or `y` are not positive integers within the safe integer range or zero.
+     * @throws {PrimitiveTypeError} When `columns` or `rows` are not positive integers within the safe integer range greater than 0.
+     * @throws {ValueRangeError} When the total grid size (`columns * rows`) exceeds {@link Number.MAX_SAFE_INTEGER}.
+     * @throws {ValueRangeError} When the (`x`, `y`) coordinates are out of bounds for the grid dimensions `columns` by `rows`.
      *
      * @public
      * @since 0.1.0

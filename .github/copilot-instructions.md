@@ -273,6 +273,46 @@ A page whose content did not change keeps its existing `modified_date`.
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
+#### The Scenario Pattern
+
+Argument validation is tested through the `Scenario` pattern defined in `test/utils/test-case/test-case.ts`, rather than through ad-hoc `test.each` arrays.
+
+A suite declares a `Scenario[]`, where each entry carries a `label`, the `inputs` that share an outcome, and the `expected` outcome for all of them.
+`buildTestCases` expands a scenario into `TestCase` objects, and a `describe.each` over the scenarios wraps a `test.each` over the cases:
+
+```typescript
+const argumentFailureScenarios: Scenario[] = [
+    {
+        label: 'Invalid value argument',
+        inputs: [...nonNumberInputs, ...nonFiniteNumberInputs, ...unsafeNumberInputs],
+        expected: PrimitiveTypeError
+    }
+];
+
+describe.each(
+    argumentFailureScenarios
+)('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+    test.each(
+        testCases
+    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+        expect((): void => {
+            MethodUnderTest(testInput as number);
+        }).toThrow(testExpected);
+    });
+});
+```
+
+Conventions for the pattern:
+
+- Group the scenarios under a `describe('Argument errors')` block within the suite for the method under test.
+- Draw inputs from the shared fixtures in `test/utils/input/` (e.g. `nonNumberInputs`, `nonFiniteNumberInputs`, `unsafeNumberInputs`) instead of restating literal lists, so a fixture change reaches every suite.
+- For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`).
+- Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
+- Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks. The pattern covers argument validation.
+- Single-argument `assert*` and `is*` methods use the shared `testAssertMethod` and `testIsMethod` helpers in `test/utils/assert/assert-tests.ts`, which take `Scenario[]` directly and emit their own blocks. Prefer those over hand-written scenario blocks where the method's shape fits.
+
 ### Validation Steps
 
 Run `npm ci`, then `npm run validate`, which runs lint, documentation generation, build, and tests in sequence.
