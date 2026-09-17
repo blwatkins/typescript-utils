@@ -124,8 +124,7 @@ export class RangeUtility {
      * Is `input` a valid {@link Range} object?
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
-     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`,
-     * because such a range would contain no values.
+     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
      *
      * @see {@link NumberUtility.isValidRange}
      *
