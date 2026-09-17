@@ -120,6 +120,34 @@ export class NumberUtility {
     }
 
     /**
+     * Assert that `a` is less than `b`.
+     *
+     * @see {@link NumberUtility.isLessThan}
+     *
+     * @param {number} a - The value that must be the lesser of the two.
+     * @param {number} b - The value that must be the greater of the two.
+     * @param {string | undefined} message - Optional message for the error thrown when `a` is not less than `b`.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When `a` is not a finite number.
+     * @throws {PrimitiveTypeError} When `b` is not a finite number.
+     * @throws {ValueRangeError} When `a` is not less than `b`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertLessThan(a: number, b: number, message?: string): void {
+        if (!NumberUtility.isLessThan(a, b)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError('a must be less than b.');
+        }
+    }
+
+    /**
      * Assert that `value` is greater than, or equal to, `min` and less than, or equal to, `max`.
      *
      * @see {@link NumberUtility.isInRange}
@@ -175,34 +203,6 @@ export class NumberUtility {
             }
 
             throw new ValueRangeError('min must be less than or equal to max.');
-        }
-    }
-
-    /**
-     * Assert that `a` is less than `b`.
-     *
-     * @see {@link NumberUtility.isLessThan}
-     *
-     * @param {number} a - The value that must be the lesser of the two.
-     * @param {number} b - The value that must be the greater of the two.
-     * @param {string | undefined} message - Optional message for the error thrown when `a` is not less than `b`.
-     *
-     * @returns {void}
-     *
-     * @throws {PrimitiveTypeError} When `a` is not a finite number.
-     * @throws {PrimitiveTypeError} When `b` is not a finite number.
-     * @throws {ValueRangeError} When `a` is not less than `b`.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static assertLessThan(a: number, b: number, message?: string): void {
-        if (!NumberUtility.isLessThan(a, b)) {
-            if (StringUtility.isSingleLine(message)) {
-                throw new ValueRangeError(message);
-            }
-
-            throw new ValueRangeError('a must be less than b.');
         }
     }
 
