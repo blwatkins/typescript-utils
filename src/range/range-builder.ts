@@ -103,13 +103,13 @@ export class RangeBuilder {
      *
      * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} - When `min` is not a number within the safe integer range.
      *
      * @public
      * @since 0.1.0
      */
     public setMin(min: number): this {
-        NumberUtility.assertFinite(min);
+        NumberUtility.assertSafe(min);
         this.#min = min;
         return this;
     }
@@ -122,13 +122,13 @@ export class RangeBuilder {
      *
      * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `max` is not a finite number.
+     * @throws {PrimitiveTypeError} - When `max` is not a number within the safe integer range.
      *
      * @public
      * @since 0.1.0
      */
     public setMax(max: number): this {
-        NumberUtility.assertFinite(max);
+        NumberUtility.assertSafe(max);
         this.#max = max;
         return this;
     }
