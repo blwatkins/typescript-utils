@@ -178,6 +178,16 @@ export class NumberUtility {
         }
     }
 
+    public static assertLessThan(a: number, b: number, message?: string): void {
+        if (!NumberUtility.isLessThan(a, b)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError('a must be less than b.');
+        }
+    }
+
     /**
      * Is `input` a finite number?
      *
@@ -313,5 +323,11 @@ export class NumberUtility {
      */
     public static isFiniteNumber(input: unknown): input is number {
         return NumberUtility.isFinite(input);
+    }
+
+    public static isLessThan(a: number, b: number): boolean {
+        NumberUtility.assertFinite(a, 'a must be a finite number.');
+        NumberUtility.assertFinite(b, 'b must be a finite number.');
+        return a < b;
     }
 }

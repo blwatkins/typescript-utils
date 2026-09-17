@@ -30,15 +30,15 @@ import { WeightedList, WeightedListUtility } from './weighted-element';
  * The maximum number of times {@link Random.randomFloat} draws a new value when a draw falls outside
  * the range.
  *
- * @default 8
+ * @default 10
  *
  * @type {number}
  * @private
  */
-const maxDrawAttempts: number = 8;
+const maxDrawAttempts: 10 = 10 as const;
 
 /**
- * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
+ * Static properties and methods for generating random values and for selecting random elements from arrays.
  *
  * @since 0.1.0
  */
@@ -96,109 +96,58 @@ export class Random {
     /**
      * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
-     * @remarks A draw that falls outside the range is discarded and replaced, and `min` is returned when
-     * no draw succeeds. Rounding can land the scaled draw exactly on `max`, and a generator that breaks
-     * its documented [0, 1) contract can carry the draw below `min` or make it `NaN`.
-     * The range [min, max) contains no values when `min` is equal to `max`, so that range throws.
-     * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
-     * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
-     * {@link Number.MAX_SAFE_INTEGER}. Restricting the bounds this way keeps any span from overflowing
-     * and keeps every returned value close enough to zero to truncate to an exact integer.
+     * @remarks This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
+     * A draw that falls outside the range is discarded and replaced.
+     * When no draw succeeds, `min` is returned.
      *
-     * @param {number} min - The minimum value (inclusive).
-     * @param {number} max - The maximum value (exclusive).
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
      *
-     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive).
+     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
      *
      * @throws {PrimitiveTypeError} When `min` is not a finite number.
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
-     * @throws {ValueRangeError} When the range contains no values.
-     * @throws {ValueRangeError} When `min` is outside the safe integer range, or `max` is greater than one more than {@link Number.MAX_SAFE_INTEGER}.
+     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static randomFloat(min: number, max: number): number {
-        NumberUtility.assertValidRange(min, max);
-        NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
-        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, 'max must not be greater than one more than Number.MAX_SAFE_INTEGER.');
-
-        if (min === max) {
-            throw new ValueRangeError('The range contains no values.');
-        }
-
-        let value: number = (Random.random() * (max - min)) + min;
-        let attempts: number = 1;
-
-        while (!Random.#isInHalfOpenRange(value, min, max) && attempts < maxDrawAttempts) {
-            value = (Random.random() * (max - min)) + min;
-            attempts++;
-        }
-
-        if (!Random.#isInHalfOpenRange(value, min, max)) {
-            return min;
-        }
-
-        return value;
-    }
-
-    /**
-     * Is `value` within the half-open range [min, max) (min inclusive, max exclusive)?
-     *
-     * @remarks The condition is written in positive form on purpose. The negated form,
-     * `value < min || value >= max`, is `false` for a non-finite value and would accept one.
-     * {@link Random.randomNumberGenerator} validates only that its argument is a function, so a
-     * generator that returns a value outside its documented [0, 1) contract reaches the draw and can
-     * carry the result below `min` or make it `NaN`.
-     *
-     * @param {number} value - The value to check.
-     * @param {number} min - The minimum value of the range (inclusive).
-     * @param {number} max - The maximum value of the range (exclusive).
-     *
-     * @returns {boolean} `true` if `value` is within the range; `false` otherwise.
-     *
-     * @private
-     */
-    static #isInHalfOpenRange(value: number, min: number, max: number): boolean {
-        return value >= min && value < max;
+        return Random.#drawValidRandomFloat(min, max);
     }
 
     /**
      * Get a random integer within the range [min, max) (min inclusive, max exclusive).
      *
-     * @remarks Non-integer bounds are rounded inward, to the smallest and largest integers that the range contains.
-     * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
-     * The range [min, max) contains no integers when `min` is equal to `max`, so that range throws.
-     * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
-     * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
-     * {@link Number.MAX_SAFE_INTEGER}. Beyond that, the gap between representable numbers exceeds 1, so
-     * consecutive integers do not exist and a uniform selection over them is not meaningful.
-     * `RangeUtility.randomInteger` in the range module takes a `Range` instead of a pair of numbers, and
-     * treats an unset `isMaxInclusive` as inclusive, so `randomInteger({ min: 0, max: 10 })` may return
-     * `10` while `randomInt(0, 10)` may not. Set `isMaxInclusive` to `false` to match this method.
+     * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
+     * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
      *
-     * @param {number} min - The minimum value (inclusive).
+     * @see {@link Random.randomInteger}
+     *
+     * @param {number} min - The inclusive minimum value.
      * Non-integer values are rounded up with {@link Math.ceil}.
-     * @param {number} max - The maximum value (exclusive).
+     * @param {number} max - The exclusive maximum value.
+     * Non-integer values are rounded down with {@link Math.floor}.
      *
      * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
      *
      * @throws {PrimitiveTypeError} When `min` is not a finite number.
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
+     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
-     * @throws {ValueRangeError} When `min` is outside the safe integer range, or `max` is greater than one more than {@link Number.MAX_SAFE_INTEGER}.
      *
      * @public
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
-        NumberUtility.assertValidRange(min, max);
         NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
         NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER + 1, 'max must not be greater than one more than Number.MAX_SAFE_INTEGER.');
+        NumberUtility.assertLessThan(min, max, 'min must be less than max.');
+
         const lowest: number = Math.ceil(min);
-        const highest: number = Math.ceil(max) - 1;
+        const highest: number = Math.floor(max);
 
         if (lowest > highest) {
             throw new ValueRangeError('The range contains no integer values.');
@@ -210,30 +159,23 @@ export class Random {
     /**
      * Get a random integer within the range [min, max) (min inclusive, max exclusive).
      *
-     * @remarks Non-integer bounds are rounded inward, to the smallest and largest integers that the range contains.
-     * A range that contains no integer values, such as [1.5, 1.89), throws instead of returning a value outside of it.
-     * The range [min, max) contains no integers when `min` is equal to `max`, so that range throws.
-     * `min` must lie within the safe integer range, and `max`, being exclusive, may be one greater than
-     * {@link Number.MAX_SAFE_INTEGER}. The largest value this method can return is therefore
-     * {@link Number.MAX_SAFE_INTEGER}. Beyond that, the gap between representable numbers exceeds 1, so
-     * consecutive integers do not exist and a uniform selection over them is not meaningful.
-     * `RangeUtility.randomInteger` in the range module takes a `Range` instead of a pair of numbers, and
-     * treats an unset `isMaxInclusive` as inclusive, so `randomInteger({ min: 0, max: 10 })` may return
-     * `10` while `randomInt(0, 10)` may not. Set `isMaxInclusive` to `false` to match this method.
+     * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
+     * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
      *
      * @see {@link Random.randomInt}
      *
-     * @param {number} min - The minimum value (inclusive).
+     * @param {number} min - The inclusive minimum value.
      * Non-integer values are rounded up with {@link Math.ceil}.
-     * @param {number} max - The maximum value (exclusive).
+     * @param {number} max - The exclusive maximum value.
+     * Non-integer values are rounded down with {@link Math.floor}.
      *
      * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
      *
      * @throws {PrimitiveTypeError} When `min` is not a finite number.
      * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
+     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
      * @throws {ValueRangeError} When the range contains no integer values.
-     * @throws {ValueRangeError} When `min` is outside the safe integer range, or `max` is greater than one more than {@link Number.MAX_SAFE_INTEGER}.
      *
      * @public
      * @since 0.1.0
@@ -312,5 +254,96 @@ export class Random {
         }
 
         return elements[elements.length - 1].value;
+    }
+
+    /**
+     * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
+     *
+     * @remarks This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
+     * A draw that falls outside the range is discarded and replaced.
+     * When no draw succeeds, `min` is returned.
+     *
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
+     *
+     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
+     *
+     * @throws {PrimitiveTypeError} When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
+     * @throws {ValueRangeError} When the range contains no values (e.g., when `min` equals `max`).
+     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     *
+     * @public
+     * @since 0.1.0
+     */
+
+    /**
+     * Draw a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive).
+     *
+     * @remarks This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
+     * A draw that falls outside the range is discarded and replaced.
+     * When no draw succeeds, `min` is returned.
+     *
+     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
+     *
+     * @throws {PrimitiveTypeError} When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {ValueRangeError} When `min` or `max` is outside the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
+     *
+     * @private
+     */
+    static #drawValidRandomFloat(min: number, max: number): number {
+        NumberUtility.assertInRange(min, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'min must be within the safe integer range.');
+        NumberUtility.assertInRange(max, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 'max must be within the safe integer range.');
+        NumberUtility.assertLessThan(min, max, 'min must be less than max.');
+
+        let value = Random.#draw(min, max);
+        let attempts = 1;
+
+        while(!Random.#isInRange(value, min, max) && (attempts < maxDrawAttempts)) {
+            value = Random.#draw(min, max);
+            attempts++;
+        }
+
+        if (!Random.#isInRange(value, min, max)) {
+            return min;
+        }
+
+        return value;
+    }
+
+    /**
+     * Get a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive).
+     *
+     * @remarks This method assumes that `min` and `max` are finite numbers, where `min` is less than `max`.
+     *
+     * @param min - The inclusive minimum value.
+     * @param max - The exclusive maximum value.
+     *
+     * @returns {number} A random float within the specified range.
+     *
+     * @private
+     */
+    static #draw(min: number, max: number): number {
+        return (Random.random() * (max - min)) + min;
+    }
+
+    /**
+     * Is `value` within the range [`min`, `max`) (`min` inclusive, `max` exclusive).
+     *
+     * @remarks This method assumes that `value`, `min`, and `max` are finite numbers, where `min` is less than `max`.
+     *
+     * @param {number} value - The value to check.
+     * @param min - The inclusive minimum value.
+     * @param max - The exclusive maximum value.
+     *
+     * @returns {boolean} `true` if `value` is greater than or equal to `min` and less than `max`; `false` otherwise.
+     *
+     * @private
+     */
+    static #isInRange(value: number, min: number, max: number): boolean {
+        return value >= min && value < max;
     }
 }
