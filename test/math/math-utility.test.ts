@@ -25,12 +25,11 @@ import { describe, test, expect } from 'vitest';
 import { MathUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
 import {
-    safeFloatInputs,
     negativeSafeIntegerInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
-    positiveUnsafeNumberInputs,
-    negativeUnsafeNumberInputs,
+    safeFloatInputs,
+    unsafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
@@ -86,8 +85,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: unknown; min: number; max: number; } => {
                         return {
                             value: input,
@@ -102,8 +100,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: number; min: unknown; max: number; } => {
                         return {
                             value: defaultValue,
@@ -118,8 +115,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { value: number; min: number; max: unknown; } => {
                         return {
                             value: defaultValue,
@@ -202,8 +198,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs,
+                        ...unsafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs
                     ].map((input: unknown): { x: unknown; y: number; columns: number; rows: number; } => {
@@ -221,8 +216,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs,
+                        ...unsafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs
                     ].map((input: unknown): { x: number; y: unknown; columns: number; rows: number; } => {
@@ -240,8 +234,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs,
+                        ...unsafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs,
                         ...zeroInputs
@@ -260,8 +253,7 @@ describe('MathUtility', (): void => {
                     inputs: [
                         ...nonNumberInputs,
                         ...nonFiniteNumberInputs,
-                        ...positiveUnsafeNumberInputs,
-                        ...negativeUnsafeNumberInputs,
+                        ...unsafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs,
                         ...zeroInputs

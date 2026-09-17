@@ -451,7 +451,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - assertInRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -463,7 +463,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - isInRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { value: unknown; min: unknown; max: unknown; } = testInput as { value: unknown; min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -586,7 +586,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - assertValidRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
                         expect((): void => {
@@ -598,7 +598,7 @@ describe('NumberUtility', (): void => {
                 describe('Argument errors - isValidRange', (): void => {
                     test.each(
                         testCases
-                    )('Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         const args: { min: unknown; max: unknown; } = testInput as { min: unknown; max: unknown; };
 
                         expect((): void => {
