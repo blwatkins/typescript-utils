@@ -69,6 +69,7 @@ describe('MathUtility', (): void => {
             });
         });
 
+        // TODO - update argument validation to match pattern established in RangeBuilder unit tests
         describe('Input validation', (): void => {
             describe('All parameters must be numbers within the safe integer range', (): void => {
                 const scenarios: Scenario[] = [
@@ -167,6 +168,8 @@ describe('MathUtility', (): void => {
             });
         });
 
+        // TODO - update argument validation to match pattern established in RangeBuilder unit tests
+        // TODO - Establish or update convention in copilot-instructions.md
         describe('Input validation', (): void => {
             describe('All parameters must be positive integers', (): void => {
                 const scenarios: Scenario[] = [

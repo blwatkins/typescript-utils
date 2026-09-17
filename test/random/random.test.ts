@@ -42,6 +42,9 @@ import {
 
 import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
 
+// TODO - Random should follow the Scenario pattern established by other unit tests
+// TODO - Establish or update convention in copilot-instructions.md
+
 describe('Random', (): void => {
     testStaticClassConstructor('Random', Random as unknown as new () => unknown, Error);
 

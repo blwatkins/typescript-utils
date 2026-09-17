@@ -39,6 +39,9 @@ import { nonObjectInputs } from '../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
+// TODO - RangeUtility should follow the Scenario pattern established by other unit tests
+// TODO - Establish or update convention in copilot-instructions.md
+
 describe('RangeUtility', (): void => {
     testStaticClassConstructor('RangeUtility', RangeUtility as unknown as new () => unknown, StaticInstanceError);
 

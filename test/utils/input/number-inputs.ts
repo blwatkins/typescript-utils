@@ -65,16 +65,24 @@ export const nonFiniteNumberInputs: number[] = [
 
 export const zeroInputs: number[] = [0, -0];
 
+// TODO - ensure all methods expecting a number or integer within the safe integer range test against the unsafe number inputs
+// TODO - What values need to be added to negativeUnsafeNumberInputs and positiveUnsafeNumberInputs
+// TODO - Need to concretely establish which values are safe and which values are unsafe
+
 export const negativeUnsafeNumberInputs: number[] = [
-    -Number.MIN_VALUE,
-    -Number.MAX_SAFE_INTEGER
+    -Number.MAX_VALUE,
+    -Number.MAX_SAFE_INTEGER,
+    -Number.MAX_SAFE_INTEGER - 1
 ];
 
 export const positiveUnsafeNumberInputs: number[] = [
-    Number.MIN_VALUE
+    Number.MAX_VALUE,
+    Number.MAX_SAFE_INTEGER + 1,
+    -Number.MIN_SAFE_INTEGER
 ];
 
 export const negativeSafeFloatInputs: number[] = [
+    -Number.MIN_VALUE,
     -Number.EPSILON,
     -10.01,
     -0.01,
@@ -82,6 +90,7 @@ export const negativeSafeFloatInputs: number[] = [
 ];
 
 export const positiveSafeFloatInputs: number[] = [
+    Number.MIN_VALUE,
     Number.EPSILON,
     10.01,
     0.01,
