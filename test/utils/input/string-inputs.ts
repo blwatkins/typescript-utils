@@ -63,11 +63,6 @@ export const nonStringInputs: unknown[] = [
     Symbol('test')
 ];
 
-/*
- * isEmpty and isNonEmpty are defined by String.prototype.trim, which strips every Unicode
- * whitespace code point rather than only the ASCII ones, so the non-ASCII entries below are
- * empty strings by the same rule as ' ' and '\n'.
- */
 export const emptyStringInputs: string[] = [
     '',
     ' ',

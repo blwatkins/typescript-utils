@@ -28,22 +28,11 @@ import { nonObjectInputs } from '../../input/object-inputs';
 
 import { Scenario } from '../test-case';
 
-/*
- * Shared Range scenarios for the RangeBuilder and RangeUtility suites.
- *
- * Every input in validRangeScenarios and invalidRangeScenarios carries all four Range properties.
- * RangeBuilder.setMinInclusive and setMaxInclusive assign their argument unconditionally, so a
- * builder round-trips an undefined flag faithfully and both consumers can take the same object.
- */
-
 const epsilon: number = Number.EPSILON;
 const smallest: number = Number.MIN_VALUE;
 const largestSafe: number = Number.MAX_SAFE_INTEGER;
 const smallestSafe: number = Number.MIN_SAFE_INTEGER;
 
-/**
- * Ranges that satisfy the Range contract.
- */
 export const validRangeScenarios: Scenario[] = [
     {
         label: 'Minimum less than maximum',
@@ -146,9 +135,6 @@ export const validRangeScenarios: Scenario[] = [
     }
 ];
 
-/**
- * Ranges whose bounds are individually valid numbers but whose combination is not.
- */
 export const invalidRangeScenarios: Scenario[] = [
     {
         label: 'Minimum greater than maximum',
@@ -218,12 +204,6 @@ export const invalidRangeScenarios: Scenario[] = [
     }
 ];
 
-/**
- * Valid Ranges that omit an optional property.
- *
- * RangeBuilder always supplies both inclusivity flags, so only a method taking a Range directly
- * can be given an object with a property absent rather than set to undefined.
- */
 export const optionalPropertyRangeScenarios: Scenario[] = [
     {
         label: 'Range objects with only min and max properties',
@@ -261,14 +241,6 @@ export const optionalPropertyRangeScenarios: Scenario[] = [
     }
 ];
 
-/**
- * Inputs that violate the shape of the Range schema, or carry a bound outside the safe integer
- * range.
- *
- * RangeBuilder's typed parameters cannot express these: a non-object never reaches build, and an
- * unsafe bound is rejected by setMin or setMax with a PrimitiveTypeError before a Range is
- * assembled. That suite covers the same inputs through its own argument-error scenarios.
- */
 export const invalidRangeSchemaScenarios: Scenario[] = [
     {
         label: 'Non-object type inputs',

@@ -69,3 +69,14 @@ export const nonArrayInputs: unknown[] = [
     new Uint8Array(2),
     new Int32Array([1, 2, 3])
 ];
+
+export const arrayInputs: unknown[] = [
+    [],
+    [1, 2, 3],
+    ['a', 'b', 'c'],
+    [{ key: 1 }, { key: 2 }, { key: 3 }],
+    [[1, 2, 3], [4, 5, 6]],
+    [undefined, undefined],
+    new (class extends Array {})(),
+    Array.from({ length: 2 })
+];

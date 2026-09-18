@@ -32,7 +32,7 @@ import {
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
-import { invalidSafeNumberInputs, nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
+import { invalidSafeNumberInputs, nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs, zeroInputs } from '../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 import {
@@ -47,6 +47,8 @@ describe('Random', (): void => {
     testStaticClassConstructor('Random', Random as unknown as new () => unknown, Error);
 
     const testRepeatTotal: number = 50;
+
+    const outOfContractDraws: number[] = [-1, -0.5, NaN, 2, Infinity, -Infinity];
 
     afterEach((): void => {
         Random.randomNumberGenerator = Math.random;
@@ -289,35 +291,40 @@ describe('Random', (): void => {
         });
 
         describe('randomFloat and randomInt should stay in range for a generator outside its contract', (): void => {
-            // randomNumberGenerator validates only that its argument is a function, so a generator
-            // that breaks its documented [0, 1) contract reaches the draw. A guard on the upper bound
-            // alone does not see a draw carried below min, and no comparison sees NaN.
-            test.each([
-                { draw: -1 },
-                { draw: -0.5 },
-                { draw: NaN },
-                { draw: 2 },
-                { draw: Infinity },
-                { draw: -Infinity }
-            ])('%# - a generator returning $draw should still yield a value within [0, 10)', ({ draw }: { draw: number; }): void => {
-                Random.randomNumberGenerator = (): number => draw;
+            const outOfContractScenarios: Scenario[] = [
+                {
+                    label: 'Draws outside the documented [0, 1) contract',
+                    inputs: outOfContractDraws,
+                    expected: undefined
+                }
+            ];
 
-                const floatValue: number = Random.randomFloat(0, 10);
-                const intValue: number = Random.randomInt(0, 10);
+            describe.each(
+                outOfContractScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                expect(Number.isFinite(floatValue)).toBe(true);
-                expect(floatValue).toBeGreaterThanOrEqual(0);
-                expect(floatValue).toBeLessThan(10);
+                test.each(
+                    testCases
+                )('%# - A generator returning $input should still yield a value within [0, 10)', ({ input: testInput }: TestCase): void => {
+                    const draw: number = testInput as number;
+                    Random.randomNumberGenerator = (): number => draw;
 
-                expect(Number.isSafeInteger(intValue)).toBe(true);
-                expect(intValue).toBeGreaterThanOrEqual(0);
-                expect(intValue).toBeLessThan(10);
+                    const floatValue: number = Random.randomFloat(0, 10);
+                    const intValue: number = Random.randomInt(0, 10);
+
+                    expect(Number.isFinite(floatValue)).toBe(true);
+                    expect(floatValue).toBeGreaterThanOrEqual(0);
+                    expect(floatValue).toBeLessThan(10);
+
+                    expect(Number.isSafeInteger(intValue)).toBe(true);
+                    expect(intValue).toBeGreaterThanOrEqual(0);
+                    expect(intValue).toBeLessThan(10);
+                });
             });
         });
 
         describe('randomFloat should never return the exclusive max', (): void => {
-            // 1 + (1 - 2^-53) lands exactly halfway between the largest double below 2 and 2
-            // itself, and ties-to-even rounds it up, so the raw affine draw returns exactly 2.
             const roundsUp: number = 1 - (Number.EPSILON / 2);
 
             test.each([
@@ -343,33 +350,49 @@ describe('Random', (): void => {
         });
 
         describe('randomFloat should retry a rejected draw rather than fall through to min', (): void => {
-            /*
-             * Every other out-of-contract generator case here is a constant, which the fallback
-             * alone would satisfy. A generator that fails once and then succeeds distinguishes a
-             * retry loop from a single draw followed by the fallback.
-             */
-            test.each([
-                { draws: [2, 0.5], expected: 5 },
-                { draws: [-1, 0.25], expected: 2.5 },
-                { draws: [NaN, 0.75], expected: 7.5 },
-                { draws: [Infinity, 2, -1, 0.5], expected: 5 }
-            ])('%# - randomFloat(0, 10) drawing $draws should return $expected', ({ draws, expected }: { draws: number[]; expected: number; }): void => {
-                let index: number = 0;
+            const retryScenarios: Scenario[] = [
+                {
+                    label: 'A single rejected draw before a valid one',
+                    inputs: outOfContractDraws.map((draw: number): number[] => {
+                        return [draw, 0.5];
+                    }),
+                    expected: 5
+                },
+                {
+                    label: 'Several rejected draws before a valid one',
+                    inputs: [
+                        [...outOfContractDraws, 0.5],
+                        [2, -1, 0.5],
+                        [NaN, NaN, NaN, 0.5]
+                    ],
+                    expected: 5
+                }
+            ];
 
-                Random.randomNumberGenerator = (): number => {
-                    const draw: number = draws[index] ?? 0;
-                    index++;
-                    return draw;
-                };
+            describe.each(
+                retryScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                expect(Random.randomFloat(0, 10)).toBe(expected);
+                test.each(
+                    testCases
+                )('%# - randomFloat(0, 10) drawing $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const draws: number[] = testInput as number[];
+                    let index: number = 0;
+
+                    Random.randomNumberGenerator = (): number => {
+                        const draw: number = draws[index] ?? 0;
+                        index++;
+                        return draw;
+                    };
+
+                    expect(Random.randomFloat(0, 10)).toBe(testExpected);
+                });
             });
         });
 
         describe('randomFloat should reject bounds before drawing from them', (): void => {
             test('randomFloat should throw rather than return NaN when the span would overflow', (): void => {
-                // max - min overflows to Infinity for these bounds, and Infinity multiplied by a
-                // draw of 0 is NaN, which no comparison against max would have caught.
                 Random.randomNumberGenerator = (): number => 0;
 
                 expect((): void => {
@@ -401,8 +424,6 @@ describe('Random', (): void => {
         });
 
         describe('randomFloat should hold min and max to the same limit', (): void => {
-            // max is exclusive, so it could have been allowed one past MAX_SAFE_INTEGER. It is held to
-            // the same bound as min instead, which makes MAX_SAFE_INTEGER itself unreachable.
             test('randomInt should not return Number.MAX_SAFE_INTEGER', (): void => {
                 Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
                 expect(Random.randomInt(0, Number.MAX_SAFE_INTEGER)).toBeLessThan(Number.MAX_SAFE_INTEGER);
@@ -502,8 +523,6 @@ describe('Random', (): void => {
             });
 
             test('randomInt should reject an unsafe bound before drawing from it', (): void => {
-                // A one ULP span of large integers contains no representable integer between its
-                // bounds, so the bounds must be rejected whatever the generator returns.
                 const min: number = 1e20;
                 const max: number = 1e20 + 16384;
 
@@ -518,8 +537,6 @@ describe('Random', (): void => {
         });
 
         describe('randomInt and randomInteger should not return the exclusive max when the draw rounds up to it', (): void => {
-            // Random.randomFloat(1, 2) returns exactly 2 for this draw: 1 + (1 - 2^-53) sits halfway
-            // between the largest double below 2 and 2 itself, and ties-to-even rounds it up.
             const roundsUp: number = 1 - (Number.EPSILON / 2);
 
             test.each([
@@ -586,17 +603,32 @@ describe('Random', (): void => {
             validateRandomBooleans(booleans, true);
         });
 
-        describe('randomBoolean should compare against the chance exclusively', (): void => {
-            // The draw is compared with <, so a generator landing exactly on the chance returns
-            // false. This is what makes randomBoolean(0) never true.
-            test.each([
-                { chance: 0.5 },
-                { chance: 0.25 },
-                { chance: 0 },
-                { chance: 1 }
-            ])('%# - randomBoolean($chance) should return false when the generator returns $chance', ({ chance }: { chance: number; }): void => {
-                Random.randomNumberGenerator = (): number => chance;
-                expect(Random.randomBoolean(chance)).toBe(false);
+        describe('randomBoolean should return false when the generator returns the chance itself', (): void => {
+            const thresholdScenarios: Scenario[] = [
+                {
+                    label: 'Chance values at the bounds',
+                    inputs: [...zeroInputs, 1],
+                    expected: false
+                },
+                {
+                    label: 'Chance values between the bounds',
+                    inputs: [0.25, 0.5, 0.75],
+                    expected: false
+                }
+            ];
+
+            describe.each(
+                thresholdScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - randomBoolean($input) should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const chance: number = testInput as number;
+                    Random.randomNumberGenerator = (): number => chance;
+                    expect(Random.randomBoolean(chance)).toBe(testExpected);
+                });
             });
         });
 
@@ -687,14 +719,28 @@ describe('Random', (): void => {
         });
 
         describe('randomElement should return an element that is itself undefined', (): void => {
-            // The non-empty guard is on length, so an array whose elements are undefined is a
-            // valid input and undefined is the correct result.
-            test.each([
-                { input: [undefined] },
-                { input: [undefined, undefined] }
-            ])('%# - randomElement($input) should return undefined', ({ input }: { input: unknown[]; }): void => {
-                const selected: unknown = Random.randomElement(input);
-                expect(selected).toBeUndefined();
+            const undefinedElementScenarios: Scenario[] = [
+                {
+                    label: 'Arrays whose elements are all undefined',
+                    inputs: [
+                        [undefined],
+                        [undefined, undefined],
+                        [undefined, undefined, undefined]
+                    ],
+                    expected: undefined
+                }
+            ];
+
+            describe.each(
+                undefinedElementScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - randomElement($input) should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect(Random.randomElement(testInput as unknown[])).toBe(testExpected);
+                });
             });
         });
 
@@ -733,11 +779,6 @@ describe('Random', (): void => {
     });
 
     describe('randomWeightedElement', (): void => {
-        /*
-         * The weighted lists below are shared by every randomWeightedElement block: the selection
-         * tests, the zero weight tests, and the out of contract generator tests all draw from the
-         * same lists so a list added once reaches all three.
-         */
         interface WeightedListCase {
             readonly input: { value: unknown; weight: number; }[];
             readonly type: string;
@@ -928,8 +969,6 @@ describe('Random', (): void => {
     });
 
     describe('Shared min and max argument errors', (): void => {
-        // randomFloat, randomInt, and randomInteger validate their bounds identically, so the same
-        // scenarios are asserted against all three.
         const safeMin: number = 0;
         const safeMax: number = 10;
 

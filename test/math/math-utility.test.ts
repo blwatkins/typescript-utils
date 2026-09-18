@@ -73,17 +73,38 @@ describe('MathUtility', (): void => {
         });
 
         describe('constrain should preserve the sign of a negative zero', (): void => {
-            /*
-             * constrain returns a value or a bound unchanged, so -0 survives rather than being
-             * normalized to 0. This is worth pinning because toBe compares with Object.is, which
-             * distinguishes the two: a consumer asserting toBe(0) on a constrained value fails.
-             */
-            test.each([
-                { label: 'A value of -0 within the bounds', value: -0, min: 0, max: 10 },
-                { label: 'A value below a min of -0', value: -5, min: -0, max: 10 },
-                { label: 'A value above a max of -0', value: 5, min: -10, max: -0 }
-            ])('%# - $label should return -0', ({ value, min, max }: { label: string; value: number; min: number; max: number; }): void => {
-                expect(MathUtility.constrain(value, min, max)).toBe(-0);
+            const negativeZeroScenarios: Scenario[] = [
+                {
+                    label: 'A value of -0 within the bounds',
+                    inputs: [
+                        { value: -0, min: 0, max: 10 },
+                        { value: -0, min: -10, max: 10 },
+                        { value: -0, min: -0, max: -0 }
+                    ],
+                    expected: -0
+                },
+                {
+                    label: 'A value outside a bound of -0',
+                    inputs: [
+                        { value: -5, min: -0, max: 10 },
+                        { value: 5, min: -10, max: -0 },
+                        { value: Number.MIN_SAFE_INTEGER, min: -0, max: 10 }
+                    ],
+                    expected: -0
+                }
+            ];
+
+            describe.each(
+                negativeZeroScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { value: number; min: number; max: number; } = testInput as { value: number; min: number; max: number; };
+                    expect(MathUtility.constrain(args.value, args.min, args.max)).toBe(testExpected);
+                });
             });
         });
 

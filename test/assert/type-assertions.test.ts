@@ -30,7 +30,7 @@ import {
 } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
-import { nonArrayInputs } from '../utils/input/array-inputs';
+import { arrayInputs, nonArrayInputs } from '../utils/input/array-inputs';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
@@ -40,21 +40,6 @@ import { Scenario } from '../utils/test-case/test-case';
 
 describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
-
-    /*
-     * assertArray accepts and assertObject rejects every entry, since both are decided by
-     * Array.isArray. A subclass instance is included because Array.isArray follows the exotic
-     * array marker rather than the prototype chain, so it is an array on both sides.
-     */
-    const arrayInputs: unknown[] = [
-        [],
-        [1, 2, 3],
-        ['a', 'b', 'c'],
-        [{ key: 1 }, { key: 2 }, { key: 3 }],
-        [[1, 2, 3], [4, 5, 6]],
-        new (class extends Array {})(),
-        Array.from({ length: 2 })
-    ];
 
     const arrayFailureScenarios: Scenario[] = [
         {
@@ -145,11 +130,6 @@ describe('TypeAssertions', (): void => {
             expected: undefined
         },
         {
-            /*
-             * assertObject is a typeof check that excludes null and arrays, so it accepts any
-             * other object regardless of its prototype. A typed array is array-like but not an
-             * Array, and an object with a null prototype has no constructor at all.
-             */
             label: 'Objects without an ordinary Object prototype',
             inputs: [
                 Object.create(null),

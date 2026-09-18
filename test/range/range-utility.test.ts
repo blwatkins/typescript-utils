@@ -313,8 +313,6 @@ describe('RangeUtility', (): void => {
         });
 
         describe('constrain should ignore the inclusivity flags of the range', (): void => {
-            // Both bounds are treated as inclusive, so an excluded bound is still returned rather
-            // than the nearest representable value inside it.
             test.each([
                 { value: 100, range: { min: 0, max: 10, isMaxInclusive: false }, expected: 10 },
                 { value: -100, range: { min: 0, max: 10, isMinInclusive: false }, expected: 0 },
@@ -395,7 +393,6 @@ describe('RangeUtility', (): void => {
     describe('Random', (): void => {
         const testRepeatTotal: number = 50;
 
-        // The largest value that Math.random may return, used to pin the bound opposite the anchor.
         const nearOne: number = 1 - (Number.EPSILON / 2);
 
         afterEach((): void => {
@@ -423,8 +420,6 @@ describe('RangeUtility', (): void => {
             });
 
             describe('randomFloat should never return an excluded bound', (): void => {
-                // A generator pinned to 0 always draws min. Where min is included that is the
-                // answer; where it is excluded every draw is rejected and the midpoint is returned.
                 const boundScenarios: { range: Range; rng: () => number; expected: number; }[] = [
                     { range: { min: 0, max: 10 }, rng: (): number => 0, expected: 0 },
                     { range: { min: 0, max: 10, isMinInclusive: true }, rng: (): number => 0, expected: 0 },
@@ -464,9 +459,6 @@ describe('RangeUtility', (): void => {
             });
 
             describe('a Range bound past MAX_SAFE_INTEGER is rejected', (): void => {
-                // Random validates a bare pair of bounds, so an unsafe bound is a type error there.
-                // A Range carries its bounds in the schema, so the same value fails the Range
-                // contract before either generator runs.
                 test('Number.MAX_SAFE_INTEGER + 1 is rejected by Random and by RangeUtility', (): void => {
                     expect((): void => {
                         Random.randomFloat(0, Number.MAX_SAFE_INTEGER + 1);
@@ -503,8 +495,6 @@ describe('RangeUtility', (): void => {
             });
 
             describe('the safe integer restriction applies to the whole Range contract', (): void => {
-                // A bound outside the safe integer range makes the object an invalid Range, so it is
-                // rejected by every method that takes one, not only by the generators.
                 test.each([
                     { min: -1e300, max: 1e300 },
                     { min: 0, max: Number.MAX_VALUE }
@@ -534,10 +524,6 @@ describe('RangeUtility', (): void => {
             });
 
             describe('randomFloat should discard a draw that lands past a bound, not only on it', (): void => {
-                // A generator returning a value at or above 1 is outside its documented [0, 1)
-                // contract, but it drives the affine draw strictly past max, which a check for
-                // equality with an excluded bound cannot see. The same technique is used in the
-                // weighted element suite.
                 test.each([
                     { range: { min: 0, max: 10 }, draw: 1.5 },
                     { range: { min: 0, max: 10 }, draw: 2 },
@@ -555,9 +541,6 @@ describe('RangeUtility', (): void => {
             });
 
             describe('randomFloat should stay within the range for bounds with a coarse gap between representable numbers', (): void => {
-                // Regression guard rather than a reproduction: no known in-contract draw rounds past a
-                // bound, but the draw is checked against the full range condition rather than for
-                // equality with an excluded bound, and this pins that.
                 const coarseMin: number = 0.75;
                 const coarseMax: number = Math.pow(2, 51) + 0.5;
 
@@ -588,8 +571,6 @@ describe('RangeUtility', (): void => {
                         expected: 1
                     },
                     {
-                        // The midpoint of these adjacent bounds rounds up to the excluded max,
-                        // so the included min is the only value the range can yield.
                         range: {
                             min: 1 + Number.EPSILON,
                             max: 1 + (2 * Number.EPSILON),
@@ -624,9 +605,6 @@ describe('RangeUtility', (): void => {
             });
 
             describe('randomFloat should differ from Random.randomFloat for a single value range', (): void => {
-                // A Range defaults to closed, so [n, n] holds one value. Random is half open, so the
-                // same pair of numbers describes the empty range [n, n) and throws. Each class obeys
-                // its own documented interval; they are deliberately not interchangeable here.
                 test.each([
                     { min: 5, max: 5 },
                     { min: 1.8, max: 1.8 },

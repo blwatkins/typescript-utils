@@ -184,10 +184,6 @@ describe('StringUtility', (): void => {
         numsAndSymbolsSuccessScenario
     ];
 
-    /*
-     * A regular expression is handed the raw input, so the non-string scenario that the assert and
-     * type guard share does not apply to it.
-     */
     function withoutNonStringInputs(scenarios: Scenario[]): Scenario[] {
         return scenarios.filter((scenario: Scenario): boolean => {
             return scenario !== nonStringFailureScenario;
