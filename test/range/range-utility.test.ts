@@ -33,262 +33,28 @@ import {
 } from '../../src';
 
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
-import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
-import { nonObjectInputs } from '../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
+import {
+    invalidRangeSchemaScenarios,
+    invalidRangeScenarios,
+    optionalPropertyRangeScenarios,
+    validRangeScenarios
+} from '../utils/test-case/scenarios/range-scenarios';
+
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('RangeUtility', (): void => {
     testStaticClassConstructor('RangeUtility', RangeUtility as unknown as new () => unknown, StaticInstanceError);
 
-    const definedNonBooleanInputs: unknown[] = nonBooleanInputs.filter((input: unknown): boolean => {
-        return input !== undefined;
-    });
-
     const rangeFailureScenarios: Scenario[] = [
-        {
-            label: 'Non-object type inputs',
-            inputs: nonObjectInputs,
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Array type inputs',
-            inputs: [
-                [],
-                [0, 10],
-                [1, 2, 3],
-                ['a', 'b', 'c']
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs missing min property',
-            inputs: [
-                { max: 10 },
-                { max: 0, isMinInclusive: true },
-                { max: -5, isMinInclusive: false, isMaxInclusive: false }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs missing max property',
-            inputs: [
-                { min: 0 },
-                { min: -5, isMaxInclusive: false },
-                { min: 10, isMinInclusive: true, isMaxInclusive: true }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs missing min and max properties',
-            inputs: [
-                {},
-                { isMinInclusive: true },
-                { isMaxInclusive: false },
-                { isMinInclusive: true, isMaxInclusive: true }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-numeric min property',
-            inputs: nonNumberInputs.map((input: unknown): { min: unknown; max: number; } => {
-                return { min: input, max: 10 };
-            }),
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-numeric max property',
-            inputs: nonNumberInputs.map((input: unknown): { min: number; max: unknown; } => {
-                return { min: 0, max: input };
-            }),
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-finite min property',
-            inputs: nonFiniteNumberInputs.map((input: number): { min: number; max: number; } => {
-                return { min: input, max: 10 };
-            }),
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-finite max property',
-            inputs: nonFiniteNumberInputs.map((input: number): { min: number; max: number; } => {
-                return { min: 0, max: input };
-            }),
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-finite min and max properties',
-            inputs: [
-                { min: NaN, max: NaN },
-                { min: -Infinity, max: Infinity },
-                { min: Infinity, max: Infinity },
-                { min: -Infinity, max: -Infinity },
-                { min: NaN, max: Infinity },
-                { min: -Infinity, max: NaN }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-boolean isMinInclusive property',
-            inputs: definedNonBooleanInputs.map((input: unknown): { min: number; max: number; isMinInclusive: unknown; } => {
-                return { min: 0, max: 10, isMinInclusive: input };
-            }),
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with non-boolean isMaxInclusive property',
-            inputs: definedNonBooleanInputs.map((input: unknown): { min: number; max: number; isMaxInclusive: unknown; } => {
-                return { min: 0, max: 10, isMaxInclusive: input };
-            }),
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with additional properties',
-            inputs: [
-                { min: 0, max: 10, name: 'bob' },
-                { min: 0, max: 10, step: 2 },
-                { min: 0, max: 10, isMinInclusive: true, age: 42 },
-                { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true, day: 7 }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with a bound outside the safe integer range',
-            inputs: [
-                ...unsafeNumberInputs.map((input: number): { min: number; max: number; } => {
-                    return { min: input, max: Number.MAX_SAFE_INTEGER };
-                }),
-                ...unsafeNumberInputs.map((input: number): { min: number; max: number; } => {
-                    return { min: Number.MIN_SAFE_INTEGER, max: input };
-                }),
-                { min: 0, max: 1e16 },
-                { min: 0, max: 1e100 },
-                { min: -1e300, max: 1e300 },
-                { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
-                { min: -Number.MAX_VALUE, max: 0 },
-                { min: 0, max: Math.pow(2, 53) }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs where min is greater than max',
-            inputs: [
-                { min: 10, max: 0 },
-                { min: 1, max: -1 },
-                { min: 0.5, max: 0.25 },
-                { min: Number.EPSILON, max: 0 },
-                { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
-                { min: 10, max: 0, isMinInclusive: true, isMaxInclusive: true }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs where min is equal to max and a bound is excluded',
-            inputs: [
-                { min: 0, max: 0, isMinInclusive: false },
-                { min: 0, max: 0, isMaxInclusive: false },
-                { min: -0, max: 0, isMaxInclusive: false },
-                { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false },
-                { min: -5, max: -5, isMaxInclusive: false },
-                { min: -5.5, max: -5.5, isMinInclusive: true, isMaxInclusive: false },
-                { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true },
-                { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false }
-            ],
-            expected: SchemaTypeError
-        },
-        {
-            label: 'Object inputs with adjacent excluded bounds that contain no representable value',
-            inputs: [
-                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: false },
-                { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
-                { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: false },
-                { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: false, isMaxInclusive: false },
-                { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false }
-            ],
-            expected: SchemaTypeError
-        }
+        ...invalidRangeSchemaScenarios,
+        ...invalidRangeScenarios
     ];
 
     const rangeSuccessScenarios: Scenario[] = [
-        {
-            label: 'Range objects where min is less than max',
-            inputs: [
-                { min: 0, max: 10 },
-                { min: -10, max: 10 },
-                { min: -10, max: -1 },
-                { min: -1.5, max: 1.5 },
-                { min: -Number.MIN_VALUE, max: 0 },
-                { min: Number.MIN_VALUE, max: Number.MAX_SAFE_INTEGER },
-                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
-            ],
-            expected: undefined
-        },
-        {
-            label: 'Range objects where min is equal to max',
-            inputs: [
-                { min: 0, max: 0 },
-                { min: -0, max: 0 },
-                { min: 0, max: -0 },
-                { min: 5, max: 5 },
-                { min: -5.5, max: -5.5 },
-                { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER }
-            ],
-            expected: undefined
-        },
-        {
-            label: 'Range objects with isMinInclusive property',
-            inputs: [
-                { min: 0, max: 10, isMinInclusive: true },
-                { min: 0, max: 10, isMinInclusive: false },
-                { min: -5, max: -5, isMinInclusive: true }
-            ],
-            expected: undefined
-        },
-        {
-            label: 'Range objects with isMaxInclusive property',
-            inputs: [
-                { min: 0, max: 10, isMaxInclusive: true },
-                { min: 0, max: 10, isMaxInclusive: false },
-                { min: -5, max: -5, isMaxInclusive: true }
-            ],
-            expected: undefined
-        },
-        {
-            label: 'Range objects with isMinInclusive and isMaxInclusive properties',
-            inputs: [
-                { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true },
-                { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false },
-                { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true },
-                { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false }
-            ],
-            expected: undefined
-        },
-        {
-            label: 'Range objects with adjacent bounds where one bound is included',
-            inputs: [
-                { min: 1, max: 1 + Number.EPSILON, isMaxInclusive: false },
-                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false },
-                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: true, isMaxInclusive: false },
-                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: true },
-                { min: 0, max: Number.MIN_VALUE, isMaxInclusive: false },
-                { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false }
-            ],
-            expected: undefined
-        },
-        {
-            label: 'Range objects with explicitly undefined isMinInclusive and isMaxInclusive properties',
-            inputs: [
-                { min: 0, max: 10, isMinInclusive: undefined },
-                { min: 0, max: 10, isMaxInclusive: undefined },
-                { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined },
-                { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false },
-                { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined }
-            ],
-            expected: undefined
-        }
+        ...validRangeScenarios,
+        ...optionalPropertyRangeScenarios
     ];
 
     describe('Range', (): void => {
