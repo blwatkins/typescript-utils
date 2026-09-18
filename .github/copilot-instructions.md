@@ -109,7 +109,7 @@ Static classes must:
 
 Custom error classes must:
 
-- Live in `src/error/` and be re-exported from `src/error/index.ts`
+- Live in `src/error/` and be re-exported from that module's index file
 - Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
 - Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
 - Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
@@ -221,7 +221,7 @@ The following preferences require manual review since no ESLint rule can check t
 - **Document version with `@since`:** Add `@since` to all public/exported members.
 - **Enclose boolean values in backticks:** Always use backticks for `true` and `false` in documentation comments.
 - **Use consistent tense and voice:** Write documentation in the present tense and active voice for clarity.
-- **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value (e.g., `Random.#rng` defaulting to `Math.random`), state the default via `@default` (e.g., `@default Math.random`).
+- **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value, state the default via `@default` (e.g., `@default Math.random`).
 - **Document default parameter values:** Indicate default values for parameters in the `@param` annotation.
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
@@ -243,7 +243,7 @@ Any addition, removal, or update to shared sections must be applied consistently
 ### Jekyll Build
 
 The Jekyll build uses the `jekyll-relative-links` plugin (configured in `docs/_config.yml`), which automatically converts relative `.md` links in `docs/` markdown files to their rendered `.html` paths.
-For example, `./portfolio-skills.md` in `docs/index.md` resolves to `portfolio-skills.html` on the published site.
+For example, a relative `./page.md` link in a `docs/` page resolves to `page.html` on the published site.
 Use `.md` relative links within `docs/` source files; the build process will convert them correctly.
 
 ### Front Matter Dates
@@ -282,7 +282,7 @@ A page whose content did not change keeps its existing `modified_date`.
 
 #### The Scenario Pattern
 
-Table-driven tests are written through the scenario types in `test/utils/test-case/test-case.ts` rather than through ad-hoc `test.each` arrays of literals.
+Table-driven tests are written through the scenario types under `test/utils/test-case/` rather than through ad-hoc `test.each` arrays of literals.
 
 A `Scenario` groups a set of `inputs` that share an outcome under a `label`, with the `expected` outcome for all of them.
 `buildTestCases` expands a scenario into `TestCase` objects, one per input, and a `describe.each` over the scenarios wraps a `test.each` over the cases:
@@ -291,7 +291,7 @@ A `Scenario` groups a set of `inputs` that share an outcome under a `label`, wit
 const scenarios: Scenario[] = [
     {
         label: 'Non-number type inputs',
-        inputs: nonNumberInputs,
+        inputs: invalidInputs,
         expected: false
     }
 ];
@@ -314,15 +314,15 @@ The label carries the reason a group of inputs belongs together, so the reason s
 Conventions for the pattern:
 
 - Title a `describe.each` over scenarios with `'%# - $label'`, and a `test.each` over cases with `'%# - ...$input...$expected...'`. The index prefix keeps output readable when inputs render alike.
-- Draw inputs from the shared fixtures in `test/utils/input/` (e.g. `nonNumberInputs`, `nonFiniteNumberInputs`, `unsafeNumberInputs`, `nonBooleanInputs`) instead of restating literal lists, so a fixture change reaches every suite that depends on it.
-- When the same combination of fixtures is spread at several call sites, give the combination its own exported fixture rather than repeating the spread. `invalidSafeNumberInputs` is the union of `nonNumberInputs`, `nonFiniteNumberInputs`, and `unsafeNumberInputs` that every method guarded by `NumberUtility.assertSafe` validates against; `definedNonBooleanInputs` is `nonBooleanInputs` without `undefined`, for the boolean parameters that treat `undefined` as unset rather than invalid.
-- Name a suite's `describe` after the class under test, and group an `assert*` and `is*` pair under a `describe` named for the concept they share rather than for either method (`Finite`, `Integer`, `Safe`, `Range`, `In`). Put the method's own `describe` inside it, so a shared scenario array has one obvious place to live.
-- Before adding a block, check whether a shared scenario array already carries its inputs through the method under test. A block that restates inputs already in `validRangeScenarios` or `invalidRangeScenarios`, for instance, adds test count without adding coverage, and has to be kept in step with the shared array by hand.
-- Declare a scenario array once in the widest scope that needs it and reuse it across every method that shares those inputs, rather than repeating it per method. 
+- Draw inputs from the shared fixtures in `test/utils/input/` instead of restating literal lists, so a fixture change reaches every suite that depends on it. A fixture is named for the quality its inputs share, not for the suite that first needed it.
+- When the same combination of fixtures is spread at several call sites, export the combination as its own fixture rather than repeating the spread. A combination earns a name when it corresponds to what one guard rejects, so every method behind that guard can validate against a single list.
+- Name a suite's `describe` after the class under test, and group an `assert*` and `is*` pair under a `describe` named for the concept they share rather than for either method. Put the method's own `describe` inside it, so a shared scenario array has one obvious place to live.
+- Before adding a block, check whether a shared scenario array already carries its inputs through the method under test. A block that restates inputs a shared array already holds adds test count without adding coverage, and has to be kept in step with that array by hand.
+- Declare a scenario array once in the widest scope that needs it and reuse it across every method that shares those inputs, rather than repeating it per method.
 - Derive a related set from an existing array with `filter` or `map` rather than writing a near-copy.
-- Use `SingleInputScenario` when a scenario describes one input rather than a set, so a `test.each` can run over the scenarios directly. `test/random/seeded-random/random-number-generator-factory.test.ts` uses it for seed, namespace, and version combinations paired with an expected sequence.
-- Put a scenario set shared across files in `test/utils/test-case/scenarios/`, exported for the suites that consume it. `range-scenarios.ts` holds the valid and invalid `Range` scenarios that `test/range/range-builder.test.ts` and `test/range/range-utility.test.ts` both run, so an edge case added once reaches both.
-- `assert*` and `is*` methods taking a single input use the shared `testAssertMethod` and `testIsMethod` helpers in `test/utils/assert/assert-tests.ts`, which take `Scenario[]` for success and failure directly and emit their own `describe`/`test` blocks. Prefer those over hand-written scenario blocks where the method's shape fits.
+- Use `SingleInputScenario` when a scenario describes one input rather than a set, so a `test.each` can run over the scenarios directly. It suits a case that pairs one argument combination with one expected result.
+- Put a scenario set shared across files in `test/utils/test-case/scenarios/`, exported for the suites that consume it, so an edge case added once reaches every suite that runs it.
+- `assert*` and `is*` methods taking a single input use the shared assertion-contract helpers under `test/utils/assert/`, which take `Scenario[]` for success and failure directly and emit their own `describe`/`test` blocks. Prefer those over hand-written scenario blocks where the method's shape fits.
 
 ##### Argument Validation
 
@@ -333,11 +333,7 @@ Here `expected` holds the error constructor the call should throw, and each inpu
 const argumentFailureScenarios: Scenario[] = [
     {
         label: 'Invalid min argument',
-        inputs: [
-            ...nonNumberInputs,
-            ...nonFiniteNumberInputs,
-            ...unsafeNumberInputs
-        ].map((input: unknown): { min: unknown; max: number; } => {
+        inputs: invalidInputs.map((input: unknown): { min: unknown; max: number; } => {
             return { min: input, max: defaultMax };
         }),
         expected: PrimitiveTypeError
@@ -364,7 +360,7 @@ describe.each(
 - Group the scenarios under a `describe('Argument errors')` block within the suite for the method under test.
 - For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`). This attributes a failure to one argument rather than leaving it ambiguous.
 - Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
-- Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method. `Random.randomFloat`, `Random.randomInt`, and `Random.randomInteger` share one such block.
+- Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method.
 - Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks, or as their own scenarios when the inputs group meaningfully. The argument-validation conventions above do not apply to them.
 
 ### Validation Steps
