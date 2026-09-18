@@ -82,8 +82,8 @@ export class RangeBuilder {
      *
      * @returns {Range} The {@link Range} object.
      *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {PrimitiveTypeError} When `min` is not a number within the safe integer range.
+     * @throws {PrimitiveTypeError} When `max` is not a number within the safe integer range.
      * @throws {PrimitiveTypeError} When `isMinInclusive` is not a boolean or undefined.
      * @throws {PrimitiveTypeError} When `isMaxInclusive` is not a boolean or undefined.
      * @throws {SchemaTypeError} When the resulting object is not a valid {@link Range}.
