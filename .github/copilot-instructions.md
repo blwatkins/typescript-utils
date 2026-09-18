@@ -145,9 +145,9 @@ Interpolation is allowed where the type and/or the range of the value is already
 
 Beyond that, messages follow a consistent voice:
 
-- **A guard whose parameter is named `input`** describes the expectation rather than the argument: `Expected a string.`, `Expected a non-array object.`, `Input does not match schema requirements for Range.`
-- **A method with named parameters** names them exactly as the signature spells them, in their own casing, at the start of the sentence: `min must be less than or equal to max.`, `value must be in the range [min, max] (inclusive).`, `a must be less than b.`
-- **A message passed to a guard from a call site** also names the caller's own parameter, because the call site knows what the value is called and the guard does not: `NumberUtility.assertSafe(min, 'min must be within the safe integer range.')`, `TypeAssertions.assertFunction(rng, 'rng must be a function.')`
+- **A guard taking a single unnamed input** describes the expectation rather than the argument, and refers to the argument as `Input` when it must name it at all.
+- **A method with named parameters** names them exactly as the signature spells them, in their own casing, at the start of the sentence — `min must be less than or equal to max.` rather than `Min must be...` or `The minimum must be...`.
+- **A message passed to a guard from a call site** names the caller's own parameter for the same reason: the call site knows what the value is called and the guard does not.
 - **A static class instantiation guard** reads `<ClassName> is a static class and cannot be instantiated.`
 - Every message is a complete sentence ending in a period.
 
@@ -155,29 +155,29 @@ Beyond that, messages follow a consistent voice:
 
 Assertion methods and type guards are the package's primary surface, and they are written as matched pairs.
 
-**Naming.** An `assert*` method and its `is*` guard name the same concept identically: `assertSafe` / `isSafe`, `assertSingleLine` / `isSingleLine`, `assertValidRange` / `isValidRange`.
-Do not encode the checked type in the member name — the `assert` or `is` prefix together with the concept already carries it.
-`assertString` rather than `assertStringType`, `isNonEmpty` rather than `isNonEmptyString`, `isFinite` rather than `isFiniteNumber`, `randomInt` rather than `randomInteger`.
-Where a regular-expression getter backs a guard, it carries the same concept without the prefix: `singleLine` backs `isSingleLine`, `singleLineLowercase` backs `isSingleLineLowercase`.
-This is the member-name counterpart of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions).
+**Naming.** An `assert*` method and its `is*` guard name the same concept identically, so that the pair differs only in its prefix.
+Do not encode the checked type in the member name — the `assert` or `is` prefix together with the concept already carries it, and a `Type`, `Number` or `String` suffix restates what the signature says.
+Where a regular-expression getter backs a guard, it carries the same concept without the prefix.
+This is the guard-pair application of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions); where the two overlap they say the same thing.
 
 **Structure.** An `assert*` method delegates its decision to the matching `is*` guard rather than repeating the check, so the two can never disagree:
 
 ```typescript
-public static assertSingleLine(input: unknown, message?: string): asserts input is string {
-    if (!StringUtility.isSingleLine(input)) {
+public static assertConcept(input: unknown, message?: string): asserts input is ExpectedType {
+    if (!ConceptUtility.isConcept(input)) {
         if (StringUtility.isSingleLine(message)) {
             throw new PrimitiveTypeError(message);
         }
 
-        throw new PrimitiveTypeError('Expected a single-line string.');
+        throw new PrimitiveTypeError('Expected a <concept>.');
     }
 }
 ```
 
 **The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, or a non-string, falls through to the default message.
 This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
-It is also observable behavior that `testAssertMethod` asserts for every guard, so a new `assert*` method either applies this check itself or forwards `message` unchanged to a method that does — as `TypeAssertions.assertString` forwards to `StringUtility.assertString`, and as every deprecated alias forwards to its replacement.
+It is also observable behavior, asserted for every guard by the shared assertion-contract helpers under `test/utils/assert/`.
+A new `assert*` method therefore either applies this check itself or forwards `message` unchanged to a method that does; a member that delegates to another guard, including a deprecated alias delegating to its replacement, takes the second form.
 Never use `message` unconditionally.
 
 ### Deprecation
@@ -246,7 +246,7 @@ All source files must include the MIT License copyright header at the top.
 - Prefer `if`/`else` blocks over ternary operators for conditional logic.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 - Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
-- Variable and constant names do not need to encode their type or role in a suffix (e.g., `Pattern`) unless doing so is necessary to clarify the data they hold; surrounding context is often sufficient (e.g., `regularExpressions.hexColor` versus the public `hexColorPattern` getter that exposes it).
+- Variable, constant and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
 
 #### Formatting Rules
 
@@ -281,7 +281,7 @@ The following preferences require manual review since no ESLint rule can check t
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
 - **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
-- **Omit a `@returns` description that only restates its type:** Where the type carries the whole meaning, the type alone is the description — `@returns {asserts input is Range}`, `@returns {input is string}`, `@returns {void}`, `@returns {RegExp}` on a pattern getter. Keep a description wherever it says something the type does not, which is most non-guard methods: `@returns {number} \`range.min\` if \`value\` is less than \`range.min\`, \`range.max\` if \`value\` is greater than \`range.max\`, \`value\` otherwise.` A deprecated member keeps whatever `@returns` text it already had; do not retrofit this to the deprecated block, where a later diff would read as a change to a member that is on its way out.
+- **Omit a `@returns` description that only restates its type:** Where the type carries the whole meaning, the type alone is the description — an `asserts input is ...` predicate, an `input is ...` guard, `@returns {void}`, or a getter returning a bare `RegExp`. Keep a description wherever it says something the type does not, which is most methods returning a value: a `@returns {number}` that states which of several bounds is returned earns its prose. A deprecated member keeps whatever `@returns` text it already had; do not retrofit this to the deprecated block, where a later diff would read as a change to a member that is on its way out.
 - **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag (and any optional type/identifier), e.g. `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
 - **State the removal version on `@deprecated`:** Every `@deprecated` tag ends with `Will be removed in v{version}.` What precedes it depends on what the consumer should do instead:
   - **Replaced within this package** — name the replacement first, as a link: `@deprecated Replaced by {@link StringUtility.assertString}. Will be removed in v0.1.0-alpha.5.`
