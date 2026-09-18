@@ -158,7 +158,7 @@ Assertion methods and type guards are the package's primary surface, and they ar
 **Naming.** An `assert*` method and its `is*` guard name the same concept identically, so that the pair differs only in its prefix.
 Do not encode the checked type in the member name — the `assert` or `is` prefix together with the concept already carries it, and a `Type`, `Number` or `String` suffix restates what the signature says.
 Where a regular-expression getter backs a guard, it carries the same concept without the prefix.
-This is the member-name counterpart of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions).
+This is the guard-pair application of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions); where the two overlap they say the same thing.
 
 **Structure.** An `assert*` method delegates its decision to the matching `is*` guard rather than repeating the check, so the two can never disagree:
 
@@ -246,7 +246,7 @@ All source files must include the MIT License copyright header at the top.
 - Prefer `if`/`else` blocks over ternary operators for conditional logic.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 - Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
-- Variable and constant names do not need to encode their type or role in a suffix (e.g., `Pattern`) unless doing so is necessary to clarify the data they hold; surrounding context is often sufficient (e.g., `regularExpressions.hexColor` versus the public `hexColorPattern` getter that exposes it).
+- Variable, constant and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
 
 #### Formatting Rules
 
