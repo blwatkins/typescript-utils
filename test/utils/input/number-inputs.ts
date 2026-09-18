@@ -54,7 +54,8 @@ export const nonNumberInputs: unknown[] = [
     { key: 'value' },
     { key: 10 },
     { key: [] },
-    { key: {} }
+    { key: {} },
+    Symbol('test')
 ];
 
 export const nonFiniteNumberInputs: number[] = [

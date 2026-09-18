@@ -72,6 +72,24 @@ describe('MathUtility', (): void => {
             });
         });
 
+        describe('constrain should preserve the sign of a negative zero', (): void => {
+            /*
+             * constrain returns a bound by identity when the value falls outside it, so a bound of
+             * -0 comes back as -0 rather than 0. Object.is separates the two where toBe would not,
+             * and toBe itself compares with Object.is, so this distinction reaches any consumer
+             * asserting on a constrained value.
+             */
+            test.each([
+                { label: 'A value of -0 inside the range', value: -0, min: 0, max: 10 },
+                { label: 'A value below a min of -0', value: -5, min: -0, max: 10 },
+                { label: 'A value above a max of -0', value: 5, min: -10, max: -0 }
+            ])('%# - $label should return -0', ({ value, min, max }: { label: string; value: number; min: number; max: number; }): void => {
+                const constrained: number = MathUtility.constrain(value, min, max);
+                expect(Object.is(constrained, -0)).toBe(true);
+                expect(constrained).toBe(-0);
+            });
+        });
+
         describe('Argument errors', (): void => {
             const defaultValue: number = 5;
             const defaultMin: number = Number.MIN_SAFE_INTEGER;

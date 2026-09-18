@@ -60,7 +60,8 @@ export const nonBooleanInputs: unknown[] = [
     [true, false],
     {},
     { key: 'value' },
-    { key: true }
+    { key: true },
+    Symbol('test')
 ];
 
 /**

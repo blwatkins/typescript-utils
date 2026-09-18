@@ -342,6 +342,30 @@ describe('Random', (): void => {
             });
         });
 
+        describe('randomFloat should retry a rejected draw rather than fall through to min', (): void => {
+            /*
+             * Every other out-of-contract generator case here is a constant, which the fallback
+             * alone would satisfy. A generator that fails once and then succeeds distinguishes a
+             * retry loop from a single draw followed by the fallback.
+             */
+            test.each([
+                { draws: [2, 0.5], expected: 5 },
+                { draws: [-1, 0.25], expected: 2.5 },
+                { draws: [NaN, 0.75], expected: 7.5 },
+                { draws: [Infinity, 2, -1, 0.5], expected: 5 }
+            ])('%# - randomFloat(0, 10) drawing $draws should return $expected', ({ draws, expected }: { draws: number[]; expected: number; }): void => {
+                let index: number = 0;
+
+                Random.randomNumberGenerator = (): number => {
+                    const draw: number = draws[index] ?? 0;
+                    index++;
+                    return draw;
+                };
+
+                expect(Random.randomFloat(0, 10)).toBe(expected);
+            });
+        });
+
         describe('randomFloat should reject bounds before drawing from them', (): void => {
             test('randomFloat should throw rather than return NaN when the span would overflow', (): void => {
                 // max - min overflows to Infinity for these bounds, and Infinity multiplied by a
@@ -562,6 +586,20 @@ describe('Random', (): void => {
             validateRandomBooleans(booleans, true);
         });
 
+        describe('randomBoolean should compare against the chance exclusively', (): void => {
+            // The draw is compared with <, so a generator landing exactly on the chance returns
+            // false. This is what makes randomBoolean(0) never true.
+            test.each([
+                { chance: 0.5 },
+                { chance: 0.25 },
+                { chance: 0 },
+                { chance: 1 }
+            ])('%# - randomBoolean($chance) should return false when the generator returns $chance', ({ chance }: { chance: number; }): void => {
+                Random.randomNumberGenerator = (): number => chance;
+                expect(Random.randomBoolean(chance)).toBe(false);
+            });
+        });
+
         describe('Chance of true validation', (): void => {
             const scenarios: Scenario[] = [
                 {
@@ -645,6 +683,18 @@ describe('Random', (): void => {
                 }
 
                 validateRandomElements(selected, input, type);
+            });
+        });
+
+        describe('randomElement should return an element that is itself undefined', (): void => {
+            // The non-empty guard is on length, so an array whose elements are undefined is a
+            // valid input and undefined is the correct result.
+            test.each([
+                { input: [undefined] },
+                { input: [undefined, undefined] }
+            ])('%# - randomElement($input) should return undefined', ({ input }: { input: unknown[]; }): void => {
+                const selected: unknown = Random.randomElement(input);
+                expect(selected).toBeUndefined();
             });
         });
 

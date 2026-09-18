@@ -41,12 +41,19 @@ import { Scenario } from '../utils/test-case/test-case';
 describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
 
+    /*
+     * assertArray accepts and assertObject rejects every entry, since both are decided by
+     * Array.isArray. A subclass instance is included because Array.isArray follows the exotic
+     * array marker rather than the prototype chain, so it is an array on both sides.
+     */
     const arrayInputs: unknown[] = [
         [],
         [1, 2, 3],
         ['a', 'b', 'c'],
         [{ key: 1 }, { key: 2 }, { key: 3 }],
-        [[1, 2, 3], [4, 5, 6]]
+        [[1, 2, 3], [4, 5, 6]],
+        new (class extends Array {})(),
+        Array.from({ length: 2 })
     ];
 
     const arrayFailureScenarios: Scenario[] = [
@@ -134,6 +141,23 @@ describe('TypeAssertions', (): void => {
                 RandomNumberGeneratorFactory.build('seed'),
                 new Error(),
                 new Set<string>()
+            ],
+            expected: undefined
+        },
+        {
+            /*
+             * assertObject is a typeof check that excludes null and arrays, so it accepts any
+             * other object regardless of its prototype. A typed array is array-like but not an
+             * Array, and an object with a null prototype has no constructor at all.
+             */
+            label: 'Objects without an ordinary Object prototype',
+            inputs: [
+                Object.create(null),
+                new Date(),
+                new Map<string, number>(),
+                new Uint8Array(2),
+                new WeakMap<object, number>(),
+                Promise.resolve()
             ],
             expected: undefined
         }

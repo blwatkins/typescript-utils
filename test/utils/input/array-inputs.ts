@@ -64,5 +64,8 @@ export const nonArrayInputs: unknown[] = [
     { key: 'value' },
     { key: 10 },
     { key: [] },
-    { key: {} }
+    { key: {} },
+    Symbol('test'),
+    new Uint8Array(2),
+    new Int32Array([1, 2, 3])
 ];

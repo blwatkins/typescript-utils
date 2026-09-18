@@ -451,4 +451,45 @@ describe('RangeBuilder', (): void => {
             });
         });
     });
+
+    describe('A builder is reusable and its output is independent', (): void => {
+        // build assembles a fresh object from the builder's current state, so a Range already
+        // handed out must not change when the builder is set again or built again.
+        test('build should return a distinct but equal object on every call', (): void => {
+            const builder: RangeBuilder = new RangeBuilder().setMin(0).setMax(10);
+            const first: Range = builder.build();
+            const second: Range = builder.build();
+
+            expect(first).not.toBe(second);
+            expect(first).toStrictEqual(second);
+        });
+
+        test('A range already built should not change when the builder is set again', (): void => {
+            const builder: RangeBuilder = new RangeBuilder().setMin(0).setMax(10);
+            const first: Range = builder.build();
+
+            builder.setMin(5).setMax(20).setMinInclusive(false).setMaxInclusive(false);
+            const second: Range = builder.build();
+
+            expect(first.min).toBe(0);
+            expect(first.max).toBe(10);
+            expect(first.isMinInclusive).toBeUndefined();
+            expect(first.isMaxInclusive).toBeUndefined();
+
+            expect(second.min).toBe(5);
+            expect(second.max).toBe(20);
+            expect(second.isMinInclusive).toBe(false);
+            expect(second.isMaxInclusive).toBe(false);
+        });
+
+        test.each([
+            { label: 'setMin', build: (): Range => new RangeBuilder().setMin(0).setMin(7).setMax(10).build(), key: 'min', expected: 7 },
+            { label: 'setMax', build: (): Range => new RangeBuilder().setMin(0).setMax(20).setMax(10).build(), key: 'max', expected: 10 },
+            { label: 'setMinInclusive', build: (): Range => new RangeBuilder().setMin(0).setMax(10).setMinInclusive(true).setMinInclusive(false).build(), key: 'isMinInclusive', expected: false },
+            { label: 'setMaxInclusive', build: (): Range => new RangeBuilder().setMin(0).setMax(10).setMaxInclusive(true).setMaxInclusive(false).build(), key: 'isMaxInclusive', expected: false }
+        ])('%# - The last call to $label should win', ({ build: buildRange, key, expected }: { label: string; build: () => Range; key: string; expected: unknown; }): void => {
+            const range: Range = buildRange();
+            expect(range[key as keyof Range]).toBe(expected);
+        });
+    });
 });
