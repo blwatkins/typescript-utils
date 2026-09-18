@@ -285,11 +285,11 @@ export class RangeUtility {
      * Each property defaults to `true` when it is `undefined`.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
-     * Note that {@link Random.randomInt} and {@link Random.randomInteger} treat a bare pair of numbers as a half-open range [min, max),
-     * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` and `Random.randomInteger(0, 10)` may not.
-     * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt} and {@link Random.randomInteger}.
+     * Note that {@link Random.randomInt} treats a bare pair of numbers as a half-open range [min, max),
+     * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` may not.
+     * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt}.
      *
-     * @see {@link RangeUtility.randomInteger}
+     * @see {@link Random.randomInt}
      * @see {@link RangeUtility.assertRange}
      *
      * @param {Range} range - The {@link Range} object to generate a value from.
@@ -328,34 +328,6 @@ export class RangeUtility {
         }
 
         return Random.randomInt(lowest, highest + 1);
-    }
-
-    /**
-     * Get a random integer within `range`.
-     *
-     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds may be returned.
-     * Each property defaults to `true` when it is `undefined`.
-     * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
-     * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
-     * Note that {@link Random.randomInt} and {@link Random.randomInteger} treat a bare pair of numbers as a half-open range [min, max),
-     * so `RangeUtility.randomInteger({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` and `Random.randomInteger(0, 10)` may not.
-     * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt} and {@link Random.randomInteger}.
-     *
-     * @see {@link RangeUtility.randomInt}
-     * @see {@link RangeUtility.assertRange}
-     *
-     * @param {Range} range - The {@link Range} object to generate a value from.
-     *
-     * @returns {number} A random integer within `range`.
-     *
-     * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
-     * @throws {ValueRangeError} When `range` contains no integer values.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static randomInteger(range: Range): number {
-        return RangeUtility.randomInt(range);
     }
 
     /**

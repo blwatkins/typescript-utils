@@ -723,7 +723,7 @@ describe('RangeUtility', (): void => {
                     }).toThrow(SchemaTypeError);
 
                     expect((): void => {
-                        RangeUtility.randomInteger({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
+                        RangeUtility.randomInt({ min: 0, max: Number.MAX_SAFE_INTEGER + 1 });
                     }).toThrow(SchemaTypeError);
                 });
             });
@@ -770,7 +770,7 @@ describe('RangeUtility', (): void => {
                     }).toThrow(SchemaTypeError);
 
                     expect((): void => {
-                        RangeUtility.randomInteger(range);
+                        RangeUtility.randomInt(range);
                     }).toThrow(SchemaTypeError);
                 });
             });
@@ -900,8 +900,8 @@ describe('RangeUtility', (): void => {
             });
         });
 
-        describe('randomInt and randomInteger', (): void => {
-            describe('randomInt and randomInteger should only return integers that are within the range', (): void => {
+        describe('randomInt', (): void => {
+            describe('randomInt should only return integers that are within the range', (): void => {
                 test.each([
                     { range: { min: 0, max: 5 }, lowest: 0, highest: 5 },
                     { range: { min: 0, max: 5, isMaxInclusive: false }, lowest: 0, highest: 4 },
@@ -911,11 +911,11 @@ describe('RangeUtility', (): void => {
                     { range: { min: 2.3, max: 5.7, isMinInclusive: false, isMaxInclusive: false }, lowest: 3, highest: 5 },
                     { range: { min: -3.75, max: -0.5 }, lowest: -3, highest: -1 },
                     { range: { min: -10, max: 10 }, lowest: -10, highest: 10 }
-                ])('%# - randomInt($range) and randomInteger($range) should return an integer in [$lowest, $highest]', ({ range, lowest, highest }: { range: Range; lowest: number; highest: number; }): void => {
+                ])('%# - randomInt($range) should return an integer in [$lowest, $highest]', ({ range, lowest, highest }: { range: Range; lowest: number; highest: number; }): void => {
                     const values: number[] = [];
 
                     for (let i: number = 0; i < testRepeatTotal; i++) {
-                        for (const value of [RangeUtility.randomInt(range), RangeUtility.randomInteger(range)]) {
+                        for (const value of [RangeUtility.randomInt(range)]) {
                             expect(Number.isInteger(value)).toBe(true);
                             expect(value).toBeGreaterThanOrEqual(lowest);
                             expect(value).toBeLessThanOrEqual(highest);
@@ -935,14 +935,14 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('randomInt and randomInteger should return min when min and max are equal integers', (): void => {
+            describe('randomInt should return min when min and max are equal integers', (): void => {
                 test.each([
                     { min: 0, max: 0 },
                     { min: 5, max: 5 },
                     { min: -10, max: -10, isMinInclusive: true, isMaxInclusive: true }
-                ])('%# - randomInt($min, $max) and randomInteger($min, $max) should return $min', (range: Range): void => {
+                ])('%# - randomInt($min, $max) should return $min', (range: Range): void => {
                     for (let i: number = 0; i < testRepeatTotal; i++) {
-                        for (const value of [RangeUtility.randomInt(range), RangeUtility.randomInteger(range)]) {
+                        for (const value of [RangeUtility.randomInt(range)]) {
                             expect(value).toBe(range.min);
                             expect(RangeUtility.isIn(value, range)).toBe(true);
                         }
@@ -950,7 +950,7 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('randomInt and randomInteger should throw when the range contains no integer values', (): void => {
+            describe('randomInt should throw when the range contains no integer values', (): void => {
                 const noIntegerValueScenarios: Scenario[] = [
                     {
                         label: 'Ranges between two consecutive integers',
@@ -987,37 +987,29 @@ describe('RangeUtility', (): void => {
 
                     test.each(
                         testCases
-                    )('%# - randomInt($input) and randomInteger($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    )('%# - randomInt($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
                             RangeUtility.randomInt(testInput as Range);
-                        }).toThrow(testExpected);
-
-                        expect((): void => {
-                            RangeUtility.randomInteger(testInput as Range);
                         }).toThrow(testExpected);
                     });
                 });
             });
 
-            describe('randomInt and randomInteger should reject an unsafe bound before drawing from it', (): void => {
+            describe('randomInt should reject an unsafe bound before drawing from it', (): void => {
                 test.each([
                     { min: 0, max: 1e20 },
                     { min: -Number.MAX_VALUE, max: 0, isMinInclusive: false },
                     { min: 1e20, max: 1e20 + 16384 }
-                ])('%# - randomInt($min, $max) and randomInteger($min, $max) should throw SchemaTypeError', (range: Range): void => {
+                ])('%# - randomInt($min, $max) should throw SchemaTypeError', (range: Range): void => {
                     Random.randomNumberGenerator = (): number => 0;
 
                     expect((): void => {
                         RangeUtility.randomInt(range);
                     }).toThrow(SchemaTypeError);
-
-                    expect((): void => {
-                        RangeUtility.randomInteger(range);
-                    }).toThrow(SchemaTypeError);
                 });
             });
 
-            describe('randomInteger should match Random.randomInt for an explicitly half open range', (): void => {
+            describe('randomInt should match Random.randomInt for an explicitly half open range', (): void => {
                 const drawFractions: number[] = [0, 0.25, 0.5, 0.75, nearOne];
 
                 test.each([
@@ -1025,12 +1017,12 @@ describe('RangeUtility', (): void => {
                     { min: -5, max: 5 },
                     { min: 2.3, max: 5.7 },
                     { min: -3.75, max: -0.5 }
-                ])('%# - randomInteger($min, $max) with an exclusive max should match Random.randomInt($min, $max)', ({ min, max }: { min: number; max: number; }): void => {
+                ])('%# - randomInt($min, $max) with an exclusive max should match Random.randomInt($min, $max)', ({ min, max }: { min: number; max: number; }): void => {
                     const range: Range = { min: min, max: max, isMaxInclusive: false };
 
                     for (const fraction of drawFractions) {
                         Random.randomNumberGenerator = (): number => fraction;
-                        const rangeValue: number = RangeUtility.randomInteger(range);
+                        const rangeValue: number = RangeUtility.randomInt(range);
 
                         Random.randomNumberGenerator = (): number => fraction;
                         const randomValue: number = Random.randomInt(min, max);
@@ -1040,11 +1032,10 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('randomInteger should include max by default where Random.randomInt excludes it', (): void => {
+            describe('randomInt should include max by default where Random.randomInt excludes it', (): void => {
                 test('randomInt({ min: 0, max: 1 }) should be able to return 1', (): void => {
                     Random.randomNumberGenerator = (): number => 0.99;
                     expect(RangeUtility.randomInt({ min: 0, max: 1 })).toBe(1);
-                    expect(RangeUtility.randomInteger({ min: 0, max: 1 })).toBe(1);
                     expect(Random.randomInt(0, 1)).toBe(0);
                 });
             });
@@ -1077,16 +1068,12 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('Argument errors - randomInt and randomInteger', (): void => {
+            describe('Argument errors - randomInt', (): void => {
                 test.each(
                     testCases
-                )('%# - randomInt($input) and randomInteger($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                )('%# - randomInt($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): void => {
                         RangeUtility.randomInt(testInput as Range);
-                    }).toThrow(testExpected);
-
-                    expect((): void => {
-                        RangeUtility.randomInteger(testInput as Range);
                     }).toThrow(testExpected);
                 });
             });

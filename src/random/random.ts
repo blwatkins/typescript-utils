@@ -121,8 +121,6 @@ export class Random {
      * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
      *
-     * @see {@link Random.randomInteger}
-     *
      * @param {number} min - The inclusive minimum value.
      * @param {number} max - The exclusive maximum value.
      *
@@ -148,30 +146,6 @@ export class Random {
         }
 
         return Math.floor(Random.randomFloat(lowest, highest + 1));
-    }
-
-    /**
-     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
-     *
-     * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
-     * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
-     *
-     * @see {@link Random.randomInt}
-     *
-     * @param {number} min - The inclusive minimum value.
-     * @param {number} max - The exclusive maximum value.
-     *
-     * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
-     *
-     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
-     * @throws {ValueRangeError} When `min` is not less than `max`.
-     * @throws {ValueRangeError} When the range contains no integer values.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static randomInteger(min: number, max: number): number {
-        return Random.randomInt(min, max);
     }
 
     /**
@@ -311,5 +285,33 @@ export class Random {
      */
     static #isInRange(value: number, min: number, max: number): boolean {
         return value >= min && value < max;
+    }
+
+    /* ******************* TODO: DEPRECATED ******************* */
+
+    /**
+     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
+     *
+     * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
+     * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
+     *
+     * @see {@link Random.randomInt}
+     *
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
+     *
+     * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
+     *
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
+     * @throws {ValueRangeError} When the range contains no integer values.
+     *
+     * @deprecated Replaced by {@link Random.randomInt}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomInteger(min: number, max: number): number {
+        return Random.randomInt(min, max);
     }
 }
