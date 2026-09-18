@@ -31,13 +31,14 @@ import {
     nonFiniteNumberInputs,
     nonNumberInputs,
     positiveSafeNumberInputs,
+    unsafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('RangeBuilder', (): void => {
-    const finiteNumberScenarios: Scenario[] = [
+    const validNumberScenarios: Scenario[] = [
         {
             label: 'Zero inputs',
             inputs: zeroInputs,
@@ -46,14 +47,14 @@ describe('RangeBuilder', (): void => {
         {
             label: 'Finite number inputs',
             inputs: [
-                ...positiveSafeNumberInputs.filter(input => input !== Number.MAX_VALUE),
-                ...negativeSafeNumberInputs.filter(input => input !== -Number.MAX_VALUE)
+                ...positiveSafeNumberInputs,
+                ...negativeSafeNumberInputs
             ],
             expected: undefined
         }
     ];
 
-    const nonFiniteNumberScenarios: Scenario[] = [
+    const invalidNumberScenarios: Scenario[] = [
         {
             label: 'Non-number inputs',
             inputs: nonNumberInputs,
@@ -63,18 +64,15 @@ describe('RangeBuilder', (): void => {
             label: 'Non-finite number inputs',
             inputs: nonFiniteNumberInputs,
             expected: PrimitiveTypeError
-        }
-    ];
-
-    const nonBooleanScenarios: Scenario[] = [
+        },
         {
-            label: 'Non-boolean inputs',
-            inputs: nonBooleanInputs.filter(input => input !== undefined),
+            label: 'Unsafe number inputs',
+            inputs: unsafeNumberInputs,
             expected: PrimitiveTypeError
         }
     ];
 
-    const booleanScenarios: Scenario[] = [
+    const validBooleanScenarios: Scenario[] = [
         {
             label: 'Boolean inputs',
             inputs: [true, false],
@@ -87,7 +85,45 @@ describe('RangeBuilder', (): void => {
         }
     ];
 
+    const invalidBooleanScenarios: Scenario[] = [
+        {
+            label: 'Non-boolean inputs',
+            inputs: nonBooleanInputs.filter(input => input !== undefined),
+            expected: PrimitiveTypeError
+        }
+    ];
+
     const validRangeScenarios: Scenario[] = [
+        {
+            label: 'Adjacent bounds where one bound is included',
+            inputs: [
+                {
+                    min: 1,
+                    max: 1 + Number.EPSILON,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 1,
+                    max: 1 + Number.EPSILON,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                },
+                {
+                    min: 0,
+                    max: Number.MIN_VALUE,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: -1 - Number.EPSILON,
+                    max: -1,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                }
+            ],
+            expected: undefined
+        },
         {
             label: 'Minimum less than maximum',
             inputs: [
@@ -278,6 +314,78 @@ describe('RangeBuilder', (): void => {
 
     const invalidRangeScenarios: Scenario[] = [
         {
+            label: 'Equal bounds where a bound is excluded',
+            inputs: [
+                {
+                    min: 5,
+                    max: 5,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                },
+                {
+                    min: 5,
+                    max: 5,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 5,
+                    max: 5,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 0,
+                    max: 0,
+                    isMinInclusive: false,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5.5,
+                    max: -5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: false
+                },
+                {
+                    min: Number.MAX_SAFE_INTEGER,
+                    max: Number.MAX_SAFE_INTEGER,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                }
+            ],
+            expected: SchemaTypeError
+        },
+        {
+            label: 'Adjacent excluded bounds that contain no representable value',
+            inputs: [
+                {
+                    min: 1,
+                    max: 1 + Number.EPSILON,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 0,
+                    max: Number.MIN_VALUE,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: -1 - Number.EPSILON,
+                    max: -1,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: Number.MAX_SAFE_INTEGER - 1,
+                    max: Number.MAX_SAFE_INTEGER,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                }
+            ],
+            expected: SchemaTypeError
+        },
+        {
             label: 'Minimum greater than maximum',
             inputs: [
                 {
@@ -439,7 +547,8 @@ describe('RangeBuilder', (): void => {
                     label: 'Invalid min argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { min: unknown; max: number; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
                         return {
                             min: input,
@@ -454,7 +563,8 @@ describe('RangeBuilder', (): void => {
                     label: 'Invalid max argument',
                     inputs: [
                         ...nonNumberInputs,
-                        ...nonFiniteNumberInputs
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
                     ].map((input: unknown): { min: number; max: unknown; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
                         return {
                             min: Number.MIN_SAFE_INTEGER,
@@ -514,7 +624,7 @@ describe('RangeBuilder', (): void => {
     describe('setMin', (): void => {
         describe('setMin should set the minimum value of the range', (): void => {
             describe.each(
-                finiteNumberScenarios
+                validNumberScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -531,7 +641,7 @@ describe('RangeBuilder', (): void => {
 
         describe('Argument errors', (): void => {
             describe.each(
-                nonFiniteNumberScenarios
+                invalidNumberScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -550,7 +660,7 @@ describe('RangeBuilder', (): void => {
     describe('setMax', (): void => {
         describe('setMax should set the maximum value of the range', (): void => {
             describe.each(
-                finiteNumberScenarios
+                validNumberScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -567,7 +677,7 @@ describe('RangeBuilder', (): void => {
 
         describe('Argument errors', (): void => {
             describe.each(
-                nonFiniteNumberScenarios
+                invalidNumberScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -586,7 +696,7 @@ describe('RangeBuilder', (): void => {
     describe('setMinInclusive', (): void => {
         describe('setMinInclusive should set the isMinInclusive value of the range', (): void => {
             describe.each(
-                booleanScenarios
+                validBooleanScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -603,7 +713,7 @@ describe('RangeBuilder', (): void => {
 
         describe('Argument errors', (): void => {
             describe.each(
-                nonBooleanScenarios
+                invalidBooleanScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -622,7 +732,7 @@ describe('RangeBuilder', (): void => {
     describe('setMaxInclusive', (): void => {
         describe('setMaxInclusive should set the isMaxInclusive value of the range', (): void => {
             describe.each(
-                booleanScenarios
+                validBooleanScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -639,7 +749,7 @@ describe('RangeBuilder', (): void => {
 
         describe('Argument errors', (): void => {
             describe.each(
-                nonBooleanScenarios
+                invalidBooleanScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -717,6 +827,7 @@ describe('RangeBuilder', (): void => {
             });
         });
     });
+
     describe('Single value ranges', (): void => {
         describe('build and buildFrom should reject a single value range with an excluded bound', (): void => {
             test.each([

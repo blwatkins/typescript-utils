@@ -80,12 +80,12 @@ export class RangeBuilder {
      * @param {boolean} isMinInclusive - Should the minimum value be included in the range?
      * @param {boolean} isMaxInclusive - Should the maximum value be included in the range?
      *
-     * @returns {Range} - The {@link Range} object.
+     * @returns {Range} The {@link Range} object.
      *
-     * @throws {PrimitiveTypeError} - When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} - When `max` is not a finite number.
-     * @throws {PrimitiveTypeError} - When `isMinInclusive` is not a boolean or undefined.
-     * @throws {PrimitiveTypeError} - When `isMaxInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `min` is not a number within the safe integer range.
+     * @throws {PrimitiveTypeError} When `max` is not a number within the safe integer range.
+     * @throws {PrimitiveTypeError} When `isMinInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `isMaxInclusive` is not a boolean or undefined.
      * @throws {SchemaTypeError} When the resulting object is not a valid {@link Range}.
      *
      * @public
@@ -99,17 +99,19 @@ export class RangeBuilder {
      * Set the `min` property of the {@link Range} object.
      * The `min` property should be less than, or equal to, the `max` property.
      *
+     * @see {@link NumberUtility.assertSafe}
+     *
      * @param {number} min - The minimum value of the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `min` is not a number within the safe integer range.
      *
      * @public
      * @since 0.1.0
      */
     public setMin(min: number): this {
-        NumberUtility.assertFinite(min);
+        NumberUtility.assertSafe(min);
         this.#min = min;
         return this;
     }
@@ -118,17 +120,19 @@ export class RangeBuilder {
      * Set the `max` property of the {@link Range} object.
      * The `max` property should be greater than, or equal to, the `min` property.
      *
+     * @see {@link NumberUtility.assertSafe}
+     *
      * @param {number} max - The maximum value of the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `max` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a number within the safe integer range.
      *
      * @public
      * @since 0.1.0
      */
     public setMax(max: number): this {
-        NumberUtility.assertFinite(max);
+        NumberUtility.assertSafe(max);
         this.#max = max;
         return this;
     }
@@ -136,13 +140,15 @@ export class RangeBuilder {
     /**
      * Set the `isMinInclusive` property of the {@link Range} object.
      *
+     * @see {@link TypeAssertions.assertBoolean}
+     *
      * @param {boolean | undefined} isMinInclusive - `true` if any values generated from the range should include the minimum value.
      * `false` if any values generated from the range should not include the minimum value.
      * `undefined` to use the default behavior of the method using the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `isMinInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `isMinInclusive` is not a boolean or undefined.
      *
      * @public
      * @since 0.1.0
@@ -159,13 +165,15 @@ export class RangeBuilder {
     /**
      * Set the `isMaxInclusive` property of the {@link Range} object.
      *
+     * @see {@link TypeAssertions.assertBoolean}
+     *
      * @param {boolean | undefined} isMaxInclusive - `true` if any values generated from the range should include the maximum value.
      * `false` if any values generated from the range should not include the maximum value.
      * `undefined` to use the default behavior of the method using the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `isMaxInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `isMaxInclusive` is not a boolean or undefined.
      *
      * @public
      * @since 0.1.0

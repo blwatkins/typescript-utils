@@ -255,6 +255,203 @@ describe('NumberUtility', (): void => {
         });
     });
 
+    describe('Safe', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: nonFiniteNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Number inputs outside the safe integer range',
+                inputs: unsafeNumberInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Number inputs within the safe integer range',
+                inputs: safeNumberInputs,
+                expected: undefined
+            },
+            {
+                label: 'Zero inputs',
+                inputs: zeroInputs,
+                expected: undefined
+            },
+            {
+                label: 'Number inputs at the safe integer bounds',
+                inputs: [Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
+                expected: undefined
+            }
+        ];
+
+        describe('assertSafe', (): void => {
+            testAssertMethod(
+                NumberUtility.assertSafe.bind(NumberUtility),
+                successScenarios,
+                failureScenarios,
+                'Expected a number between MIN_SAFE_INTEGER and MAX_SAFE_INTEGER (inclusive).'
+            );
+        });
+
+        describe('isSafe', (): void => {
+            testIsMethod(NumberUtility.isSafe.bind(NumberUtility), successScenarios, failureScenarios);
+        });
+    });
+
+    describe('LessThan', (): void => {
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'a greater than b',
+                inputs: [
+                    { a: 10, b: 0 },
+                    { a: 0, b: Number.MIN_SAFE_INTEGER },
+                    { a: Number.MAX_SAFE_INTEGER, b: 0 },
+                    { a: Number.MAX_SAFE_INTEGER, b: Number.MIN_SAFE_INTEGER },
+                    { a: -100, b: -500 },
+                    { a: -3.123, b: -5.123 },
+                    { a: 100, b: 10 },
+                    { a: 100.123, b: 10.123 },
+                    { a: Number.EPSILON, b: 0 }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'a equal to b',
+                inputs: [
+                    { a: 0, b: 0 },
+                    { a: 0, b: -0 },
+                    { a: Number.MIN_SAFE_INTEGER, b: Number.MIN_SAFE_INTEGER },
+                    { a: Number.MAX_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
+                    { a: 5, b: 5 },
+                    { a: 5.123, b: 5.123 },
+                    { a: -5, b: -5 },
+                    { a: -5.123, b: -5.123 }
+                ],
+                expected: ValueRangeError
+            }
+        ];
+
+        const successScenarios: Scenario[] = [
+            {
+                label: 'a less than b',
+                inputs: [
+                    { a: 0, b: 10 },
+                    { a: Number.MIN_SAFE_INTEGER, b: 0 },
+                    { a: 0, b: Number.MAX_SAFE_INTEGER },
+                    { a: Number.MIN_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
+                    { a: -500, b: -100 },
+                    { a: -5.123, b: -3.123 },
+                    { a: 10, b: 100 },
+                    { a: 10.123, b: 100.123 }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'a less than b by the smallest representable amount',
+                inputs: [
+                    { a: 0, b: Number.MIN_VALUE },
+                    { a: 1, b: 1 + Number.EPSILON },
+                    { a: -1 - Number.EPSILON, b: -1 }
+                ],
+                expected: undefined
+            }
+        ];
+
+        describe('assertLessThan', (): void => {
+            function assertLessThan(input: unknown, message?: string): void {
+                const args = input as { a: number; b: number; };
+                NumberUtility.assertLessThan(args.a, args.b, message);
+            }
+
+            testAssertMethod(
+                assertLessThan,
+                successScenarios,
+                failureScenarios,
+                'a must be less than b.'
+            );
+        });
+
+        describe('isLessThan', (): void => {
+            function isLessThan(input: unknown): boolean {
+                const args = input as { a: number; b: number; };
+                return NumberUtility.isLessThan(args.a, args.b);
+            }
+
+            testIsMethod(isLessThan, successScenarios, failureScenarios);
+        });
+
+        describe('Argument errors', (): void => {
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid a argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
+                    ].map((input: unknown): { a: unknown; b: number; } => {
+                        return {
+                            a: input,
+                            b: Number.MAX_SAFE_INTEGER
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid b argument',
+                    inputs: [
+                        ...nonNumberInputs,
+                        ...nonFiniteNumberInputs,
+                        ...unsafeNumberInputs
+                    ].map((input: unknown): { a: number; b: unknown; } => {
+                        return {
+                            a: Number.MIN_SAFE_INTEGER,
+                            b: input
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('Argument errors - assertLessThan', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { a: unknown; b: unknown; } = testInput as { a: unknown; b: unknown; };
+
+                        expect((): void => {
+                            NumberUtility.assertLessThan(args.a as number, args.b as number);
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Argument errors - isLessThan', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { a: unknown; b: unknown; } = testInput as { a: unknown; b: unknown; };
+
+                        expect((): void => {
+                            NumberUtility.isLessThan(args.a as number, args.b as number);
+                        }).toThrow(testExpected);
+                    });
+                });
+            });
+        });
+    });
+
     describe('InRange', (): void => {
         const failureScenarios: Scenario[] = [
             {
