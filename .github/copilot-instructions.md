@@ -290,7 +290,7 @@ A `Scenario` groups a set of `inputs` that share an outcome under a `label`, wit
 ```typescript
 const scenarios: Scenario[] = [
     {
-        label: 'Non-number type inputs',
+        label: 'Invalid type inputs',
         inputs: invalidInputs,
         expected: false
     }
