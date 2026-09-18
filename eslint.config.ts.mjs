@@ -122,8 +122,6 @@ export default defineConfig([
 
             'require-atomic-updates': 'error',
 
-            'require-await': 'error',
-
             'use-isnan': ['error', {
                 enforceForSwitchCase: true,
                 enforceForIndexOf: true
@@ -220,6 +218,9 @@ export default defineConfig([
 
             'no-useless-constructor': 'off',
             '@typescript-eslint/no-useless-constructor': 'error',
+
+            'require-await': 'off',
+            '@typescript-eslint/require-await': 'error',
 
             '@typescript-eslint/class-literal-property-style': ['error', 'getters'],
 

@@ -62,9 +62,10 @@ export class RangeUtility {
     /**
      * Assert that `input` is a valid {@link Range} object.
      *
-     * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
-     * Both `min` and `max` must be numbers within the safe integer range.
-     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
+     * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property, and both `min` and `max` must be numbers within the safe integer range.
+     * Additionally, the range must contain at least one representable value.
+     * When either bound is excluded, `min` must be less than `max`.
+     * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`; otherwise, there is no representable value available to satisfy the range.
      *
      * @see {@link RangeUtility.isRange}
      *
@@ -127,10 +128,7 @@ export class RangeUtility {
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property, and both `min` and `max` must be numbers within the safe integer range.
      * Additionally, the range must contain at least one representable value.
      * When either bound is excluded, `min` must be less than `max`.
-     * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`, because an included bound is no longer available to satisfy the range.
-     *
-     * @see {@link NumberUtility.isValidRange}
-     * @see {@link NumberUtility.isLessThan}
+     * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`; otherwise, there is no representable value available to satisfy the range.
      *
      * @param {unknown} input - The input to check.
      *
@@ -205,7 +203,6 @@ export class RangeUtility {
      *
      * @see {@link MathUtility.constrain}
      * @see {@link RangeUtility.assertRange}
-     * @see {@link RangeUtility.isIn}
      *
      * @param {number} value - The value to constrain.
      * @param {Range} range - The {@link Range} object to constrain `value` to.
@@ -231,7 +228,7 @@ export class RangeUtility {
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
      * A draw that falls outside the range is discarded and replaced.
-     * When no draw succeeds, the midpoint between `min` and `max` is returned, or an included bound when the midpoint rounds past one.
+     * When no draw succeeds, the midpoint between `min` and `max` is returned, or an included bound when the midpoint rounds past `min` or `max`.
      *
      * @see {@link RangeUtility.assertRange}
      *
@@ -265,9 +262,6 @@ export class RangeUtility {
                 return midpoint;
             }
 
-            // The midpoint rounds to a bound, so the bounds are adjacent representable numbers and
-            // the only candidate values are the bounds themselves. A range that excludes both is
-            // not a valid Range, so an included bound is always available here.
             if (isMaxInclusive) {
                 return range.max;
             }

@@ -159,8 +159,6 @@ describe('Random', (): void => {
             });
 
             test('randomFloat', (): void => {
-                // The generator contract is [0, 1), and randomFloat never returns its exclusive
-                // max, so the injected value must be a legal draw.
                 const random: number = 0.25;
                 const expected: number = 2;
 
@@ -174,8 +172,6 @@ describe('Random', (): void => {
             });
 
             test('randomInt', (): void => {
-                // The generator contract is [0, 1), and randomInt constrains its result to the
-                // integers the range contains, so the injected value must be a legal draw.
                 const random: number = 0.75;
                 const expected: number = 3;
 
