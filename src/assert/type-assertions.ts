@@ -97,7 +97,7 @@ export class TypeAssertions {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a function.
      *
-     * @returns {asserts input is (...args: unknown[]) => unknown} Asserts that `input` is a callable function.
+     * @returns {asserts input is (...args: unknown[]) => unknown}
      *
      * @throws {PrimitiveTypeError} When `input` is not a callable function.
      *
@@ -123,7 +123,7 @@ export class TypeAssertions {
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a non-array object.
      *
-     * @returns {asserts input is object} Asserts that `input` is a non-array object.
+     * @returns {asserts input is object}
      *
      * @throws {PrimitiveTypeError} When `input` is not a non-array object.
      *

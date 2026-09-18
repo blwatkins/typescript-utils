@@ -321,7 +321,34 @@ export class RangeUtility {
             throw new ValueRangeError('The range contains no integer values.');
         }
 
-        return Random.randomInt(lowest, highest + 1);
+        return RangeUtility.#randomIntInclusive(lowest, highest);
+    }
+
+    /**
+     * Get a random integer within the inclusive range [`lowest`, `highest`].
+     *
+     * @remarks This method assumes that `lowest` and `highest` are integers within the safe integer range, where `lowest` is less than or equal to `highest`.
+     * {@link Random.randomInt} takes an exclusive maximum, so it cannot express a range that includes {@link Number.MAX_SAFE_INTEGER}.
+     * This method delegates to {@link Random.randomInt} whenever `highest` has a safe successor, and draws the value itself otherwise.
+     *
+     * @see {@link Random.randomInt}
+     *
+     * @param {number} lowest - The inclusive minimum value.
+     * @param {number} highest - The inclusive maximum value.
+     *
+     * @returns {number} A random integer in the range [`lowest`, `highest`] (inclusive).
+     *
+     * @private
+     */
+    static #randomIntInclusive(lowest: number, highest: number): number {
+        const exclusiveHighest: number = highest + 1;
+
+        if (NumberUtility.isSafe(exclusiveHighest)) {
+            return Random.randomInt(lowest, exclusiveHighest);
+        }
+
+        const value: number = lowest + Math.floor(Random.random() * ((highest - lowest) + 1));
+        return MathUtility.constrain(value, lowest, highest);
     }
 
     /**

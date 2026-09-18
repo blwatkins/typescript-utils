@@ -44,7 +44,7 @@ export class NumberUtility {
     /**
      * Assert that `input` is a finite number.
      *
-     * @see {@link NumberUtility.isFiniteNumber}
+     * @see {@link NumberUtility.isFinite}
      *
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not a finite number.
