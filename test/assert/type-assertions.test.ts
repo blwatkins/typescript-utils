@@ -41,306 +41,202 @@ import { Scenario } from '../utils/test-case/test-case';
 describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
 
+    const arrayInputs: unknown[] = [
+        [],
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+        [{ key: 1 }, { key: 2 }, { key: 3 }],
+        [[1, 2, 3], [4, 5, 6]]
+    ];
+
+    const arrayFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-array inputs',
+            inputs: nonArrayInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const arraySuccessScenarios: Scenario[] = [
+        {
+            label: 'Array inputs',
+            inputs: arrayInputs,
+            expected: undefined
+        }
+    ];
+
+    const booleanFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-boolean inputs',
+            inputs: nonBooleanInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const booleanSuccessScenarios: Scenario[] = [
+        {
+            label: 'Boolean inputs',
+            inputs: [
+                true,
+                false
+            ],
+            expected: undefined
+        }
+    ];
+
+    const functionFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-function inputs',
+            inputs: nonFunctionInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const functionSuccessScenarios: Scenario[] = [
+        {
+            label: 'Functions',
+            inputs: [
+                Math.random,
+                (): boolean => {
+                    return false;
+                },
+                (): number => {
+                    return 2;
+                },
+                (x: number, y: number): number => {
+                    return (x * y) - (x + y);
+                }
+            ],
+            expected: undefined
+        }
+    ];
+
+    const objectFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-object inputs',
+            inputs: nonObjectInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Array inputs',
+            inputs: arrayInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const objectSuccessScenarios: Scenario[] = [
+        {
+            label: 'Non-array objects',
+            inputs: [
+                {},
+                { key: 'value' },
+                { 'other key': 'other value' },
+                RandomNumberGeneratorFactory.build('seed'),
+                new Error(),
+                new Set<string>()
+            ],
+            expected: undefined
+        }
+    ];
+
+    const stringFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-string inputs',
+            inputs: nonStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const stringSuccessScenarios: Scenario[] = [
+        {
+            label: 'String inputs',
+            inputs: [
+                ...emptyStringInputs,
+                ...nonEmptyStringInputs
+            ],
+            expected: undefined
+        }
+    ];
+
     describe('assertArray', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-array inputs',
-                inputs: nonArrayInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Array inputs',
-                inputs: [
-                    [],
-                    [1, 2, 3],
-                    ['a', 'b', 'c'],
-                    [{ key: 1 }, { key: 2 }, { key: 3 }],
-                    [[1, 2, 3], [4, 5, 6]]
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertArray.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            arraySuccessScenarios,
+            arrayFailureScenarios,
             'Expected an array.'
         );
     });
 
     describe('assertBoolean', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-boolean inputs',
-                inputs: nonBooleanInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Boolean inputs',
-                inputs: [
-                    true,
-                    false
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertBoolean.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            booleanSuccessScenarios,
+            booleanFailureScenarios,
             'Expected a boolean.'
         );
     });
 
     describe('assertFunction', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-function inputs',
-                inputs: nonFunctionInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Functions',
-                inputs: [
-                    Math.random,
-                    (): boolean => {
-                        return false;
-                    },
-                    (): number => {
-                        return 2;
-                    },
-                    (x: number, y: number): number => {
-                        return (x * y) - (x + y);
-                    }
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertFunction.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            functionSuccessScenarios,
+            functionFailureScenarios,
             'Expected a function.'
         );
     });
 
     describe('assertObject', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-object inputs',
-                inputs: nonObjectInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Array inputs',
-                inputs: [
-                    [],
-                    [1, 2, 3],
-                    ['a', 'b', 'c'],
-                    [{ key: 1 }, { key: 2 }, { key: 3 }],
-                    [[1, 2, 3], [4, 5, 6]]
-                ],
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Non-array objects',
-                inputs: [
-                    {},
-                    { key: 'value' },
-                    { 'other key': 'other value' },
-                    RandomNumberGeneratorFactory.build('seed'),
-                    new Error(),
-                    new Set<string>()
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertObject.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            objectSuccessScenarios,
+            objectFailureScenarios,
             'Expected a non-array object.'
         );
     });
 
     describe('assertString', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: nonStringInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'String inputs',
-                inputs: [
-                    ...emptyStringInputs,
-                    ...nonEmptyStringInputs
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertString.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            stringSuccessScenarios,
+            stringFailureScenarios,
             'Expected a string.'
         );
     });
 
+    /* ******************* TODO: DEPRECATED ******************* */
+
     describe('[DEPRECATED] assertArrayType', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-array inputs',
-                inputs: nonArrayInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Array inputs',
-                inputs: [
-                    [],
-                    [1, 2, 3],
-                    ['a', 'b', 'c'],
-                    [{ key: 1 }, { key: 2 }, { key: 3 }],
-                    [[1, 2, 3], [4, 5, 6]]
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertArrayType.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            arraySuccessScenarios,
+            arrayFailureScenarios,
             'Expected an array.'
         );
     });
 
     describe('[DEPRECATED] assertFunctionType', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-function inputs',
-                inputs: nonFunctionInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Functions',
-                inputs: [
-                    Math.random,
-                    (): boolean => {
-                        return false;
-                    },
-                    (): number => {
-                        return 2;
-                    },
-                    (x: number, y: number): number => {
-                        return (x * y) - (x + y);
-                    }
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertFunctionType.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            functionSuccessScenarios,
+            functionFailureScenarios,
             'Expected a function.'
         );
     });
 
     describe('[DEPRECATED] assertObjectType', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-object inputs',
-                inputs: nonObjectInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Array inputs',
-                inputs: [
-                    [],
-                    [1, 2, 3],
-                    ['a', 'b', 'c'],
-                    [{ key: 1 }, { key: 2 }, { key: 3 }],
-                    [[1, 2, 3], [4, 5, 6]]
-                ],
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Non-array objects',
-                inputs: [
-                    {},
-                    { key: 'value' },
-                    { 'other key': 'other value' },
-                    RandomNumberGeneratorFactory.build('seed'),
-                    new Error(),
-                    new Set<string>()
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertObjectType.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            objectSuccessScenarios,
+            objectFailureScenarios,
             'Expected a non-array object.'
         );
     });
 
     describe('[DEPRECATED] assertStringType', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: nonStringInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'String inputs',
-                inputs: [
-                    ...emptyStringInputs,
-                    ...nonEmptyStringInputs
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             TypeAssertions.assertStringType.bind(TypeAssertions),
-            successScenarios,
-            failureScenarios,
+            stringSuccessScenarios,
+            stringFailureScenarios,
             'Expected a string.'
         );
     });

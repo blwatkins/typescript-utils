@@ -32,7 +32,7 @@ import {
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
-import { nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
+import { invalidSafeNumberInputs, nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 import {
@@ -368,7 +368,10 @@ describe('Random', (): void => {
                     expect(value).toBeGreaterThanOrEqual(min);
                     expect(value).toBeLessThan(max);
 
-                    expect(Number.isSafeInteger(Random.randomInt(min, max))).toBe(true);
+                    const intValue: number = Random.randomInt(min, max);
+                    expect(Number.isSafeInteger(intValue)).toBe(true);
+                    expect(intValue).toBeGreaterThanOrEqual(min);
+                    expect(intValue).toBeLessThan(max);
                 }
             });
         });
@@ -510,19 +513,6 @@ describe('Random', (): void => {
                 expect(intValue).toBeLessThan(max);
                 expect(integerValue).toBeGreaterThanOrEqual(min);
                 expect(integerValue).toBeLessThan(max);
-            });
-        });
-
-        describe('randomInt and randomInteger should accept bounds at the safe integer limits', (): void => {
-            test.each([
-                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                { min: 0, max: Number.MAX_SAFE_INTEGER },
-                { min: Number.MIN_SAFE_INTEGER, max: 0 }
-            ])('%# - randomInt($min, $max) should return a safe integer', ({ min, max }: { min: number; max: number; }): void => {
-                const value: number = Random.randomInt(min, max);
-                expect(Number.isSafeInteger(value)).toBe(true);
-                expect(value).toBeGreaterThanOrEqual(min);
-                expect(value).toBeLessThan(max);
             });
         });
 
@@ -693,65 +683,147 @@ describe('Random', (): void => {
     });
 
     describe('randomWeightedElement', (): void => {
+        /*
+         * The weighted lists below are shared by every randomWeightedElement block: the selection
+         * tests, the zero weight tests, and the out of contract generator tests all draw from the
+         * same lists so a list added once reaches all three.
+         */
+        interface WeightedListScenario {
+            readonly input: { value: unknown; weight: number; }[];
+            readonly type: string;
+        }
+
+        interface ZeroWeightListScenario extends WeightedListScenario {
+            readonly expected: unknown[];
+        }
+
+        const weightedListScenarios: WeightedListScenario[] = [
+            {
+                input: [
+                    { value: 1, weight: 0.25 },
+                    { value: 2, weight: 0.25 },
+                    { value: 3, weight: 0.25 },
+                    { value: 4, weight: 0.25 }
+                ],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1, weight: 0.5 },
+                    { value: 2, weight: 0.2 },
+                    { value: 3, weight: 0.2 },
+                    { value: 4, weight: 0.1 }
+                ],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1.1, weight: 0.25 },
+                    { value: 2.2, weight: 0.25 },
+                    { value: 3.3, weight: 0.25 },
+                    { value: 4.4, weight: 0.25 }
+                ],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1, weight: 1 }
+                ],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 'it', weight: 0.25 },
+                    { value: 'was', weight: 0.25 },
+                    { value: 'the', weight: 0.25 },
+                    { value: 'best', weight: 0.25 }
+                ],
+                type: 'string'
+            },
+            {
+                input: [
+                    { value: 'see', weight: 0.33 },
+                    { value: 'spot', weight: 0.33 },
+                    { value: 'run', weight: 0.34 }
+                ],
+                type: 'string'
+            },
+            {
+                input: [
+                    { value: 'hello', weight: 1 }
+                ],
+                type: 'string'
+            }
+        ];
+
+        const zeroWeightListScenarios: ZeroWeightListScenario[] = [
+            {
+                input: [
+                    { value: 1, weight: 0.25 },
+                    { value: 2, weight: 0 },
+                    { value: 3, weight: 0.25 },
+                    { value: 4, weight: 0.25 },
+                    { value: 5, weight: 0.25 }
+                ],
+                expected: [1, 3, 4, 5],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1, weight: 0.5 },
+                    { value: 2, weight: 0 },
+                    { value: 3, weight: 0.3 },
+                    { value: 4, weight: 0.2 }
+                ],
+                expected: [1, 3, 4],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1, weight: 0 },
+                    { value: 2, weight: 0.3 },
+                    { value: 3, weight: 0.3 },
+                    { value: 4, weight: 0.4 }
+                ],
+                expected: [2, 3, 4],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1, weight: 0.4 },
+                    { value: 2, weight: 0.3 },
+                    { value: 3, weight: 0.3 },
+                    { value: 4, weight: 0 }
+                ],
+                expected: [1, 2, 3],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 1.1, weight: 0 },
+                    { value: 2.2, weight: 0.25 },
+                    { value: 3.3, weight: 0.25 },
+                    { value: 4.4, weight: 0.5 }
+                ],
+                expected: [2.2, 3.3, 4.4],
+                type: 'number'
+            },
+            {
+                input: [
+                    { value: 'it', weight: 0.2 },
+                    { value: 'was', weight: 0.4 },
+                    { value: 'the', weight: 0 },
+                    { value: 'best', weight: 0.4 }
+                ],
+                expected: ['it', 'was', 'best'],
+                type: 'string'
+            }
+        ];
+
         describe('randomWeightedElement should return an element from the given list with the proper element type', (): void => {
-            test.each([
-                {
-                    input: [
-                        { value: 1, weight: 0.25 },
-                        { value: 2, weight: 0.25 },
-                        { value: 3, weight: 0.25 },
-                        { value: 4, weight: 0.25 }
-                    ],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.5 },
-                        { value: 2, weight: 0.2 },
-                        { value: 3, weight: 0.2 },
-                        { value: 4, weight: 0.1 }
-                    ],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1.1, weight: 0.25 },
-                        { value: 2.2, weight: 0.25 },
-                        { value: 3.3, weight: 0.25 },
-                        { value: 4.4, weight: 0.25 }
-                    ],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1, weight: 1 }
-                    ],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 'it', weight: 0.25 },
-                        { value: 'was', weight: 0.25 },
-                        { value: 'the', weight: 0.25 },
-                        { value: 'best', weight: 0.25 }
-                    ],
-                    type: 'string'
-                },
-                {
-                    input: [
-                        { value: 'see', weight: 0.33 },
-                        { value: 'spot', weight: 0.33 },
-                        { value: 'run', weight: 0.34 }
-                    ],
-                    type: 'string'
-                },
-                {
-                    input: [
-                        { value: 'hello', weight: 1 }
-                    ],
-                    type: 'string'
-                }
-            ])('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: { input: { value: unknown; weight: number; }[]; type: string; }): void => {
+            test.each(
+                weightedListScenarios
+            )('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: WeightedListScenario): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
                 const expectedElements: unknown[] = input.map((item: { value: unknown; weight: number; }): unknown => item.value);
@@ -765,69 +837,9 @@ describe('Random', (): void => {
         });
 
         describe('randomWeightedElement should not return an element from the given list if the weight is zero', (): void => {
-            test.each([
-                {
-                    input: [
-                        { value: 1, weight: 0.25 },
-                        { value: 2, weight: 0 },
-                        { value: 3, weight: 0.25 },
-                        { value: 4, weight: 0.25 },
-                        { value: 5, weight: 0.25 }
-                    ],
-                    expected: [1, 3, 4, 5],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.5 },
-                        { value: 2, weight: 0 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0.2 }
-                    ],
-                    expected: [1, 3, 4],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0 },
-                        { value: 2, weight: 0.3 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0.4 }
-                    ],
-                    expected: [2, 3, 4],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.4 },
-                        { value: 2, weight: 0.3 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0 }
-                    ],
-                    expected: [1, 2, 3],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 1.1, weight: 0 },
-                        { value: 2.2, weight: 0.25 },
-                        { value: 3.3, weight: 0.25 },
-                        { value: 4.4, weight: 0.5 }
-                    ],
-                    expected: [2.2, 3.3, 4.4],
-                    type: 'number'
-                },
-                {
-                    input: [
-                        { value: 'it', weight: 0.2 },
-                        { value: 'was', weight: 0.4 },
-                        { value: 'the', weight: 0 },
-                        { value: 'best', weight: 0.4 }
-                    ],
-                    expected: ['it', 'was', 'best'],
-                    type: 'string'
-                }
-            ])('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: { input: { value: unknown; weight: number; }[]; expected: unknown[]; type: string; }): void => {
+            test.each(
+                zeroWeightListScenarios
+            )('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: ZeroWeightListScenario): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 10);
 
@@ -841,105 +853,9 @@ describe('Random', (): void => {
 
         describe('randomWeightedElement should return a fallback element if the randomNumberGenerator returns a number outside the range of 0 to 1', (): void => {
             describe.each([
-                {
-                    input: [
-                        { value: 1, weight: 0.25 },
-                        { value: 2, weight: 0.25 },
-                        { value: 3, weight: 0.25 },
-                        { value: 4, weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.5 },
-                        { value: 2, weight: 0.2 },
-                        { value: 3, weight: 0.2 },
-                        { value: 4, weight: 0.1 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1.1, weight: 0.25 },
-                        { value: 2.2, weight: 0.25 },
-                        { value: 3.3, weight: 0.25 },
-                        { value: 4.4, weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 1 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'it', weight: 0.25 },
-                        { value: 'was', weight: 0.25 },
-                        { value: 'the', weight: 0.25 },
-                        { value: 'best', weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'see', weight: 0.33 },
-                        { value: 'spot', weight: 0.33 },
-                        { value: 'run', weight: 0.34 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'hello', weight: 1 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.25 },
-                        { value: 2, weight: 0 },
-                        { value: 3, weight: 0.25 },
-                        { value: 4, weight: 0.25 },
-                        { value: 5, weight: 0.25 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.5 },
-                        { value: 2, weight: 0 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0.2 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0 },
-                        { value: 2, weight: 0.3 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0.4 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1, weight: 0.4 },
-                        { value: 2, weight: 0.3 },
-                        { value: 3, weight: 0.3 },
-                        { value: 4, weight: 0 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 1.1, weight: 0 },
-                        { value: 2.2, weight: 0.25 },
-                        { value: 3.3, weight: 0.25 },
-                        { value: 4.4, weight: 0.5 }
-                    ]
-                },
-                {
-                    input: [
-                        { value: 'it', weight: 0.2 },
-                        { value: 'was', weight: 0.4 },
-                        { value: 'the', weight: 0 },
-                        { value: 'best', weight: 0.4 }
-                    ]
-                }
-            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: { input: { value: unknown; weight: number; }[]; }): void => {
+                ...weightedListScenarios,
+                ...zeroWeightListScenarios
+            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: WeightedListScenario): void => {
                 test('Should return elements[0] if the rng function returns a negative number', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return -0.1;
@@ -967,23 +883,17 @@ describe('Random', (): void => {
         const safeMin: number = 0;
         const safeMax: number = 10;
 
-        const invalidBoundInputs: unknown[] = [
-            ...nonNumberInputs,
-            ...nonFiniteNumberInputs,
-            ...unsafeNumberInputs
-        ];
-
         const argumentFailureScenarios: Scenario[] = [
             {
                 label: 'Invalid min argument',
-                inputs: invalidBoundInputs.map((input: unknown): { min: unknown; max: number; } => {
+                inputs: invalidSafeNumberInputs.map((input: unknown): { min: unknown; max: number; } => {
                     return { min: input, max: safeMax };
                 }),
                 expected: PrimitiveTypeError
             },
             {
                 label: 'Invalid max argument',
-                inputs: invalidBoundInputs.map((input: unknown): { min: number; max: unknown; } => {
+                inputs: invalidSafeNumberInputs.map((input: unknown): { min: number; max: unknown; } => {
                     return { min: safeMin, max: input };
                 }),
                 expected: PrimitiveTypeError

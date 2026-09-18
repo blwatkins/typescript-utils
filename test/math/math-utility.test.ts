@@ -25,11 +25,9 @@ import { describe, test, expect } from 'vitest';
 import { MathUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
 import {
+    invalidSafeNumberInputs,
     negativeSafeIntegerInputs,
-    nonFiniteNumberInputs,
-    nonNumberInputs,
     safeFloatInputs,
-    unsafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
@@ -82,11 +80,7 @@ describe('MathUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid value argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: unknown; min: number; max: number; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: unknown; min: number; max: number; } => {
                         return {
                             value: input,
                             min: defaultMin,
@@ -97,11 +91,7 @@ describe('MathUtility', (): void => {
                 },
                 {
                     label: 'Invalid min argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: number; min: unknown; max: number; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: number; min: unknown; max: number; } => {
                         return {
                             value: defaultValue,
                             min: input,
@@ -112,11 +102,7 @@ describe('MathUtility', (): void => {
                 },
                 {
                     label: 'Invalid max argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: number; min: number; max: unknown; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: number; min: number; max: unknown; } => {
                         return {
                             value: defaultValue,
                             min: defaultMin,
@@ -196,9 +182,7 @@ describe('MathUtility', (): void => {
                 {
                     label: 'Invalid x argument',
                     inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs,
+                        ...invalidSafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs
                     ].map((input: unknown): { x: unknown; y: number; columns: number; rows: number; } => {
@@ -214,9 +198,7 @@ describe('MathUtility', (): void => {
                 {
                     label: 'Invalid y argument',
                     inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs,
+                        ...invalidSafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs
                     ].map((input: unknown): { x: number; y: unknown; columns: number; rows: number; } => {
@@ -232,9 +214,7 @@ describe('MathUtility', (): void => {
                 {
                     label: 'Invalid columns argument',
                     inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs,
+                        ...invalidSafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs,
                         ...zeroInputs
@@ -251,9 +231,7 @@ describe('MathUtility', (): void => {
                 {
                     label: 'Invalid rows argument',
                     inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs,
+                        ...invalidSafeNumberInputs,
                         ...safeFloatInputs,
                         ...negativeSafeIntegerInputs,
                         ...zeroInputs

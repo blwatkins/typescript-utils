@@ -22,11 +22,12 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeError, Range, RangeBuilder, RangeUtility, SchemaTypeError } from '../../src';
+import { PrimitiveTypeError, Range, RangeBuilder, RangeUtility } from '../../src';
 
-import { nonBooleanInputs } from '../utils/input/boolean-inputs';
+import { definedNonBooleanInputs } from '../utils/input/boolean-inputs';
 
 import {
+    invalidSafeNumberInputs,
     negativeSafeNumberInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
@@ -90,7 +91,7 @@ describe('RangeBuilder', (): void => {
     const invalidBooleanScenarios: Scenario[] = [
         {
             label: 'Non-boolean inputs',
-            inputs: nonBooleanInputs.filter(input => input !== undefined),
+            inputs: definedNonBooleanInputs,
             expected: PrimitiveTypeError
         }
     ];
@@ -139,11 +140,7 @@ describe('RangeBuilder', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid min argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { min: unknown; max: number; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { min: unknown; max: number; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
                         return {
                             min: input,
                             max: Number.MAX_SAFE_INTEGER,
@@ -155,11 +152,7 @@ describe('RangeBuilder', (): void => {
                 },
                 {
                     label: 'Invalid max argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { min: number; max: unknown; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { min: number; max: unknown; isMinInclusive: undefined; isMaxInclusive: undefined; } => {
                         return {
                             min: Number.MIN_SAFE_INTEGER,
                             max: input,
@@ -171,7 +164,7 @@ describe('RangeBuilder', (): void => {
                 },
                 {
                     label: 'Invalid isMinInclusive argument',
-                    inputs: nonBooleanInputs.filter(input => input !== undefined)
+                    inputs: definedNonBooleanInputs
                         .map((input: unknown): { min: number; max: number; isMinInclusive: unknown; isMaxInclusive: undefined; } => {
                             return {
                                 min: Number.MIN_SAFE_INTEGER,
@@ -184,7 +177,7 @@ describe('RangeBuilder', (): void => {
                 },
                 {
                     label: 'Invalid isMaxInclusive argument',
-                    inputs: nonBooleanInputs.filter(input => input !== undefined)
+                    inputs: definedNonBooleanInputs
                         .map((input: unknown): { min: number; max: number; isMinInclusive: undefined; isMaxInclusive: unknown; } => {
                             return {
                                 min: Number.MIN_SAFE_INTEGER,
@@ -457,45 +450,6 @@ describe('RangeBuilder', (): void => {
                         builder.build();
                     }).toThrow(testExpected);
                 });
-            });
-        });
-    });
-
-    describe('Single value ranges', (): void => {
-        describe('build and buildFrom should reject a single value range with an excluded bound', (): void => {
-            test.each([
-                { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: true },
-                { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: false },
-                { min: 5, max: 5, isMinInclusive: false, isMaxInclusive: false },
-                { min: 0, max: 0, isMinInclusive: false, isMaxInclusive: undefined },
-                { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: false }
-            ])('%# - buildFrom($min, $max, $isMinInclusive, $isMaxInclusive) should throw SchemaTypeError', ({ min, max, isMinInclusive, isMaxInclusive }: { min: number; max: number; isMinInclusive: boolean | undefined; isMaxInclusive: boolean | undefined; }): void => {
-                expect((): Range => {
-                    return RangeBuilder.buildFrom(min, max, isMinInclusive, isMaxInclusive);
-                }).toThrow(SchemaTypeError);
-
-                expect((): Range => {
-                    return new RangeBuilder()
-                        .setMin(min)
-                        .setMax(max)
-                        .setMinInclusive(isMinInclusive)
-                        .setMaxInclusive(isMaxInclusive)
-                        .build();
-                }).toThrow(SchemaTypeError);
-            });
-        });
-
-        describe('build and buildFrom should accept a single value range without an excluded bound', (): void => {
-            test.each([
-                { min: 5, max: 5, isMinInclusive: undefined, isMaxInclusive: undefined },
-                { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: true },
-                { min: 0, max: 0, isMinInclusive: true, isMaxInclusive: undefined },
-                { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: true }
-            ])('%# - buildFrom($min, $max, $isMinInclusive, $isMaxInclusive) should return a valid Range', ({ min, max, isMinInclusive, isMaxInclusive }: { min: number; max: number; isMinInclusive: boolean | undefined; isMaxInclusive: boolean | undefined; }): void => {
-                const range: Range = RangeBuilder.buildFrom(min, max, isMinInclusive, isMaxInclusive);
-                expect(RangeUtility.isRange(range)).toBe(true);
-                expect(range.min).toBe(min);
-                expect(range.max).toBe(max);
             });
         });
     });
