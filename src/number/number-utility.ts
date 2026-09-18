@@ -42,57 +42,57 @@ export class NumberUtility {
     }
 
     /**
-     * Validates and asserts that the given input is a finite number.
+     * Assert that `input` is a finite number.
      *
-     * @see {@link NumberUtility.isFiniteNumber}
+     * @see {@link NumberUtility.isFinite}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a finite number.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a finite number.
      *
-     * @returns {asserts input is number} Asserts that the given input is a finite number.
+     * @returns {asserts input is number}
      *
-     * @throws {PrimitiveTypeError} When the input is not a finite number.
+     * @throws {PrimitiveTypeError} When `input` is not a finite number.
      *
      * @public
      * @since 0.1.0
      */
-    public static assertFiniteNumber(input: unknown, message?: string): asserts input is number {
-        if (!NumberUtility.isFiniteNumber(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+    public static assertFinite(input: unknown, message?: string): asserts input is number {
+        if (!NumberUtility.isFinite(input)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a finite number, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a finite number.');
         }
     }
 
     /**
-     * Validates and asserts that the given input is an integer.
+     * Assert that `input` is an integer within the safe integer range.
      *
      * @see {@link NumberUtility.isInteger}
      *
      * @param {unknown} input - The input to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not an integer.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not an integer within the safe integer range.
      *
-     * @returns {asserts input is number} Asserts that the given input is an integer.
+     * @returns {asserts input is number}
      *
-     * @throws {PrimitiveTypeError} When the input is not an integer.
+     * @throws {PrimitiveTypeError} When `input` is not an integer within the safe integer range.
      *
      * @public
      * @since 0.1.0
      */
     public static assertInteger(input: unknown, message?: string): asserts input is number {
         if (!NumberUtility.isInteger(input)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected an integer, but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected an integer within the safe integer range.');
         }
     }
 
     /**
-     * Validates and asserts that the given input is a positive integer.
+     * Assert that `input` is a positive integer within the safe integer range.
      *
      * @see {@link NumberUtility.isPositiveInteger}
      *
@@ -100,121 +100,172 @@ export class NumberUtility {
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
      * Default value is `false`.
-     * @param {string|undefined} message - Optional message for the error thrown when the input is not a positive integer.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a positive integer within the safe integer range or zero when `zeroInclusive` is `true`.
      *
-     * @returns {asserts input is number} Asserts that the given input is a positive integer.
+     * @returns {asserts input is number}
      *
-     * @throws {PrimitiveTypeError} When the input is not a positive integer.
+     * @throws {PrimitiveTypeError} When `input` is not a positive integer within the safe integer range or zero when `zeroInclusive` is `true`.
      *
      * @public
      * @since 0.1.0
      */
     public static assertPositiveInteger(input: unknown, zeroInclusive: boolean = false, message?: string): asserts input is number {
         if (!NumberUtility.isPositiveInteger(input, zeroInclusive)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new PrimitiveTypeError(message);
             }
 
-            throw new PrimitiveTypeError(`Expected a positive integer (zeroInclusive=${zeroInclusive}), but received: ${typeof input}.`);
+            throw new PrimitiveTypeError('Expected a positive integer within the safe integer range or zero if zeroInclusive is true.');
         }
     }
 
     /**
-     * Validate and assert that the given value is greater than or equal to the given min and less than or equal to the given max.
+     * Assert that `input` is a number within the safe integer range.
      *
-     * @see {@link NumberUtility.isInRange}
+     * @see {@link NumberUtility.isSafe}
      *
-     * @param {number} value - The value to check. Must be a finite number.
-     * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
-     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
-     * @param {string|undefined} message - Optional message for the error thrown when the given value is not within the range [min, max] (inclusive).
+     * @param {unknown} input - The input to check.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a number within the safe integer range.
+     *
+     * @returns {asserts input is number}
+     *
+     * @throws {PrimitiveTypeError} When `input` is not a number within the safe integer range.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertSafe(input: unknown, message?: string): asserts input is number {
+        if (!NumberUtility.isSafe(input)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError('Expected a number between MIN_SAFE_INTEGER and MAX_SAFE_INTEGER (inclusive).');
+        }
+    }
+
+    /**
+     * Assert that `a` is less than `b`.
+     *
+     * @see {@link NumberUtility.isLessThan}
+     *
+     * @param {number} a - The value that must be the lesser of the two.
+     * @param {number} b - The value that must be the greater of the two.
+     * @param {string | undefined} message - Optional message for the error thrown when `a` is not less than `b`.
      *
      * @returns {void}
      *
-     * @throws {PrimitiveTypeError} When the given value is not a finite number.
-     * @throws {PrimitiveTypeError} When the given min is not a finite number.
-     * @throws {PrimitiveTypeError} When the given max is not a finite number.
-     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
-     * @throws {ValueRangeError} When the given value is not in the range [min, max] (inclusive).
+     * @throws {PrimitiveTypeError} When `a` and `b` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `a` is not less than `b`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertLessThan(a: number, b: number, message?: string): void {
+        if (!NumberUtility.isLessThan(a, b)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError('a must be less than b.');
+        }
+    }
+
+    /**
+     * Assert that `value` is greater than or equal to `min` and less than or equal to `max`.
+     *
+     * @see {@link NumberUtility.isInRange}
+     *
+     * @param {number} value - The value to check.
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The inclusive maximum value.
+     * @param {string | undefined} message - Optional message for the error thrown when `value` is not within the range [`min`, `max`] (inclusive).
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When `value`, `min`, or `max` are not all numbers within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than or equal to `max`.
+     * @throws {ValueRangeError} When `value` is not in the range [`min`, `max`] (inclusive).
      *
      * @public
      * @since 0.1.0
      */
     public static assertInRange(value: number, min: number, max: number, message?: string): void {
         if (!NumberUtility.isInRange(value, min, max)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError(`Value ${value} must be in the range [${min}, ${max}].`);
+            throw new ValueRangeError('value must be in the range [min, max] (inclusive).');
         }
     }
 
     /**
-     * Validate and assert that the given min and max are finite numbers, where min is less than or equal to max.
+     * Assert that `min` and `max` are numbers within the safe integer range, where `min` is less than or equal to `max`.
      *
      * @see {@link NumberUtility.isValidRange}
      *
      * @param {number} min - Minimum value to check.
      * @param {number} max - Maximum value to check.
-     * @param {string|undefined} message - Optional message for the error thrown when the given min is not less than or equal to the given max.
+     * @param {string | undefined} message - Optional message for the error thrown when `min` is not less than or equal to `max`.
      *
      * @returns {void}
      *
-     * @throws {PrimitiveTypeError} When the given min is not a finite number.
-     * @throws {PrimitiveTypeError} When the given max is not a finite number.
-     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than or equal to `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static assertValidRange(min: number, max: number, message?: string): void {
         if (!NumberUtility.isValidRange(min, max)) {
-            if (StringUtility.isSingleLineTrimmedString(message)) {
+            if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError(`Min (${min}) must be less than or equal to max (${max}).`);
+            throw new ValueRangeError('min must be less than or equal to max.');
         }
     }
 
     /**
-     * Is the given input a finite number?
+     * Is `input` a finite number?
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
+     * @returns {input is number} `true` when `input` is a finite number; `false` otherwise.
      *
      * @public
      * @since 0.1.0
      */
-    public static isFiniteNumber(input: unknown): input is number {
+    public static isFinite(input: unknown): input is number {
         return Number.isFinite(input);
     }
 
     /**
-     * Is the given input an integer?
+     * Is `input` an integer within the safe integer range?
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {input is number} `true` when the input is an integer; `false` otherwise.
+     * @returns {input is number} `true` when `input` is an integer within the safe integer range; `false` otherwise.
      *
      * @public
      * @since 0.1.0
      */
     public static isInteger(input: unknown): input is number {
-        return Number.isInteger(input);
+        return Number.isInteger(input) && NumberUtility.isSafe(input);
     }
 
     /**
-     * Is the given input a positive integer?
+     * Is `input` a positive integer within the safe integer range?
+     *
+     * @see {@link NumberUtility.isInteger}
      *
      * @param {unknown} input - The input to check.
      * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
      * Default value is `false`.
      *
-     * @returns {input is number} `true` if the given input is a positive integer, or zero when `zeroInclusive` is `true`; `false` otherwise.
+     * @returns {input is number} `true` if `input` is a positive integer within the safe integer range, or zero when `zeroInclusive` is `true`; `false` otherwise.
      *
      * @public
      * @since 0.1.0
@@ -232,47 +283,124 @@ export class NumberUtility {
     }
 
     /**
-     * Is the given value greater than or equal to the given min and less than or equal to the given max?
+     * Is `input` a number within the safe integer range?
      *
-     * @param {number} value - The value to check. Must be a finite number.
-     * @param {number} min - The minimum value (inclusive). Must be a finite number less than or equal to the given max.
-     * @param {number} max - The maximum value (inclusive). Must be a finite number greater than or equal to the given min.
+     * @param {unknown} input - The input to check.
      *
-     * @returns {boolean} `true` if the given value is in the range [min, max] (inclusive).; `false` otherwise.
+     * @returns {input is number} `true` if `input` is a number within the safe integer range; `false` otherwise.
      *
-     * @throws {PrimitiveTypeError} When the given value is not a finite number.
-     * @throws {PrimitiveTypeError} When the given min is not a finite number.
-     * @throws {PrimitiveTypeError} When the given max is not a finite number.
-     * @throws {ValueRangeError} When the given min is not less than or equal to the given max.
+     * @public
+     * @since 0.1.0
+     */
+    public static isSafe(input: unknown): input is number {
+        if (NumberUtility.isFinite(input)) {
+            return (input >= Number.MIN_SAFE_INTEGER) && (input <= Number.MAX_SAFE_INTEGER);
+        }
+
+        return false;
+    }
+
+    /**
+     * Is `a` less than `b`?
+     *
+     * @see {@link NumberUtility.assertSafe}
+     *
+     * @param {number} a - The value that must be the lesser of the two.
+     * @param {number} b - The value that must be the greater of the two.
+     *
+     * @returns {boolean} `true` if `a` is less than `b`; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `a` and `b` are not both numbers within the safe integer range.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isLessThan(a: number, b: number): boolean {
+        NumberUtility.assertSafe(a, 'a must be within the safe integer range.');
+        NumberUtility.assertSafe(b, 'b must be within the safe integer range.');
+        return a < b;
+    }
+
+    /**
+     * Is `value` greater than or equal to `min` and less than, or equal to, `max`?
+     *
+     * @param {number} value - The value to check.
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The inclusive maximum value.
+     *
+     * @returns {boolean} `true` if `value` is in the range [`min`, `max`] (inclusive); `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `value`, `min`, or `max` are not all within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than or equal to `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static isInRange(value: number, min: number, max: number): boolean {
-        NumberUtility.assertFiniteNumber(min);
-        NumberUtility.assertFiniteNumber(max);
-        NumberUtility.assertFiniteNumber(value);
+        NumberUtility.assertSafe(value, 'value must be within the safe integer range.');
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
         NumberUtility.assertValidRange(min, max);
         return value >= min && value <= max;
     }
 
     /**
-     * Do the given min and max form a valid range, where min and max finite numbers and min is less than or equal to max?
+     * Do `min` and `max` form a valid range, where `min` and `max` are within the safe integer range and `min` is less than or equal to `max`?
+     *
+     * @see {@link NumberUtility.assertSafe}
      *
      * @param {number} min - Minimum value to check.
      * @param {number} max - Maximum value to check.
      *
-     * @returns {boolean} `true` if the given min and max are finite numbers and min is less than or equal to max; `false` otherwise.
+     * @returns {boolean} `true` if `min` and `max` are within the safe integer range, and `min` is less than or equal to `max`; `false` otherwise.
      *
-     * @throws {PrimitiveTypeError} When the given min is not a finite number.
-     * @throws {PrimitiveTypeError} When the given max is not a finite number.
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both within the safe integer range.
      *
      * @public
      * @since 0.1.0
      */
     public static isValidRange(min: number, max: number): boolean {
-        NumberUtility.assertFiniteNumber(min, 'Min must be a finite number.');
-        NumberUtility.assertFiniteNumber(max, 'Max must be a finite number.');
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
         return min <= max;
+    }
+
+    /* ******************* TODO: DEPRECATED ******************* */
+
+    /**
+     * Asserts that input is a finite number.
+     *
+     * @see {@link NumberUtility.isFiniteNumber}
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string | undefined} message - Optional message for the error thrown when the input is not a finite number.
+     *
+     * @returns {asserts input is number} Asserts that input is a finite number.
+     *
+     * @throws {PrimitiveTypeError} When the input is not a finite number.
+     *
+     * @deprecated Replaced by {@link NumberUtility.assertFinite}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertFiniteNumber(input: unknown, message?: string): asserts input is number {
+        NumberUtility.assertFinite(input, message);
+    }
+
+    /**
+     * Is input a finite number?
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
+     *
+     * @deprecated Replaced by {@link NumberUtility.isFinite}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isFiniteNumber(input: unknown): input is number {
+        return NumberUtility.isFinite(input);
     }
 }

@@ -28,7 +28,7 @@ export function testAssertMethod(
     method: (input: unknown, message?: string) => asserts input is unknown,
     successScenarios: Scenario[],
     failureScenarios: Scenario[],
-    buildDefaultMessage?: (input: unknown) => string
+    defaultMessage?: string
 ): void {
     const maxMessageTestCases: number = 5;
 
@@ -54,17 +54,16 @@ export function testAssertMethod(
         )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
             const failureCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-            if (buildDefaultMessage) {
+            if (defaultMessage) {
                 describe('Failure scenarios should throw the expected error with default message', (): void => {
                     test.each(
                         failureCases
                     )(`%# - ${method.name}($input) should throw $expected with default message`, ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        const expectedMessage: string = buildDefaultMessage(testInput);
                         const ExpectedErrorType: new (message?: string) => Error = testExpected as new (message?: string) => Error;
 
                         expect((): void => {
                             method(testInput);
-                        }).toThrow(new ExpectedErrorType(expectedMessage));
+                        }).toThrow(new ExpectedErrorType(defaultMessage));
                     });
                 });
             } else {
@@ -128,12 +127,10 @@ export function testAssertMethod(
                         )(`%# - ${method.name}(input, $input) should throw with default message`, ({ input: message }: TestCase): void => {
                             const ExpectedErrorType: new (message?: string) => Error = failureExpected as new (message?: string) => Error;
 
-                            if (buildDefaultMessage) {
-                                const expectedMessage: string = buildDefaultMessage(failureInput);
-
+                            if (defaultMessage) {
                                 expect((): void => {
                                     method(failureInput, message as string);
-                                }).toThrow(new ExpectedErrorType(expectedMessage));
+                                }).toThrow(new ExpectedErrorType(defaultMessage));
                             } else {
                                 expect((): void => {
                                     method(failureInput, message as string);
@@ -147,6 +144,39 @@ export function testAssertMethod(
                     });
                 });
             });
+        });
+    });
+}
+
+export function testIsMethod(
+    method: (input: unknown) => boolean,
+    successScenarios: Scenario[],
+    failureScenarios: Scenario[]
+): void {
+    const scenarios: Scenario[] = [
+        ...failureScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: false
+            };
+        }),
+        ...successScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: true
+            };
+        })
+    ];
+
+    describe.each(
+        scenarios
+    )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+        const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+        test.each(
+            testCases
+        )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+            expect(method(testInput)).toBe(testExpected);
         });
     });
 }

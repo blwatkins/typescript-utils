@@ -1,6 +1,7 @@
 ---
 title: "TypeScript Utilities"
 layout: page
+description: "A toolkit of general-purpose TypeScript and JavaScript utilities."
 ---
 
 ## About This Project

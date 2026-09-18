@@ -4,9 +4,7 @@ layout: custom-post
 author:
   - Brittni Watkins
 date: 2026-05-18
-modified_date: 2026-08-28
-tags:
-  - releases
+modified_date: 2026-09-03
 toc: true
 read_time: false
 description: "Past and current releases of the TypeScript Utilities (@blwatkins/utils) npm package."

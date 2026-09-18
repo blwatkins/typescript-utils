@@ -21,22 +21,33 @@
  */
 
 import { TypeAssertions } from '../assert';
-import { PrimitiveTypeError, StaticInstanceError } from '../error';
+import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
 
 import { WeightedList, WeightedListUtility } from './weighted-element';
 
 /**
- * Static properties and methods for generating random numbers and booleans, and for selecting random elements from arrays.
+ * The maximum number of times {@link Random.randomFloat} draws a new value when a draw falls outside
+ * the range.
+ *
+ * @default 10
+ *
+ * @type {number}
+ * @private
+ */
+const maxDrawAttempts: number = 10;
+
+/**
+ * Static properties and methods for generating random values and for selecting random elements from arrays.
  *
  * @since 0.1.0
  */
 export class Random {
     /**
      * The primary function used to generate random numbers.
-     * By default, this is set to `Math.random`, but it can be overridden for testing or seeded pseudorandom number generation.
+     * By default, this is set to {@link Math.random}, but it can be overridden for testing or seeded pseudorandom number generation.
      *
-     * @default Math.random
+     * @default {@link Math.random}
      *
      * @type {() => number}
      * @private
@@ -60,13 +71,13 @@ export class Random {
      *
      * @param {() => number} rng - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
-     * @throws {PrimitiveTypeError} When the given random number generator is not a function.
+     * @throws {PrimitiveTypeError} When `rng` is not a function.
      *
      * @public
      * @since 0.1.0
      */
     public static set randomNumberGenerator(rng: () => number) {
-        TypeAssertions.assertFunctionType(rng, 'Random number generator must be a function.');
+        TypeAssertions.assertFunction(rng, 'rng must be a function.');
         Random.#rng = rng;
     }
 
@@ -83,72 +94,58 @@ export class Random {
     }
 
     /**
-     * Get a random floating-point number within the given range.
+     * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
-     * @param {number} min - The minimum value (inclusive).
-     * @param {number} max - The maximum value (exclusive).
+     * @remarks This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
+     * A draw that falls outside the range is discarded and replaced.
+     * When no draw succeeds, `min` is returned.
      *
-     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive).
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
      *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
+     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
+     *
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
      *
      * @public
      * @since 0.1.0
      */
     public static randomFloat(min: number, max: number): number {
-        NumberUtility.assertValidRange(min, max);
-        return (Random.random() * (max - min)) + min;
+        return Random.#drawValidRandomFloat(min, max);
     }
 
     /**
-     * Get a random integer within the given range.
-     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
+     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
      *
-     * @param {number} min - The minimum value (inclusive).
-     * Non-integer values are rounded down with `Math.floor`.
-     * @param {number} max - The maximum value (exclusive).
-     * Non-integer values are rounded down with `Math.floor`.
+     * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
+     * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
      *
-     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
      *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
+     * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
+     *
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
+     * @throws {ValueRangeError} When the range contains no integer values.
      *
      * @public
      * @since 0.1.0
      */
     public static randomInt(min: number, max: number): number {
-        NumberUtility.assertValidRange(min, max);
-        const floorMin: number = Math.floor(min);
-        const floorMax: number = Math.floor(max);
-        return Math.floor(Random.randomFloat(floorMin, floorMax));
-    }
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
+        NumberUtility.assertLessThan(min, max, 'min must be less than max.');
 
-    /**
-     * Get a random integer within the given range.
-     * If `min` or `max` is not an integer, it is rounded down with `Math.floor` before a value is generated.
-     *
-     * @see {@link Random.randomInt}
-     *
-     * @param {number} min - The minimum value (inclusive).
-     * Non-integer values are rounded down with `Math.floor`.
-     * @param {number} max - The maximum value (exclusive).
-     * Non-integer values are rounded down with `Math.floor`.
-     *
-     * @returns {number} A random integer in the range [Math.floor(min), Math.floor(max)) (min inclusive, max exclusive).
-     *
-     * @throws {PrimitiveTypeError} When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} When `max` is not a finite number.
-     * @throws {ValueRangeError} When `min` is not less than or equal `max`.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static randomInteger(min: number, max: number): number {
-        return Random.randomInt(min, max);
+        const lowest: number = Math.ceil(min);
+        const highest: number = Math.ceil(max) - 1;
+
+        if (lowest > highest) {
+            throw new ValueRangeError('The range contains no integer values.');
+        }
+
+        return Math.floor(Random.randomFloat(lowest, highest + 1));
     }
 
     /**
@@ -159,51 +156,52 @@ export class Random {
      *
      * @returns {boolean} A random boolean value.
      *
-     * @throws {PrimitiveTypeError} When `chanceOfTrue` is not a finite number.
+     * @throws {PrimitiveTypeError} When `chanceOfTrue` is not a number within the safe integer range.
      * @throws {ValueRangeError} When `chanceOfTrue` is not in the range [0, 1] (inclusive).
      *
      * @public
      * @since 0.1.0
      */
     public static randomBoolean(chanceOfTrue: number = 0.5): boolean {
-        NumberUtility.assertInRange(chanceOfTrue, 0, 1, 'Chance of true must be between 0 and 1.');
+        NumberUtility.assertInRange(chanceOfTrue, 0, 1, 'chanceOfTrue must be between 0 and 1.');
         return Random.random() < chanceOfTrue;
     }
 
     /**
-     * Get a random element from the given array.
+     * Get a random element.
      *
      * @param {Type[]} elements - An array of elements to choose from.
      *
-     * @returns {Type} A random element from the array.
+     * @returns {Type} A random element from `elements`.
      *
-     * @throws {PrimitiveTypeError} When elements is not a non-empty array.
+     * @throws {PrimitiveTypeError} When `elements` is not a non-empty array.
      *
      * @public
      * @since 0.1.0
      */
     public static randomElement<Type>(elements: Type[]): Type {
-        TypeAssertions.assertArrayType(elements);
+        TypeAssertions.assertArray(elements);
 
         if (elements.length === 0) {
-            throw new PrimitiveTypeError('Elements must be a non-empty array.');
+            throw new PrimitiveTypeError('elements must be a non-empty array.');
         }
 
         return elements[Random.randomInt(0, elements.length)];
     }
 
     /**
-     * Get a random element from the given {@link WeightedList}.
+     * Get a random element from a non-uniform distribution.
+     *
+     * @remarks For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {WeightedList} elements - The {@link WeightedList} to select a random element from.
      *
-     * @returns {Type} A random element from the given {@link WeightedList}, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
+     * @returns {Type} A random element from `elements`, where the selection probability is equal to the {@link WeightedElement.weight} of each element.
      *
-     * @throws {SchemaTypeError} When the given list is not a valid {@link WeightedList}.
-     * For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * @throws {SchemaTypeError} When `elements` is not a valid {@link WeightedList} object.
      *
      * @public
      * @since 0.1.0
@@ -221,5 +219,99 @@ export class Random {
         }
 
         return elements[elements.length - 1].value;
+    }
+
+    /**
+     * Draw a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive), discarding
+     * a draw that falls outside the range.
+     *
+     * @see {@link Random.randomFloat}
+     *
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
+     *
+     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
+     *
+     * @private
+     */
+    static #drawValidRandomFloat(min: number, max: number): number {
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
+        NumberUtility.assertLessThan(min, max, 'min must be less than max.');
+
+        let value: number = Random.#draw(min, max);
+        let attempts: number = 1;
+
+        while (!Random.#isInRange(value, min, max) && (attempts < maxDrawAttempts)) {
+            value = Random.#draw(min, max);
+            attempts++;
+        }
+
+        if (!Random.#isInRange(value, min, max)) {
+            return min;
+        }
+
+        return value;
+    }
+
+    /**
+     * Get a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive).
+     *
+     * @remarks This method assumes that `min` and `max` are finite numbers, where `min` is less than `max`.
+     *
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
+     *
+     * @returns {number} A random float within the specified range.
+     *
+     * @private
+     */
+    static #draw(min: number, max: number): number {
+        return (Random.random() * (max - min)) + min;
+    }
+
+    /**
+     * Is `value` within the range [`min`, `max`) (`min` inclusive, `max` exclusive)?
+     *
+     * @remarks This method assumes that `value`, `min`, and `max` are finite numbers, where `min` is less than `max`.
+     *
+     * @param {number} value - The value to check.
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
+     *
+     * @returns {boolean} `true` if `value` is greater than or equal to `min` and less than `max`; `false` otherwise.
+     *
+     * @private
+     */
+    static #isInRange(value: number, min: number, max: number): boolean {
+        return value >= min && value < max;
+    }
+
+    /* ******************* TODO: DEPRECATED ******************* */
+
+    /**
+     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
+     *
+     * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
+     * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
+     *
+     * @see {@link Random.randomInt}
+     *
+     * @param {number} min - The inclusive minimum value.
+     * @param {number} max - The exclusive maximum value.
+     *
+     * @returns {number} A random integer within the range [min, max) (min inclusive, max exclusive).
+     *
+     * @throws {PrimitiveTypeError} When `min` and `max` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `min` is not less than `max`.
+     * @throws {ValueRangeError} When the range contains no integer values.
+     *
+     * @deprecated Replaced by {@link Random.randomInt}. Will be removed in v0.1.0-alpha.5.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomInteger(min: number, max: number): number {
+        return Random.randomInt(min, max);
     }
 }

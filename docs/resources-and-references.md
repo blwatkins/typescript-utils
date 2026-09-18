@@ -4,7 +4,7 @@ layout: custom-post
 author:
   - Brittni Watkins
 date: 2026-06-05
-modified_date: 2026-08-27
+modified_date: 2026-09-06
 toc: true
 read_time: false
 description: "Resources and references used to develop the TypeScript Utilities (@blwatkins/utils) npm package."
@@ -15,6 +15,7 @@ description: "Resources and references used to develop the TypeScript Utilities 
 ### JavaScript
 
 - [MDN Web Docs - Array.prototype.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every)
+- [MDN Web Docs - Math.floor()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor)
 - [MDN Web Docs - Number.EPSILON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON)
 - [MDN Web Docs - Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
 - [MDN Web Docs - Number.isFinite()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite)

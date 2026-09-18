@@ -25,4 +25,5 @@ export * from './error';
 export * from './math';
 export * from './number';
 export * from './random';
+export * from './range';
 export * from './string';

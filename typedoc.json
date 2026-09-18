@@ -11,6 +11,7 @@
     "./src/math/index.ts",
     "./src/number/index.ts",
     "./src/random/index.ts",
+    "./src/range/index.ts",
     "./src/string/index.ts"
   ],
 
@@ -51,5 +52,13 @@
 
   "treatWarningsAsErrors": true,
 
-  "customFooterHtml": "<br/>Copyright &copy; 2022-2026 Brittni Watkins."
+  "customFooterHtml": "<br/>Copyright &copy; 2022-2026 Brittni Watkins.",
+
+  "externalSymbolLinkMappings": {
+    "typescript": {
+      "Math.ceil": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/ceil",
+      "Math.floor": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor",
+      "NumberConstructor.MAX_SAFE_INTEGER": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER"
+    }
+  }
 }
