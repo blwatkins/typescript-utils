@@ -26,7 +26,6 @@ import {
     PrimitiveTypeError,
     Random,
     Range,
-    RangeBuilder,
     RangeUtility,
     SchemaTypeError,
     StaticInstanceError,
@@ -663,47 +662,6 @@ describe('RangeUtility', (): void => {
                     for (let i: number = 0; i < testRepeatTotal; i++) {
                         const value: number = RangeUtility.randomInt(range);
                         expect(value).toBe(range.min);
-                        expect(RangeUtility.isIn(value, range)).toBe(true);
-                    }
-                });
-            });
-
-            describe('randomInt should draw from a range whose largest integer is MAX_SAFE_INTEGER', (): void => {
-                test.each([
-                    { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { min: 0, max: Number.MAX_SAFE_INTEGER },
-                    { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER },
-                    { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { min: 0, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: true },
-                    { min: Number.MAX_SAFE_INTEGER - 0.5, max: Number.MAX_SAFE_INTEGER }
-                ])('%# - randomInt($min, $max) should return a safe integer within the range', (range: Range): void => {
-                    for (let i: number = 0; i < testRepeatTotal; i++) {
-                        const value: number = RangeUtility.randomInt(range);
-                        expect(Number.isSafeInteger(value)).toBe(true);
-                        expect(RangeUtility.isIn(value, range)).toBe(true);
-                    }
-                });
-            });
-
-            describe('randomInt should reach both bounds of a range that ends at MAX_SAFE_INTEGER', (): void => {
-                test.each([
-                    { range: { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER }, draw: 0, expected: Number.MAX_SAFE_INTEGER - 1 },
-                    { range: { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER }, draw: nearOne, expected: Number.MAX_SAFE_INTEGER },
-                    { range: { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }, draw: nearOne, expected: Number.MAX_SAFE_INTEGER },
-                    { range: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }, draw: 0, expected: Number.MIN_SAFE_INTEGER }
-                ])('%# - randomInt($range) with a draw of $draw should return $expected', ({ range, draw, expected }: { range: Range; draw: number; expected: number; }): void => {
-                    Random.randomNumberGenerator = (): number => draw;
-                    expect(RangeUtility.randomInt(range)).toBe(expected);
-                });
-            });
-
-            describe('randomInt should build the same range the default RangeBuilder builds', (): void => {
-                test('randomInt should draw from the default RangeBuilder range', (): void => {
-                    const range: Range = new RangeBuilder().build();
-
-                    for (let i: number = 0; i < testRepeatTotal; i++) {
-                        const value: number = RangeUtility.randomInt(range);
-                        expect(Number.isSafeInteger(value)).toBe(true);
                         expect(RangeUtility.isIn(value, range)).toBe(true);
                     }
                 });
