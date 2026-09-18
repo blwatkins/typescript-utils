@@ -282,6 +282,8 @@ export class RangeUtility {
      * Note that {@link Random.randomInt} treats a bare pair of numbers as a half-open range [min, max),
      * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` may not.
      * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt}.
+     * A `range` holding more integers than a double can distinguish, such as the whole safe integer range, draws from a subset of those integers, because the draw is scaled by a single floating-point multiplication.
+     * Every value drawn is still within `range`; the distribution over a range that wide is not uniform.
      *
      * @see {@link Random.randomInt}
      * @see {@link RangeUtility.assertRange}
