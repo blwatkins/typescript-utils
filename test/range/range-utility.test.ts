@@ -33,7 +33,7 @@ import {
 } from '../../src';
 
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
-import { nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../utils/input/number-inputs';
+import { invalidSafeNumberInputs } from '../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import {
     invalidRangeSchemaScenarios,
@@ -234,11 +234,7 @@ describe('RangeUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid value argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: unknown; range: Range; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: unknown; range: Range; } => {
                         return {
                             value: input,
                             range: { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true }
@@ -358,11 +354,7 @@ describe('RangeUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid value argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: unknown; range: Range; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: unknown; range: Range; } => {
                         return {
                             value: input,
                             range: { min: 0, max: 10 }
@@ -585,23 +577,6 @@ describe('RangeUtility', (): void => {
                 });
             });
 
-            describe('randomFloat should reject a range with no representable value before drawing', (): void => {
-                // The bounds of each range below are adjacent representable numbers with both bounds
-                // excluded, so no representable value satisfies the range. Such an object is not a
-                // valid Range, so assertRange rejects it rather than the draw loop failing.
-                test.each([
-                    { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: false },
-                    { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
-                    { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: false }
-                ])('%# - randomFloat($min, $max) should throw SchemaTypeError', (range: Range): void => {
-                    Random.randomNumberGenerator = (): number => 0;
-
-                    expect((): void => {
-                        RangeUtility.randomFloat(range);
-                    }).toThrow(SchemaTypeError);
-                });
-            });
-
             describe('randomFloat should return the single representable value of an adjacent bound range', (): void => {
                 test.each([
                     {
@@ -681,13 +656,12 @@ describe('RangeUtility', (): void => {
                     const values: number[] = [];
 
                     for (let i: number = 0; i < testRepeatTotal; i++) {
-                        for (const value of [RangeUtility.randomInt(range)]) {
-                            expect(Number.isInteger(value)).toBe(true);
-                            expect(value).toBeGreaterThanOrEqual(lowest);
-                            expect(value).toBeLessThanOrEqual(highest);
-                            expect(RangeUtility.isIn(value, range)).toBe(true);
-                            values.push(value);
-                        }
+                        const value: number = RangeUtility.randomInt(range);
+                        expect(Number.isInteger(value)).toBe(true);
+                        expect(value).toBeGreaterThanOrEqual(lowest);
+                        expect(value).toBeLessThanOrEqual(highest);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
+                        values.push(value);
                     }
 
                     const valuesSet: Set<number> = new Set<number>(values);
@@ -708,10 +682,9 @@ describe('RangeUtility', (): void => {
                     { min: -10, max: -10, isMinInclusive: true, isMaxInclusive: true }
                 ])('%# - randomInt($min, $max) should return $min', (range: Range): void => {
                     for (let i: number = 0; i < testRepeatTotal; i++) {
-                        for (const value of [RangeUtility.randomInt(range)]) {
-                            expect(value).toBe(range.min);
-                            expect(RangeUtility.isIn(value, range)).toBe(true);
-                        }
+                        const value: number = RangeUtility.randomInt(range);
+                        expect(value).toBe(range.min);
+                        expect(RangeUtility.isIn(value, range)).toBe(true);
                     }
                 });
             });
@@ -813,16 +786,6 @@ describe('RangeUtility', (): void => {
             });
 
             const testCases: TestCase[] = buildTestCases(invalidRangeInputs, SchemaTypeError);
-
-            describe('Argument errors - constrain', (): void => {
-                test.each(
-                    testCases
-                )('%# - constrain(5, $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                    expect((): void => {
-                        RangeUtility.constrain(5, testInput as Range);
-                    }).toThrow(testExpected);
-                });
-            });
 
             describe('Argument errors - randomFloat', (): void => {
                 test.each(

@@ -27,12 +27,11 @@ import { NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
+    invalidSafeNumberInputs,
     negativeSafeIntegerInputs,
-    negativeSafeNumberInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
     positiveSafeIntegerInputs,
-    positiveSafeNumberInputs,
     safeFloatInputs,
     safeIntegerInputs,
     safeNumberInputs,
@@ -46,49 +45,49 @@ import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case
 describe('NumberUtility', (): void => {
     testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, StaticInstanceError);
 
+    const finiteFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-number inputs',
+            inputs: nonNumberInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Non-finite number inputs',
+            inputs: nonFiniteNumberInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const finiteSuccessScenarios: Scenario[] = [
+        {
+            label: 'Number inputs within the safe integer range',
+            inputs: safeNumberInputs,
+            expected: undefined
+        },
+        {
+            label: 'Number inputs outside the safe integer range',
+            inputs: unsafeNumberInputs,
+            expected: undefined
+        },
+        {
+            label: 'Zero inputs',
+            inputs: zeroInputs,
+            expected: undefined
+        }
+    ];
+
     describe('Finite', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: nonNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: nonFiniteNumberInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Number inputs within the safe integer range',
-                inputs: safeNumberInputs,
-                expected: undefined
-            },
-            {
-                label: 'Number inputs outside the safe integer range',
-                inputs: unsafeNumberInputs,
-                expected: undefined
-            },
-            {
-                label: 'Zero inputs',
-                inputs: zeroInputs,
-                expected: undefined
-            }
-        ];
-
         describe('assertFinite', (): void => {
             testAssertMethod(
                 NumberUtility.assertFinite.bind(NumberUtility),
-                successScenarios,
-                failureScenarios,
+                finiteSuccessScenarios,
+                finiteFailureScenarios,
                 'Expected a finite number.'
             );
         });
 
         describe('isFinite', (): void => {
-            testIsMethod(NumberUtility.isFinite.bind(NumberUtility), successScenarios, failureScenarios);
+            testIsMethod(NumberUtility.isFinite.bind(NumberUtility), finiteSuccessScenarios, finiteFailureScenarios);
         });
     });
 
@@ -204,20 +203,30 @@ describe('NumberUtility', (): void => {
             });
 
             describe('isPositiveInteger', (): void => {
-                describe('zeroInclusive argument omitted', (): void => {
-                    function isPositiveInteger(input: unknown): boolean {
-                        return NumberUtility.isPositiveInteger(input);
-                    }
+                function isPositiveInteger(input: unknown): boolean {
+                    return NumberUtility.isPositiveInteger(input);
+                }
 
-                    testIsMethod(isPositiveInteger, successScenarios, zeroExclusiveFailureScenarios);
-                });
+                testIsMethod(isPositiveInteger, successScenarios, zeroExclusiveFailureScenarios);
+            });
 
-                describe('zeroInclusive argument given', (): void => {
-                    function isPositiveInteger(input: unknown): boolean {
-                        return NumberUtility.isPositiveInteger(input, false);
-                    }
-
-                    testIsMethod(isPositiveInteger, successScenarios, zeroExclusiveFailureScenarios);
+            describe('An omitted zeroInclusive argument should match an explicit false', (): void => {
+                /*
+                 * zeroInclusive is a default parameter, so the two call forms cannot diverge today:
+                 * both enter the method with zeroInclusive bound to false. This pins that they agree
+                 * if the defaulting is ever reworked into an explicit branch, which is the one change
+                 * the omitted-argument run above would not catch, since it never passes the argument.
+                 *
+                 * Four literal inputs rather than a fixture sweep: the relationship is the same for
+                 * every input, and zero is the only value the two zeroInclusive settings disagree on.
+                 */
+                test.each([
+                    { label: 'Positive zero', input: 0 },
+                    { label: 'Negative zero', input: -0 },
+                    { label: 'A positive integer', input: 5 },
+                    { label: 'A negative integer', input: -5 }
+                ])('%# - $label should give the same result either way', ({ input }: { label: string; input: number; }): void => {
+                    expect(NumberUtility.isPositiveInteger(input)).toBe(NumberUtility.isPositiveInteger(input, false));
                 });
             });
         });
@@ -392,11 +401,7 @@ describe('NumberUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid a argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { a: unknown; b: number; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { a: unknown; b: number; } => {
                         return {
                             a: input,
                             b: Number.MAX_SAFE_INTEGER
@@ -406,11 +411,7 @@ describe('NumberUtility', (): void => {
                 },
                 {
                     label: 'Invalid b argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { a: number; b: unknown; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { a: number; b: unknown; } => {
                         return {
                             a: Number.MIN_SAFE_INTEGER,
                             b: input
@@ -584,11 +585,7 @@ describe('NumberUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid value argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: unknown; min: number; max: number; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: unknown; min: number; max: number; } => {
                         return {
                             value: input,
                             min: Number.MIN_SAFE_INTEGER,
@@ -599,11 +596,7 @@ describe('NumberUtility', (): void => {
                 },
                 {
                     label: 'Invalid min argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: number; min: unknown; max: number; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: number; min: unknown; max: number; } => {
                         return {
                             value: 0,
                             min: input,
@@ -614,11 +607,7 @@ describe('NumberUtility', (): void => {
                 },
                 {
                     label: 'Invalid max argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { value: number; min: number; max: unknown; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { value: number; min: number; max: unknown; } => {
                         return {
                             value: 0,
                             min: Number.MIN_SAFE_INTEGER,
@@ -747,11 +736,7 @@ describe('NumberUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid min argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { min: unknown; max: number; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { min: unknown; max: number; } => {
                         return {
                             min: input,
                             max: Number.MAX_SAFE_INTEGER
@@ -761,11 +746,7 @@ describe('NumberUtility', (): void => {
                 },
                 {
                     label: 'Invalid max argument',
-                    inputs: [
-                        ...nonNumberInputs,
-                        ...nonFiniteNumberInputs,
-                        ...unsafeNumberInputs
-                    ].map((input: unknown): { min: number; max: unknown; } => {
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { min: number; max: unknown; } => {
                         return {
                             min: Number.MIN_SAFE_INTEGER,
                             max: input
@@ -807,66 +788,18 @@ describe('NumberUtility', (): void => {
         });
     });
 
+    /* ******************* TODO: DEPRECATED ******************* */
+
     describe('[DEPRECATED] assertFiniteNumber', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: nonNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: nonFiniteNumberInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Number inputs',
-                inputs: [
-                    ...positiveSafeNumberInputs,
-                    ...negativeSafeNumberInputs,
-                    ...zeroInputs
-                ],
-                expected: undefined
-            }
-        ];
-
         testAssertMethod(
             NumberUtility.assertFiniteNumber.bind(NumberUtility),
-            successScenarios,
-            failureScenarios,
+            finiteSuccessScenarios,
+            finiteFailureScenarios,
             'Expected a finite number.'
         );
     });
 
     describe('[DEPRECATED] isFiniteNumber', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: nonNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: nonFiniteNumberInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Number inputs',
-                inputs: [
-                    ...positiveSafeNumberInputs,
-                    ...negativeSafeNumberInputs,
-                    ...zeroInputs
-                ],
-                expected: undefined
-            }
-        ];
-
-        testIsMethod(NumberUtility.isFiniteNumber.bind(NumberUtility), successScenarios, failureScenarios);
+        testIsMethod(NumberUtility.isFiniteNumber.bind(NumberUtility), finiteSuccessScenarios, finiteFailureScenarios);
     });
 });

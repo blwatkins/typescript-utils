@@ -82,6 +82,17 @@ export const unsafeNumberInputs: number[] = [
     ...positiveUnsafeNumberInputs
 ];
 
+/**
+ * Every input rejected by a parameter that requires a finite number within the safe integer range.
+ *
+ * @remarks This is the argument-validation fixture for any method whose numeric parameters are guarded by `NumberUtility.assertSafe`.
+ */
+export const invalidSafeNumberInputs: unknown[] = [
+    ...nonNumberInputs,
+    ...nonFiniteNumberInputs,
+    ...unsafeNumberInputs
+];
+
 export const negativeSafeFloatInputs: number[] = [
     -Number.MIN_VALUE,
     -Number.EPSILON,

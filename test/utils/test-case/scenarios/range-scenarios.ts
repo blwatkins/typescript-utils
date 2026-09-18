@@ -22,7 +22,7 @@
 
 import { SchemaTypeError } from '../../../../src';
 
-import { nonBooleanInputs } from '../../input/boolean-inputs';
+import { definedNonBooleanInputs } from '../../input/boolean-inputs';
 import { nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs } from '../../input/number-inputs';
 import { nonObjectInputs } from '../../input/object-inputs';
 
@@ -40,10 +40,6 @@ const epsilon: number = Number.EPSILON;
 const smallest: number = Number.MIN_VALUE;
 const largestSafe: number = Number.MAX_SAFE_INTEGER;
 const smallestSafe: number = Number.MIN_SAFE_INTEGER;
-
-const definedNonBooleanInputs: unknown[] = nonBooleanInputs.filter((input: unknown): boolean => {
-    return input !== undefined;
-});
 
 /**
  * Ranges that satisfy the Range contract.
@@ -82,7 +78,9 @@ export const validRangeScenarios: Scenario[] = [
             { min: -0, max: -0, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: -0, max: 0, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: 0, max: -0, isMinInclusive: undefined, isMaxInclusive: undefined },
-            { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: true }
+            { min: 5, max: 5, isMinInclusive: true, isMaxInclusive: true },
+            { min: 0, max: 0, isMinInclusive: true, isMaxInclusive: undefined },
+            { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: true }
         ],
         expected: undefined
     },
