@@ -688,16 +688,16 @@ describe('Random', (): void => {
          * tests, the zero weight tests, and the out of contract generator tests all draw from the
          * same lists so a list added once reaches all three.
          */
-        interface WeightedListScenario {
+        interface WeightedListCase {
             readonly input: { value: unknown; weight: number; }[];
             readonly type: string;
         }
 
-        interface ZeroWeightListScenario extends WeightedListScenario {
+        interface ZeroWeightListCase extends WeightedListCase {
             readonly expected: unknown[];
         }
 
-        const weightedListScenarios: WeightedListScenario[] = [
+        const weightedListCases: WeightedListCase[] = [
             {
                 input: [
                     { value: 1, weight: 0.25 },
@@ -756,7 +756,7 @@ describe('Random', (): void => {
             }
         ];
 
-        const zeroWeightListScenarios: ZeroWeightListScenario[] = [
+        const zeroWeightListCases: ZeroWeightListCase[] = [
             {
                 input: [
                     { value: 1, weight: 0.25 },
@@ -822,8 +822,8 @@ describe('Random', (): void => {
 
         describe('randomWeightedElement should return an element from the given list with the proper element type', (): void => {
             test.each(
-                weightedListScenarios
-            )('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: WeightedListScenario): void => {
+                weightedListCases
+            )('%# - randomWeightedElement($input) should return an element from ($input)', ({ input, type }: WeightedListCase): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 6);
                 const expectedElements: unknown[] = input.map((item: { value: unknown; weight: number; }): unknown => item.value);
@@ -838,8 +838,8 @@ describe('Random', (): void => {
 
         describe('randomWeightedElement should not return an element from the given list if the weight is zero', (): void => {
             test.each(
-                zeroWeightListScenarios
-            )('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: ZeroWeightListScenario): void => {
+                zeroWeightListCases
+            )('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: ZeroWeightListCase): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 10);
 
@@ -853,9 +853,9 @@ describe('Random', (): void => {
 
         describe('randomWeightedElement should return a fallback element if the randomNumberGenerator returns a number outside the range of 0 to 1', (): void => {
             describe.each([
-                ...weightedListScenarios,
-                ...zeroWeightListScenarios
-            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: WeightedListScenario): void => {
+                ...weightedListCases,
+                ...zeroWeightListCases
+            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: WeightedListCase): void => {
                 test('Should return elements[0] if the rng function returns a negative number', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return -0.1;

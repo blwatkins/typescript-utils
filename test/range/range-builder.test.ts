@@ -164,28 +164,26 @@ describe('RangeBuilder', (): void => {
                 },
                 {
                     label: 'Invalid isMinInclusive argument',
-                    inputs: definedNonBooleanInputs
-                        .map((input: unknown): { min: number; max: number; isMinInclusive: unknown; isMaxInclusive: undefined; } => {
-                            return {
-                                min: Number.MIN_SAFE_INTEGER,
-                                max: Number.MAX_SAFE_INTEGER,
-                                isMinInclusive: input,
-                                isMaxInclusive: undefined
-                            };
-                        }),
+                    inputs: definedNonBooleanInputs.map((input: unknown): { min: number; max: number; isMinInclusive: unknown; isMaxInclusive: undefined; } => {
+                        return {
+                            min: Number.MIN_SAFE_INTEGER,
+                            max: Number.MAX_SAFE_INTEGER,
+                            isMinInclusive: input,
+                            isMaxInclusive: undefined
+                        };
+                    }),
                     expected: PrimitiveTypeError
                 },
                 {
                     label: 'Invalid isMaxInclusive argument',
-                    inputs: definedNonBooleanInputs
-                        .map((input: unknown): { min: number; max: number; isMinInclusive: undefined; isMaxInclusive: unknown; } => {
-                            return {
-                                min: Number.MIN_SAFE_INTEGER,
-                                max: Number.MAX_SAFE_INTEGER,
-                                isMinInclusive: undefined,
-                                isMaxInclusive: input
-                            };
-                        }),
+                    inputs: definedNonBooleanInputs.map((input: unknown): { min: number; max: number; isMinInclusive: undefined; isMaxInclusive: unknown; } => {
+                        return {
+                            min: Number.MIN_SAFE_INTEGER,
+                            max: Number.MAX_SAFE_INTEGER,
+                            isMinInclusive: undefined,
+                            isMaxInclusive: input
+                        };
+                    }),
                     expected: PrimitiveTypeError
                 }
             ];
