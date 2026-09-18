@@ -215,6 +215,45 @@ describe('RangeBuilder', (): void => {
         });
     });
 
+    describe('Construction paths should agree', (): void => {
+        // buildFrom passes undefined to both inclusivity setters; the fluent path leaves those
+        // setters uncalled. Both must reach the same object, including which keys are present.
+        test.each([
+            { min: 0, max: 10 },
+            { min: -10, max: -5 },
+            { min: -5.5, max: 10.5 },
+            { min: 5, max: 5 },
+            { min: 0, max: 0 },
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
+        ])('%# - buildFrom($min, $max) should equal the fluent path', ({ min, max }: { min: number; max: number; }): void => {
+            const fromStatic: Range = RangeBuilder.buildFrom(min, max);
+            const fromFluent: Range = new RangeBuilder().setMin(min).setMax(max).build();
+
+            expect(fromStatic).toStrictEqual(fromFluent);
+            expect(Object.keys(fromStatic)).toEqual(Object.keys(fromFluent));
+            expect(fromStatic.isMinInclusive).toBeUndefined();
+            expect(fromStatic.isMaxInclusive).toBeUndefined();
+        });
+
+        test.each([
+            { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: undefined },
+            { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false },
+            { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: true },
+            { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false }
+        ])('%# - buildFrom($min, $max, $isMinInclusive, $isMaxInclusive) should equal the fluent path', ({ min, max, isMinInclusive, isMaxInclusive }: { min: number; max: number; isMinInclusive: boolean | undefined; isMaxInclusive: boolean | undefined; }): void => {
+            const fromStatic: Range = RangeBuilder.buildFrom(min, max, isMinInclusive, isMaxInclusive);
+            const fromFluent: Range = new RangeBuilder()
+                .setMin(min)
+                .setMax(max)
+                .setMinInclusive(isMinInclusive)
+                .setMaxInclusive(isMaxInclusive)
+                .build();
+
+            expect(fromStatic).toStrictEqual(fromFluent);
+            expect(Object.keys(fromStatic)).toEqual(Object.keys(fromFluent));
+        });
+    });
+
     describe('setMin', (): void => {
         describe('setMin should set the minimum value of the range', (): void => {
             describe.each(

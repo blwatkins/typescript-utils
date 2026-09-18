@@ -55,22 +55,22 @@ export class RangeBuilder {
     /**
      * The `isMinInclusive` property of the {@link Range} object.
      *
-     * @default true
+     * @default undefined
      *
      * @type {boolean | undefined}
      * @private
      */
-    #isMinInclusive: boolean | undefined = true;
+    #isMinInclusive: boolean | undefined = undefined;
 
     /**
      * The `isMaxInclusive` property of the {@link Range} object.
      *
-     * @default true
+     * @default undefined
      *
      * @type {boolean | undefined}
      * @private
      */
-    #isMaxInclusive: boolean | undefined = true;
+    #isMaxInclusive: boolean | undefined = undefined;
 
     /**
      * Build a {@link Range} object.
