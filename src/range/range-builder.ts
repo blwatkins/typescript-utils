@@ -80,12 +80,12 @@ export class RangeBuilder {
      * @param {boolean} isMinInclusive - Should the minimum value be included in the range?
      * @param {boolean} isMaxInclusive - Should the maximum value be included in the range?
      *
-     * @returns {Range} - The {@link Range} object.
+     * @returns {Range} The {@link Range} object.
      *
-     * @throws {PrimitiveTypeError} - When `min` is not a finite number.
-     * @throws {PrimitiveTypeError} - When `max` is not a finite number.
-     * @throws {PrimitiveTypeError} - When `isMinInclusive` is not a boolean or undefined.
-     * @throws {PrimitiveTypeError} - When `isMaxInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `min` is not a finite number.
+     * @throws {PrimitiveTypeError} When `max` is not a finite number.
+     * @throws {PrimitiveTypeError} When `isMinInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `isMaxInclusive` is not a boolean or undefined.
      * @throws {SchemaTypeError} When the resulting object is not a valid {@link Range}.
      *
      * @public
@@ -101,9 +101,9 @@ export class RangeBuilder {
      *
      * @param {number} min - The minimum value of the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `min` is not a number within the safe integer range.
+     * @throws {PrimitiveTypeError} When `min` is not a number within the safe integer range.
      *
      * @public
      * @since 0.1.0
@@ -120,9 +120,9 @@ export class RangeBuilder {
      *
      * @param {number} max - The maximum value of the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `max` is not a number within the safe integer range.
+     * @throws {PrimitiveTypeError} When `max` is not a number within the safe integer range.
      *
      * @public
      * @since 0.1.0
@@ -140,9 +140,9 @@ export class RangeBuilder {
      * `false` if any values generated from the range should not include the minimum value.
      * `undefined` to use the default behavior of the method using the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `isMinInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `isMinInclusive` is not a boolean or undefined.
      *
      * @public
      * @since 0.1.0
@@ -163,9 +163,9 @@ export class RangeBuilder {
      * `false` if any values generated from the range should not include the maximum value.
      * `undefined` to use the default behavior of the method using the range.
      *
-     * @returns {this} - The current instance of the {@link RangeBuilder} for method chaining.
+     * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
      *
-     * @throws {PrimitiveTypeError} - When `isMaxInclusive` is not a boolean or undefined.
+     * @throws {PrimitiveTypeError} When `isMaxInclusive` is not a boolean or undefined.
      *
      * @public
      * @since 0.1.0

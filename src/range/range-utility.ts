@@ -126,7 +126,8 @@ export class RangeUtility {
      *
      * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property, and both `min` and `max` must be numbers within the safe integer range.
      * Additionally, the range must contain at least one representable value.
-     * When either `isMinInclusive` or `isMaxInclusive` is `false`, `min` must be less than `max`, and the midpoint of the range must be distinct from both `min` and `max`.
+     * When either bound is excluded, `min` must be less than `max`.
+     * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`, because an included bound is no longer available to satisfy the range.
      *
      * @see {@link NumberUtility.isValidRange}
      *
@@ -147,14 +148,23 @@ export class RangeUtility {
                 return false;
             }
 
-            if (range.isMinInclusive === false || range.isMaxInclusive === false) {
-                const midpoint: number = range.min + ((range.max - range.min) / 2.0);
-                const validRange: boolean = range.min < range.max;
-                const distinctMidpoint: boolean = RangeUtility.#isIn(midpoint, range.min, range.max, false, false);
-                return validRange && distinctMidpoint;
+            const isMinInclusive: boolean = range.isMinInclusive ?? true;
+            const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
+
+            if (isMinInclusive && isMaxInclusive) {
+                return true;
             }
 
-            return true;
+            if (range.min >= range.max) {
+                return false;
+            }
+
+            if (isMinInclusive || isMaxInclusive) {
+                return true;
+            }
+
+            const midpoint: number = range.min + ((range.max - range.min) / 2.0);
+            return RangeUtility.#isIn(midpoint, range.min, range.max, false, false);
         }
 
         return false;
@@ -220,7 +230,7 @@ export class RangeUtility {
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
      * A draw that falls outside the range is discarded and replaced.
-     * When no draw succeeds, the midpoint between `min` and `max` is returned.
+     * When no draw succeeds, the midpoint between `min` and `max` is returned, or an included bound when the midpoint rounds past one.
      *
      * @see {@link RangeUtility.assertRange}
      *
@@ -248,7 +258,20 @@ export class RangeUtility {
         }
 
         if (!RangeUtility.#isIn(value, range.min, range.max, isMinInclusive, isMaxInclusive)) {
-            return range.min + ((range.max - range.min) / 2);
+            const midpoint: number = range.min + ((range.max - range.min) / 2);
+
+            if (RangeUtility.#isIn(midpoint, range.min, range.max, isMinInclusive, isMaxInclusive)) {
+                return midpoint;
+            }
+
+            // The midpoint rounds to a bound, so the bounds are adjacent representable numbers and
+            // the only candidate values are the bounds themselves. A range that excludes both is
+            // not a valid Range, so an included bound is always available here.
+            if (isMaxInclusive) {
+                return range.max;
+            }
+
+            return range.min;
         }
 
         return value;
@@ -262,7 +285,7 @@ export class RangeUtility {
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
      * Note that {@link Random.randomInt} and {@link Random.randomInteger} treat a bare pair of numbers as a half-open range [min, max),
-     * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)`  and `Random.randomInteger(0, 10)` may not.
+     * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` and `Random.randomInteger(0, 10)` may not.
      * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt} and {@link Random.randomInteger}.
      *
      * @see {@link RangeUtility.randomInteger}
@@ -314,7 +337,7 @@ export class RangeUtility {
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
      * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
      * Note that {@link Random.randomInt} and {@link Random.randomInteger} treat a bare pair of numbers as a half-open range [min, max),
-     * so `RangeUtility.randomInteger({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)`  and `Random.randomInteger(0, 10)` may not.
+     * so `RangeUtility.randomInteger({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` and `Random.randomInteger(0, 10)` may not.
      * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt} and {@link Random.randomInteger}.
      *
      * @see {@link RangeUtility.randomInt}
@@ -344,8 +367,8 @@ export class RangeUtility {
      * @param {number} value - The value to check.
      * @param {number} min - The minimum value of the range.
      * @param {number} max - The maximum value of the range.
-     * @param {boolean} isMinInclusive - Is the minimum value is inclusive?
-     * @param {boolean} isMaxInclusive - Is the maximum value is inclusive?
+     * @param {boolean} isMinInclusive - Is the minimum value inclusive?
+     * @param {boolean} isMaxInclusive - Is the maximum value inclusive?
      *
      * @returns {boolean} `true` if the value is within the range, `false` otherwise.
      *
