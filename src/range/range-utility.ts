@@ -130,6 +130,7 @@ export class RangeUtility {
      * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`, because an included bound is no longer available to satisfy the range.
      *
      * @see {@link NumberUtility.isValidRange}
+     * @see {@link NumberUtility.isLessThan}
      *
      * @param {unknown} input - The input to check.
      *
@@ -144,18 +145,14 @@ export class RangeUtility {
         if (validSchema) {
             const range: Range = input as Range;
 
-            if (!NumberUtility.isValidRange(range.min, range.max)) {
-                return false;
-            }
-
             const isMinInclusive: boolean = range.isMinInclusive ?? true;
             const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
 
             if (isMinInclusive && isMaxInclusive) {
-                return true;
+                return NumberUtility.isValidRange(range.min, range.max);
             }
 
-            if (range.min >= range.max) {
+            if (!NumberUtility.isLessThan(range.min, range.max)) {
                 return false;
             }
 
@@ -203,8 +200,10 @@ export class RangeUtility {
      * Constrain `value` to the bounds of `range`.
      *
      * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` are ignored: the range is treated as inclusive, regardless of their current values.
+     * A returned value satisfies {@link RangeUtility.isIn} for `range` unless it is equal to an excluded bound.
      *
      * @see {@link MathUtility.constrain}
+     * @see {@link RangeUtility.isIn}
      *
      * @param {number} value - The value to constrain.
      * @param {Range} range - The {@link Range} object to constrain `value` to.

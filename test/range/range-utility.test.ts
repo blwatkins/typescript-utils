@@ -203,7 +203,9 @@ describe('RangeUtility', (): void => {
             inputs: [
                 { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: false },
                 { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
-                { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: false }
+                { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: false },
+                { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: false, isMaxInclusive: false },
+                { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false }
             ],
             expected: SchemaTypeError
         }
@@ -261,6 +263,18 @@ describe('RangeUtility', (): void => {
                 { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: false },
                 { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: true },
                 { min: 0, max: 10, isMinInclusive: false, isMaxInclusive: false }
+            ],
+            expected: undefined
+        },
+        {
+            label: 'Range objects with adjacent bounds where one bound is included',
+            inputs: [
+                { min: 1, max: 1 + Number.EPSILON, isMaxInclusive: false },
+                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false },
+                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: true, isMaxInclusive: false },
+                { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: true },
+                { min: 0, max: Number.MIN_VALUE, isMaxInclusive: false },
+                { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false }
             ],
             expected: undefined
         },

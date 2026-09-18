@@ -95,6 +95,36 @@ describe('RangeBuilder', (): void => {
 
     const validRangeScenarios: Scenario[] = [
         {
+            label: 'Adjacent bounds where one bound is included',
+            inputs: [
+                {
+                    min: 1,
+                    max: 1 + Number.EPSILON,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 1,
+                    max: 1 + Number.EPSILON,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                },
+                {
+                    min: 0,
+                    max: Number.MIN_VALUE,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: -1 - Number.EPSILON,
+                    max: -1,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                }
+            ],
+            expected: undefined
+        },
+        {
             label: 'Minimum less than maximum',
             inputs: [
                 {
@@ -283,6 +313,78 @@ describe('RangeBuilder', (): void => {
     ];
 
     const invalidRangeScenarios: Scenario[] = [
+        {
+            label: 'Equal bounds where a bound is excluded',
+            inputs: [
+                {
+                    min: 5,
+                    max: 5,
+                    isMinInclusive: false,
+                    isMaxInclusive: true
+                },
+                {
+                    min: 5,
+                    max: 5,
+                    isMinInclusive: true,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 5,
+                    max: 5,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 0,
+                    max: 0,
+                    isMinInclusive: false,
+                    isMaxInclusive: undefined
+                },
+                {
+                    min: -5.5,
+                    max: -5.5,
+                    isMinInclusive: undefined,
+                    isMaxInclusive: false
+                },
+                {
+                    min: Number.MAX_SAFE_INTEGER,
+                    max: Number.MAX_SAFE_INTEGER,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                }
+            ],
+            expected: SchemaTypeError
+        },
+        {
+            label: 'Adjacent excluded bounds that contain no representable value',
+            inputs: [
+                {
+                    min: 1,
+                    max: 1 + Number.EPSILON,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: 0,
+                    max: Number.MIN_VALUE,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: -1 - Number.EPSILON,
+                    max: -1,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                },
+                {
+                    min: Number.MAX_SAFE_INTEGER - 1,
+                    max: Number.MAX_SAFE_INTEGER,
+                    isMinInclusive: false,
+                    isMaxInclusive: false
+                }
+            ],
+            expected: SchemaTypeError
+        },
         {
             label: 'Minimum greater than maximum',
             inputs: [
