@@ -125,6 +125,61 @@ Choose the error type by the kind of failure, not by the call site:
 Custom error types intentionally do not expose a Node.js-style `code` property.
 Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
 
+### Error Messages
+
+Error messages are fixed strings. Do not interpolate a value that has not already been verified.
+
+An assertion's failure path is precisely the path where the input has *not* been verified, so an assertion's own message never describes the input it rejected:
+
+```typescript
+// Correct.
+throw new PrimitiveTypeError('Expected an array.');
+
+// Wrong. `input` failed the check, and its type is now visible to anyone who can read the error.
+throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}.`);
+```
+
+The concern is disclosure, not verbosity.
+A caller that passes a secret, a token, or an internal object to a guard should not have its content or its type surface in a message that may be logged, serialized, or shown to an end user.
+Interpolation is allowed where the type and/or the range of the value is already established — for example, after the value has passed a guard earlier in the same method — because there is then no unverified input to leak.
+
+Beyond that, messages follow a consistent voice:
+
+- **A guard whose parameter is named `input`** describes the expectation rather than the argument: `Expected a string.`, `Expected a non-array object.`, `Input does not match schema requirements for Range.`
+- **A method with named parameters** names them exactly as the signature spells them, in their own casing, at the start of the sentence: `min must be less than or equal to max.`, `value must be in the range [min, max] (inclusive).`, `a must be less than b.`
+- **A message passed to a guard from a call site** also names the caller's own parameter, because the call site knows what the value is called and the guard does not: `NumberUtility.assertSafe(min, 'min must be within the safe integer range.')`, `TypeAssertions.assertFunction(rng, 'rng must be a function.')`
+- **A static class instantiation guard** reads `<ClassName> is a static class and cannot be instantiated.`
+- Every message is a complete sentence ending in a period.
+
+### Assertions and Type Guards
+
+Assertion methods and type guards are the package's primary surface, and they are written as matched pairs.
+
+**Naming.** An `assert*` method and its `is*` guard name the same concept identically: `assertSafe` / `isSafe`, `assertSingleLine` / `isSingleLine`, `assertValidRange` / `isValidRange`.
+Do not encode the checked type in the member name — the `assert` or `is` prefix together with the concept already carries it.
+`assertString` rather than `assertStringType`, `isNonEmpty` rather than `isNonEmptyString`, `isFinite` rather than `isFiniteNumber`, `randomInt` rather than `randomInteger`.
+Where a regular-expression getter backs a guard, it carries the same concept without the prefix: `singleLine` backs `isSingleLine`, `singleLineLowercase` backs `isSingleLineLowercase`.
+This is the member-name counterpart of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions).
+
+**Structure.** An `assert*` method delegates its decision to the matching `is*` guard rather than repeating the check, so the two can never disagree:
+
+```typescript
+public static assertSingleLine(input: unknown, message?: string): asserts input is string {
+    if (!StringUtility.isSingleLine(input)) {
+        if (StringUtility.isSingleLine(message)) {
+            throw new PrimitiveTypeError(message);
+        }
+
+        throw new PrimitiveTypeError('Expected a single-line string.');
+    }
+}
+```
+
+**The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, or a non-string, falls through to the default message.
+This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
+It is also observable behavior that `testAssertMethod` asserts for every guard, so a new `assert*` method either applies this check itself or forwards `message` unchanged to a method that does — as `TypeAssertions.assertString` forwards to `StringUtility.assertString`, and as every deprecated alias forwards to its replacement.
+Never use `message` unconditionally.
+
 ### Deprecation
 
 When a member is deprecated rather than removed:
@@ -213,6 +268,13 @@ Most documentation comment conventions are enforced automatically by `eslint.con
 Do not weaken or remove these ESLint rules to work around a violation; fix the documentation comment instead.
 If a legitimate case requires deviating from one of these rules, discuss the specific rule override with the maintainer rather than silently suppressing it.
 
+#### Agreed Rule Overrides
+
+A rule listed here has already been discussed and turned off deliberately.
+Record any future override in this list, with its reason, in the same change that alters `eslint.config.ts.mjs` — an override that is not written down here is indistinguishable from a silent suppression.
+
+- **`jsdoc/require-returns-description`** — off. A `@returns` type is often the whole description, and repeating it in prose adds nothing. See the `@returns` bullet below for when a description is still expected.
+
 #### Manual Review Instructions for Documentation Comment Preferences
 
 The following preferences require manual review since no ESLint rule can check them automatically:
@@ -226,6 +288,7 @@ The following preferences require manual review since no ESLint rule can check t
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
 - **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
+- **Omit a `@returns` description that only restates its type:** Where the type carries the whole meaning, the type alone is the description — `@returns {asserts input is Range}`, `@returns {input is string}`, `@returns {void}`, `@returns {RegExp}` on a pattern getter. Keep a description wherever it says something the type does not, which is most non-guard methods: `@returns {number} \`range.min\` if \`value\` is less than \`range.min\`, \`range.max\` if \`value\` is greater than \`range.max\`, \`value\` otherwise.` A deprecated member keeps whatever `@returns` text it already had; do not retrofit this to the deprecated block, where a later diff would read as a change to a member that is on its way out.
 - **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag (and any optional type/identifier), e.g. `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
 - **State the removal version on `@deprecated`:** Every `@deprecated` tag ends with `Will be removed in v{version}.` What precedes it depends on what the consumer should do instead:
   - **Replaced within this package** — name the replacement first, as a link: `@deprecated Replaced by {@link StringUtility.assertString}. Will be removed in v0.1.0-alpha.5.`
