@@ -225,7 +225,12 @@ The following preferences require manual review since no ESLint rule can check t
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
 - **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
 - **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag (and any optional type/identifier), e.g. `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
-- **State the removal version on `@deprecated`:** Write `@deprecated Will be removed in v{version}.` When a replacement exists, name it first: `@deprecated Migrated to {@link Replacement}. Will be removed in v{version}.` Apply the tag to private helpers that exist only to support deprecated members, using the same message format.
+- **State the removal version on `@deprecated`:** Every `@deprecated` tag ends with `Will be removed in v{version}.` What precedes it depends on what the consumer should do instead:
+  - **Replaced within this package** — name the replacement first, as a link: `@deprecated Replaced by {@link StringUtility.assertString}. Will be removed in v0.1.0-alpha.5.`
+  - **Moved to another package** — name the destination first, without a link, because TypeDoc cannot resolve a symbol outside this package and an unresolved link fails the documentation run: `@deprecated Migrated to @scope/package-name. Will be removed in v1.0.0.`
+  - **Removed with no alternative** — the removal notice alone: `@deprecated Will be removed in v1.0.0.`
+
+  Apply the tag to private helpers that exist only to support deprecated members, using the same message format.
 
 ## Documentation and GitHub Pages
 
