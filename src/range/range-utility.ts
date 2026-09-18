@@ -342,10 +342,10 @@ export class RangeUtility {
      * Additionally, this method assumes that `min`, `max`, `isMinInclusive`, and `isMaxInclusive` form a valid range with a representable value.
      *
      * @param {number} value - The value to check.
-     * @param min - The minimum value of the range.
-     * @param max - The maximum value of the range.
-     * @param isMinInclusive - Is the minimum value is inclusive?
-     * @param isMaxInclusive - Is the maximum value is inclusive?
+     * @param {number} min - The minimum value of the range.
+     * @param {number} max - The maximum value of the range.
+     * @param {boolean} isMinInclusive - Is the minimum value is inclusive?
+     * @param {boolean} isMaxInclusive - Is the maximum value is inclusive?
      *
      * @returns {boolean} `true` if the value is within the range, `false` otherwise.
      *

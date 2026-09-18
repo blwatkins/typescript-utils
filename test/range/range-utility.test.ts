@@ -39,7 +39,6 @@ import { nonObjectInputs } from '../utils/input/object-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
-
 describe('RangeUtility', (): void => {
     testStaticClassConstructor('RangeUtility', RangeUtility as unknown as new () => unknown, StaticInstanceError);
 
