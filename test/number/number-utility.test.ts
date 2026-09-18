@@ -211,21 +211,22 @@ describe('NumberUtility', (): void => {
             });
 
             describe('An omitted zeroInclusive argument should match an explicit false', (): void => {
-                const defaultScenarios: Scenario[] = [
-                    ...successScenarios,
-                    ...zeroExclusiveFailureScenarios
-                ];
-
-                describe.each(
-                    defaultScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - Input $input should give the same result either way', ({ input: testInput }: TestCase): void => {
-                        expect(NumberUtility.isPositiveInteger(testInput)).toBe(NumberUtility.isPositiveInteger(testInput, false));
-                    });
+                /*
+                 * zeroInclusive is a default parameter, so the two call forms cannot diverge today:
+                 * both enter the method with zeroInclusive bound to false. This pins that they agree
+                 * if the defaulting is ever reworked into an explicit branch, which is the one change
+                 * the omitted-argument run above would not catch, since it never passes the argument.
+                 *
+                 * Four literal inputs rather than a fixture sweep: the relationship is the same for
+                 * every input, and zero is the only value the two zeroInclusive settings disagree on.
+                 */
+                test.each([
+                    { label: 'Positive zero', input: 0 },
+                    { label: 'Negative zero', input: -0 },
+                    { label: 'A positive integer', input: 5 },
+                    { label: 'A negative integer', input: -5 }
+                ])('%# - $label should give the same result either way', ({ input }: { label: string; input: number; }): void => {
+                    expect(NumberUtility.isPositiveInteger(input)).toBe(NumberUtility.isPositiveInteger(input, false));
                 });
             });
         });
