@@ -268,13 +268,6 @@ Most documentation comment conventions are enforced automatically by `eslint.con
 Do not weaken or remove these ESLint rules to work around a violation; fix the documentation comment instead.
 If a legitimate case requires deviating from one of these rules, discuss the specific rule override with the maintainer rather than silently suppressing it.
 
-#### Agreed Rule Overrides
-
-A rule listed here has already been discussed and turned off deliberately.
-Record any future override in this list, with its reason, in the same change that alters `eslint.config.ts.mjs` — an override that is not written down here is indistinguishable from a silent suppression.
-
-- **`jsdoc/require-returns-description`** — off. A `@returns` type is often the whole description, and repeating it in prose adds nothing. See the `@returns` bullet below for when a description is still expected.
-
 #### Manual Review Instructions for Documentation Comment Preferences
 
 The following preferences require manual review since no ESLint rule can check them automatically:
