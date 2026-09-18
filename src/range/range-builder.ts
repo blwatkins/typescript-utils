@@ -99,6 +99,8 @@ export class RangeBuilder {
      * Set the `min` property of the {@link Range} object.
      * The `min` property should be less than, or equal to, the `max` property.
      *
+     * @see {@link NumberUtility.assertSafe}
+     *
      * @param {number} min - The minimum value of the range.
      *
      * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
@@ -118,6 +120,8 @@ export class RangeBuilder {
      * Set the `max` property of the {@link Range} object.
      * The `max` property should be greater than, or equal to, the `min` property.
      *
+     * @see {@link NumberUtility.assertSafe}
+     *
      * @param {number} max - The maximum value of the range.
      *
      * @returns {this} The current instance of the {@link RangeBuilder} for method chaining.
@@ -135,6 +139,8 @@ export class RangeBuilder {
 
     /**
      * Set the `isMinInclusive` property of the {@link Range} object.
+     *
+     * @see {@link TypeAssertions.assertBoolean}
      *
      * @param {boolean | undefined} isMinInclusive - `true` if any values generated from the range should include the minimum value.
      * `false` if any values generated from the range should not include the minimum value.
@@ -158,6 +164,8 @@ export class RangeBuilder {
 
     /**
      * Set the `isMaxInclusive` property of the {@link Range} object.
+     *
+     * @see {@link TypeAssertions.assertBoolean}
      *
      * @param {boolean | undefined} isMaxInclusive - `true` if any values generated from the range should include the maximum value.
      * `false` if any values generated from the range should not include the maximum value.

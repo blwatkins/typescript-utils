@@ -175,6 +175,7 @@ export class RangeUtility {
      * When `isMinInclusive` is `false`, `value` must be greater than `range.min`.
      * When `isMaxInclusive` is `false`, `value` must be less than `range.max`.
      *
+     * @see {@link NumberUtility.assertSafe}
      * @see {@link RangeUtility.assertRange}
      *
      * @param {number} value - The value to check.
@@ -203,6 +204,7 @@ export class RangeUtility {
      * A returned value satisfies {@link RangeUtility.isIn} for `range` unless it is equal to an excluded bound.
      *
      * @see {@link MathUtility.constrain}
+     * @see {@link RangeUtility.assertRange}
      * @see {@link RangeUtility.isIn}
      *
      * @param {number} value - The value to constrain.
