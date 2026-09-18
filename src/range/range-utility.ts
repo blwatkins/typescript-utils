@@ -124,9 +124,9 @@ export class RangeUtility {
     /**
      * Is `input` a valid {@link Range} object?
      *
-     * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property.
-     * Both `min` and `max` must be numbers within the safe integer range.
-     * Additionally, when `min` is equal to `max`, neither `isMinInclusive` nor `isMaxInclusive` may be `false`; such a range would contain no values.
+     * @remarks For a {@link Range} object to be valid, its `min` property must be less than or equal to its `max` property, and both `min` and `max` must be numbers within the safe integer range.
+     * Additionally, the range must contain at least one representable value.
+     * When either `isMinInclusive` or `isMaxInclusive` is `false`, `min` must be less than `max`, and the midpoint of the range must be distinct from both `min` and `max`.
      *
      * @see {@link NumberUtility.isValidRange}
      *
@@ -147,8 +147,14 @@ export class RangeUtility {
                 return false;
             }
 
-            return !(range.min === range.max
-                && (range.isMinInclusive === false || range.isMaxInclusive === false));
+            if (range.isMinInclusive === false || range.isMaxInclusive === false) {
+                const midpoint: number = range.min + ((range.max - range.min) / 2.0);
+                const validRange: boolean = range.min < range.max;
+                const distinctMidpoint: boolean = RangeUtility.#isIn(midpoint, range.min, range.max, false, false);
+                return validRange && distinctMidpoint;
+            }
+
+            return true;
         }
 
         return false;
@@ -180,16 +186,7 @@ export class RangeUtility {
         RangeUtility.assertRange(range);
         const isMinInclusive: boolean = range.isMinInclusive ?? true;
         const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
-
-        if (isMinInclusive && isMaxInclusive) {
-            return NumberUtility.isInRange(value, range.min, range.max);
-        } else if (isMinInclusive) {
-            return NumberUtility.isInRange(value, range.min, range.max) && value !== range.max;
-        } else if (isMaxInclusive) {
-            return NumberUtility.isInRange(value, range.min, range.max) && value !== range.min;
-        } else {
-            return NumberUtility.isInRange(value, range.min, range.max) && value !== range.min && value !== range.max;
-        }
+        return RangeUtility.#isIn(value, range.min, range.max, isMinInclusive, isMaxInclusive);
     }
 
     /**
@@ -218,26 +215,20 @@ export class RangeUtility {
     /**
      * Get a random floating-point number within `range`.
      *
-     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max`
-     * bounds may be returned. Each property defaults to `true` when it is `undefined`, matching {@link RangeUtility.isIn}.
-     * For floating-point values, inclusivity is a boundary guarantee rather than a change in distribution:
-     * an exclusive bound is never returned, while an inclusive bound is merely permitted and may be unreachable.
-     * Each draw is checked against the full range condition, so a value that rounds past a bound is
-     * discarded along with one that lands on it.
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds may be returned.
+     * Each property defaults to `true` when it is `undefined`.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
-     * When the endpoints of `range` are adjacent representable numbers, the only candidate values are the
-     * bounds themselves, and an included bound is returned. If both bounds are excluded, no representable
-     * value satisfies `range` and this method throws rather than returning an excluded bound.
+     * This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
+     * A draw that falls outside the range is discarded and replaced.
+     * When no draw succeeds, the midpoint between `min` and `max` is returned.
      *
-     * @see {@link RangeUtility.isIn}
-     * @see {@link Random.randomFloat}
+     * @see {@link RangeUtility.assertRange}
      *
      * @param {Range} range - The {@link Range} object to generate a value from.
      *
      * @returns {number} A random floating-point number within `range`.
      *
      * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
-     * @throws {ValueRangeError} When `range` contains no representable values.
      *
      * @public
      * @since 0.1.0
@@ -250,28 +241,14 @@ export class RangeUtility {
         let value: number = range.min + (Random.random() * (range.max - range.min));
         let attempts: number = 1;
 
-        while (!RangeUtility.#isInRange(value, range, isMinInclusive, isMaxInclusive)
+        while (!RangeUtility.#isIn(value, range.min, range.max, isMinInclusive, isMaxInclusive)
             && attempts < maxDrawAttempts) {
             value = range.min + (Random.random() * (range.max - range.min));
             attempts++;
         }
 
-        if (!RangeUtility.#isInRange(value, range, isMinInclusive, isMaxInclusive)) {
-            const midpoint: number = range.min + ((range.max - range.min) / 2);
-
-            if (RangeUtility.#isInRange(midpoint, range, isMinInclusive, isMaxInclusive)) {
-                return midpoint;
-            }
-
-            // The midpoint rounds to a bound, so the bounds are adjacent representable numbers and
-            // the only candidate values are the bounds themselves.
-            if (isMaxInclusive) {
-                return range.max;
-            } else if (isMinInclusive) {
-                return range.min;
-            }
-
-            throw new ValueRangeError('The range contains no representable values.');
+        if (!RangeUtility.#isIn(value, range.min, range.max, isMinInclusive, isMaxInclusive)) {
+            return range.min + ((range.max - range.min) / 2);
         }
 
         return value;
@@ -280,16 +257,16 @@ export class RangeUtility {
     /**
      * Get a random integer within `range`.
      *
-     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max`
-     * bounds may be returned. Each property defaults to `true` when it is `undefined`, matching {@link RangeUtility.isIn}.
-     * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds may be returned.
+     * Each property defaults to `true` when it is `undefined`.
      * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
-     * Note that {@link Random.randomInt} treats a bare pair of numbers as the half-open range [min, max),
-     * so `RangeUtility.randomInteger({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` may not.
-     * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt}.
+     * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
+     * Note that {@link Random.randomInt} and {@link Random.randomInteger} treat a bare pair of numbers as a half-open range [min, max),
+     * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)`  and `Random.randomInteger(0, 10)` may not.
+     * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt} and {@link Random.randomInteger}.
      *
-     * @see {@link RangeUtility.isIn}
-     * @see {@link Random.randomInt}
+     * @see {@link RangeUtility.randomInteger}
+     * @see {@link RangeUtility.assertRange}
      *
      * @param {Range} range - The {@link Range} object to generate a value from.
      *
@@ -301,7 +278,7 @@ export class RangeUtility {
      * @public
      * @since 0.1.0
      */
-    public static randomInteger(range: Range): number {
+    public static randomInt(range: Range): number {
         RangeUtility.assertRange(range);
         const isMinInclusive: boolean = range.isMinInclusive ?? true;
         const isMaxInclusive: boolean = range.isMaxInclusive ?? true;
@@ -330,40 +307,65 @@ export class RangeUtility {
     }
 
     /**
-     * Is `value` within `range`, given the resolved inclusivity of each bound?
+     * Get a random integer within `range`.
      *
-     * @remarks This is the full range condition rather than a test for equality with an excluded bound.
-     * Rounding in the draw could in principle carry a value past a bound without landing on it, and a
-     * test for equality would not see that. The condition is written in positive form on purpose: the
-     * negated form accepts a non-finite value, because every comparison against `NaN` is `false`.
+     * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` determine whether the `min` and `max` bounds may be returned.
+     * Each property defaults to `true` when it is `undefined`.
+     * A value returned by this method always satisfies {@link RangeUtility.isIn} for the same `range`.
+     * Non-integer bounds are rounded inward, to the smallest and largest integers that `range` contains.
+     * Note that {@link Random.randomInt} and {@link Random.randomInteger} treat a bare pair of numbers as a half-open range [min, max),
+     * so `RangeUtility.randomInteger({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)`  and `Random.randomInteger(0, 10)` may not.
+     * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt} and {@link Random.randomInteger}.
+     *
+     * @see {@link RangeUtility.randomInt}
+     * @see {@link RangeUtility.assertRange}
+     *
+     * @param {Range} range - The {@link Range} object to generate a value from.
+     *
+     * @returns {number} A random integer within `range`.
+     *
+     * @throws {SchemaTypeError} When `range` is not a valid {@link Range} object.
+     * @throws {ValueRangeError} When `range` contains no integer values.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomInteger(range: Range): number {
+        return RangeUtility.randomInt(range);
+    }
+
+    /**
+     * Is `value` within the range formed by `min` and `max`?
+     *
+     * @remarks This method assumes that `value`, `min`, and `max` are all numbers within the safe integer range.
+     * This method assumes that `isMinInclusive` and `isMaxInclusive` are both boolean values.
+     * Additionally, this method assumes that `min`, `max`, `isMinInclusive`, and `isMaxInclusive` form a valid range with a representable value.
      *
      * @param {number} value - The value to check.
-     * @param {Range} range - The {@link Range} object to check against.
-     * @param {boolean} isMinInclusive - Is the `min` bound of `range` inclusive?
-     * @param {boolean} isMaxInclusive - Is the `max` bound of `range` inclusive?
+     * @param min - The minimum value of the range.
+     * @param max - The maximum value of the range.
+     * @param isMinInclusive - Is the minimum value is inclusive?
+     * @param isMaxInclusive - Is the maximum value is inclusive?
      *
-     * @returns {boolean} `true` if `value` is within `range`; `false` otherwise.
+     * @returns {boolean} `true` if the value is within the range, `false` otherwise.
      *
      * @private
      */
-    static #isInRange(value: number,
-                      range: Range,
-                      isMinInclusive: boolean,
-                      isMaxInclusive: boolean): boolean {
+    static #isIn(value: number, min: number, max: number, isMinInclusive: boolean, isMaxInclusive: boolean): boolean {
         let aboveMin: boolean;
 
         if (isMinInclusive) {
-            aboveMin = value >= range.min;
+            aboveMin = value >= min;
         } else {
-            aboveMin = value > range.min;
+            aboveMin = value > min;
         }
 
         let belowMax: boolean;
 
         if (isMaxInclusive) {
-            belowMax = value <= range.max;
+            belowMax = value <= max;
         } else {
-            belowMax = value < range.max;
+            belowMax = value < max;
         }
 
         return aboveMin && belowMax;
