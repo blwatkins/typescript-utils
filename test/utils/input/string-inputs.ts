@@ -59,7 +59,8 @@ export const nonStringInputs: unknown[] = [
     { key: 'value' },
     { key: 10 },
     { key: [] },
-    { key: {} }
+    { key: {} },
+    Symbol('test')
 ];
 
 export const emptyStringInputs: string[] = [
@@ -73,7 +74,17 @@ export const emptyStringInputs: string[] = [
     '\n \t',
     '\n  \t',
     '\n   \t',
-    ' \n\t '
+    ' \n\t ',
+    '\r',
+    '\v',
+    '\f',
+    '\u00A0',
+    '\uFEFF',
+    '\u2000',
+    '\u3000',
+    '\u2028',
+    '\u2029',
+    '\u00A0\u2028\v'
 ];
 
 export const singleLineTrimmedInputsNumsAndSymbols: string[] = [

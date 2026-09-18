@@ -207,8 +207,6 @@ describe('RangeBuilder', (): void => {
     });
 
     describe('Construction paths should agree', (): void => {
-        // buildFrom passes undefined to both inclusivity setters; the fluent path leaves those
-        // setters uncalled. Both must reach the same object, including which keys are present.
         test.each([
             { min: 0, max: 10 },
             { min: -10, max: -5 },
@@ -449,6 +447,43 @@ describe('RangeBuilder', (): void => {
                     }).toThrow(testExpected);
                 });
             });
+        });
+    });
+
+    describe('A builder is reusable and its output is independent', (): void => {
+        test('build should return a distinct but equal object on every call', (): void => {
+            const builder: RangeBuilder = new RangeBuilder().setMin(0).setMax(10);
+
+            const first: Range = builder.build();
+            const second: Range = builder.build();
+
+            expect(first).not.toBe(second);
+            expect(first).toStrictEqual(second);
+        });
+
+        test('A range already built should not change when the builder is set again', (): void => {
+            const builder: RangeBuilder = new RangeBuilder().setMin(0).setMax(10);
+            const first: Range = builder.build();
+
+            const second: Range = builder.setMin(5)
+                .setMax(20)
+                .setMinInclusive(false)
+                .setMaxInclusive(false)
+                .build();
+
+            expect(first).toStrictEqual({ min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined });
+            expect(second).toStrictEqual({ min: 5, max: 20, isMinInclusive: false, isMaxInclusive: false });
+        });
+
+        test('A repeated setter call should keep the last value', (): void => {
+            const range: Range = new RangeBuilder()
+                .setMin(0).setMin(7)
+                .setMax(20).setMax(10)
+                .setMinInclusive(true).setMinInclusive(false)
+                .setMaxInclusive(true).setMaxInclusive(false)
+                .build();
+
+            expect(range).toStrictEqual({ min: 7, max: 10, isMinInclusive: false, isMaxInclusive: false });
         });
     });
 });

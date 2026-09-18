@@ -54,5 +54,6 @@ export const nonObjectInputs: unknown[] = [
     (): object => {
         return {};
     },
-    Math.random
+    Math.random,
+    Symbol('test')
 ];

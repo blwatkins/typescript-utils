@@ -60,12 +60,10 @@ export const nonBooleanInputs: unknown[] = [
     [true, false],
     {},
     { key: 'value' },
-    { key: true }
+    { key: true },
+    Symbol('test')
 ];
 
-/**
- * Every input rejected by a boolean parameter that treats `undefined` as unset rather than invalid.
- */
 export const definedNonBooleanInputs: unknown[] = nonBooleanInputs.filter((input: unknown): boolean => {
     return input !== undefined;
 });

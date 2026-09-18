@@ -19,7 +19,7 @@
 <h4 class="tsd-anchor-link" id="since">Since<a href="#since" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L34">src/range/range-builder.ts:34</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L34">src/range/range-builder.ts:34</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -74,9 +74,7 @@
 <li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">isMaxInclusive</span>: <span class="tsd-signature-type">boolean</span></span>
 <div class="tsd-comment tsd-typography"><p>Should the maximum value be included in the range?</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{</span> <span class="tsd-kind-property">isMaxInclusive</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">isMinInclusive</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">max</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">min</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span> <span class="tsd-signature-symbol">}</span></h4><ul>
-<li>The <a href="../types/range.Range.html" class="tsd-kind-type-alias">Range</a> object.</li>
-</ul>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{</span> <span class="tsd-kind-property">isMaxInclusive</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">isMinInclusive</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">max</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span> <span class="tsd-kind-property">min</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span> <span class="tsd-signature-symbol">}</span></h4><p>The <a href="../types/range.Range.html" class="tsd-kind-type-alias">Range</a> object.</p>
 
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
@@ -97,24 +95,16 @@
 </div></li></ul>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>min</code> is not a finite number.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>min</code> is not a number within the safe integer range.</p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-1">Throws<a href="#throws-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>max</code> is not a finite number.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-1">Throws<a href="#throws-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>max</code> is not a number within the safe integer range.</p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-2">Throws<a href="#throws-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>isMinInclusive</code> is not a boolean or undefined.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-2">Throws<a href="#throws-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>isMinInclusive</code> is not a boolean or undefined.</p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-3">Throws<a href="#throws-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>isMaxInclusive</code> is not a boolean or undefined.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-3">Throws<a href="#throws-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>isMaxInclusive</code> is not a boolean or undefined.</p>
 </div>
 <div class="tsd-tag-throws">
 <h4 class="tsd-anchor-link" id="throws-4">Throws<a href="#throws-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When the resulting object is not a valid <a href="../types/range.Range.html" class="tsd-kind-type-alias">Range</a>.</p>
@@ -123,7 +113,7 @@
 <h4 class="tsd-anchor-link" id="since-1">Since<a href="#since-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L94">src/range/range-builder.ts:94</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L94">src/range/range-builder.ts:94</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="build"><span>build</span><a href="#build" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -162,7 +152,7 @@
 <h4 class="tsd-anchor-link" id="since-2">Since<a href="#since-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L194">src/range/range-builder.ts:194</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L202">src/range/range-builder.ts:202</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="setmax"><span>set<wbr/>Max</span><a href="#setmax" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -178,21 +168,20 @@ The <code>max</code> property should be greater than, or equal to, the <code>min
 <li><span><span class="tsd-kind-parameter">max</span>: <span class="tsd-signature-type">number</span></span>
 <div class="tsd-comment tsd-typography"><p>The maximum value of the range.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><ul>
-<li>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</li>
-</ul>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><p>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</p>
 
 <div class="tsd-comment tsd-typography">
+<div class="tsd-tag-see">
+<h4 class="tsd-anchor-link" id="see-1">See<a href="#see-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="number.NumberUtility.html#assertsafe" class="tsd-kind-method">NumberUtility.assertSafe</a></p>
+</div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-6">Throws<a href="#throws-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>max</code> is not a number within the safe integer range.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-6">Throws<a href="#throws-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>max</code> is not a number within the safe integer range.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-3">Since<a href="#since-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L130">src/range/range-builder.ts:130</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L134">src/range/range-builder.ts:134</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="setmaxinclusive"><span>set<wbr/>Max<wbr/>Inclusive</span><a href="#setmaxinclusive" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -209,21 +198,20 @@ The <code>max</code> property should be greater than, or equal to, the <code>min
 <code>false</code> if any values generated from the range should not include the maximum value.
 <code>undefined</code> to use the default behavior of the method using the range.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><ul>
-<li>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</li>
-</ul>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><p>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</p>
 
 <div class="tsd-comment tsd-typography">
+<div class="tsd-tag-see">
+<h4 class="tsd-anchor-link" id="see-2">See<a href="#see-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="assert.TypeAssertions.html#assertboolean" class="tsd-kind-method">TypeAssertions.assertBoolean</a></p>
+</div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-7">Throws<a href="#throws-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>isMaxInclusive</code> is not a boolean or undefined.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-7">Throws<a href="#throws-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>isMaxInclusive</code> is not a boolean or undefined.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-4">Since<a href="#since-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L173">src/range/range-builder.ts:173</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L181">src/range/range-builder.ts:181</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="setmin"><span>set<wbr/>Min</span><a href="#setmin" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -239,21 +227,20 @@ The <code>min</code> property should be less than, or equal to, the <code>max</c
 <li><span><span class="tsd-kind-parameter">min</span>: <span class="tsd-signature-type">number</span></span>
 <div class="tsd-comment tsd-typography"><p>The minimum value of the range.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><ul>
-<li>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</li>
-</ul>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><p>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</p>
 
 <div class="tsd-comment tsd-typography">
+<div class="tsd-tag-see">
+<h4 class="tsd-anchor-link" id="see-3">See<a href="#see-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="number.NumberUtility.html#assertsafe" class="tsd-kind-method">NumberUtility.assertSafe</a></p>
+</div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-8">Throws<a href="#throws-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>min</code> is not a number within the safe integer range.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-8">Throws<a href="#throws-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>min</code> is not a number within the safe integer range.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-5">Since<a href="#since-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L111">src/range/range-builder.ts:111</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L113">src/range/range-builder.ts:113</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="setmininclusive"><span>set<wbr/>Min<wbr/>Inclusive</span><a href="#setmininclusive" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -270,21 +257,20 @@ The <code>min</code> property should be less than, or equal to, the <code>max</c
 <code>false</code> if any values generated from the range should not include the minimum value.
 <code>undefined</code> to use the default behavior of the method using the range.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><ul>
-<li>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</li>
-</ul>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4><p>The current instance of the <a href="#" class="tsd-kind-class">RangeBuilder</a> for method chaining.</p>
 
 <div class="tsd-comment tsd-typography">
+<div class="tsd-tag-see">
+<h4 class="tsd-anchor-link" id="see-4">See<a href="#see-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="assert.TypeAssertions.html#assertboolean" class="tsd-kind-method">TypeAssertions.assertBoolean</a></p>
+</div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-9">Throws<a href="#throws-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
-<li>When <code>isMinInclusive</code> is not a boolean or undefined.</li>
-</ul>
+<h4 class="tsd-anchor-link" id="throws-9">Throws<a href="#throws-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>isMinInclusive</code> is not a boolean or undefined.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-6">Since<a href="#since-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8c556ca97778b45376c22242f4d6d4a3faaef89f/src/range/range-builder.ts#L150">src/range/range-builder.ts:150</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/21ff2cbe0d65c57d0a46c4f80cb773f0981da4ac/src/range/range-builder.ts#L156">src/range/range-builder.ts:156</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

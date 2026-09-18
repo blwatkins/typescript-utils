@@ -30,7 +30,7 @@ import {
 } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
-import { nonArrayInputs } from '../utils/input/array-inputs';
+import { arrayInputs, nonArrayInputs } from '../utils/input/array-inputs';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
@@ -40,14 +40,6 @@ import { Scenario } from '../utils/test-case/test-case';
 
 describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
-
-    const arrayInputs: unknown[] = [
-        [],
-        [1, 2, 3],
-        ['a', 'b', 'c'],
-        [{ key: 1 }, { key: 2 }, { key: 3 }],
-        [[1, 2, 3], [4, 5, 6]]
-    ];
 
     const arrayFailureScenarios: Scenario[] = [
         {
@@ -134,6 +126,18 @@ describe('TypeAssertions', (): void => {
                 RandomNumberGeneratorFactory.build('seed'),
                 new Error(),
                 new Set<string>()
+            ],
+            expected: undefined
+        },
+        {
+            label: 'Objects without an ordinary Object prototype',
+            inputs: [
+                Object.create(null),
+                new Date(),
+                new Map<string, number>(),
+                new Uint8Array(2),
+                new WeakMap<object, number>(),
+                Promise.resolve()
             ],
             expected: undefined
         }

@@ -72,6 +72,42 @@ describe('MathUtility', (): void => {
             });
         });
 
+        describe('constrain should preserve the sign of a negative zero', (): void => {
+            const negativeZeroScenarios: Scenario[] = [
+                {
+                    label: 'A value of -0 within the bounds',
+                    inputs: [
+                        { value: -0, min: 0, max: 10 },
+                        { value: -0, min: -10, max: 10 },
+                        { value: -0, min: -0, max: -0 }
+                    ],
+                    expected: -0
+                },
+                {
+                    label: 'A value outside a bound of -0',
+                    inputs: [
+                        { value: -5, min: -0, max: 10 },
+                        { value: 5, min: -10, max: -0 },
+                        { value: Number.MIN_SAFE_INTEGER, min: -0, max: 10 }
+                    ],
+                    expected: -0
+                }
+            ];
+
+            describe.each(
+                negativeZeroScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    const args: { value: number; min: number; max: number; } = testInput as { value: number; min: number; max: number; };
+                    expect(MathUtility.constrain(args.value, args.min, args.max)).toBe(testExpected);
+                });
+            });
+        });
+
         describe('Argument errors', (): void => {
             const defaultValue: number = 5;
             const defaultMin: number = Number.MIN_SAFE_INTEGER;
