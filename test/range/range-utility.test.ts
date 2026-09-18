@@ -502,6 +502,37 @@ describe('RangeUtility', (): void => {
                 });
             });
 
+            describe('the safe integer restriction applies to the whole Range contract', (): void => {
+                // A bound outside the safe integer range makes the object an invalid Range, so it is
+                // rejected by every method that takes one, not only by the generators.
+                test.each([
+                    { min: -1e300, max: 1e300 },
+                    { min: 0, max: Number.MAX_VALUE }
+                ])('%# - the range $min to $max should be rejected by every Range method', (range: Range): void => {
+                    expect(RangeUtility.isRange(range)).toBe(false);
+
+                    expect((): void => {
+                        RangeUtility.isIn(0, range);
+                    }).toThrow(SchemaTypeError);
+
+                    expect((): void => {
+                        RangeUtility.assertIn(0, range);
+                    }).toThrow(SchemaTypeError);
+
+                    expect((): void => {
+                        RangeUtility.constrain(0, range);
+                    }).toThrow(SchemaTypeError);
+
+                    expect((): void => {
+                        RangeUtility.randomFloat(range);
+                    }).toThrow(SchemaTypeError);
+
+                    expect((): void => {
+                        RangeUtility.randomInt(range);
+                    }).toThrow(SchemaTypeError);
+                });
+            });
+
             describe('randomFloat should discard a draw that lands past a bound, not only on it', (): void => {
                 // A generator returning a value at or above 1 is outside its documented [0, 1)
                 // contract, but it drives the affine draw strictly past max, which a check for
