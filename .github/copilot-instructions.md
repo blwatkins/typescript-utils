@@ -278,6 +278,7 @@ A page whose content did not change keeps its existing `modified_date`.
 - Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
 - Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file.
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
+- Test files carry no explanatory comments. A `describe` title states what is under test and a scenario `label` states why its inputs belong together, so a comment explaining either is bloat and a signal that the title or the label needs the work instead. The only comments a test file keeps are the deprecated banner, editor pragmas, and a warning on data that must never change, such as published seed sequences.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
 #### The Scenario Pattern
