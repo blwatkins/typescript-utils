@@ -155,12 +155,28 @@ Beyond that, messages follow a consistent voice:
 
 Assertion methods and type guards are the package's primary surface, and they are written as matched pairs.
 
+**Two guard shapes.** A guard takes one of two shapes, and which one it takes decides its signature, whether a wrong-type argument is an answer or a failure, and how far its `message` reaches.
+
+A **classifying guard** answers "what is this?" about an input of unknown provenance.
+It takes a single `unknown` parameter, returns a type predicate, and is total: every input yields `true` or `false`, and no input makes it throw.
+Where such a guard needs a check that would itself reject a bad argument, it establishes the type first, so that check is never reached with an argument it would throw on.
+
+A **relational guard** answers "how do these compare?" about parameters that are already typed.
+It takes named parameters of concrete types, returns a plain `boolean` rather than a type predicate, and validates its arguments before comparing them.
+An argument of the wrong type is a broken call rather than one of the answers, so it throws instead of returning `false`.
+
+Choose the shape from the question the guard answers, not from what a call site would find convenient.
+Do not widen a relational guard's parameters to `unknown` without also making its body total: a type predicate over `unknown` reads as answering for any input, and one that still leads with an assertion throws across most of the domain it claims to cover.
+A guard that throws is not thereby inconsistent with one that returns `false` — check which shape it is before treating the difference as a defect.
+
 **Naming.** An `assert*` method and its `is*` guard name the same concept identically, so that the pair differs only in its prefix.
 Do not encode the checked type in the member name — the `assert` or `is` prefix together with the concept already carries it, and a `Type`, `Number` or `String` suffix restates what the signature says.
 Where a regular-expression getter backs a guard, it carries the same concept without the prefix.
 This is the guard-pair application of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions); where the two overlap they say the same thing.
 
-**Structure.** An `assert*` method delegates its decision to the matching `is*` guard rather than repeating the check, so the two can never disagree:
+**Structure.** An `assert*` method delegates its decision to the matching `is*` guard rather than repeating the check, so the two can never disagree.
+
+A classifying pair asserts nothing in the guard, and the `assert*` raises the type error:
 
 ```typescript
 public static assertConcept(input: unknown, message?: string): asserts input is ExpectedType {
@@ -174,11 +190,38 @@ public static assertConcept(input: unknown, message?: string): asserts input is 
 }
 ```
 
+A relational pair validates its arguments in the guard, so the type error is raised there and the `assert*` raises only the relation error.
+The `assert*` returns `void` rather than an assertion predicate, because its parameters are already typed and there is nothing left to narrow:
+
+```typescript
+public static isConcept(first: number, second: number): boolean {
+    NumberUtility.assertSafe(first, 'first must be within the safe integer range.');
+    NumberUtility.assertSafe(second, 'second must be within the safe integer range.');
+    return first < second;
+}
+
+public static assertConcept(first: number, second: number, message?: string): void {
+    if (!ConceptUtility.isConcept(first, second)) {
+        if (StringUtility.isSingleLine(message)) {
+            throw new ValueRangeError(message);
+        }
+
+        throw new ValueRangeError('first must be less than second.');
+    }
+}
+```
+
 **The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, or a non-string, falls through to the default message.
 This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
-It is also observable behavior, asserted for every guard by the shared assertion-contract helpers under `test/utils/assert/`.
+It is also observable behavior, asserted by the shared assertion-contract helpers under `test/utils/assert/` for the failures each guard's `message` covers.
 A new `assert*` method therefore either applies this check itself or forwards `message` unchanged to a method that does; a member that delegates to another guard, including a deprecated alias delegating to its replacement, takes the second form.
 Never use `message` unconditionally.
+
+**How far `message` reaches.** A classifying pair has one failure, so `message` covers it.
+A relational pair has two, and `message` covers only the relation the pair is named for.
+Argument validation runs first, inside the guard, and raises a fixed message naming the parameter that failed, so a caller's `message` never reaches the type-failure path.
+This is deliberate rather than a gap: the caller's message describes the relation it expected, which says nothing useful about an argument that was the wrong type before any comparison happened.
+Do not treat the split as a defect, and do not route `message` into the argument validation to close it.
 
 ### Deprecation
 
@@ -418,6 +461,7 @@ describe.each(
 - For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`). This attributes a failure to one argument rather than leaving it ambiguous.
 - Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
 - Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method.
+- A relational guard's suite uses both mechanisms: its wrong-type inputs belong in the `Argument errors` block, and its in-type failures go through the shared assertion-contract helpers, reached by a local wrapper that adapts the argument list to the single-input shape those helpers take. A classifying guard needs no `Argument errors` block at all, because it has no wrong-type failure to attribute. The presence or absence of that block therefore tracks which shape a guard is, and is not on its own a sign that a suite is inconsistent.
 - Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks, or as their own scenarios when the inputs group meaningfully. The argument-validation conventions above do not apply to them.
 
 ### Validation Steps
