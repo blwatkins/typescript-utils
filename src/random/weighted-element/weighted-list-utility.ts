@@ -144,8 +144,8 @@ export class WeightedListUtility {
      *
      * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
+     * @see {@link TypeAssertions.assertFunction}
      * @see {@link WeightedListUtility.isGenericWeightedList}
-     * @see {@link WeightedElementUtility.isWeightedElement}
      *
      * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
      *

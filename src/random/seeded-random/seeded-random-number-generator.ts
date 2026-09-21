@@ -117,6 +117,8 @@ export class SeededRandomNumberGenerator {
      * @remarks For a state array to be valid, it must be an array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
      * Additionally, a valid state array must have at least one element that is greater than zero.
      *
+     * @see {@link TypeAssertions.assertArray}
+     *
      * @param {unknown} input - The input to check.
      *
      * @returns {asserts input is [number, number, number, number]} Asserts that `input` is a valid state array.
