@@ -102,6 +102,9 @@ export class Random {
      * A draw that falls outside the range is discarded and replaced.
      * When no draw succeeds, `min` is returned.
      *
+     * @see {@link NumberUtility.assertSafe}
+     * @see {@link NumberUtility.assertLessThan}
+     *
      * @param {number} min - The inclusive minimum value.
      * @param {number} max - The exclusive maximum value.
      *
