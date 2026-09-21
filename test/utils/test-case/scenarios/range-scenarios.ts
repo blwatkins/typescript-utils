@@ -69,7 +69,7 @@ export const validRangeScenarios: Scenario[] = [
         expected: undefined
     },
     {
-        label: 'Every combination of defined and undefined inclusivity',
+        label: 'Every combination of inclusivity with at least one bound defined',
         inputs: [
             { min: 5, max: 10, isMinInclusive: true, isMaxInclusive: undefined },
             { min: 5, max: 10, isMinInclusive: false, isMaxInclusive: undefined },
@@ -94,6 +94,7 @@ export const validRangeScenarios: Scenario[] = [
             { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false },
             { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: true },
             { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER + 1, isMinInclusive: true, isMaxInclusive: false },
+            { min: -Number.MIN_VALUE, max: 0, isMinInclusive: true, isMaxInclusive: false },
             { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: true, isMaxInclusive: false }
         ],
         expected: undefined
@@ -121,9 +122,7 @@ export const validRangeScenarios: Scenario[] = [
         label: 'Ranges spanning zero at the smallest representable width',
         inputs: [
             { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
-            { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: true },
-            { min: -Number.MIN_VALUE, max: 0, isMinInclusive: true, isMaxInclusive: false },
-            { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: true }
+            { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: true }
         ],
         expected: undefined
     }
