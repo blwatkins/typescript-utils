@@ -136,20 +136,20 @@ describe('RandomNumberGeneratorFactory', (): void => {
             describe('Invalid seed inputs', (): void => {
                 test.each(
                     nonStringInputs
-                )('%# - Invalid seed %o should throw a TypeError', (seed: unknown): void => {
+                )('%# - Invalid seed %o should throw a PrimitiveTypeError', (seed: unknown): void => {
                     expect((): void => {
                         RandomNumberGeneratorFactory.build(seed as string);
-                    }).toThrow(TypeError);
+                    }).toThrow(PrimitiveTypeError);
                 });
             });
 
             describe('Invalid namespace inputs', (): void => {
                 test.each(
                     nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-                )('%# - Invalid namespace %o should throw a TypeError', (namespace: unknown): void => {
+                )('%# - Invalid namespace %o should throw a PrimitiveTypeError', (namespace: unknown): void => {
                     expect((): void => {
                         RandomNumberGeneratorFactory.build('', namespace as string);
-                    }).toThrow(TypeError);
+                    }).toThrow(PrimitiveTypeError);
                 });
             });
 
@@ -247,16 +247,16 @@ describe('RandomNumberGeneratorFactory', (): void => {
             describe('Invalid seed inputs', (): void => {
                 test.each(
                     nonStringInputs
-                )('%# - Invalid seed %o should throw a TypeError', async (seed: unknown): Promise<void> => {
-                    await expect(RandomNumberGeneratorFactory.asyncBuild(seed as string)).rejects.toThrow(TypeError);
+                )('%# - Invalid seed %o should throw a PrimitiveTypeError', async (seed: unknown): Promise<void> => {
+                    await expect(RandomNumberGeneratorFactory.asyncBuild(seed as string)).rejects.toThrow(PrimitiveTypeError);
                 });
             });
 
             describe('Invalid namespace inputs', (): void => {
                 test.each(
                     nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-                )('%# - Invalid namespace %o should throw a TypeError', async (namespace: unknown): Promise<void> => {
-                    await expect(RandomNumberGeneratorFactory.asyncBuild('', namespace as string)).rejects.toThrow(TypeError);
+                )('%# - Invalid namespace %o should throw a PrimitiveTypeError', async (namespace: unknown): Promise<void> => {
+                    await expect(RandomNumberGeneratorFactory.asyncBuild('', namespace as string)).rejects.toThrow(PrimitiveTypeError);
                 });
             });
         });

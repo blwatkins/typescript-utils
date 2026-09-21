@@ -57,7 +57,7 @@ describe('SeededRandomNumberGenerator', (): void => {
                         [0, 0, 1.5, 0],
                         [0, 0, 0, 1.5]
                     ],
-                    expected: RangeError
+                    expected: ValueRangeError
                 },
                 {
                     label: 'Array inputs greater than 0xFFFFFFFF (max 32-bit unsigned integer)',

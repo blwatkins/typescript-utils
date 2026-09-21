@@ -47,7 +47,7 @@ export class SeededRandomNumberGenerator {
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
      * @throws {PrimitiveTypeError} When `state` is not an array with exactly 4 elements.
-     * @throws {ValueRangeError} When all elements of `state` are not 32-bit unsigned integers less than or equal to 0xFFFFFFFF.
+     * @throws {ValueRangeError} When any element of `state` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
      * @throws {ValueRangeError} When all elements of `state` are equal to zero.
      *
      * @public
@@ -122,7 +122,7 @@ export class SeededRandomNumberGenerator {
      * @returns {asserts input is [number, number, number, number]} Asserts that `input` is a valid state array.
      *
      * @throws {PrimitiveTypeError} When `input` is not an array with exactly 4 elements.
-     * @throws {ValueRangeError} When all elements of `input` are not 32-bit unsigned integers less than or equal to 0xFFFFFFFF.
+     * @throws {ValueRangeError} When any element of `input` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
      * @throws {ValueRangeError} When all elements of `input` are equal to zero.
      *
      * @private
