@@ -27,24 +27,34 @@ import {
     Random,
     RandomNumberGeneratorFactory,
     SeededRandomNumberGenerator,
+    StaticInstanceError,
     ValueRangeError
 } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
-import { invalidSafeNumberInputs, nonFiniteNumberInputs, nonNumberInputs, unsafeNumberInputs, zeroInputs } from '../utils/input/number-inputs';
+
+import {
+    invalidSafeNumberInputs,
+    nonFiniteNumberInputs,
+    nonNumberInputs,
+    unsafeNumberInputs,
+    zeroInputs
+} from '../utils/input/number-inputs';
+
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
 import {
     asciiNamespace,
-    asciiSeed, getExpectedAsyncSequence,
+    asciiSeed,
+    getExpectedAsyncSequence,
     getExpectedSequence
 } from '../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
-import { buildTestCases, Scenario, TestCase } from '../utils/test-case/test-case';
+import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('Random', (): void => {
-    testStaticClassConstructor('Random', Random as unknown as new () => unknown, Error);
+    testStaticClassConstructor('Random', Random as unknown as new () => unknown, StaticInstanceError);
 
     const testRepeatTotal: number = 50;
 
@@ -290,40 +300,6 @@ describe('Random', (): void => {
             });
         });
 
-        describe('randomFloat and randomInt should stay in range for a generator outside its contract', (): void => {
-            const outOfContractScenarios: Scenario[] = [
-                {
-                    label: 'Draws outside the documented [0, 1) contract',
-                    inputs: outOfContractDraws,
-                    expected: undefined
-                }
-            ];
-
-            describe.each(
-                outOfContractScenarios
-            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                test.each(
-                    testCases
-                )('%# - A generator returning $input should still yield a value within [0, 10)', ({ input: testInput }: TestCase): void => {
-                    const draw: number = testInput as number;
-                    Random.randomNumberGenerator = (): number => draw;
-
-                    const floatValue: number = Random.randomFloat(0, 10);
-                    const intValue: number = Random.randomInt(0, 10);
-
-                    expect(Number.isFinite(floatValue)).toBe(true);
-                    expect(floatValue).toBeGreaterThanOrEqual(0);
-                    expect(floatValue).toBeLessThan(10);
-
-                    expect(Number.isSafeInteger(intValue)).toBe(true);
-                    expect(intValue).toBeGreaterThanOrEqual(0);
-                    expect(intValue).toBeLessThan(10);
-                });
-            });
-        });
-
         describe('randomFloat should never return the exclusive max', (): void => {
             const roundsUp: number = 1 - (Number.EPSILON / 2);
 
@@ -398,28 +374,6 @@ describe('Random', (): void => {
                 expect((): void => {
                     Random.randomFloat(-Number.MAX_VALUE, Number.MAX_VALUE);
                 }).toThrow(PrimitiveTypeError);
-            });
-        });
-
-        describe('randomFloat and randomInt should accept bounds at the safe integer limits', (): void => {
-            test.each([
-                { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                { min: 0, max: Number.MAX_SAFE_INTEGER },
-                { min: Number.MIN_SAFE_INTEGER, max: 0 }
-            ])('%# - randomFloat($min, $max) should return a safely truncatable value', ({ min, max }: { min: number; max: number; }): void => {
-                for (let i: number = 0; i < testRepeatTotal; i++) {
-                    const value: number = Random.randomFloat(min, max);
-
-                    expect(Number.isFinite(value)).toBe(true);
-                    expect(Number.isSafeInteger(Math.floor(value))).toBe(true);
-                    expect(value).toBeGreaterThanOrEqual(min);
-                    expect(value).toBeLessThan(max);
-
-                    const intValue: number = Random.randomInt(min, max);
-                    expect(Number.isSafeInteger(intValue)).toBe(true);
-                    expect(intValue).toBeGreaterThanOrEqual(min);
-                    expect(intValue).toBeLessThan(max);
-                }
             });
         });
 
@@ -1049,6 +1003,62 @@ describe('Random', (): void => {
                     Random.randomInteger(args.min as number, args.max as number);
                 }).toThrow(testExpected);
             });
+        });
+    });
+
+    describe('randomFloat and randomInt should stay in range for a generator outside its contract', (): void => {
+        const outOfContractScenarios: Scenario[] = [
+            {
+                label: 'Draws outside the documented [0, 1) contract',
+                inputs: outOfContractDraws,
+                expected: undefined
+            }
+        ];
+
+        describe.each(
+            outOfContractScenarios
+        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+            test.each(
+                testCases
+            )('%# - A generator returning $input should still yield a value within [0, 10)', ({ input: testInput }: TestCase): void => {
+                const draw: number = testInput as number;
+                Random.randomNumberGenerator = (): number => draw;
+
+                const floatValue: number = Random.randomFloat(0, 10);
+                const intValue: number = Random.randomInt(0, 10);
+
+                expect(Number.isFinite(floatValue)).toBe(true);
+                expect(floatValue).toBeGreaterThanOrEqual(0);
+                expect(floatValue).toBeLessThan(10);
+
+                expect(Number.isSafeInteger(intValue)).toBe(true);
+                expect(intValue).toBeGreaterThanOrEqual(0);
+                expect(intValue).toBeLessThan(10);
+            });
+        });
+    });
+
+    describe('randomFloat and randomInt should accept bounds at the safe integer limits', (): void => {
+        test.each([
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+            { min: 0, max: Number.MAX_SAFE_INTEGER },
+            { min: Number.MIN_SAFE_INTEGER, max: 0 }
+        ])('%# - randomFloat($min, $max) should return a safely truncatable value', ({ min, max }: { min: number; max: number; }): void => {
+            for (let i: number = 0; i < testRepeatTotal; i++) {
+                const value: number = Random.randomFloat(min, max);
+
+                expect(Number.isFinite(value)).toBe(true);
+                expect(Number.isSafeInteger(Math.floor(value))).toBe(true);
+                expect(value).toBeGreaterThanOrEqual(min);
+                expect(value).toBeLessThan(max);
+
+                const intValue: number = Random.randomInt(min, max);
+                expect(Number.isSafeInteger(intValue)).toBe(true);
+                expect(intValue).toBeGreaterThanOrEqual(min);
+                expect(intValue).toBeLessThan(max);
+            }
         });
     });
 });
