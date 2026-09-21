@@ -195,8 +195,8 @@ The `assert*` returns `void` rather than an assertion predicate, because its par
 
 ```typescript
 public static isConcept(first: number, second: number): boolean {
-    NumberUtility.assertSafe(first, 'first must be within the safe integer range.');
-    NumberUtility.assertSafe(second, 'second must be within the safe integer range.');
+    GuardUtility.assertArgument(first, 'first must be <expectation>.');
+    GuardUtility.assertArgument(second, 'second must be <expectation>.');
     return first < second;
 }
 
