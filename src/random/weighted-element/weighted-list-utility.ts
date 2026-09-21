@@ -146,7 +146,6 @@ export class WeightedListUtility {
      *
      * @see {@link TypeAssertions.assertFunction}
      * @see {@link WeightedListUtility.isGenericWeightedList}
-     * @see {@link WeightedElementUtility.isWeightedElement}
      *
      * @template TValue The type of the value property of the {@link WeightedElement} objects in the list.
      *
