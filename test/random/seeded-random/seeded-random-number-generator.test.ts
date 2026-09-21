@@ -22,21 +22,21 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { SeededRandomNumberGenerator } from '../../../src';
+import {PrimitiveTypeError, SeededRandomNumberGenerator, ValueRangeError} from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
-describe('SeededRandomNumberGenerator', () => {
-    describe('new SeededRandomNumberGenerator()', () => {
-        describe('Input validation', (): void => {
+describe('SeededRandomNumberGenerator', (): void => {
+    describe('new SeededRandomNumberGenerator()', (): void => {
+        describe('Argument errors', (): void => {
             const scenarios: Scenario[] = [
                 {
                     label: 'Non-array inputs',
                     inputs: [
                         ...nonArrayInputs
                     ],
-                    expected: TypeError
+                    expected: PrimitiveTypeError
                 },
                 {
                     label: 'Array inputs with incorrect length',
@@ -47,7 +47,7 @@ describe('SeededRandomNumberGenerator', () => {
                         [1, 2, 3],
                         [1, 2, 3, 4, 5]
                     ],
-                    expected: TypeError
+                    expected: PrimitiveTypeError
                 },
                 {
                     label: 'Array inputs with non-integer elements',
@@ -67,7 +67,7 @@ describe('SeededRandomNumberGenerator', () => {
                         [0, 0, (0xFFFFFFFF + 1), 0],
                         [0, 0, 0, (0xFFFFFFFF + 1)]
                     ],
-                    expected: RangeError
+                    expected: ValueRangeError
                 },
                 {
                     label: 'Array inputs with negative elements',
@@ -77,12 +77,12 @@ describe('SeededRandomNumberGenerator', () => {
                         [0, 0, -1, 0],
                         [0, 0, 0, -1]
                     ],
-                    expected: RangeError
+                    expected: ValueRangeError
                 },
                 {
                     label: 'Array input with zero state (all elements are 0)',
                     inputs: [[0, 0, 0, 0]],
-                    expected: RangeError
+                    expected: ValueRangeError
                 }
             ];
 
