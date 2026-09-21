@@ -114,7 +114,23 @@ export class Random {
      * @since 0.1.0
      */
     public static randomFloat(min: number, max: number): number {
-        return Random.#drawValidRandomFloat(min, max);
+        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
+        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
+        NumberUtility.assertLessThan(min, max, 'min must be less than max.');
+
+        let value: number = Random.#draw(min, max);
+        let attempts: number = 1;
+
+        while (!Random.#isInRange(value, min, max) && (attempts < maxDrawAttempts)) {
+            value = Random.#draw(min, max);
+            attempts++;
+        }
+
+        if (!Random.#isInRange(value, min, max)) {
+            return min;
+        }
+
+        return value;
     }
 
     /**
@@ -227,41 +243,6 @@ export class Random {
         }
 
         return elements[elements.length - 1].value;
-    }
-
-    /**
-     * Draw a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive), discarding
-     * a draw that falls outside the range.
-     *
-     * @see {@link NumberUtility.assertSafe}
-     * @see {@link NumberUtility.assertLessThan}
-     * @see {@link Random.randomFloat}
-     *
-     * @param {number} min - The inclusive minimum value.
-     * @param {number} max - The exclusive maximum value.
-     *
-     * @returns {number} A random floating-point number in the range [min, max) (min inclusive, max exclusive), or `min` if no draw succeeds.
-     *
-     * @private
-     */
-    static #drawValidRandomFloat(min: number, max: number): number {
-        NumberUtility.assertSafe(min, 'min must be within the safe integer range.');
-        NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
-        NumberUtility.assertLessThan(min, max, 'min must be less than max.');
-
-        let value: number = Random.#draw(min, max);
-        let attempts: number = 1;
-
-        while (!Random.#isInRange(value, min, max) && (attempts < maxDrawAttempts)) {
-            value = Random.#draw(min, max);
-            attempts++;
-        }
-
-        if (!Random.#isInRange(value, min, max)) {
-            return min;
-        }
-
-        return value;
     }
 
     /**
