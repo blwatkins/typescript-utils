@@ -572,7 +572,7 @@ describe('NumberUtility', (): void => {
             testIsMethod(isInRange, successScenarios, failureScenarios);
         });
 
-        describe('Argument Errors', (): void => {
+        describe('Argument errors', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid value argument',

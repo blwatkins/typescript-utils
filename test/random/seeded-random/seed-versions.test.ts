@@ -150,7 +150,7 @@ describe('SeedVersions', (): void => {
             testIsMethod(isValidIndex, successScenarios, failureScenarios);
         });
 
-        describe('Argument Errors', (): void => {
+        describe('Argument errors', (): void => {
             describe.each(
                 argumentFailureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
