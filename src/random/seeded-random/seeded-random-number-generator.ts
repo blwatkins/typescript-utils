@@ -119,7 +119,7 @@ export class SeededRandomNumberGenerator {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {asserts input is [number, number, number]} Asserts that `input` is a valid state array.
+     * @returns {asserts input is [number, number, number, number]} Asserts that `input` is a valid state array.
      *
      * @throws {PrimitiveTypeError} When `input` is not an array.
      * @throws {PrimitiveTypeError} When `input` does not have exactly 4 elements.
@@ -128,7 +128,7 @@ export class SeededRandomNumberGenerator {
      *
      * @private
      */
-    #assertState(input: unknown): asserts input is [number, number, number] {
+    #assertState(input: unknown): asserts input is [number, number, number, number] {
         TypeAssertions.assertArray(input);
         if (input.length !== 4) throw new PrimitiveTypeError('Input must have exactly 4 elements.');
 
