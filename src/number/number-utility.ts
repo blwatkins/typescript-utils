@@ -324,6 +324,9 @@ export class NumberUtility {
     /**
      * Is `value` greater than or equal to `min` and less than, or equal to, `max`?
      *
+     * @see {@link NumberUtility.assertSafe}
+     * @see {@link NumberUtility.assertValidRange}
+     *
      * @param {number} value - The value to check.
      * @param {number} min - The inclusive minimum value.
      * @param {number} max - The inclusive maximum value.

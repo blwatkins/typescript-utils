@@ -131,6 +131,7 @@ export class WeightedElementUtility {
      *
      * @remarks For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *
+     * @see {@link TypeAssertions.assertFunction}
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @template TValue The type of the value property of the {@link WeightedElement} object.
