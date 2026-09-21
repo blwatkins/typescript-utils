@@ -46,9 +46,9 @@ export class SeededRandomNumberGenerator {
      * @param {[number, number, number, number]} state - Initial 128-bit state.
      * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @throws {TypeError} When `state` is not an array with 4 elements.
-     * @throws {RangeError} When each element of `state` is not a 32-bit unsigned integer.
-     * @throws {RangeError} When `state` does not have at least one element that is greater than 0.
+     * @throws {PrimitiveTypeError} When `state` is not an array with exactly 4 elements.
+     * @throws {ValueRangeError} When any element of `state` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
+     * @throws {ValueRangeError} When all elements of `state` are equal to zero.
      *
      * @public
      * @since 0.1.0
@@ -119,16 +119,15 @@ export class SeededRandomNumberGenerator {
      *
      * @param {unknown} input - The input to check.
      *
-     * @returns {asserts input is [number, number, number]} Asserts that `input` is a valid state array.
+     * @returns {asserts input is [number, number, number, number]} Asserts that `input` is a valid state array.
      *
-     * @throws {PrimitiveTypeError} When `input` is not an array.
-     * @throws {PrimitiveTypeError} When `input` does not have exactly 4 elements.
-     * @throws {ValueRangeError} When all elements of `input` are not 32-bit unsigned integers less than 0xFFFFFFFF.
+     * @throws {PrimitiveTypeError} When `input` is not an array with exactly 4 elements.
+     * @throws {ValueRangeError} When any element of `input` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
      * @throws {ValueRangeError} When all elements of `input` are equal to zero.
      *
      * @private
      */
-    #assertState(input: unknown): asserts input is [number, number, number] {
+    #assertState(input: unknown): asserts input is [number, number, number, number] {
         TypeAssertions.assertArray(input);
         if (input.length !== 4) throw new PrimitiveTypeError('Input must have exactly 4 elements.');
 
