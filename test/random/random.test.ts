@@ -65,13 +65,13 @@ describe('Random', (): void => {
     });
 
     function validateRandomFloatValues(numbers: number[], min: number, max: number): void {
-        const sameMinMax: boolean = min !== max;
+        const differentMinMax: boolean = min !== max;
 
         for (const num of numbers) {
             expectTypeOf(num).toBeNumber();
             expect(num).not.toBeNaN();
 
-            if (sameMinMax) {
+            if (differentMinMax) {
                 expect(num).toBeGreaterThanOrEqual(min);
                 expect(num).toBeLessThan(max);
             } else {
@@ -81,7 +81,7 @@ describe('Random', (): void => {
 
         const numbersSet: Set<number> = new Set<number>(numbers);
 
-        if (sameMinMax) {
+        if (differentMinMax) {
             expect(numbersSet.size).toBe(numbers.length);
         } else {
             expect(numbersSet.size).toBe(1);
@@ -259,7 +259,7 @@ describe('Random', (): void => {
     });
 
     describe('random', (): void => {
-        test('random() should return a positive number between 0 inclusive and 1 exclusive', (): void => {
+        test('random() should return a number between 0 inclusive and 1 exclusive', (): void => {
             const min: 0 = 0 as const;
             const max: 1 = 1 as const;
             const numbers: number[] = [];
@@ -374,13 +374,6 @@ describe('Random', (): void => {
                 expect((): void => {
                     Random.randomFloat(-Number.MAX_VALUE, Number.MAX_VALUE);
                 }).toThrow(PrimitiveTypeError);
-            });
-        });
-
-        describe('randomFloat should hold min and max to the same limit', (): void => {
-            test('randomInt should not return Number.MAX_SAFE_INTEGER', (): void => {
-                Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
-                expect(Random.randomInt(0, Number.MAX_SAFE_INTEGER)).toBeLessThan(Number.MAX_SAFE_INTEGER);
             });
         });
     });
@@ -508,6 +501,13 @@ describe('Random', (): void => {
                 expect(intValue).toBeLessThan(max);
                 expect(integerValue).toBeGreaterThanOrEqual(min);
                 expect(integerValue).toBeLessThan(max);
+            });
+        });
+
+        describe('randomInt should not return the exclusive max at the safe integer limit', (): void => {
+            test('randomInt should not return Number.MAX_SAFE_INTEGER', (): void => {
+                Random.randomNumberGenerator = (): number => 1 - (Number.EPSILON / 2);
+                expect(Random.randomInt(0, Number.MAX_SAFE_INTEGER)).toBeLessThan(Number.MAX_SAFE_INTEGER);
             });
         });
 
