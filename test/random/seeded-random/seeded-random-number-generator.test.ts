@@ -22,7 +22,7 @@
 
 import { describe, test, expect } from 'vitest';
 
-import {PrimitiveTypeError, SeededRandomNumberGenerator, ValueRangeError} from '../../../src';
+import { PrimitiveTypeError, SeededRandomNumberGenerator, ValueRangeError } from '../../../src';
 
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
