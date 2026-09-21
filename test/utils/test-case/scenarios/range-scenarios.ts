@@ -93,14 +93,14 @@ export const validRangeScenarios: Scenario[] = [
             { min: -1 - Number.EPSILON, max: -1, isMinInclusive: true, isMaxInclusive: false },
             { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false },
             { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: true },
-            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER + 1, isMinInclusive: true, isMaxInclusive: false }
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER + 1, isMinInclusive: true, isMaxInclusive: false },
+            { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: true, isMaxInclusive: false }
         ],
         expected: undefined
     },
     {
         label: 'Midpoint rounds onto an included bound',
         inputs: [
-            { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: true, isMaxInclusive: false },
             { min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: true, isMaxInclusive: false }
         ],
         expected: undefined
