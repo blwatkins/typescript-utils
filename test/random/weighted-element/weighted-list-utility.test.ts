@@ -282,7 +282,7 @@ describe('WeightedListUtility', (): void => {
         });
     });
 
-    describe('Argument Errors', (): void => {
+    describe('Argument errors', (): void => {
         const argumentFailureScenarios: Scenario[] = [
             {
                 label: 'Non-function type guard inputs',

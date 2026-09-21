@@ -130,19 +130,27 @@ describe('SeedVersions', (): void => {
         ];
 
         describe('assertValidIndex', (): void => {
+            function assertValidIndex(input: unknown, message?: string): void {
+                SeedVersions.assertValidIndex(input as number, message);
+            }
+
             testAssertMethod(
-                SeedVersions.assertValidIndex.bind(SeedVersions),
+                assertValidIndex,
                 successScenarios,
                 failureScenarios,
-                'Input is out of bounds for valid seed version index.'
+                'index must be a valid seed version index.'
             );
         });
 
         describe('isValidIndex', (): void => {
-            testIsMethod(SeedVersions.isValidIndex.bind(SeedVersions), successScenarios, failureScenarios);
+            function isValidIndex(input: unknown): boolean {
+                return SeedVersions.isValidIndex(input as number);
+            }
+
+            testIsMethod(isValidIndex, successScenarios, failureScenarios);
         });
 
-        describe('Argument Errors', (): void => {
+        describe('Argument errors', (): void => {
             describe.each(
                 argumentFailureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
@@ -153,7 +161,7 @@ describe('SeedVersions', (): void => {
                         testCases
                     )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            SeedVersions.assertValidIndex(testInput);
+                            SeedVersions.assertValidIndex(testInput as number);
                         }).toThrow(testExpected);
                     });
                 });
@@ -163,7 +171,7 @@ describe('SeedVersions', (): void => {
                         testCases
                     )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                         expect((): void => {
-                            SeedVersions.isValidIndex(testInput);
+                            SeedVersions.isValidIndex(testInput as number);
                         }).toThrow(testExpected);
                     });
                 });
