@@ -23,10 +23,11 @@
 import { describe, test, expect } from 'vitest';
 
 import {
+    PrimitiveTypeError,
     RandomNumberGeneratorFactory,
     SeedVersions,
     SeededRandomNumberGenerator,
-    PrimitiveTypeError,
+    StaticInstanceError,
     ValueRangeError
 } from '../../../src';
 
@@ -59,7 +60,7 @@ import {
 } from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('RandomNumberGeneratorFactory', (): void => {
-    testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => unknown, Error);
+    testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => unknown, StaticInstanceError);
 
     const sequenceLength: 5 = 5 as const;
 
