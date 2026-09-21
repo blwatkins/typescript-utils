@@ -86,6 +86,7 @@ export const validRangeScenarios: Scenario[] = [
         label: 'Adjacent bounds where one bound is included',
         inputs: [
             { min: 1, max: 1 + Number.EPSILON, isMinInclusive: true, isMaxInclusive: false },
+            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: true },
             { min: 0, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: false },
             { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: true },
             { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: true },
@@ -100,7 +101,6 @@ export const validRangeScenarios: Scenario[] = [
         label: 'Midpoint rounds onto an included bound',
         inputs: [
             { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: true, isMaxInclusive: false },
-            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: true },
             { min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: true, isMaxInclusive: false }
         ],
         expected: undefined
