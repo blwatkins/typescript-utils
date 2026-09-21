@@ -91,46 +91,46 @@ export class SeedVersions {
     }
 
     /**
-     * Assert that `input` is a valid seed version index.
+     * Assert that `index` is a valid seed version index.
      *
      * @see {@link SeedVersions.isValidIndex}
      *
-     * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid seed version index.
+     * @param {number} index - The index to check.
+     * @param {string | undefined} message - Optional message for the error thrown when `index` is not a valid seed version index.
      *
-     * @returns {asserts input is number}
+     * @returns {void}
      *
-     * @throws {PrimitiveTypeError} When `input` is not a positive integer or zero.
-     * @throws {ValueRangeError} When `input` is not a valid seed version index.
+     * @throws {PrimitiveTypeError} When `index` is not a positive integer or zero.
+     * @throws {ValueRangeError} When `index` is not a valid seed version index.
      *
      * @public
      * @since 0.1.0
      */
-    static assertValidIndex(input: unknown, message?: string): asserts input is number {
-        if (!SeedVersions.isValidIndex(input)) {
+    static assertValidIndex(index: number, message?: string): void {
+        if (!SeedVersions.isValidIndex(index)) {
             if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
             }
 
-            throw new ValueRangeError('Input is out of bounds for valid seed version index.');
+            throw new ValueRangeError('index must be a valid seed version index.');
         }
     }
 
     /**
-     * Is `input` a valid seed version?
+     * Is `index` a valid seed version index?
      *
-     * @param {unknown} input - The input to check.
+     * @param {number} index - The index to check.
      *
-     * @returns {input is number} `true` if `input` is a valid seed version; `false` otherwise.
+     * @returns {boolean} `true` if `index` is a valid seed version index; `false` otherwise.
      *
-     * @throws {PrimitiveTypeError} When `input` is not a positive integer or zero.
+     * @throws {PrimitiveTypeError} When `index` is not a positive integer or zero.
      *
      * @public
      * @since 0.1.0
      */
-    static isValidIndex(input: unknown): input is number {
-        NumberUtility.assertPositiveInteger(input, true);
-        return input < seedVersions.length;
+    static isValidIndex(index: number): boolean {
+        NumberUtility.assertPositiveInteger(index, true, 'index must be a positive integer or zero.');
+        return index < seedVersions.length;
     }
 
     /**
