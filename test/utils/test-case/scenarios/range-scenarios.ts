@@ -28,11 +28,6 @@ import { nonObjectInputs } from '../../input/object-inputs';
 
 import { Scenario } from '../test-case';
 
-const epsilon: number = Number.EPSILON;
-const smallest: number = Number.MIN_VALUE;
-const largestSafe: number = Number.MAX_SAFE_INTEGER;
-const smallestSafe: number = Number.MIN_SAFE_INTEGER;
-
 export const validRangeScenarios: Scenario[] = [
     {
         label: 'Minimum less than maximum',
@@ -50,7 +45,7 @@ export const validRangeScenarios: Scenario[] = [
             { min: -10, max: -5.5, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: -10.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: -1.5, max: 1.5, isMinInclusive: undefined, isMaxInclusive: undefined },
-            { min: smallest, max: largestSafe, isMinInclusive: undefined, isMaxInclusive: undefined },
+            { min: Number.MIN_VALUE, max: Number.MAX_SAFE_INTEGER, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: 10.12345678912344, max: 10.12345678912345, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: -10.12345678912345, max: -10.12345678912344, isMinInclusive: undefined, isMaxInclusive: undefined }
         ],
@@ -74,7 +69,7 @@ export const validRangeScenarios: Scenario[] = [
         expected: undefined
     },
     {
-        label: 'Every combination of defined and undefined inclusivity',
+        label: 'Every combination of inclusivity with at least one bound defined',
         inputs: [
             { min: 5, max: 10, isMinInclusive: true, isMaxInclusive: undefined },
             { min: 5, max: 10, isMinInclusive: false, isMaxInclusive: undefined },
@@ -90,46 +85,38 @@ export const validRangeScenarios: Scenario[] = [
     {
         label: 'Adjacent bounds where one bound is included',
         inputs: [
-            { min: 1, max: 1 + epsilon, isMinInclusive: true, isMaxInclusive: false },
-            { min: 1, max: 1 + epsilon, isMinInclusive: false, isMaxInclusive: true },
-            { min: 0, max: smallest, isMinInclusive: true, isMaxInclusive: false },
-            { min: 0, max: smallest, isMinInclusive: false, isMaxInclusive: true },
-            { min: -1 - epsilon, max: -1, isMinInclusive: false, isMaxInclusive: true },
-            { min: -1 - epsilon, max: -1, isMinInclusive: true, isMaxInclusive: false },
-            { min: largestSafe - 1, max: largestSafe, isMinInclusive: true, isMaxInclusive: false },
-            { min: largestSafe - 1, max: largestSafe, isMinInclusive: false, isMaxInclusive: true },
-            { min: smallestSafe, max: smallestSafe + 1, isMinInclusive: true, isMaxInclusive: false }
-        ],
-        expected: undefined
-    },
-    {
-        label: 'Midpoint rounds onto an included bound',
-        inputs: [
-            { min: 1 + epsilon, max: 1 + (2 * epsilon), isMinInclusive: true, isMaxInclusive: false },
-            { min: 1, max: 1 + epsilon, isMinInclusive: false, isMaxInclusive: true },
-            { min: -1 - (2 * epsilon), max: -1 - epsilon, isMinInclusive: true, isMaxInclusive: false }
+            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: true, isMaxInclusive: false },
+            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: true },
+            { min: 0, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: false },
+            { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: true },
+            { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: true },
+            { min: -1 - Number.EPSILON, max: -1, isMinInclusive: true, isMaxInclusive: false },
+            { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false },
+            { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: true },
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER + 1, isMinInclusive: true, isMaxInclusive: false },
+            { min: -Number.MIN_VALUE, max: 0, isMinInclusive: true, isMaxInclusive: false },
+            { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: true, isMaxInclusive: false },
+            { min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: true, isMaxInclusive: false }
         ],
         expected: undefined
     },
     {
         label: 'Ranges at the safe integer limits',
         inputs: [
-            { min: smallestSafe, max: largestSafe, isMinInclusive: undefined, isMaxInclusive: undefined },
-            { min: smallestSafe, max: largestSafe, isMinInclusive: false, isMaxInclusive: false },
-            { min: 0, max: largestSafe, isMinInclusive: false, isMaxInclusive: false },
-            { min: smallestSafe, max: 0, isMinInclusive: false, isMaxInclusive: false },
-            { min: largestSafe, max: largestSafe, isMinInclusive: true, isMaxInclusive: true },
-            { min: smallestSafe, max: smallestSafe, isMinInclusive: undefined, isMaxInclusive: undefined }
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: undefined, isMaxInclusive: undefined },
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false },
+            { min: 0, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false },
+            { min: Number.MIN_SAFE_INTEGER, max: 0, isMinInclusive: false, isMaxInclusive: false },
+            { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: true },
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: undefined, isMaxInclusive: undefined }
         ],
         expected: undefined
     },
     {
         label: 'Ranges spanning zero at the smallest representable width',
         inputs: [
-            { min: -smallest, max: smallest, isMinInclusive: false, isMaxInclusive: false },
-            { min: -smallest, max: smallest, isMinInclusive: true, isMaxInclusive: true },
-            { min: -smallest, max: 0, isMinInclusive: true, isMaxInclusive: false },
-            { min: 0, max: smallest, isMinInclusive: false, isMaxInclusive: true }
+            { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
+            { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: true }
         ],
         expected: undefined
     }
@@ -159,8 +146,8 @@ export const invalidRangeScenarios: Scenario[] = [
             { min: -5.5, max: -10.5, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: 10.12345678912345, max: 10.12345678912344, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: -10.12345678912344, max: -10.12345678912345, isMinInclusive: undefined, isMaxInclusive: undefined },
-            { min: epsilon, max: 0, isMinInclusive: undefined, isMaxInclusive: undefined },
-            { min: largestSafe, max: smallestSafe, isMinInclusive: undefined, isMaxInclusive: undefined },
+            { min: Number.EPSILON, max: 0, isMinInclusive: undefined, isMaxInclusive: undefined },
+            { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: 10, max: 0, isMinInclusive: true, isMaxInclusive: true }
         ],
         expected: SchemaTypeError
@@ -177,28 +164,22 @@ export const invalidRangeScenarios: Scenario[] = [
             { min: 0, max: -0, isMinInclusive: true, isMaxInclusive: false },
             { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: false },
             { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true },
-            { min: largestSafe, max: largestSafe, isMinInclusive: false, isMaxInclusive: false },
-            { min: smallestSafe, max: smallestSafe, isMinInclusive: true, isMaxInclusive: false }
+            { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false },
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false }
         ],
         expected: SchemaTypeError
     },
     {
         label: 'Adjacent excluded bounds that contain no representable value',
         inputs: [
-            { min: 1, max: 1 + epsilon, isMinInclusive: false, isMaxInclusive: false },
-            { min: 0, max: smallest, isMinInclusive: false, isMaxInclusive: false },
-            { min: -smallest, max: 0, isMinInclusive: false, isMaxInclusive: false },
-            { min: -1 - epsilon, max: -1, isMinInclusive: false, isMaxInclusive: false },
-            { min: largestSafe - 1, max: largestSafe, isMinInclusive: false, isMaxInclusive: false },
-            { min: smallestSafe, max: smallestSafe + 1, isMinInclusive: false, isMaxInclusive: false }
-        ],
-        expected: SchemaTypeError
-    },
-    {
-        label: 'Midpoint rounds onto an excluded bound',
-        inputs: [
-            { min: 1 + epsilon, max: 1 + (2 * epsilon), isMinInclusive: false, isMaxInclusive: false },
-            { min: -1 - (2 * epsilon), max: -1 - epsilon, isMinInclusive: false, isMaxInclusive: false }
+            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false, isMaxInclusive: false },
+            { min: 0, max: Number.MIN_VALUE, isMinInclusive: false, isMaxInclusive: false },
+            { min: -Number.MIN_VALUE, max: 0, isMinInclusive: false, isMaxInclusive: false },
+            { min: -1 - Number.EPSILON, max: -1, isMinInclusive: false, isMaxInclusive: false },
+            { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false },
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER + 1, isMinInclusive: false, isMaxInclusive: false },
+            { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: false, isMaxInclusive: false },
+            { min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: false, isMaxInclusive: false }
         ],
         expected: SchemaTypeError
     }
@@ -211,7 +192,7 @@ export const optionalPropertyRangeScenarios: Scenario[] = [
             { min: 0, max: 10 },
             { min: -10, max: -1 },
             { min: 5, max: 5 },
-            { min: smallestSafe, max: largestSafe }
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
         ],
         expected: undefined
     },
@@ -223,8 +204,8 @@ export const optionalPropertyRangeScenarios: Scenario[] = [
             { min: 0, max: 10, isMaxInclusive: true },
             { min: 0, max: 10, isMaxInclusive: false },
             { min: -5, max: -5, isMinInclusive: true },
-            { min: 1, max: 1 + epsilon, isMaxInclusive: false },
-            { min: 1, max: 1 + epsilon, isMinInclusive: false }
+            { min: 1, max: 1 + Number.EPSILON, isMaxInclusive: false },
+            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false }
         ],
         expected: undefined
     },
@@ -353,10 +334,10 @@ export const invalidRangeSchemaScenarios: Scenario[] = [
         label: 'Object inputs with a bound outside the safe integer range',
         inputs: [
             ...unsafeNumberInputs.map((input: number): { min: number; max: number; } => {
-                return { min: input, max: largestSafe };
+                return { min: input, max: Number.MAX_SAFE_INTEGER };
             }),
             ...unsafeNumberInputs.map((input: number): { min: number; max: number; } => {
-                return { min: smallestSafe, max: input };
+                return { min: Number.MIN_SAFE_INTEGER, max: input };
             }),
             { min: 0, max: 1e16 },
             { min: 0, max: 1e100 },
