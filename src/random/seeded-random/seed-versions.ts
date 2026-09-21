@@ -119,6 +119,8 @@ export class SeedVersions {
     /**
      * Is `index` a valid seed version index?
      *
+     * @see {@link NumberUtility.assertPositiveInteger}
+     *
      * @param {number} index - The index to check.
      *
      * @returns {boolean} `true` if `index` is a valid seed version index; `false` otherwise.
@@ -135,6 +137,8 @@ export class SeedVersions {
 
     /**
      * Get a {@link SeedVersion} object.
+     *
+     * @see {@link SeedVersions.assertValidIndex}
      *
      * @param {number} index - The index of the seed version to retrieve.
      * Must be a valid {@link SeedVersions} index.

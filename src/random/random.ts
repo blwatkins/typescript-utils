@@ -69,6 +69,8 @@ export class Random {
     /**
      * Set the primary function used to generate random numbers.
      *
+     * @see {@link TypeAssertions.assertFunction}
+     *
      * @param {() => number} rng - A function that returns a random number in the range [0, 1) (zero inclusive, one exclusive).
      *
      * @throws {PrimitiveTypeError} When `rng` is not a function.
@@ -121,6 +123,9 @@ export class Random {
      * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
      *
+     * @see {@link NumberUtility.assertSafe}
+     * @see {@link NumberUtility.assertLessThan}
+     *
      * @param {number} min - The inclusive minimum value.
      * @param {number} max - The exclusive maximum value.
      *
@@ -151,6 +156,8 @@ export class Random {
     /**
      * Get a random boolean.
      *
+     * @see {@link NumberUtility.assertInRange}
+     *
      * @param {number} chanceOfTrue - The probability of returning `true` (between 0 and 1).
      * Default value is `0.5`.
      *
@@ -169,6 +176,8 @@ export class Random {
 
     /**
      * Get a random element.
+     *
+     * @see {@link TypeAssertions.assertArray}
      *
      * @param {Type[]} elements - An array of elements to choose from.
      *
@@ -194,8 +203,7 @@ export class Random {
      *
      * @remarks For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      *
-     * @see {@link WeightedListUtility.isGenericWeightedList}
-     * @see {@link WeightedElementUtility.isGenericWeightedElement}
+     * @see {@link WeightedListUtility.assertGenericWeightedList}
      *
      * @param {WeightedList} elements - The {@link WeightedList} to select a random element from.
      *
@@ -225,6 +233,8 @@ export class Random {
      * Draw a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive), discarding
      * a draw that falls outside the range.
      *
+     * @see {@link NumberUtility.assertSafe}
+     * @see {@link NumberUtility.assertLessThan}
      * @see {@link Random.randomFloat}
      *
      * @param {number} min - The inclusive minimum value.

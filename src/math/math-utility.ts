@@ -44,6 +44,9 @@ export class MathUtility {
     /**
      * Constrain `value` between `min` and `max`.
      *
+     * @see {@link NumberUtility.assertSafe}
+     * @see {@link NumberUtility.assertValidRange}
+     *
      * @param {number} value - The value to constrain.
      * @param {number} min - The minimum value to constrain to.
      * @param {number} max - The maximum value to constrain to.
@@ -69,6 +72,8 @@ export class MathUtility {
 
     /**
      * Convert the (`x`, `y`) index coordinates to a one-dimensional index for an array with the dimensions `columns` by `rows`.
+     *
+     * @see {@link NumberUtility.assertPositiveInteger}
      *
      * @param {number} x - The x-coordinate (column index) of the 2D array.
      * @param {number} y - The y-coordinate (row index) of the 2D array.

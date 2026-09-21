@@ -201,8 +201,8 @@ export class RangeUtility {
      * @remarks The `isMinInclusive` and `isMaxInclusive` properties of `range` are ignored: the range is treated as inclusive, regardless of their current values.
      * A returned value satisfies {@link RangeUtility.isIn} for `range` unless it is equal to an excluded bound.
      *
-     * @see {@link MathUtility.constrain}
      * @see {@link RangeUtility.assertRange}
+     * @see {@link MathUtility.constrain}
      *
      * @param {number} value - The value to constrain.
      * @param {Range} range - The {@link Range} object to constrain `value` to.
@@ -283,8 +283,8 @@ export class RangeUtility {
      * so `RangeUtility.randomInt({ min: 0, max: 10 })` may return `10`, while `Random.randomInt(0, 10)` may not.
      * Set `isMaxInclusive` to `false` to reproduce the behavior of {@link Random.randomInt}.
      *
-     * @see {@link Random.randomInt}
      * @see {@link RangeUtility.assertRange}
+     * @see {@link Random.randomInt}
      *
      * @param {Range} range - The {@link Range} object to generate a value from.
      *
