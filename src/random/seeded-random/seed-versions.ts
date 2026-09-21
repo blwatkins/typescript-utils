@@ -86,7 +86,7 @@ export class SeedVersions {
      * @public
      * @since 0.1.0
      */
-    static get size(): number {
+    public static get size(): number {
         return seedVersions.length;
     }
 
@@ -106,7 +106,7 @@ export class SeedVersions {
      * @public
      * @since 0.1.0
      */
-    static assertValidIndex(index: number, message?: string): void {
+    public static assertValidIndex(index: number, message?: string): void {
         if (!SeedVersions.isValidIndex(index)) {
             if (StringUtility.isSingleLine(message)) {
                 throw new ValueRangeError(message);
@@ -128,7 +128,7 @@ export class SeedVersions {
      * @public
      * @since 0.1.0
      */
-    static isValidIndex(index: number): boolean {
+    public static isValidIndex(index: number): boolean {
         NumberUtility.assertPositiveInteger(index, true, 'index must be a positive integer or zero.');
         return index < seedVersions.length;
     }
@@ -147,7 +147,7 @@ export class SeedVersions {
      * @public
      * @since 0.1.0
      */
-    static getVersion(index: number): SeedVersion {
+    public static getVersion(index: number): SeedVersion {
         SeedVersions.assertValidIndex(index);
         return seedVersions[index];
     }
