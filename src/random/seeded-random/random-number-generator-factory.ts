@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { StaticInstanceError } from '../../error';
+import { StaticInstanceError, ValueRangeError } from '../../error';
 import { StringUtility } from '../../string';
 
 import { SeedVersions } from './seed-versions';
@@ -75,7 +75,9 @@ export class RandomNumberGeneratorFactory {
      * @returns {SeededRandomNumberGenerator} A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
      * @throws {PrimitiveTypeError} When `seed` is not a string.
+     * @throws {ValueRangeError} When `seed` is not a valid seed.
      * @throws {PrimitiveTypeError} When `namespace` is not a string.
+     * @throws {ValueRangeError} When `namespace` is not a valid namespace.
      * @throws {PrimitiveTypeError} When `version` is not a positive integer or zero.
      * @throws {ValueRangeError} When `version` is not a valid {@link SeedVersions} index.
      *
@@ -83,8 +85,8 @@ export class RandomNumberGeneratorFactory {
      * @since 0.1.0
      */
     public static build(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
-        StringUtility.assertString(seed, 'seed must be a string.');
-        if (namespace !== undefined) StringUtility.assertString(namespace, 'namespace must be a string.');
+        RandomNumberGeneratorFactory.#assertValidSeed(seed);
+        RandomNumberGeneratorFactory.#assertValidNamespace(namespace);
         if (version !== undefined) SeedVersions.assertValidIndex(version);
 
         const input: string = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
@@ -106,18 +108,102 @@ export class RandomNumberGeneratorFactory {
      * @returns {Promise<SeededRandomNumberGenerator>} A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
      * @throws {PrimitiveTypeError} When `seed` is not a string.
+     * @throws {ValueRangeError} When `seed` is not a valid seed.
      * @throws {PrimitiveTypeError} When `namespace` is not a string.
+     * @throws {ValueRangeError} When `namespace` is not a valid namespace.
      *
      * @public
      * @since 0.1.0
      */
     public static async asyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
-        StringUtility.assertString(seed, 'seed must be a string.');
-        if (namespace !== undefined) StringUtility.assertString(namespace, 'namespace must be a string.');
+        RandomNumberGeneratorFactory.#assertValidSeed(seed);
+        RandomNumberGeneratorFactory.#assertValidNamespace(namespace);
 
         const input = RandomNumberGeneratorFactory.#buildInputString(seed, namespace);
         const state = await RandomNumberGeneratorFactory.#generateSha256HashState(input);
         return new SeededRandomNumberGenerator(state);
+    }
+
+    /**
+     * Assert that `namespace` is a valid namespace.
+     *
+     * @remarks For a namespace to be valid, it must be a string without null characters or undefined.
+     *
+     * @param {string} namespace - The namespace to check.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When `namespace` is not a string.
+     * @throws {ValueRangeError} When `namespace` is not a valid namespace.
+     *
+     * @private
+     */
+    static #assertValidNamespace(namespace: string | undefined): void {
+        if (!RandomNumberGeneratorFactory.#isValidNamespace(namespace)) {
+            throw new ValueRangeError('namespace must be a string without null characters or undefined.');
+        }
+    }
+
+    /**
+     * Assert that `seed` is a valid seed.
+     *
+     * @remarks For a seed to be valid, it must be a string without null characters.
+     *
+     * @param {string} seed - The seed to check.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When `seed` is not a string.
+     * @throws {ValueRangeError} When `seed` is not a valid seed.
+     *
+     * @private
+     */
+    static #assertValidSeed(seed: string): void {
+        if (!RandomNumberGeneratorFactory.#isValidSeed(seed)) {
+            throw new ValueRangeError('seed must be a string without null characters.');
+        }
+    }
+
+    /**
+     * Is `namespace` a valid namespace?
+     *
+     * @remarks For a namespace to be valid, it must be a string without null characters or undefined.
+     *
+     * @see {@link StringUtility.assertString}
+     *
+     * @param {string | undefined} namespace - The namespace to check.
+     *
+     * @returns {boolean} `true` if `namespace` is a valid namespace, `false` otherwise.
+     *
+     * @private
+     */
+    static #isValidNamespace(namespace: string | undefined): boolean {
+        if (namespace === undefined) {
+            return true;
+        }
+
+        StringUtility.assertString(namespace, 'namespace must be a string.');
+        return !namespace.includes('\x00');
+    }
+
+    /**
+     * Is `seed` a valid seed?
+     *
+     * @remarks For a seed to be valid, it must be a string without null characters.
+     *
+     * @see {@link StringUtility.assertString}
+     *
+     * @param {string} seed - The seed to check.
+     *
+     * @returns {boolean} `true` if `seed` is a valid seed, `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `seed` is not a string.
+     *
+     * @private
+     */
+    static #isValidSeed(seed: string): boolean {
+        StringUtility.assertString(seed, 'seed must be a string.');
+        return !seed.includes('\x00');
     }
 
     /**
@@ -133,13 +219,13 @@ export class RandomNumberGeneratorFactory {
      * If `namespace` is not provided, the input string will be `seed` alone.
      *
      * @throws {PrimitiveTypeError} When `seed` is not a string.
-     * @throws {PrimitiveTypeError} When `namespace` is not a string.
+     * @throws {PrimitiveTypeError} When `namespace` is not a string or undefined.
      *
      * @private
      */
     static #buildInputString(seed: string, namespace?: string): string {
-        StringUtility.assertString(seed, 'seed must be a string.');
-        if (namespace !== undefined) StringUtility.assertString(namespace, 'namespace must be a string.');
+        RandomNumberGeneratorFactory.#assertValidSeed(seed);
+        RandomNumberGeneratorFactory.#assertValidNamespace(namespace);
 
         if (namespace === undefined) {
             return seed;
