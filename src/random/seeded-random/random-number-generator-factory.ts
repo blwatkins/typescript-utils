@@ -157,7 +157,7 @@ export class RandomNumberGeneratorFactory {
      */
     static #assertValidSeed(seed: string): void {
         if (!RandomNumberGeneratorFactory.#isValidSeed(seed)) {
-            throw new ValueRangeError('seed must be a string without null characters.');
+            throw new ValueRangeError('seed must not contain null characters.');
         }
     }
 
