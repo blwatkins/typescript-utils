@@ -30,15 +30,19 @@ import {
     emptyStringInputs,
     nonEmptyStringInputs,
     nonStringInputs,
+    nonTextCharacterInputs,
     singleLineInputsNumsAndSymbols,
     singleLineFailureInputsLowercase,
+    singleLineFailureInputsNumsAndSymbols,
     singleLineInputsLowercase,
     singleLineInputsMixedCase,
     singleLineInputsUppercase,
     singleLineFailureInputsUppercase,
     singleLineFailureInputsMixedCase,
     singleLineFailureInputs,
-    singleLineInputs
+    singleLineInputs,
+    specialCharacterInputs,
+    textInputs
 } from '../utils/input/string-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
@@ -59,8 +63,14 @@ describe('StringUtility', (): void => {
         expected: PrimitiveTypeError
     };
 
+    const nonTextFailureScenario: Scenario = {
+        label: 'Inputs containing characters that are not allowed in text',
+        inputs: nonTextCharacterInputs,
+        expected: PrimitiveTypeError
+    };
+
     const numsAndSymbolsSuccessScenario: Scenario = {
-        label: 'Number and symbol trimmed inputs',
+        label: 'Caseless single-line inputs',
         inputs: singleLineInputsNumsAndSymbols,
         expected: undefined
     };
@@ -108,11 +118,24 @@ describe('StringUtility', (): void => {
         }
     ];
 
-    const singleLineFailureScenarios: Scenario[] = [
+    const textFailureScenarios: Scenario[] = [
         nonStringFailureScenario,
         emptyStringFailureScenario,
+        nonTextFailureScenario
+    ];
+
+    const textSuccessScenarios: Scenario[] = [
         {
-            label: 'Single-line trimmed failure inputs',
+            label: 'Text inputs',
+            inputs: textInputs,
+            expected: undefined
+        }
+    ];
+
+    const singleLineFailureScenarios: Scenario[] = [
+        ...textFailureScenarios,
+        {
+            label: 'Text inputs that are not single-line',
             inputs: singleLineFailureInputs,
             expected: PrimitiveTypeError
         }
@@ -120,15 +143,14 @@ describe('StringUtility', (): void => {
 
     const singleLineSuccessScenarios: Scenario[] = [
         {
-            label: 'Single-line trimmed inputs',
+            label: 'Single-line inputs',
             inputs: singleLineInputs,
             expected: undefined
         }
     ];
 
     const singleLineLowercaseFailureScenarios: Scenario[] = [
-        nonStringFailureScenario,
-        emptyStringFailureScenario,
+        ...textFailureScenarios,
         {
             label: 'Incorrect case inputs',
             inputs: [
@@ -140,15 +162,18 @@ describe('StringUtility', (): void => {
             expected: PrimitiveTypeError
         },
         {
-            label: 'Single-line lowercase trimmed failure inputs',
-            inputs: singleLineFailureInputsLowercase,
+            label: 'Lowercase and caseless text inputs that are not single-line',
+            inputs: [
+                ...singleLineFailureInputsLowercase,
+                ...singleLineFailureInputsNumsAndSymbols
+            ],
             expected: PrimitiveTypeError
         }
     ];
 
     const singleLineLowercaseSuccessScenarios: Scenario[] = [
         {
-            label: 'Single-line lowercase trimmed inputs',
+            label: 'Single-line lowercase inputs',
             inputs: singleLineInputsLowercase,
             expected: undefined
         },
@@ -156,8 +181,7 @@ describe('StringUtility', (): void => {
     ];
 
     const singleLineUppercaseFailureScenarios: Scenario[] = [
-        nonStringFailureScenario,
-        emptyStringFailureScenario,
+        ...textFailureScenarios,
         {
             label: 'Incorrect case inputs',
             inputs: [
@@ -169,24 +193,27 @@ describe('StringUtility', (): void => {
             expected: PrimitiveTypeError
         },
         {
-            label: 'Single-line uppercase trimmed failure inputs',
-            inputs: singleLineFailureInputsUppercase,
+            label: 'Uppercase and caseless text inputs that are not single-line',
+            inputs: [
+                ...singleLineFailureInputsUppercase,
+                ...singleLineFailureInputsNumsAndSymbols
+            ],
             expected: PrimitiveTypeError
         }
     ];
 
     const singleLineUppercaseSuccessScenarios: Scenario[] = [
         {
-            label: 'Single-line uppercase trimmed inputs',
+            label: 'Single-line uppercase inputs',
             inputs: singleLineInputsUppercase,
             expected: undefined
         },
         numsAndSymbolsSuccessScenario
     ];
 
-    function withoutNonStringInputs(scenarios: Scenario[]): Scenario[] {
+    function withTextInputsOnly(scenarios: Scenario[]): Scenario[] {
         return scenarios.filter((scenario: Scenario): boolean => {
-            return scenario !== nonStringFailureScenario;
+            return !textFailureScenarios.includes(scenario);
         });
     }
 
@@ -235,6 +262,29 @@ describe('StringUtility', (): void => {
         });
     });
 
+    describe('Text', (): void => {
+        describe('assertText', (): void => {
+            testAssertMethod(
+                StringUtility.assertText.bind(StringUtility),
+                textSuccessScenarios,
+                textFailureScenarios,
+                'Expected a text string.'
+            );
+        });
+
+        describe('isText', (): void => {
+            testIsMethod(StringUtility.isText.bind(StringUtility), textSuccessScenarios, textFailureScenarios);
+        });
+
+        describe('Special characters', (): void => {
+            test.each(
+                specialCharacterInputs
+            )('%# - Special character %s should be unchanged by NFKC normalization', (character: string): void => {
+                expect(character.normalize('NFKC')).toBe(character);
+            });
+        });
+    });
+
     describe('SingleLine', (): void => {
         describe('assertSingleLine', (): void => {
             testAssertMethod(
@@ -254,7 +304,7 @@ describe('StringUtility', (): void => {
                 return StringUtility.singleLine.test(input as string);
             }
 
-            testIsMethod(matchesSingleLine, singleLineSuccessScenarios, withoutNonStringInputs(singleLineFailureScenarios));
+            testIsMethod(matchesSingleLine, singleLineSuccessScenarios, withTextInputsOnly(singleLineFailureScenarios));
         });
     });
 
@@ -277,7 +327,7 @@ describe('StringUtility', (): void => {
                 return StringUtility.singleLineLowercase.test(input as string);
             }
 
-            testIsMethod(matchesSingleLineLowercase, singleLineLowercaseSuccessScenarios, withoutNonStringInputs(singleLineLowercaseFailureScenarios));
+            testIsMethod(matchesSingleLineLowercase, singleLineLowercaseSuccessScenarios, withTextInputsOnly(singleLineLowercaseFailureScenarios));
         });
     });
 
@@ -300,7 +350,7 @@ describe('StringUtility', (): void => {
                 return StringUtility.singleLineUppercase.test(input as string);
             }
 
-            testIsMethod(matchesSingleLineUppercase, singleLineUppercaseSuccessScenarios, withoutNonStringInputs(singleLineUppercaseFailureScenarios));
+            testIsMethod(matchesSingleLineUppercase, singleLineUppercaseSuccessScenarios, withTextInputsOnly(singleLineUppercaseFailureScenarios));
         });
     });
 
