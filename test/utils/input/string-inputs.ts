@@ -63,6 +63,10 @@ export const nonStringInputs: unknown[] = [
     Symbol('test')
 ];
 
+export const definedNonStringInputs: unknown[] = nonStringInputs.filter((input: unknown): boolean => {
+    return input !== undefined;
+});
+
 export const emptyStringInputs: string[] = [
     '',
     ' ',
