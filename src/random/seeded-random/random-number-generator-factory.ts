@@ -64,7 +64,6 @@ export class RandomNumberGeneratorFactory {
     /**
      * Build a {@link SeededRandomNumberGenerator} object.
      *
-     * @see {@link StringUtility.assertString}
      * @see {@link SeedVersions.assertValidIndex}
      *
      * @param {string} seed - The primary input to determine the random number sequence.
@@ -100,8 +99,6 @@ export class RandomNumberGeneratorFactory {
      * @remarks This method relies on the Web Crypto API via `crypto.subtle`.
      * In Node.js environments, ensure you are using a version where the Web Crypto API is available.
      *
-     * @see {@link StringUtility.assertString}
-     *
      * @param {string} seed - The primary input to determine the random number sequence.
      * @param {string | undefined} namespace - Namespace to create different sequences from the same seed.
      *
@@ -129,7 +126,7 @@ export class RandomNumberGeneratorFactory {
      *
      * @remarks For a namespace to be valid, it must be a string without null characters or undefined.
      *
-     * @param {string} namespace - The namespace to check.
+     * @param {string | undefined} namespace - The namespace to check.
      *
      * @returns {void}
      *
@@ -140,7 +137,7 @@ export class RandomNumberGeneratorFactory {
      */
     static #assertValidNamespace(namespace: string | undefined): void {
         if (!RandomNumberGeneratorFactory.#isValidNamespace(namespace)) {
-            throw new ValueRangeError('namespace must be a string without null characters or undefined.');
+            throw new ValueRangeError('namespace must not contain null characters.');
         }
     }
 
@@ -160,7 +157,7 @@ export class RandomNumberGeneratorFactory {
      */
     static #assertValidSeed(seed: string): void {
         if (!RandomNumberGeneratorFactory.#isValidSeed(seed)) {
-            throw new ValueRangeError('seed must be a string without null characters.');
+            throw new ValueRangeError('seed must not contain null characters.');
         }
     }
 
@@ -174,6 +171,8 @@ export class RandomNumberGeneratorFactory {
      * @param {string | undefined} namespace - The namespace to check.
      *
      * @returns {boolean} `true` if `namespace` is a valid namespace, `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `namespace` is not a string or undefined.
      *
      * @private
      */
@@ -209,8 +208,6 @@ export class RandomNumberGeneratorFactory {
     /**
      * Build the hash algorithm input string.
      *
-     * @see {@link StringUtility.assertString}
-     *
      * @param {string} seed - The primary seed input to determine the random number sequence.
      * @param {string | undefined} namespace - Optional namespace to create different sequences from the same seed.
      *
@@ -219,7 +216,9 @@ export class RandomNumberGeneratorFactory {
      * If `namespace` is not provided, the input string will be `seed` alone.
      *
      * @throws {PrimitiveTypeError} When `seed` is not a string.
+     * @throws {ValueRangeError} When `seed` is not a valid seed.
      * @throws {PrimitiveTypeError} When `namespace` is not a string or undefined.
+     * @throws {ValueRangeError} When `namespace` is not a valid namespace.
      *
      * @private
      */
