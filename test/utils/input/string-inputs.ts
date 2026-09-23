@@ -232,3 +232,10 @@ export const nonEmptyStringInputs: string[] = [
     ...singleLineTrimmedFailureInputs,
     ...singleLineTrimmedInputs
 ];
+
+export const nullCharacterStringInputs: string[] = [
+    '\x00',
+    'null\x00character',
+    'null character\x00',
+    '\x00null character'
+];

@@ -31,7 +31,11 @@ import {
     ValueRangeError
 } from '../../../src';
 
-import { definedNonStringInputs, nonStringInputs } from '../../utils/input/string-inputs';
+import {
+    definedNonStringInputs,
+    nonStringInputs,
+    nullCharacterStringInputs
+} from '../../utils/input/string-inputs';
 import { definedInvalidSafePositiveIntegerInputs } from '../../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 
@@ -65,6 +69,52 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         return sequence;
     }
+
+    interface SeedAndNamespaceArgs {
+        seed: unknown;
+        namespace?: unknown;
+    }
+
+    const seedAndNamespaceFailureScenarios: Scenario[] = [
+        {
+            label: 'Invalid seed - not a string',
+            inputs: nonStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+                return {
+                    seed: input
+                };
+            }),
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Invalid seed - string with null character',
+            inputs: nullCharacterStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+                return {
+                    seed: input
+                };
+            }),
+            expected: ValueRangeError
+        },
+        {
+            label: 'Invalid namespace - not a string or undefined',
+            inputs: definedNonStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+                return {
+                    seed: '',
+                    namespace: input
+                };
+            }),
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Invalid namespace - string with null character',
+            inputs: nullCharacterStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+                return {
+                    seed: '',
+                    namespace: input
+                };
+            }),
+            expected: ValueRangeError
+        }
+    ];
 
     describe('build', (): void => {
         interface BuildArgs {
@@ -121,6 +171,17 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(a).not.toEqual(b);
             });
 
+            test('An absent namespace and an empty namespace should produce different sequences', (): void => {
+                const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed });
+                const rngB: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: '' });
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(a).not.toEqual(b);
+            });
+
             test('Changing the seed version should change the sequence for the same seed and namespace', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace, version: 0 });
                 const rngB: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace, version: 1 });
@@ -135,45 +196,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         describe('Argument errors', (): void => {
             const argumentFailureScenarios: Scenario[] = [
-                {
-                    label: 'Invalid seed - not a string',
-                    inputs: nonStringInputs.map((input: unknown): BuildArgs => {
-                        return {
-                            seed: input
-                        };
-                    }),
-                    expected: PrimitiveTypeError
-                },
-                {
-                    label: 'Invalid seed - string with null character',
-                    inputs: ['\x00', 'invalid\x00seed', 'invalid seed\x00', '\x00invalid seed'].map((input: unknown): BuildArgs => {
-                        return {
-                            seed: input,
-                            namespace: undefined
-                        };
-                    }),
-                    expected: ValueRangeError
-                },
-                {
-                    label: 'Invalid namespace - not a string or undefined',
-                    inputs: definedNonStringInputs.map((input: unknown): BuildArgs => {
-                        return {
-                            seed: '',
-                            namespace: input
-                        };
-                    }),
-                    expected: PrimitiveTypeError
-                },
-                {
-                    label: 'Invalid namespace - string with null character',
-                    inputs: ['\x00', 'invalid\x00seed', 'invalid seed\x00', '\x00invalid seed'].map((input: unknown): BuildArgs => {
-                        return {
-                            seed: '',
-                            namespace: input
-                        };
-                    }),
-                    expected: ValueRangeError
-                },
+                ...seedAndNamespaceFailureScenarios,
                 {
                     label: 'Invalid version - invalid safe positive integer',
                     inputs: definedInvalidSafePositiveIntegerInputs.map((input: unknown): BuildArgs => {
@@ -263,53 +286,22 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
                 expect(a).not.toEqual(b);
             });
+
+            test('An absent namespace and an empty namespace should produce different sequences', async (): Promise<void> => {
+                const rngA: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed });
+                const rngB: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed, namespace: '' });
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(a).not.toEqual(b);
+            });
         });
 
         describe('Argument errors', (): void => {
-            const argumentFailureScenarios: Scenario[] = [
-                {
-                    label: 'Invalid seed - not a string',
-                    inputs: nonStringInputs.map((input: unknown): AsyncBuildArgs => {
-                        return {
-                            seed: input
-                        };
-                    }),
-                    expected: PrimitiveTypeError
-                },
-                {
-                    label: 'Invalid seed - string with null character',
-                    inputs: ['\x00', 'invalid\x00seed', 'invalid seed\x00', '\x00invalid seed'].map((input: unknown): AsyncBuildArgs => {
-                        return {
-                            seed: input,
-                            namespace: undefined
-                        };
-                    }),
-                    expected: ValueRangeError
-                },
-                {
-                    label: 'Invalid namespace - not a string or undefined',
-                    inputs: definedNonStringInputs.map((input: unknown): AsyncBuildArgs => {
-                        return {
-                            seed: '',
-                            namespace: input
-                        };
-                    }),
-                    expected: PrimitiveTypeError
-                },
-                {
-                    label: 'Invalid namespace - string with null character',
-                    inputs: ['\x00', 'invalid\x00seed', 'invalid seed\x00', '\x00invalid seed'].map((input: unknown): AsyncBuildArgs => {
-                        return {
-                            seed: '',
-                            namespace: input
-                        };
-                    }),
-                    expected: ValueRangeError
-                }
-            ];
-
             describe.each(
-                argumentFailureScenarios
+                seedAndNamespaceFailureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
                 test.each(
