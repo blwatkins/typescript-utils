@@ -4,7 +4,7 @@ layout: custom-post
 author:
   - Brittni Watkins
 date: 2026-06-05
-modified_date: 2026-09-06
+modified_date: 2026-09-23
 toc: true
 read_time: false
 description: "Resources and references used to develop the TypeScript Utilities (@blwatkins/utils) npm package."
@@ -20,6 +20,8 @@ description: "Resources and references used to develop the TypeScript Utilities 
 - [MDN Web Docs - Number.MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)
 - [MDN Web Docs - Number.isFinite()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite)
 - [MDN Web Docs - Number.isInteger()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger)
+- [MDN Web Docs - String.prototype.includes()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes)
+- [MDN Web Docs - String.prototype.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)
 
 ### TypeScript
 
