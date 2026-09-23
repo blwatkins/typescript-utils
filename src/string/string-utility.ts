@@ -22,10 +22,27 @@
 
 import { PrimitiveTypeError, StaticInstanceError } from '../error';
 
+/**
+ * Characters that {@link StringUtility.isText} accepts beyond printable ASCII, accented ASCII letters, emoji and text whitespace.
+ * Every entry must be unchanged by NFKC normalization, or {@link StringUtility.isText} can never accept it.
+ *
+ * @type {readonly string[]}
+ */
+const specialCharacters: readonly string[] = [
+    '\u00A9',
+    '\u00B0',
+    '\u00B1',
+    '\u00F7',
+    '\u2022'
+];
+
 const regularExpressions = {
-    singleLineLowercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Lu})(?!.* {2})[^\t\r\n]+$/u,
-    singleLineUppercaseTrimmed: /^(?!\s)(?!.*\s$)(?!.*\p{Ll})(?!.* {2})[^\t\r\n]+$/u,
-    singleLineTrimmed: /^(?!\s)(?!.*\s$)(?!.* {2})[^\t\r\n]+$/
+    accentedLetter: /^[A-Za-z]\p{M}$/u,
+    singleLineLowercase: /^[^\s\p{Lu}]+(?:\u0020[^\s\p{Lu}]+)*$/u,
+    singleLineUppercase: /^[^\s\p{Ll}]+(?:\u0020[^\s\p{Ll}]+)*$/u,
+    singleLine: /^\S+(?:\u0020\S+)*$/,
+    textCharacter: /^(?:\p{RGI_Emoji}|\r\n|[\t\n\u0020-\u007E])$/v,
+    textUnit: /\p{RGI_Emoji}|\r\n|./gsv
 };
 
 /**
@@ -49,7 +66,9 @@ export class StringUtility {
     /**
      * Get the regular expression for single-line lowercase strings.
      *
-     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
+     * It matches non-whitespace characters separated by single spaces (U+0020), with no uppercase letters.
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @returns {RegExp}
      *
@@ -57,13 +76,15 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static get singleLineLowercase(): RegExp {
-        return regularExpressions.singleLineLowercaseTrimmed;
+        return regularExpressions.singleLineLowercase;
     }
 
     /**
      * Get the regular expression for single-line uppercase strings.
      *
-     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
+     * It matches non-whitespace characters separated by single spaces (U+0020), with no lowercase letters.
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @returns {RegExp}
      *
@@ -71,13 +92,15 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static get singleLineUppercase(): RegExp {
-        return regularExpressions.singleLineUppercaseTrimmed;
+        return regularExpressions.singleLineUppercase;
     }
 
     /**
      * Get the regular expression for single-line mixed-case strings.
      *
-     * @remarks This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.
+     * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
+     * It matches non-whitespace characters separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @returns {RegExp}
      *
@@ -85,7 +108,7 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static get singleLine(): RegExp {
-        return regularExpressions.singleLineTrimmed;
+        return regularExpressions.singleLine;
     }
 
     /**
@@ -168,9 +191,41 @@ export class StringUtility {
     }
 
     /**
+     * Assert that `input` is a text string.
+     *
+     * @remarks Text must satisfy all of the following:
+     * - It is a string that contains at least one non-whitespace character.
+     * - It is unchanged by NFKC normalization.
+     * - Every character is printable ASCII (U+0021 to U+007E), an ASCII letter with exactly one accent, an emoji sequence recommended for general interchange (RGI), a special character (`©`, `°`, `±`, `÷` or `•`), or text whitespace.
+     * - Text whitespace is a space (U+0020), a tab, a line feed, or a carriage return immediately followed by a line feed.
+     *
+     * @see {@link StringUtility.isText}
+     *
+     * @param {unknown} input - The input to check.
+     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a text string.
+     *
+     * @returns {asserts input is string}
+     *
+     * @throws {PrimitiveTypeError} When `input` is not a text string.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertText(input: unknown, message?: string): asserts input is string {
+        if (!StringUtility.isText(input)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new PrimitiveTypeError(message);
+            }
+
+            throw new PrimitiveTypeError('Expected a text string.');
+        }
+    }
+
+    /**
      * Assert that `input` is a single-line string.
      *
-     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isSingleLine}
      *
@@ -197,7 +252,8 @@ export class StringUtility {
     /**
      * Assert that `input` is a single-line lowercase string.
      *
-     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isSingleLineLowercase}
      *
@@ -224,7 +280,8 @@ export class StringUtility {
     /**
      * Assert that `input` is a single-line uppercase string.
      *
-     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isSingleLineUppercase}
      *
@@ -295,10 +352,44 @@ export class StringUtility {
     }
 
     /**
+     * Is `input` a text string?
+     *
+     * @remarks Text must satisfy all of the following:
+     * - It is a string that contains at least one non-whitespace character.
+     * - It is unchanged by NFKC normalization.
+     * - Every character is printable ASCII (U+0021 to U+007E), an ASCII letter with exactly one accent, an emoji sequence recommended for general interchange (RGI), a special character (`©`, `°`, `±`, `÷` or `•`), or text whitespace.
+     * - Text whitespace is a space (U+0020), a tab, a line feed, or a carriage return immediately followed by a line feed.
+     *
+     * @see {@link StringUtility.isNonEmpty}
+     *
+     * @param {unknown} input - The input to check.
+     *
+     * @returns {input is string} `true` if `input` is a text string; `false` otherwise.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isText(input: unknown): input is string {
+        if (!StringUtility.isNonEmpty(input) || input !== input.normalize('NFKC')) {
+            return false;
+        }
+
+        for (const [unit] of input.matchAll(regularExpressions.textUnit)) {
+            if (!StringUtility.#isTextUnit(unit)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Is `input` a single-line string?
      *
-     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
+     * @see {@link StringUtility.isText}
      * @see {@link StringUtility.singleLine}
      *
      * @param {unknown} input - The input to check.
@@ -309,14 +400,16 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static isSingleLine(input: unknown): input is string {
-        return StringUtility.isString(input) && StringUtility.singleLine.test(input);
+        return StringUtility.isText(input) && StringUtility.singleLine.test(input);
     }
 
     /**
      * Is `input` a single-line lowercase string?
      *
-     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
+     * @see {@link StringUtility.isText}
      * @see {@link StringUtility.singleLineLowercase}
      *
      * @param {unknown} input - The input to check.
@@ -327,14 +420,16 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static isSingleLineLowercase(input: unknown): input is string {
-        return StringUtility.isString(input) && StringUtility.singleLineLowercase.test(input);
+        return StringUtility.isText(input) && StringUtility.singleLineLowercase.test(input);
     }
 
     /**
      * Is `input` a single-line uppercase string?
      *
-     * @remarks This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within `input`.
+     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
+     * @see {@link StringUtility.isText}
      * @see {@link StringUtility.singleLineUppercase}
      *
      * @param {unknown} input - The input to check.
@@ -345,7 +440,22 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static isSingleLineUppercase(input: unknown): input is string {
-        return StringUtility.isString(input) && StringUtility.singleLineUppercase.test(input);
+        return StringUtility.isText(input) && StringUtility.singleLineUppercase.test(input);
+    }
+
+    /**
+     * Is `unit` a single allowed unit of a text string?
+     *
+     * @param {string} unit - A single code point, a carriage return and line feed pair, or an emoji sequence.
+     *
+     * @returns {boolean} `true` if `unit` is allowed in a text string; `false` otherwise.
+     *
+     * @private
+     */
+    static #isTextUnit(unit: string): boolean {
+        return regularExpressions.textCharacter.test(unit)
+            || specialCharacters.includes(unit)
+            || regularExpressions.accentedLetter.test(unit.normalize('NFD'));
     }
 
     /* ******************* TODO: DEPRECATED ******************* */

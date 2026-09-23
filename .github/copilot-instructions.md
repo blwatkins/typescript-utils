@@ -172,7 +172,7 @@ Do not encode the checked type in the member name — the `assert` or `is` prefi
 Where a regular-expression getter backs a guard, it carries the same concept without the prefix.
 This is the guard-pair application of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions); where the two overlap they say the same thing.
 
-**The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, or a non-string, falls through to the default message.
+**The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, a string containing a character that `StringUtility.isText` does not allow, `undefined`, or a non-string, falls through to the default message.
 This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
 It is also observable behavior, asserted by the shared assertion-contract helpers under `test/utils/assert/` for the failures each guard's `message` covers.
 A new `assert*` method therefore either applies this check itself or forwards `message` unchanged to a method that does; a member that delegates to another guard, including a deprecated alias delegating to its replacement, takes the second form.
@@ -383,6 +383,7 @@ Conventions for the pattern:
 - Before adding a block, check whether a shared scenario array already carries its inputs through the method under test. A block that restates inputs a shared array already holds adds test count without adding coverage, and has to be kept in step with that array by hand.
 - Declare a scenario array once in the widest scope that needs it and reuse it across every method that shares those inputs, rather than repeating it per method.
 - Derive a related set from an existing array with `filter` or `map` rather than writing a near-copy.
+- Generate fixture inputs from the rule they exercise rather than listing variations by hand: build them from code point ranges, from Unicode properties, or by combining shared building blocks, and remove duplicates from the result. A generated list stays complete when the rule changes, where a hand-written list only covers the cases its author thought of.
 - Use `SingleInputScenario` when a scenario describes one input rather than a set, so a `test.each` can run over the scenarios directly. It suits a case that pairs one argument combination with one expected result.
 - Put a scenario set shared across files in `test/utils/test-case/scenarios/`, exported for the suites that consume it, so an edge case added once reaches every suite that runs it.
 - `assert*` and `is*` methods taking a single input use the shared assertion-contract helpers under `test/utils/assert/`, which take `Scenario[]` for success and failure directly and emit their own `describe`/`test` blocks. Prefer those over hand-written scenario blocks where the method's shape fits.
