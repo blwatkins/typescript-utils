@@ -31,7 +31,7 @@ import {
     ValueRangeError
 } from '../../../src';
 
-import { definedNonStringInputs, nonStringInputs, nullCharacterInputs } from '../../utils/input/string-inputs';
+import { definedNonStringInputs, nonSingleLineStringInputs, nonStringInputs } from '../../utils/input/string-inputs';
 
 import { definedInvalidSafePositiveIntegerInputs } from '../../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
@@ -91,33 +91,33 @@ describe('RandomNumberGeneratorFactory', (): void => {
             expected: PrimitiveTypeError
         },
         {
-            label: 'Invalid seed - string with null character',
-            inputs: nullCharacterInputs.map((input: unknown): SharedArgs => {
+            label: 'Invalid seed - not a single-line string',
+            inputs: nonSingleLineStringInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: input
                 };
             }),
-            expected: ValueRangeError
+            expected: PrimitiveTypeError
         },
         {
             label: 'Invalid namespace - not a string or undefined',
             inputs: definedNonStringInputs.map((input: unknown): SharedArgs => {
                 return {
-                    seed: '',
+                    seed: asciiSeed,
                     namespace: input
                 };
             }),
             expected: PrimitiveTypeError
         },
         {
-            label: 'Invalid namespace - string with null character',
-            inputs: nullCharacterInputs.map((input: unknown): SharedArgs => {
+            label: 'Invalid namespace - not a single-line string',
+            inputs: nonSingleLineStringInputs.map((input: unknown): SharedArgs => {
                 return {
-                    seed: '',
+                    seed: asciiSeed,
                     namespace: input
                 };
             }),
-            expected: ValueRangeError
+            expected: PrimitiveTypeError
         }
     ];
 
@@ -170,17 +170,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
                 expect(a).not.toEqual(b);
             });
 
-            test('An absent namespace and an empty namespace should produce different sequences', (): void => {
-                const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed });
-                const rngB: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: '' });
-                const a: number[] = buildActualSequence(rngA, sequenceLength);
-                const b: number[] = buildActualSequence(rngB, sequenceLength);
-
-                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
-                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
-                expect(a).not.toEqual(b);
-            });
-
             test('Changing the seed version should change the sequence for the same seed and namespace', (): void => {
                 const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace, version: 0 });
                 const rngB: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace, version: 1 });
@@ -200,7 +189,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'Invalid version - invalid safe positive integer',
                     inputs: definedInvalidSafePositiveIntegerInputs.map((input: unknown): BuildArgs => {
                         return {
-                            seed: '',
+                            seed: asciiSeed,
                             version: input
                         };
                     }),
@@ -210,7 +199,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
                     label: 'Invalid version - out of range safe positive integer',
                     inputs: [SeedVersions.size, SeedVersions.size + 1, Number.MAX_SAFE_INTEGER, 500, 1_000].map((input: unknown): BuildArgs => {
                         return {
-                            seed: '',
+                            seed: asciiSeed,
                             version: input
                         };
                     }),
@@ -272,17 +261,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
             test('Changing the namespace should change the sequence', async (): Promise<void> => {
                 const rngA: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed, namespace: asciiNamespace });
                 const rngB: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed, namespace: alternateAsciiNamespace });
-                const a: number[] = buildActualSequence(rngA, sequenceLength);
-                const b: number[] = buildActualSequence(rngB, sequenceLength);
-
-                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
-                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
-                expect(a).not.toEqual(b);
-            });
-
-            test('An absent namespace and an empty namespace should produce different sequences', async (): Promise<void> => {
-                const rngA: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed });
-                const rngB: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed, namespace: '' });
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
                 const b: number[] = buildActualSequence(rngB, sequenceLength);
 
