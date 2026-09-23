@@ -20,6 +20,14 @@
  * SPDX-License-Identifier: MIT
  */
 
+function mixStrings(inputsA: string[], inputsB: string[]): string[] {
+    return inputsA.flatMap((inputA: string): string[] => {
+        return inputsB.flatMap((inputB: string): string[] => {
+            return [`${inputA}${inputB}`, `${inputB}${inputA}`, `${inputA}${inputB}${inputA}`, `${inputB}${inputA}${inputB}`];
+        });
+    });
+}
+
 // noinspection JSPrimitiveTypeWrapperUsage
 export const nonStringInputs: unknown[] = [
     null,
@@ -67,18 +75,11 @@ export const definedNonStringInputs: unknown[] = nonStringInputs.filter((input: 
     return input !== undefined;
 });
 
-export const emptyStringInputs: string[] = [
+const baseEmptyStringInputs: string[] = [
     '',
     ' ',
-    '  ',
-    '   ',
     '\n',
     '\t',
-    '\n\t',
-    '\n \t',
-    '\n  \t',
-    '\n   \t',
-    ' \n\t ',
     '\r',
     '\v',
     '\f',
@@ -87,11 +88,21 @@ export const emptyStringInputs: string[] = [
     '\u2000',
     '\u3000',
     '\u2028',
-    '\u2029',
-    '\u00A0\u2028\v'
+    '\u2029'
 ];
 
-export const singleLineTrimmedInputsNumsAndSymbols: string[] = [
+export const emptyStringInputs: string[] = [
+    ...baseEmptyStringInputs,
+    ...mixStrings(baseEmptyStringInputs, baseEmptyStringInputs)
+];
+
+function buildWhitespaceFailureStrings(tokens: string[]): string[] {
+    return [...baseEmptyStringInputs, '  ', '   '].flatMap((empty: string): string[] => {
+        return mixStrings([empty], [tokens.join(empty)]);
+    });
+}
+
+export const singleLineInputsNumsAndSymbols: string[] = [
     '\u{1F3A8}',
     '\u{1F3A8} \u{1F3A8}',
     '🎨',
@@ -101,7 +112,7 @@ export const singleLineTrimmedInputsNumsAndSymbols: string[] = [
     '!@#$%^&*()-_+=~`"\'/\\|,.<>?;:'
 ];
 
-export const singleLineTrimmedInputsMixedCase: string[] = [
+export const singleLineInputsMixedCase: string[] = [
     'Example',
     'ëË',
     'ë Ë',
@@ -110,7 +121,7 @@ export const singleLineTrimmedInputsMixedCase: string[] = [
     'this IS an Example sEnTeNcE!'
 ];
 
-export const singleLineTrimmedInputsLowercase: string[] = [
+export const singleLineInputsLowercase: string[] = [
     'example',
     'ë',
     'ë ë',
@@ -119,7 +130,7 @@ export const singleLineTrimmedInputsLowercase: string[] = [
     'this is an example sentence!'
 ];
 
-export const singleLineTrimmedInputsUppercase: string[] = [
+export const singleLineInputsUppercase: string[] = [
     'EXAMPLE',
     'Ë',
     'Ë Ë',
@@ -128,95 +139,46 @@ export const singleLineTrimmedInputsUppercase: string[] = [
     'THIS IS AN EXAMPLE SENTENCE!'
 ];
 
-export const singleLineTrimmedFailureInputsLowercase: string[] = [
-    ' example ',
-    '\nexample\n',
-    '\texample\t',
-    ' \n\texample\t\n ',
-    ' leading whitespace example',
-    '\nleading whitespace example',
-    '\tleading whitespace example',
-    ' \n\tleading whitespace example',
-    'trailing whitespace example ',
-    'trailing whitespace example\n',
-    'trailing whitespace example\t',
-    'trailing whitespace example\t\n ',
-    'internal\nspaces\nexample',
-    'internal\tspaces\texample',
-    'internal\n\nspaces\n\nexample',
-    'internal\t\tspaces\t\texample',
-    'internal\n spaces\n example',
-    'internal\t spaces\t example',
-    'internal  spaces  example',
-    'internal   spaces   example',
-    '\nëë',
-    'ë\në',
-    'ëë\n'
+export const singleLineFailureInputsLowercase: string[] = [
+    ...buildWhitespaceFailureStrings(['e', 'e']),
+    ...buildWhitespaceFailureStrings(['ë', 'ë'])
 ];
 
-export const singleLineTrimmedFailureInputsUppercase: string[] = [
-    ' EXAMPLE ',
-    '\nEXAMPLE\n',
-    '\tEXAMPLE\t',
-    ' \n\tEXAMPLE\t\n ',
-    ' LEADING WHITESPACE EXAMPLE',
-    '\nLEADING WHITESPACE EXAMPLE',
-    '\tLEADING WHITESPACE EXAMPLE',
-    ' \n\tLEADING WHITESPACE EXAMPLE',
-    'TRAILING WHITESPACE EXAMPLE ',
-    'TRAILING WHITESPACE EXAMPLE\n',
-    'TRAILING WHITESPACE EXAMPLE\t',
-    'TRAILING WHITESPACE EXAMPLE\t\n ',
-    'INTERNAL\nSPACES\nEXAMPLE',
-    'INTERNAL\tSPACES\tEXAMPLE',
-    'INTERNAL\n\nSPACES\n\nEXAMPLE',
-    'INTERNAL\t\tSPACES\t\tEXAMPLE',
-    'INTERNAL\n SPACES\n EXAMPLE',
-    'INTERNAL\t SPACES\t EXAMPLE',
-    'INTERNAL  SPACES  EXAMPLE',
-    'INTERNAL   SPACES   EXAMPLE',
-    '\nËË',
-    'Ë\nË',
-    'ËË\n'
+export const singleLineFailureInputsUppercase: string[] = [
+    ...buildWhitespaceFailureStrings(['E', 'E']),
+    ...buildWhitespaceFailureStrings(['Ë', 'Ë'])
 ];
 
-export const singleLineTrimmedFailureInputsMixedCase: string[] = [
-    ' Example ',
-    '\nExample\n',
-    '\tExample\t',
-    ' \n\tExample\t\n ',
-    ' Leading Whitespace Example',
-    '\nLeading Whitespace Example',
-    '\tLeading Whitespace Example',
-    ' \n\tLeading Whitespace Example',
-    'Trailing Whitespace Example ',
-    'Trailing Whitespace Example\n',
-    'Trailing Whitespace Example\t',
-    'Trailing Whitespace Example\t\n ',
-    'Internal\nSpaces\nExample',
-    'Internal\tSpaces\tExample',
-    'Internal\n\nSpaces\n\nExample',
-    'Internal\t\tSpaces\t\tExample',
-    'Internal\n Spaces\n Example',
-    'Internal\t Spaces\t Example',
-    'Internal  Spaces  Example',
-    'Internal   Spaces   Example',
-    '\nëË',
-    'ë\nË',
-    'ëË\n'
+export const singleLineFailureInputsMixedCase: string[] = [
+    ...buildWhitespaceFailureStrings(['E', 'e']),
+    ...buildWhitespaceFailureStrings(['e', 'E']),
+    ...buildWhitespaceFailureStrings(['Ë', 'ë']),
+    ...buildWhitespaceFailureStrings(['ë', 'Ë'])
 ];
 
-export const singleLineTrimmedInputs: string[] = [
-    ...singleLineTrimmedInputsLowercase,
-    ...singleLineTrimmedInputsUppercase,
-    ...singleLineTrimmedInputsMixedCase,
-    ...singleLineTrimmedInputsNumsAndSymbols
+export const singleLineInputs: string[] = [
+    ...singleLineInputsLowercase,
+    ...singleLineInputsUppercase,
+    ...singleLineInputsMixedCase,
+    ...singleLineInputsNumsAndSymbols
 ];
 
-export const singleLineTrimmedFailureInputs: string[] = [
-    ...singleLineTrimmedFailureInputsLowercase,
-    ...singleLineTrimmedFailureInputsUppercase,
-    ...singleLineTrimmedFailureInputsMixedCase
+export const singleLineFailureInputs: string[] = [
+    ...singleLineFailureInputsLowercase,
+    ...singleLineFailureInputsUppercase,
+    ...singleLineFailureInputsMixedCase
+];
+
+const baseNullCharacterInputs: string[] = [
+    '\x00',
+    'null\x00character',
+    'null character\x00',
+    '\x00null character'
+];
+
+export const nullCharacterInputs: string[] = [
+    ...baseNullCharacterInputs,
+    ...mixStrings(baseEmptyStringInputs, baseNullCharacterInputs)
 ];
 
 export const nonEmptyStringInputs: string[] = [
@@ -229,13 +191,7 @@ export const nonEmptyStringInputs: string[] = [
     '\u{1F3A8}',
     '🎨',
     'ë',
-    ...singleLineTrimmedFailureInputs,
-    ...singleLineTrimmedInputs
-];
-
-export const nullCharacterStringInputs: string[] = [
-    '\x00',
-    'null\x00character',
-    'null character\x00',
-    '\x00null character'
+    ...singleLineFailureInputs,
+    ...singleLineInputs,
+    ...nullCharacterInputs
 ];
