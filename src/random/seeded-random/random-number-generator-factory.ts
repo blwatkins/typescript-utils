@@ -137,7 +137,7 @@ export class RandomNumberGeneratorFactory {
      */
     static #assertValidNamespace(namespace: string | undefined): void {
         if (!RandomNumberGeneratorFactory.#isValidNamespace(namespace)) {
-            throw new ValueRangeError('namespace must be a string without null characters or undefined.');
+            throw new ValueRangeError('namespace must not contain null characters.');
         }
     }
 
