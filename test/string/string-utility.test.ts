@@ -30,15 +30,15 @@ import {
     emptyStringInputs,
     nonEmptyStringInputs,
     nonStringInputs,
-    singleLineTrimmedInputsNumsAndSymbols,
-    singleLineTrimmedFailureInputsLowercase,
-    singleLineTrimmedInputsLowercase,
-    singleLineTrimmedInputsMixedCase,
-    singleLineTrimmedInputsUppercase,
-    singleLineTrimmedFailureInputsUppercase,
-    singleLineTrimmedFailureInputsMixedCase,
-    singleLineTrimmedFailureInputs,
-    singleLineTrimmedInputs
+    singleLineInputsNumsAndSymbols,
+    singleLineFailureInputsLowercase,
+    singleLineInputsLowercase,
+    singleLineInputsMixedCase,
+    singleLineInputsUppercase,
+    singleLineFailureInputsUppercase,
+    singleLineFailureInputsMixedCase,
+    singleLineFailureInputs,
+    singleLineInputs
 } from '../utils/input/string-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
@@ -61,7 +61,7 @@ describe('StringUtility', (): void => {
 
     const numsAndSymbolsSuccessScenario: Scenario = {
         label: 'Number and symbol trimmed inputs',
-        inputs: singleLineTrimmedInputsNumsAndSymbols,
+        inputs: singleLineInputsNumsAndSymbols,
         expected: undefined
     };
 
@@ -113,7 +113,7 @@ describe('StringUtility', (): void => {
         emptyStringFailureScenario,
         {
             label: 'Single-line trimmed failure inputs',
-            inputs: singleLineTrimmedFailureInputs,
+            inputs: singleLineFailureInputs,
             expected: PrimitiveTypeError
         }
     ];
@@ -121,7 +121,7 @@ describe('StringUtility', (): void => {
     const singleLineSuccessScenarios: Scenario[] = [
         {
             label: 'Single-line trimmed inputs',
-            inputs: singleLineTrimmedInputs,
+            inputs: singleLineInputs,
             expected: undefined
         }
     ];
@@ -132,16 +132,16 @@ describe('StringUtility', (): void => {
         {
             label: 'Incorrect case inputs',
             inputs: [
-                ...singleLineTrimmedInputsUppercase,
-                ...singleLineTrimmedInputsMixedCase,
-                ...singleLineTrimmedFailureInputsUppercase,
-                ...singleLineTrimmedFailureInputsMixedCase
+                ...singleLineInputsUppercase,
+                ...singleLineInputsMixedCase,
+                ...singleLineFailureInputsUppercase,
+                ...singleLineFailureInputsMixedCase
             ],
             expected: PrimitiveTypeError
         },
         {
             label: 'Single-line lowercase trimmed failure inputs',
-            inputs: singleLineTrimmedFailureInputsLowercase,
+            inputs: singleLineFailureInputsLowercase,
             expected: PrimitiveTypeError
         }
     ];
@@ -149,7 +149,7 @@ describe('StringUtility', (): void => {
     const singleLineLowercaseSuccessScenarios: Scenario[] = [
         {
             label: 'Single-line lowercase trimmed inputs',
-            inputs: singleLineTrimmedInputsLowercase,
+            inputs: singleLineInputsLowercase,
             expected: undefined
         },
         numsAndSymbolsSuccessScenario
@@ -161,16 +161,16 @@ describe('StringUtility', (): void => {
         {
             label: 'Incorrect case inputs',
             inputs: [
-                ...singleLineTrimmedInputsLowercase,
-                ...singleLineTrimmedInputsMixedCase,
-                ...singleLineTrimmedFailureInputsLowercase,
-                ...singleLineTrimmedFailureInputsMixedCase
+                ...singleLineInputsLowercase,
+                ...singleLineInputsMixedCase,
+                ...singleLineFailureInputsLowercase,
+                ...singleLineFailureInputsMixedCase
             ],
             expected: PrimitiveTypeError
         },
         {
             label: 'Single-line uppercase trimmed failure inputs',
-            inputs: singleLineTrimmedFailureInputsUppercase,
+            inputs: singleLineFailureInputsUppercase,
             expected: PrimitiveTypeError
         }
     ];
@@ -178,7 +178,7 @@ describe('StringUtility', (): void => {
     const singleLineUppercaseSuccessScenarios: Scenario[] = [
         {
             label: 'Single-line uppercase trimmed inputs',
-            inputs: singleLineTrimmedInputsUppercase,
+            inputs: singleLineInputsUppercase,
             expected: undefined
         },
         numsAndSymbolsSuccessScenario
