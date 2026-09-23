@@ -31,11 +31,8 @@ import {
     ValueRangeError
 } from '../../../src';
 
-import {
-    definedNonStringInputs,
-    nonStringInputs,
-    nullCharacterStringInputs
-} from '../../utils/input/string-inputs';
+import { definedNonStringInputs, nonStringInputs, nullCharacterInputs } from '../../utils/input/string-inputs';
+
 import { definedInvalidSafePositiveIntegerInputs } from '../../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 
@@ -70,15 +67,23 @@ describe('RandomNumberGeneratorFactory', (): void => {
         return sequence;
     }
 
-    interface SeedAndNamespaceArgs {
+    interface BuildArgs {
+        seed: unknown;
+        namespace?: unknown;
+        version?: unknown;
+    }
+
+    interface AsyncBuildArgs {
         seed: unknown;
         namespace?: unknown;
     }
 
-    const seedAndNamespaceFailureScenarios: Scenario[] = [
+    type SharedArgs = BuildArgs & AsyncBuildArgs;
+
+    const sharedArgumentFailureScenarios: Scenario[] = [
         {
             label: 'Invalid seed - not a string',
-            inputs: nonStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+            inputs: nonStringInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: input
                 };
@@ -87,7 +92,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
         },
         {
             label: 'Invalid seed - string with null character',
-            inputs: nullCharacterStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+            inputs: nullCharacterInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: input
                 };
@@ -96,7 +101,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
         },
         {
             label: 'Invalid namespace - not a string or undefined',
-            inputs: definedNonStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+            inputs: definedNonStringInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: '',
                     namespace: input
@@ -106,7 +111,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
         },
         {
             label: 'Invalid namespace - string with null character',
-            inputs: nullCharacterStringInputs.map((input: unknown): SeedAndNamespaceArgs => {
+            inputs: nullCharacterInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: '',
                     namespace: input
@@ -117,12 +122,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
     ];
 
     describe('build', (): void => {
-        interface BuildArgs {
-            seed: unknown;
-            namespace?: unknown;
-            version?: unknown;
-        }
-
         function callBuild(args: BuildArgs): SeededRandomNumberGenerator {
             if (args.version !== undefined) {
                 return RandomNumberGeneratorFactory.build(args.seed as string, args.namespace as string, args.version as number);
@@ -196,7 +195,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         describe('Argument errors', (): void => {
             const argumentFailureScenarios: Scenario[] = [
-                ...seedAndNamespaceFailureScenarios,
+                ...sharedArgumentFailureScenarios,
                 {
                     label: 'Invalid version - invalid safe positive integer',
                     inputs: definedInvalidSafePositiveIntegerInputs.map((input: unknown): BuildArgs => {
@@ -235,11 +234,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
     });
 
     describe('asyncBuild', (): void => {
-        interface AsyncBuildArgs {
-            seed: unknown;
-            namespace?: unknown;
-        }
-
         async function callAsyncBuild(args: AsyncBuildArgs): Promise<SeededRandomNumberGenerator> {
             if (args.namespace !== undefined) {
                 return await RandomNumberGeneratorFactory.asyncBuild(args.seed as string, args.namespace as string);
@@ -254,8 +248,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
             )('%# - $label',
                 async ({ input: scenarioInput, expected: scenarioExpected }: SingleInputScenario): Promise<void> => {
                     const expected = scenarioExpected as number[];
-                    const input = scenarioInput as AsyncBuildArgs;
-                    const rng: SeededRandomNumberGenerator = await callAsyncBuild(input);
+                    const rng: SeededRandomNumberGenerator = await callAsyncBuild(scenarioInput as AsyncBuildArgs);
                     const sequence: number[] = buildActualSequence(rng, sequenceLength);
 
                     expect(rng).toBeInstanceOf(SeededRandomNumberGenerator);
@@ -301,7 +294,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
         describe('Argument errors', (): void => {
             describe.each(
-                seedAndNamespaceFailureScenarios
+                sharedArgumentFailureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
                 test.each(
