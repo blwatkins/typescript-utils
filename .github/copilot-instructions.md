@@ -117,13 +117,10 @@ Custom error classes must:
 
 Choose the error type by the kind of failure, not by the call site:
 
-- `PrimitiveTypeError` — input fails a type check with no schema involved (e.g., not a string, not a number, not a function, not an object), including a classifying guard that folds a content rule into the type it narrows to (e.g., a guard for single-line strings, where a multi-line string fails the type)
+- `PrimitiveTypeError` — input fails a type check with no schema involved (e.g., not a string, not a number, not a function, not an object), including a classifying guard that folds a content rule into the type it narrows to
 - `SchemaTypeError` — input is checked against an expected object schema and fails it, either because it does not satisfy the schema or because it is not an object at all
-- `ValueRangeError` — input has already passed its type check, but its value falls outside what is allowed: a range, a bound, or a content rule on an already-typed string (e.g., a string containing a character the parameter forbids)
+- `ValueRangeError` — input has already passed its type check, but its value falls outside what is allowed: a range, a bound, or a content rule on an already-typed value
 - `StaticInstanceError` — a static class constructor was invoked
-
-The same content rule can therefore throw either type, depending on the shape of the guard that enforces it.
-A classifying guard has one failure and reports it as a type failure; a constraint guard reports a wrong type and a disallowed value as separate failures.
 
 Custom error types intentionally do not expose a Node.js-style `code` property.
 Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
@@ -163,7 +160,7 @@ It takes a single `unknown` parameter and returns a type predicate: every input 
 Where such a guard needs a check that would itself reject a bad argument, it establishes the type first, so that check is never reached with an argument it would throw on.
 
 A **constraint guard** answers "does this value satisfy the constraint?" about parameters that are already typed.
-The constraint may relate one parameter to another (one must not exceed the other), bound a parameter against internal state (an index into a collection the class holds), or restrict its content (a string that must not contain a reserved character).
+The constraint may relate one parameter to another, bound a parameter against an internal state, or restrict its content.
 It takes named parameters of concrete types, returns a plain `boolean` rather than a type predicate, and validates its arguments before checking the constraint.
 An argument of the wrong type is a broken call rather than one of the answers, so it throws instead of returning `false`.
 
