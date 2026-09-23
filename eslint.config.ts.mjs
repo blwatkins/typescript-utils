@@ -62,13 +62,13 @@ export default defineConfig([
         extends: [
             eslint.configs.recommended,
             stylistic.configs.recommended,
-            esX.configs['flat/restrict-to-es2022'],
+            esX.configs['flat/restrict-to-es2024'],
             ...tsEslint.configs.recommendedTypeChecked,
             ...tsEslint.configs.strictTypeChecked,
             ...tsEslint.configs.stylisticTypeChecked
         ],
         languageOptions: {
-            ecmaVersion: 2022,
+            ecmaVersion: 2024,
             sourceType: 'module',
             parserOptions: {
                 projectService: true
