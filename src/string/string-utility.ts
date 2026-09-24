@@ -22,27 +22,12 @@
 
 import { PrimitiveTypeError, StaticInstanceError } from '../error';
 
-/**
- * Characters that {@link StringUtility.isText} accepts beyond printable ASCII, accented ASCII letters, emoji and text whitespace.
- * Every entry must be unchanged by NFKC normalization, or {@link StringUtility.isText} can never accept it.
- *
- * @type {readonly string[]}
- */
-const specialCharacters: readonly string[] = [
-    '\u00A9',
-    '\u00B0',
-    '\u00B1',
-    '\u00F7',
-    '\u2022'
-];
-
 const regularExpressions = {
-    accentedLetter: /^[A-Za-z]\p{M}$/u,
     singleLineLowercase: /^[^\s\p{Lu}]+(?:\u0020[^\s\p{Lu}]+)*$/u,
     singleLineUppercase: /^[^\s\p{Ll}]+(?:\u0020[^\s\p{Ll}]+)*$/u,
     singleLine: /^\S+(?:\u0020\S+)*$/,
-    textCharacter: /^(?:\p{RGI_Emoji}|\r\n|[\t\n\u0020-\u007E])$/v,
-    textUnit: /\p{RGI_Emoji}|\r\n|./gsv
+    textCharacters: /^(?:[\t\n\r\u0020-\u007E\u00A1-\u00FF\u2022]|\p{RGI_Emoji})+$/v,
+    rejectedTextCharacters: /[\u00A6\u00A8\u00AA\u00AC-\u00AF\u00B2-\u00BA\u00BC-\u00BE\u00C6\u00D0\u00D7\u00D8\u00DE\u00DF\u00E6\u00F0\u00F8\u00FE]|\r(?!\n)/
 };
 
 /**
@@ -193,11 +178,11 @@ export class StringUtility {
     /**
      * Assert that `input` is a text string.
      *
-     * @remarks Text must satisfy all of the following:
+     * @remarks A text string must satisfy all of the following:
      * - It is a string that contains at least one non-whitespace character.
-     * - It is unchanged by NFKC normalization.
-     * - Every character is printable ASCII (U+0021 to U+007E), an ASCII letter with exactly one accent, an emoji sequence recommended for general interchange (RGI), a special character (`©`, `°`, `±`, `÷` or `•`), or text whitespace.
-     * - Text whitespace is a space (U+0020), a tab, a line feed, or a carriage return immediately followed by a line feed.
+     * - Every character is a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet `•` (U+2022), or part of an emoji sequence recommended for general interchange (RGI).
+     * - Every carriage return is immediately followed by a line feed.
+     * - It contains none of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or `¦ ¨ ª ¬ ® ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ`.
      *
      * @see {@link StringUtility.isText}
      *
@@ -354,11 +339,11 @@ export class StringUtility {
     /**
      * Is `input` a text string?
      *
-     * @remarks Text must satisfy all of the following:
+     * @remarks A text string must satisfy all of the following:
      * - It is a string that contains at least one non-whitespace character.
-     * - It is unchanged by NFKC normalization.
-     * - Every character is printable ASCII (U+0021 to U+007E), an ASCII letter with exactly one accent, an emoji sequence recommended for general interchange (RGI), a special character (`©`, `°`, `±`, `÷` or `•`), or text whitespace.
-     * - Text whitespace is a space (U+0020), a tab, a line feed, or a carriage return immediately followed by a line feed.
+     * - Every character is a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet `•` (U+2022), or part of an emoji sequence recommended for general interchange (RGI).
+     * - Every carriage return is immediately followed by a line feed.
+     * - It contains none of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or `¦ ¨ ª ¬ ® ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ`.
      *
      * @see {@link StringUtility.isNonEmpty}
      *
@@ -370,17 +355,9 @@ export class StringUtility {
      * @since 0.1.0
      */
     public static isText(input: unknown): input is string {
-        if (!StringUtility.isNonEmpty(input) || input !== input.normalize('NFKC')) {
-            return false;
-        }
-
-        for (const [unit] of input.matchAll(regularExpressions.textUnit)) {
-            if (!StringUtility.#isTextUnit(unit)) {
-                return false;
-            }
-        }
-
-        return true;
+        return StringUtility.isNonEmpty(input)
+            && regularExpressions.textCharacters.test(input)
+            && !regularExpressions.rejectedTextCharacters.test(input);
     }
 
     /**
@@ -441,21 +418,6 @@ export class StringUtility {
      */
     public static isSingleLineUppercase(input: unknown): input is string {
         return StringUtility.isText(input) && StringUtility.singleLineUppercase.test(input);
-    }
-
-    /**
-     * Is `unit` a single allowed unit of a text string?
-     *
-     * @param {string} unit - A single code point, a carriage return and line feed pair, or an emoji sequence.
-     *
-     * @returns {boolean} `true` if `unit` is allowed in a text string; `false` otherwise.
-     *
-     * @private
-     */
-    static #isTextUnit(unit: string): boolean {
-        return regularExpressions.textCharacter.test(unit)
-            || specialCharacters.includes(unit)
-            || regularExpressions.accentedLetter.test(unit.normalize('NFD'));
     }
 
     /* ******************* TODO: DEPRECATED ******************* */
