@@ -38,4 +38,5 @@ description: "Resources and references used to develop the TypeScript Utilities 
 
 ## Unicode Text
 
+- [Unicode Character Ranges](https://jrgraphix.net/r/Unicode/)
 - [Unicode code converter](https://r12a.github.io/app-conversion/)
