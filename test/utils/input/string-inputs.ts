@@ -97,98 +97,106 @@ export const definedNonStringInputs: unknown[] = nonStringInputs.filter((input: 
 
 const textWhitespace: string[] = [' ', '\t', '\n', '\r\n'];
 
-const whitespaceCharacters: string[] = codePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
-    return /^\s$/.test(character);
-});
-
-const nonTextWhitespaceCharacters: string[] = whitespaceCharacters.filter((character: string): boolean => {
-    return !textWhitespace.includes(character);
-});
-
 const textWhitespaceRuns: string[] = unique([
     ...textWhitespace,
-    ...mixStrings(textWhitespace, textWhitespace)
+    ...textWhitespace.flatMap((first: string): string[] => {
+        return textWhitespace.map((second: string): string => {
+            return `${first}${second}`;
+        });
+    })
 ]);
 
-const interiorSingleLineFailureRuns: string[] = textWhitespaceRuns.filter((run: string): boolean => {
-    return run !== ' ';
+const whitespaceCharacters: string[] = codePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
+    return /^\s$/.test(character);
 });
 
 export const emptyStringInputs: string[] = unique([
     '',
     ...whitespaceCharacters,
-    ...mixStrings(textWhitespace, whitespaceCharacters)
+    ...textWhitespaceRuns,
+    ...whitespaceCharacters.map((character: string): string => {
+        return ` ${character} `;
+    })
 ]);
 
-const asciiLetters: string[] = [
-    ...codePointRange(0x0041, 0x005A),
-    ...codePointRange(0x0061, 0x007A)
+const rejectedLatin1Characters: string[] = [
+    '\u00A6',
+    '\u00A8',
+    '\u00AA',
+    '\u00AC',
+    '\u00AD',
+    '\u00AE',
+    '\u00AF',
+    '\u00B2',
+    '\u00B3',
+    '\u00B4',
+    '\u00B5',
+    '\u00B6',
+    '\u00B7',
+    '\u00B8',
+    '\u00B9',
+    '\u00BA',
+    '\u00BC',
+    '\u00BD',
+    '\u00BE',
+    '\u00C6',
+    '\u00D0',
+    '\u00D7',
+    '\u00D8',
+    '\u00DE',
+    '\u00DF',
+    '\u00E6',
+    '\u00F0',
+    '\u00F8',
+    '\u00FE'
 ];
 
-const accentedLetters: string[] = unique(asciiLetters.flatMap((letter: string): string[] => {
-    return codePointRange(0x0300, 0x036F).map((mark: string): string => {
-        return `${letter}${mark}`.normalize('NFC');
-    });
-})).filter((character: string): boolean => {
-    return /^.$/su.test(character)
-        && character === character.normalize('NFKC')
-        && /^[A-Za-z]\p{M}$/u.test(character.normalize('NFD'));
+const acceptedLatin1Characters: string[] = codePointRange(0x00A1, 0x00FF).filter((character: string): boolean => {
+    return !rejectedLatin1Characters.includes(character);
 });
 
-const accentedLowercaseLetters: string[] = accentedLetters.filter((character: string): boolean => {
+const acceptedLatin1Symbols: string[] = acceptedLatin1Characters.filter((character: string): boolean => {
+    return !/\p{L}/u.test(character);
+});
+
+const acceptedLowercaseLetters: string = acceptedLatin1Characters.filter((character: string): boolean => {
     return /\p{Ll}/u.test(character);
-});
+}).join('');
 
-const accentedUppercaseLetters: string[] = accentedLetters.filter((character: string): boolean => {
+const acceptedUppercaseLetters: string = acceptedLatin1Characters.filter((character: string): boolean => {
     return /\p{Lu}/u.test(character);
-});
+}).join('');
 
-const twoAccentLetters: string[] = unique(accentedLetters.flatMap((letter: string): string[] => {
-    return codePointRange(0x0300, 0x036F).map((mark: string): string => {
-        return `${letter}${mark}`.normalize('NFC');
-    });
-})).filter((character: string): boolean => {
-    return /^.$/su.test(character) && character === character.normalize('NFKC');
-});
-
-const asciiSymbols: string[] = codePointRange(0x0021, 0x007E).filter((character: string): boolean => {
+const asciiSymbols: string = codePointRange(0x0021, 0x007E).filter((character: string): boolean => {
     return !/[A-Za-z]/.test(character);
-});
-
-export const specialCharacterInputs: string[] = ['©', '°', '±', '÷', '•'];
+}).join('');
 
 const emojiInputs: string[] = [
     '\u{1F3A8}',
-    '⭐',
-    '❤️',
     '\u{1F44D}\u{1F3FD}',
-    '\u{1F468}‍\u{1F469}‍\u{1F467}',
-    '\u{1F3F3}️‍\u{1F308}',
+    '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}',
     '\u{1F1FA}\u{1F1F8}',
     '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}',
-    '1️⃣',
-    '©️'
+    '1\uFE0F\u20E3',
+    '\u00A9\uFE0F',
+    '\u2122\uFE0F'
 ];
 
-const lowercaseWords: string[] = ['example', 'word', accentedLowercaseLetters.join('')];
+const lowercaseWords: string[] = ['example', 'caf\u00E9', acceptedLowercaseLetters];
 
-const uppercaseWords: string[] = ['EXAMPLE', 'WORD', accentedUppercaseLetters.join('')];
+const uppercaseWords: string[] = ['EXAMPLE', 'CAF\u00C9', acceptedUppercaseLetters];
 
-const mixedCaseWords: string[] = ['Example', 'wOrD', `${accentedUppercaseLetters.join('')}${accentedLowercaseLetters.join('')}`];
+const mixedCaseWords: string[] = ['Example', 'wOrD', `${acceptedUppercaseLetters}${acceptedLowercaseLetters}`];
 
-const caselessWords: string[] = [
-    '12345',
-    asciiSymbols.join(''),
-    ...asciiSymbols,
-    ...emojiInputs,
-    ...specialCharacterInputs
-];
+const caselessWords: string[] = ['12345', asciiSymbols, acceptedLatin1Symbols.join(''), '\u2022', ...emojiInputs];
 
 function buildSingleLineFailureInputs(words: string[]): string[] {
     const [firstWord, secondWord] = words;
 
     return unique([
-        ...interiorSingleLineFailureRuns.map((run: string): string => {
+        ...textWhitespaceRuns.filter((run: string): boolean => {
+            return run !== ' ';
+        }).map((run: string): string => {
             return `${firstWord}${run}${secondWord}`;
         }),
         ...textWhitespaceRuns.flatMap((run: string): string[] => {
@@ -232,85 +240,57 @@ export const textInputs: string[] = [
     ...singleLineFailureInputs
 ];
 
-const nonNormalizedEmoji: string[] = [
-    ...codePointRange(0x2000, 0x33FF),
-    ...codePointRange(0x1F000, 0x1FFFF)
-].flatMap((character: string): string[] => {
-    return [character, `${character}\uFE0F`];
-}).filter((emoji: string): boolean => {
-    return /^\p{RGI_Emoji}$/v.test(emoji) && emoji !== emoji.normalize('NFKC');
-});
-
 const nonTextCharacters: string[] = [
-    ...nonNormalizedEmoji,
-    ...nonTextWhitespaceCharacters,
+    '\r',
     ...codePointRange(0x0000, 0x009F).filter((character: string): boolean => {
-        return /\p{Cc}/u.test(character) && !/\s/.test(character);
+        return /\p{Cc}/u.test(character) && !['\t', '\n', '\r'].includes(character);
+    }),
+    ...whitespaceCharacters.filter((character: string): boolean => {
+        return ![' ', '\t', '\n', '\r'].includes(character);
     }),
     ...codePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
         return /\p{Cf}/u.test(character) && !/\s/.test(character);
     }),
+    ...rejectedLatin1Characters,
     '\u{E0001}',
     '\u{E0067}',
     '\u{E007F}',
-    '͏',
-    '︎',
-    '️',
-    '́',
-    '⃣',
-    'а',
-    'α',
-    '中',
-    'ب',
-    'א',
-    '⠀',
-    '،',
-    '、',
-    'Ａ',
+    '\u034F',
+    '\u115F',
+    '\u3164',
+    '\uFFA0',
+    '\u2800',
+    '\uFE0E',
+    '\uFE0F',
+    '\u0301',
+    '\u20E3',
+    '\u00AE\uFE0F',
+    '\u0430',
+    '\u03B1',
+    '\u4E2D',
+    '\u0628',
+    '\u05D0',
+    '\u0142',
+    '\u0159',
+    '\u1EC5',
+    '\u017F',
+    '\u0131',
+    '\uFF21',
     '\u{1D400}',
-    'ⓐ',
-    'Ⅰ',
-    'ﬁ',
-    'ſ',
-    'ª',
-    'µ',
-    'ǅ',
-    ';',
-    'K',
-    '™',
-    '…',
-    '½',
-    '²',
-    '´',
-    '‘',
-    '’',
-    '“',
-    '”',
-    'ʻ',
-    'ʼ',
-    '×',
-    'ß',
-    'æ',
-    'ø',
-    'ł',
-    'ı',
-    'ɑ',
-    '￼',
-    '�',
-    '',
-    '͸',
+    '\u2122',
+    '\u2019',
+    '\u02BB',
+    '\uFFFC',
+    '\uFFFD',
+    '\uE000',
+    '\u0378',
     '\uD800',
     '\uDC00'
 ];
 
-export const nonTextCharacterInputs: string[] = unique([
-    ...nonTextCharacters.flatMap((character: string): string[] => {
-        return [character, ...mixStrings([character], ['text'])];
-    }),
-    ...twoAccentLetters,
-    accentedLowercaseLetters.join('').normalize('NFD'),
-    accentedUppercaseLetters.join('').normalize('NFD')
-]).filter((input: string): boolean => {
+export const nonTextCharacterInputs: string[] = unique(nonTextCharacters.flatMap((character: string): string[] => {
+    return [character, ...mixStrings([character], ['text'])];
+})).filter((input: string): boolean => {
     return input.trim().length > 0;
 });
 

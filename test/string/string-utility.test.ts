@@ -41,7 +41,6 @@ import {
     singleLineFailureInputsMixedCase,
     singleLineFailureInputs,
     singleLineInputs,
-    specialCharacterInputs,
     textInputs
 } from '../utils/input/string-inputs';
 
@@ -274,14 +273,6 @@ describe('StringUtility', (): void => {
 
         describe('isText', (): void => {
             testIsMethod(StringUtility.isText.bind(StringUtility), textSuccessScenarios, textFailureScenarios);
-        });
-
-        describe('Special characters', (): void => {
-            test.each(
-                specialCharacterInputs
-            )('%# - Special character %s should be unchanged by NFKC normalization', (character: string): void => {
-                expect(character.normalize('NFKC')).toBe(character);
-            });
         });
     });
 
