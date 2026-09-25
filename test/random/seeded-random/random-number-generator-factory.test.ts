@@ -31,16 +31,9 @@ import {
     ValueRangeError
 } from '../../../src';
 
-import { nonStringInputs } from '../../utils/input/string-inputs';
+import { definedNonStringInputs, nonStringInputs, singleLineFailureStringInputs } from '../../utils/input/string-inputs';
 
-import {
-    negativeSafeIntegerInputs,
-    nonFiniteNumberInputs,
-    nonNumberInputs,
-    safeFloatInputs,
-    unsafeNumberInputs
-} from '../../utils/input/number-inputs';
-
+import { definedInvalidSafePositiveIntegerInputs } from '../../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 
 import {
@@ -64,16 +57,6 @@ describe('RandomNumberGeneratorFactory', (): void => {
 
     const sequenceLength: 5 = 5 as const;
 
-    function callBuild(seed: string, namespace?: string, version?: number): SeededRandomNumberGenerator {
-        if (version !== undefined) {
-            return RandomNumberGeneratorFactory.build(seed, namespace, version);
-        } else if (namespace !== undefined) {
-            return RandomNumberGeneratorFactory.build(seed, namespace);
-        }
-
-        return RandomNumberGeneratorFactory.build(seed);
-    }
-
     function buildActualSequence(rng: SeededRandomNumberGenerator, length: number): number[] {
         const sequence: number[] = [];
 
@@ -84,180 +67,218 @@ describe('RandomNumberGeneratorFactory', (): void => {
         return sequence;
     }
 
-    async function callAsyncBuild(seed: string, namespace?: string): Promise<SeededRandomNumberGenerator> {
-        if (namespace !== undefined) {
-            return await RandomNumberGeneratorFactory.asyncBuild(seed, namespace);
-        }
-
-        return await RandomNumberGeneratorFactory.asyncBuild(seed);
+    interface BuildArgs {
+        seed: unknown;
+        namespace?: unknown;
+        version?: unknown;
     }
 
+    interface AsyncBuildArgs {
+        seed: unknown;
+        namespace?: unknown;
+    }
+
+    type SharedArgs = BuildArgs & AsyncBuildArgs;
+
+    const sharedArgumentFailureScenarios: Scenario[] = [
+        {
+            label: 'Invalid seed - not a string',
+            inputs: nonStringInputs.map((input: unknown): SharedArgs => {
+                return {
+                    seed: input
+                };
+            }),
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Invalid seed - not a single-line string',
+            inputs: singleLineFailureStringInputs.map((input: unknown): SharedArgs => {
+                return {
+                    seed: input
+                };
+            }),
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Invalid namespace - not a string or undefined',
+            inputs: definedNonStringInputs.map((input: unknown): SharedArgs => {
+                return {
+                    seed: asciiSeed,
+                    namespace: input
+                };
+            }),
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Invalid namespace - not a single-line string',
+            inputs: singleLineFailureStringInputs.map((input: unknown): SharedArgs => {
+                return {
+                    seed: asciiSeed,
+                    namespace: input
+                };
+            }),
+            expected: PrimitiveTypeError
+        }
+    ];
+
     describe('build', (): void => {
-        describe('build() with valid inputs', (): void => {
+        function callBuild(args: BuildArgs): SeededRandomNumberGenerator {
+            if (args.version !== undefined) {
+                return RandomNumberGeneratorFactory.build(args.seed as string, args.namespace as string, args.version as number);
+            } else if (args.namespace !== undefined) {
+                return RandomNumberGeneratorFactory.build(args.seed as string, args.namespace as string);
+            }
+
+            return RandomNumberGeneratorFactory.build(args.seed as string);
+        }
+
+        describe('Should build a SeededRandomNumberGenerator that returns the expected sequence', (): void => {
             test.each(
                 scenarios
             )('%# - $label',
                 ({ input: scenarioInput, expected: scenarioExpected }: SingleInputScenario): void => {
                     const expected = scenarioExpected as number[];
-                    const input = scenarioInput as { seed: string; namespace?: string; version?: number; };
-                    const rng: SeededRandomNumberGenerator = callBuild(input.seed, input.namespace, input.version);
+                    const rng: SeededRandomNumberGenerator = callBuild(scenarioInput as BuildArgs);
                     const sequence: number[] = buildActualSequence(rng, sequenceLength);
+
+                    expect(rng).toBeInstanceOf(SeededRandomNumberGenerator);
                     expect(sequence).toEqual(expected);
                 }
             );
         });
 
-        describe('Sequence distinctness contracts', (): void => {
-            test('Changing seed changes sequence', (): void => {
-                const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed);
-                const rngB: SeededRandomNumberGenerator = callBuild(alternateAsciiSeed);
+        describe('Should preserve sequence distinctness contracts', (): void => {
+            test('Changing the seed should change the sequence', (): void => {
+                const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed });
+                const rngB: SeededRandomNumberGenerator = callBuild({ seed: alternateAsciiSeed });
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
                 const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
                 expect(a).not.toEqual(b);
             });
 
-            test('Changing namespace changes sequence', (): void => {
-                const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace);
-                const rngB: SeededRandomNumberGenerator = callBuild(asciiSeed, alternateAsciiNamespace);
+            test('Changing the namespace should change the sequence', (): void => {
+                const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace });
+                const rngB: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: alternateAsciiNamespace });
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
                 const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
                 expect(a).not.toEqual(b);
             });
 
-            test('Changing valid version changes sequence for same seed and namespace', (): void => {
-                const rngA: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace, 0);
-                const rngB: SeededRandomNumberGenerator = callBuild(asciiSeed, asciiNamespace, 1);
-                const v0: number[] = buildActualSequence(rngA, sequenceLength);
-                const v1: number[] = buildActualSequence(rngB, sequenceLength);
-                expect(v0).not.toEqual(v1);
+            test('Changing the seed version should change the sequence for the same seed and namespace', (): void => {
+                const rngA: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace, version: 0 });
+                const rngB: SeededRandomNumberGenerator = callBuild({ seed: asciiSeed, namespace: asciiNamespace, version: 1 });
+                const a: number[] = buildActualSequence(rngA, sequenceLength);
+                const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(a).not.toEqual(b);
             });
         });
 
-        describe('Input validation', (): void => {
-            describe('Invalid seed inputs', (): void => {
+        describe('Argument errors', (): void => {
+            const argumentFailureScenarios: Scenario[] = [
+                ...sharedArgumentFailureScenarios,
+                {
+                    label: 'Invalid version - invalid safe positive integer',
+                    inputs: definedInvalidSafePositiveIntegerInputs.map((input: unknown): BuildArgs => {
+                        return {
+                            seed: asciiSeed,
+                            version: input
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid version - out of range safe positive integer',
+                    inputs: [SeedVersions.size, SeedVersions.size + 1, Number.MAX_SAFE_INTEGER, 500, 1_000].map((input: unknown): BuildArgs => {
+                        return {
+                            seed: asciiSeed,
+                            version: input
+                        };
+                    }),
+                    expected: ValueRangeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
                 test.each(
-                    nonStringInputs
-                )('%# - Invalid seed %o should throw a PrimitiveTypeError', (seed: unknown): void => {
+                    testCases
+                )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
                     expect((): void => {
-                        RandomNumberGeneratorFactory.build(seed as string);
-                    }).toThrow(PrimitiveTypeError);
-                });
-            });
-
-            describe('Invalid namespace inputs', (): void => {
-                test.each(
-                    nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-                )('%# - Invalid namespace %o should throw a PrimitiveTypeError', (namespace: unknown): void => {
-                    expect((): void => {
-                        RandomNumberGeneratorFactory.build('', namespace as string);
-                    }).toThrow(PrimitiveTypeError);
-                });
-            });
-
-            describe('Invalid version inputs', (): void => {
-                const testScenarios: Scenario[] = [
-                    {
-                        label: 'Non-number versions',
-                        inputs: nonNumberInputs.filter((input: unknown): boolean => input !== undefined),
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Non-finite versions',
-                        inputs: nonFiniteNumberInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Versions outside of safe integer range',
-                        inputs: unsafeNumberInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Float versions',
-                        inputs: safeFloatInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Negative integer versions',
-                        inputs: negativeSafeIntegerInputs,
-                        expected: PrimitiveTypeError
-                    },
-                    {
-                        label: 'Out-of-range integer versions',
-                        inputs: [
-                            SeedVersions.size,
-                            SeedVersions.size + 1,
-                            Number.MAX_SAFE_INTEGER,
-                            500,
-                            1_000
-                        ],
-                        expected: ValueRangeError
-                    }
-                ];
-
-                describe.each(
-                    testScenarios
-                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-                    test.each(
-                        testCases
-                    )('%# - build("", "", $input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                        expect((): void => {
-                            RandomNumberGeneratorFactory.build('', '', testInput as number);
-                        }).toThrow(testExpected);
-                    });
+                        callBuild(testInput as BuildArgs);
+                    }).toThrow(testExpected);
                 });
             });
         });
     });
 
     describe('asyncBuild', (): void => {
-        describe('asyncBuild() with valid inputs', (): void => {
+        async function callAsyncBuild(args: AsyncBuildArgs): Promise<SeededRandomNumberGenerator> {
+            if (args.namespace !== undefined) {
+                return await RandomNumberGeneratorFactory.asyncBuild(args.seed as string, args.namespace as string);
+            }
+
+            return await RandomNumberGeneratorFactory.asyncBuild(args.seed as string);
+        }
+
+        describe('Should build a SeededRandomNumberGenerator that returns the expected sequence', (): void => {
             test.each(
                 asyncScenarios
             )('%# - $label',
                 async ({ input: scenarioInput, expected: scenarioExpected }: SingleInputScenario): Promise<void> => {
                     const expected = scenarioExpected as number[];
-                    const input = scenarioInput as { seed: string; namespace?: string; };
-                    const rng: SeededRandomNumberGenerator = await callAsyncBuild(input.seed, input.namespace);
+                    const rng: SeededRandomNumberGenerator = await callAsyncBuild(scenarioInput as AsyncBuildArgs);
                     const sequence: number[] = buildActualSequence(rng, sequenceLength);
+
+                    expect(rng).toBeInstanceOf(SeededRandomNumberGenerator);
                     expect(sequence).toEqual(expected);
                 }
             );
         });
 
-        describe('Sequence distinctness contracts', (): void => {
-            test('Changing seed changes sequence', async (): Promise<void> => {
-                const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed);
-                const rngB: SeededRandomNumberGenerator = await callAsyncBuild(alternateAsciiSeed);
+        describe('Should preserve sequence distinctness contracts', (): void => {
+            test('Changing the seed should change the sequence', async (): Promise<void> => {
+                const rngA: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed });
+                const rngB: SeededRandomNumberGenerator = await callAsyncBuild({ seed: alternateAsciiSeed });
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
                 const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
                 expect(a).not.toEqual(b);
             });
 
-            test('Changing namespace changes sequence', async (): Promise<void> => {
-                const rngA: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, asciiNamespace);
-                const rngB: SeededRandomNumberGenerator = await callAsyncBuild(asciiSeed, alternateAsciiNamespace);
+            test('Changing the namespace should change the sequence', async (): Promise<void> => {
+                const rngA: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed, namespace: asciiNamespace });
+                const rngB: SeededRandomNumberGenerator = await callAsyncBuild({ seed: asciiSeed, namespace: alternateAsciiNamespace });
                 const a: number[] = buildActualSequence(rngA, sequenceLength);
                 const b: number[] = buildActualSequence(rngB, sequenceLength);
+
+                expect(rngA).toBeInstanceOf(SeededRandomNumberGenerator);
+                expect(rngB).toBeInstanceOf(SeededRandomNumberGenerator);
                 expect(a).not.toEqual(b);
             });
         });
 
-        describe('Input validation', (): void => {
-            describe('Invalid seed inputs', (): void => {
+        describe('Argument errors', (): void => {
+            describe.each(
+                sharedArgumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
                 test.each(
-                    nonStringInputs
-                )('%# - Invalid seed %o should throw a PrimitiveTypeError', async (seed: unknown): Promise<void> => {
-                    await expect(RandomNumberGeneratorFactory.asyncBuild(seed as string)).rejects.toThrow(PrimitiveTypeError);
-                });
-            });
-
-            describe('Invalid namespace inputs', (): void => {
-                test.each(
-                    nonStringInputs.filter((s: unknown): boolean => s !== undefined)
-                )('%# - Invalid namespace %o should throw a PrimitiveTypeError', async (namespace: unknown): Promise<void> => {
-                    await expect(RandomNumberGeneratorFactory.asyncBuild('', namespace as string)).rejects.toThrow(PrimitiveTypeError);
+                    testCases
+                )('%# - Input $input should throw $expected', async ({ input: testInput, expected: testExpected }: TestCase): Promise<void> => {
+                    await expect(callAsyncBuild(testInput as AsyncBuildArgs)).rejects.toThrow(testExpected);
                 });
             });
         });

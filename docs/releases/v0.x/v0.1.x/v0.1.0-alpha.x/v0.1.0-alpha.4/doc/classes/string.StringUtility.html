@@ -19,7 +19,7 @@
 <h4 class="tsd-anchor-link" id="since">Since<a href="#since" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L36">src/string/string-utility.ts:36</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L38">src/string/string-utility.ts:38</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -44,6 +44,7 @@
 <a href="#assertsinglelineuppercase" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Uppercase</span></a>
 <a href="#assertstring" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>String</span></a>
 <a href="#assertstringtype" class="tsd-index-link deprecated tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>String<wbr/>Type</span></a>
+<a href="#asserttext" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Text</span></a>
 <a href="#isempty" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Empty</span></a>
 <a href="#isnonempty" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Non<wbr/>Empty</span></a>
 <a href="#isnonemptystring" class="tsd-index-link deprecated tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Non<wbr/>Empty<wbr/>String</span></a>
@@ -54,6 +55,7 @@
 <a href="#issinglelineuppercase" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase</span></a>
 <a href="#issinglelineuppercasetrimmedstring" class="tsd-index-link deprecated tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase<wbr/>Trimmed<wbr/>String</span></a>
 <a href="#isstring" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>String</span></a>
+<a href="#istext" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Text</span></a>
 </div></section></div></details></section></section>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="accessors-1">Accessors<a href="#accessors-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
@@ -69,13 +71,15 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">RegExp</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks">Remarks<a href="#remarks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.</p>
+<h4 class="tsd-anchor-link" id="remarks">Remarks<a href="#remarks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This expression assumes the string has already passed <a href="#istext" class="tsd-kind-method">StringUtility.isText</a>.
+It matches non-whitespace characters separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-1">Since<a href="#since-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L87">src/string/string-utility.ts:87</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L63">src/string/string-utility.ts:63</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="singlelinelowercase"><code class="tsd-tag">Static</code><span>single<wbr/>Line<wbr/>Lowercase</span><a href="#singlelinelowercase" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -87,13 +91,15 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">RegExp</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-1">Remarks<a href="#remarks-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.</p>
+<h4 class="tsd-anchor-link" id="remarks-1">Remarks<a href="#remarks-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This expression assumes the string has already passed <a href="#istext" class="tsd-kind-method">StringUtility.isText</a>.
+It matches non-whitespace characters separated by single spaces (U+0020), with no uppercase letters.
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-2">Since<a href="#since-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L59">src/string/string-utility.ts:59</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L79">src/string/string-utility.ts:79</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="singlelinelowercasetrimmedpattern"><code class="tsd-tag">Static</code><span>single<wbr/>Line<wbr/>Lowercase<wbr/>Trimmed<wbr/>Pattern</span><a href="#singlelinelowercasetrimmedpattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -115,7 +121,7 @@
 <h4 class="tsd-anchor-link" id="since-3">Since<a href="#since-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L365">src/string/string-utility.ts:365</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L437">src/string/string-utility.ts:437</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="singlelinetrimmedpattern"><code class="tsd-tag">Static</code><span>single<wbr/>Line<wbr/>Trimmed<wbr/>Pattern</span><a href="#singlelinetrimmedpattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -137,7 +143,7 @@
 <h4 class="tsd-anchor-link" id="since-4">Since<a href="#since-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L397">src/string/string-utility.ts:397</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L469">src/string/string-utility.ts:469</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="singlelineuppercase"><code class="tsd-tag">Static</code><span>single<wbr/>Line<wbr/>Uppercase</span><a href="#singlelineuppercase" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -149,13 +155,15 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">RegExp</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-4">Remarks<a href="#remarks-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This expression does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within the string.</p>
+<h4 class="tsd-anchor-link" id="remarks-4">Remarks<a href="#remarks-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This expression assumes the string has already passed <a href="#istext" class="tsd-kind-method">StringUtility.isText</a>.
+It matches non-whitespace characters separated by single spaces (U+0020), with no lowercase letters.
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-5">Since<a href="#since-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L73">src/string/string-utility.ts:73</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L95">src/string/string-utility.ts:95</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="singlelineuppercasetrimmedpattern"><code class="tsd-tag">Static</code><span>single<wbr/>Line<wbr/>Uppercase<wbr/>Trimmed<wbr/>Pattern</span><a href="#singlelineuppercasetrimmedpattern" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -177,7 +185,7 @@
 <h4 class="tsd-anchor-link" id="since-6">Since<a href="#since-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L381">src/string/string-utility.ts:381</a></li></ul></aside></div></li></ul></section></section></details>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L453">src/string/string-utility.ts:453</a></li></ul></aside></div></li></ul></section></section></details>
 <details class="tsd-panel-group tsd-member-group tsd-accordion" open><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
@@ -213,7 +221,7 @@
 <h4 class="tsd-anchor-link" id="since-7">Since<a href="#since-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L133">src/string/string-utility.ts:133</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L141">src/string/string-utility.ts:141</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertnonempty"><code class="tsd-tag">Static</code><span>assert<wbr/>Non<wbr/>Empty</span><a href="#assertnonempty" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -246,7 +254,7 @@
 <h4 class="tsd-anchor-link" id="since-8">Since<a href="#since-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L160">src/string/string-utility.ts:160</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L168">src/string/string-utility.ts:168</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertsingleline"><code class="tsd-tag">Static</code><span>assert<wbr/>Single<wbr/>Line</span><a href="#assertsingleline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -267,7 +275,8 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-8">Remarks<a href="#remarks-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within <code>input</code>.</p>
+<h4 class="tsd-anchor-link" id="remarks-8">Remarks<a href="#remarks-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see-2">See<a href="#see-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#issingleline" class="tsd-kind-method">StringUtility.isSingleLine</a></p>
@@ -279,7 +288,7 @@
 <h4 class="tsd-anchor-link" id="since-9">Since<a href="#since-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L187">src/string/string-utility.ts:187</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L227">src/string/string-utility.ts:227</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertsinglelinelowercase"><code class="tsd-tag">Static</code><span>assert<wbr/>Single<wbr/>Line<wbr/>Lowercase</span><a href="#assertsinglelinelowercase" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -300,7 +309,8 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-9">Remarks<a href="#remarks-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within <code>input</code>.</p>
+<h4 class="tsd-anchor-link" id="remarks-9">Remarks<a href="#remarks-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see-3">See<a href="#see-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#issinglelinelowercase" class="tsd-kind-method">StringUtility.isSingleLineLowercase</a></p>
@@ -312,7 +322,7 @@
 <h4 class="tsd-anchor-link" id="since-10">Since<a href="#since-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L214">src/string/string-utility.ts:214</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L255">src/string/string-utility.ts:255</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-deprecated">
 <h3 class="tsd-anchor-link" id="assertsinglelinetrimmedstring"><code class="tsd-tag">Static</code><span class="deprecated">assert<wbr/>Single<wbr/>Line<wbr/>Trimmed<wbr/>String</span><a href="#assertsinglelinetrimmedstring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-deprecated">
@@ -346,7 +356,7 @@
 <h4 class="tsd-anchor-link" id="since-11">Since<a href="#since-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L439">src/string/string-utility.ts:439</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L511">src/string/string-utility.ts:511</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertsinglelineuppercase"><code class="tsd-tag">Static</code><span>assert<wbr/>Single<wbr/>Line<wbr/>Uppercase</span><a href="#assertsinglelineuppercase" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -367,7 +377,8 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-10">Remarks<a href="#remarks-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within <code>input</code>.</p>
+<h4 class="tsd-anchor-link" id="remarks-10">Remarks<a href="#remarks-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-see">
 <h4 class="tsd-anchor-link" id="see-5">See<a href="#see-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#issinglelineuppercase" class="tsd-kind-method">StringUtility.isSingleLineUppercase</a></p>
@@ -379,7 +390,7 @@
 <h4 class="tsd-anchor-link" id="since-12">Since<a href="#since-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L241">src/string/string-utility.ts:241</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L283">src/string/string-utility.ts:283</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertstring"><code class="tsd-tag">Static</code><span>assert<wbr/>String</span><a href="#assertstring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -409,7 +420,7 @@
 <h4 class="tsd-anchor-link" id="since-13">Since<a href="#since-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L106">src/string/string-utility.ts:106</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L114">src/string/string-utility.ts:114</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-deprecated">
 <h3 class="tsd-anchor-link" id="assertstringtype"><code class="tsd-tag">Static</code><span class="deprecated">assert<wbr/>String<wbr/>Type</span><a href="#assertstringtype" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-deprecated">
@@ -443,7 +454,46 @@
 <h4 class="tsd-anchor-link" id="since-14">Since<a href="#since-14" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L418">src/string/string-utility.ts:418</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L490">src/string/string-utility.ts:490</a></li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="asserttext"><code class="tsd-tag">Static</code><span>assert<wbr/>Text</span><a href="#asserttext" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="asserttext-1"><span class="tsd-kind-call-signature">assertText</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">input</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">,</span> <span class="tsd-kind-parameter">message</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span><a href="#asserttext-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Assert that <code>input</code> is a text string.</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">input</span>: <span class="tsd-signature-type">unknown</span></span>
+<div class="tsd-comment tsd-typography"><p>The input to check.</p>
+</div></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">message</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>Optional message for the error thrown when <code>input</code> is not a text string.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span></h4>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-remarks">
+<h4 class="tsd-anchor-link" id="remarks-11">Remarks<a href="#remarks-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A text string must satisfy all of the following rules:</p>
+<ul>
+<li>It must be a string that contains at least one non-whitespace character.</li>
+<li>Every character must be a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet <code>•</code> (U+2022), or part of an emoji sequence recommended for general interchange (RGI).</li>
+<li>A line feed must immediately follow every carriage return.</li>
+<li>It must not contain any of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or <code>¦ ¨ ª ¬ ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ</code>.</li>
+</ul>
+</div>
+<div class="tsd-tag-see">
+<h4 class="tsd-anchor-link" id="see-8">See<a href="#see-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#istext" class="tsd-kind-method">StringUtility.isText</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-8">Throws<a href="#throws-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>When <code>input</code> is not a text string.</p>
+</div>
+<div class="tsd-tag-since">
+<h4 class="tsd-anchor-link" id="since-15">Since<a href="#since-15" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+</div></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L199">src/string/string-utility.ts:199</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isempty"><code class="tsd-tag">Static</code><span>is<wbr/>Empty</span><a href="#isempty" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -462,13 +512,13 @@
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-11">Remarks<a href="#remarks-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Empty strings must only contain whitespace characters.</p>
+<h4 class="tsd-anchor-link" id="remarks-12">Remarks<a href="#remarks-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Empty strings must only contain whitespace characters.</p>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-15">Since<a href="#since-15" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-16">Since<a href="#since-16" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L277">src/string/string-utility.ts:277</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L319">src/string/string-utility.ts:319</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isnonempty"><code class="tsd-tag">Static</code><span>is<wbr/>Non<wbr/>Empty</span><a href="#isnonempty" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -487,13 +537,13 @@
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-12">Remarks<a href="#remarks-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Non-empty strings must contain at least one non-whitespace character.</p>
+<h4 class="tsd-anchor-link" id="remarks-13">Remarks<a href="#remarks-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Non-empty strings must contain at least one non-whitespace character.</p>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-16">Since<a href="#since-16" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-17">Since<a href="#since-17" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L293">src/string/string-utility.ts:293</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L335">src/string/string-utility.ts:335</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-deprecated">
 <h3 class="tsd-anchor-link" id="isnonemptystring"><code class="tsd-tag">Static</code><span class="deprecated">is<wbr/>Non<wbr/>Empty<wbr/>String</span><a href="#isnonemptystring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-deprecated">
@@ -516,10 +566,10 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 <h4 class="tsd-anchor-link" id="deprecated-5">Deprecated<a href="#deprecated-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Replaced by <a href="#isnonempty" class="tsd-kind-method">StringUtility.isNonEmpty</a>. Will be removed in v0.1.0-alpha.5.</p>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-17">Since<a href="#since-17" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-18">Since<a href="#since-18" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L456">src/string/string-utility.ts:456</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L528">src/string/string-utility.ts:528</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="issingleline"><code class="tsd-tag">Static</code><span>is<wbr/>Single<wbr/>Line</span><a href="#issingleline" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -538,16 +588,20 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-13">Remarks<a href="#remarks-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within <code>input</code>.</p>
+<h4 class="tsd-anchor-link" id="remarks-14">Remarks<a href="#remarks-14" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-8">See<a href="#see-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singleline" class="tsd-kind-accessor">StringUtility.singleLine</a></p>
+<h4 class="tsd-anchor-link" id="see-9">See<a href="#see-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li><a href="#istext" class="tsd-kind-method">StringUtility.isText</a></li>
+<li><a href="#singleline" class="tsd-kind-accessor">StringUtility.singleLine</a></li>
+</ul>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-18">Since<a href="#since-18" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-19">Since<a href="#since-19" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L311">src/string/string-utility.ts:311</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L379">src/string/string-utility.ts:379</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="issinglelinelowercase"><code class="tsd-tag">Static</code><span>is<wbr/>Single<wbr/>Line<wbr/>Lowercase</span><a href="#issinglelinelowercase" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -566,16 +620,20 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-14">Remarks<a href="#remarks-14" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within <code>input</code>.</p>
+<h4 class="tsd-anchor-link" id="remarks-15">Remarks<a href="#remarks-15" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-9">See<a href="#see-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelinelowercase" class="tsd-kind-accessor">StringUtility.singleLineLowercase</a></p>
+<h4 class="tsd-anchor-link" id="see-10">See<a href="#see-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li><a href="#istext" class="tsd-kind-method">StringUtility.isText</a></li>
+<li><a href="#singlelinelowercase" class="tsd-kind-accessor">StringUtility.singleLineLowercase</a></li>
+</ul>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-19">Since<a href="#since-19" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-20">Since<a href="#since-20" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L329">src/string/string-utility.ts:329</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L399">src/string/string-utility.ts:399</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-deprecated">
 <h3 class="tsd-anchor-link" id="issinglelinelowercasetrimmedstring"><code class="tsd-tag">Static</code><span class="deprecated">is<wbr/>Single<wbr/>Line<wbr/>Lowercase<wbr/>Trimmed<wbr/>String</span><a href="#issinglelinelowercasetrimmedstring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-deprecated">
@@ -594,16 +652,16 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-10">See<a href="#see-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelinelowercasetrimmedpattern" class="tsd-kind-accessor">StringUtility.singleLineLowercaseTrimmedPattern</a></p>
+<h4 class="tsd-anchor-link" id="see-11">See<a href="#see-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelinelowercasetrimmedpattern" class="tsd-kind-accessor">StringUtility.singleLineLowercaseTrimmedPattern</a></p>
 </div>
 <div class="tsd-tag-deprecated">
 <h4 class="tsd-anchor-link" id="deprecated-6">Deprecated<a href="#deprecated-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Replaced by <a href="#issinglelinelowercase" class="tsd-kind-method">StringUtility.isSingleLineLowercase</a>. Will be removed in v0.1.0-alpha.5.</p>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-20">Since<a href="#since-20" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-21">Since<a href="#since-21" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L492">src/string/string-utility.ts:492</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L564">src/string/string-utility.ts:564</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-deprecated">
 <h3 class="tsd-anchor-link" id="issinglelinetrimmedstring"><code class="tsd-tag">Static</code><span class="deprecated">is<wbr/>Single<wbr/>Line<wbr/>Trimmed<wbr/>String</span><a href="#issinglelinetrimmedstring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-deprecated">
@@ -622,16 +680,16 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-11">See<a href="#see-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelinetrimmedpattern" class="tsd-kind-accessor">StringUtility.singleLineTrimmedPattern</a></p>
+<h4 class="tsd-anchor-link" id="see-12">See<a href="#see-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelinetrimmedpattern" class="tsd-kind-accessor">StringUtility.singleLineTrimmedPattern</a></p>
 </div>
 <div class="tsd-tag-deprecated">
 <h4 class="tsd-anchor-link" id="deprecated-7">Deprecated<a href="#deprecated-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Replaced by <a href="#issingleline" class="tsd-kind-method">StringUtility.isSingleLine</a>. Will be removed in v0.1.0-alpha.5.</p>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-21">Since<a href="#since-21" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-22">Since<a href="#since-22" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L474">src/string/string-utility.ts:474</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L546">src/string/string-utility.ts:546</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="issinglelineuppercase"><code class="tsd-tag">Static</code><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase</span><a href="#issinglelineuppercase" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -650,16 +708,20 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-15">Remarks<a href="#remarks-15" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not allow tab breaks, new lines, leading whitespace, trailing whitespace, or consecutive spaces within <code>input</code>.</p>
+<h4 class="tsd-anchor-link" id="remarks-16">Remarks<a href="#remarks-16" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
+It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.</p>
 </div>
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-12">See<a href="#see-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelineuppercase" class="tsd-kind-accessor">StringUtility.singleLineUppercase</a></p>
+<h4 class="tsd-anchor-link" id="see-13">See<a href="#see-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li><a href="#istext" class="tsd-kind-method">StringUtility.isText</a></li>
+<li><a href="#singlelineuppercase" class="tsd-kind-accessor">StringUtility.singleLineUppercase</a></li>
+</ul>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-22">Since<a href="#since-22" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-23">Since<a href="#since-23" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L347">src/string/string-utility.ts:347</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L419">src/string/string-utility.ts:419</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member tsd-is-deprecated">
 <h3 class="tsd-anchor-link" id="issinglelineuppercasetrimmedstring"><code class="tsd-tag">Static</code><span class="deprecated">is<wbr/>Single<wbr/>Line<wbr/>Uppercase<wbr/>Trimmed<wbr/>String</span><a href="#issinglelineuppercasetrimmedstring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-is-deprecated">
@@ -678,16 +740,16 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-13">See<a href="#see-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelineuppercasetrimmedpattern" class="tsd-kind-accessor">StringUtility.singleLineUppercaseTrimmedPattern</a></p>
+<h4 class="tsd-anchor-link" id="see-14">See<a href="#see-14" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#singlelineuppercasetrimmedpattern" class="tsd-kind-accessor">StringUtility.singleLineUppercaseTrimmedPattern</a></p>
 </div>
 <div class="tsd-tag-deprecated">
 <h4 class="tsd-anchor-link" id="deprecated-8">Deprecated<a href="#deprecated-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>Replaced by <a href="#issinglelineuppercase" class="tsd-kind-method">StringUtility.isSingleLineUppercase</a>. Will be removed in v0.1.0-alpha.5.</p>
 </div>
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-23">Since<a href="#since-23" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-24">Since<a href="#since-24" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L510">src/string/string-utility.ts:510</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L582">src/string/string-utility.ts:582</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isstring"><code class="tsd-tag">Static</code><span>is<wbr/>String</span><a href="#isstring" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -706,10 +768,44 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-since">
-<h4 class="tsd-anchor-link" id="since-24">Since<a href="#since-24" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+<h4 class="tsd-anchor-link" id="since-25">Since<a href="#since-25" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/8aca43365e061964ce4f08343fa7c426880895a1/src/string/string-utility.ts#L261">src/string/string-utility.ts:261</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L303">src/string/string-utility.ts:303</a></li></ul></aside></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="istext"><code class="tsd-tag">Static</code><span>is<wbr/>Text</span><a href="#istext" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="istext-1"><span class="tsd-kind-call-signature">isText</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">input</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span><a href="#istext-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Is <code>input</code> a text string?</p>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">input</span>: <span class="tsd-signature-type">unknown</span></span>
+<div class="tsd-comment tsd-typography"><p>The input to check.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <span class="tsd-signature-type">string</span></h4><p><code>true</code> if <code>input</code> is a text string; <code>false</code> otherwise.</p>
+
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-remarks">
+<h4 class="tsd-anchor-link" id="remarks-17">Remarks<a href="#remarks-17" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>A text string must satisfy all of the following rules:</p>
+<ul>
+<li>It must be a string that contains at least one non-whitespace character.</li>
+<li>Every character must be a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet <code>•</code> (U+2022), or part of an emoji sequence recommended for general interchange (RGI).</li>
+<li>A line feed must immediately follow every carriage return.</li>
+<li>It must not contain any of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or <code>¦ ¨ ª ¬ ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ</code>.</li>
+</ul>
+</div>
+<div class="tsd-tag-see">
+<h4 class="tsd-anchor-link" id="see-15">See<a href="#see-15" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="#isnonempty" class="tsd-kind-method">StringUtility.isNonEmpty</a></p>
+</div>
+<div class="tsd-tag-since">
+<h4 class="tsd-anchor-link" id="since-26">Since<a href="#since-26" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
+</div></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/acf934949844d0f203df106835e71cd961d9c880/src/string/string-utility.ts#L357">src/string/string-utility.ts:357</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -731,7 +827,7 @@ Non-empty strings must contain at least one non-whitespace character.</p>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Accessors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Accessors</summary>
 <div><a href="#singleline"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>single<wbr/>Line</span></a><a href="#singlelinelowercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>single<wbr/>Line<wbr/>Lowercase</span></a><a href="#singlelinelowercasetrimmedpattern"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>single<wbr/>Line<wbr/>Lowercase<wbr/>Trimmed<wbr/>Pattern</span></a><a href="#singlelinetrimmedpattern"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>single<wbr/>Line<wbr/>Trimmed<wbr/>Pattern</span></a><a href="#singlelineuppercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>single<wbr/>Line<wbr/>Uppercase</span></a><a href="#singlelineuppercasetrimmedpattern"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Accessor"><use href="../assets/icons.svg#icon-262144"></use></svg><span>single<wbr/>Line<wbr/>Uppercase<wbr/>Trimmed<wbr/>Pattern</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
-<div><a href="#assertempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Empty</span></a><a href="#assertnonempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Non<wbr/>Empty</span></a><a href="#assertsingleline"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line</span></a><a href="#assertsinglelinelowercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Lowercase</span></a><a href="#assertsinglelinetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Trimmed<wbr/>String</span></a><a href="#assertsinglelineuppercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Uppercase</span></a><a href="#assertstring"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>String</span></a><a href="#assertstringtype" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>String<wbr/>Type</span></a><a href="#isempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Empty</span></a><a href="#isnonempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Non<wbr/>Empty</span></a><a href="#isnonemptystring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Non<wbr/>Empty<wbr/>String</span></a><a href="#issingleline"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line</span></a><a href="#issinglelinelowercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Lowercase</span></a><a href="#issinglelinelowercasetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Lowercase<wbr/>Trimmed<wbr/>String</span></a><a href="#issinglelinetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Trimmed<wbr/>String</span></a><a href="#issinglelineuppercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase</span></a><a href="#issinglelineuppercasetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase<wbr/>Trimmed<wbr/>String</span></a><a href="#isstring"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>String</span></a></div></details></div></details></div>
+<div><a href="#assertempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Empty</span></a><a href="#assertnonempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Non<wbr/>Empty</span></a><a href="#assertsingleline"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line</span></a><a href="#assertsinglelinelowercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Lowercase</span></a><a href="#assertsinglelinetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Trimmed<wbr/>String</span></a><a href="#assertsinglelineuppercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Single<wbr/>Line<wbr/>Uppercase</span></a><a href="#assertstring"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>String</span></a><a href="#assertstringtype" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>String<wbr/>Type</span></a><a href="#asserttext"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>assert<wbr/>Text</span></a><a href="#isempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Empty</span></a><a href="#isnonempty"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Non<wbr/>Empty</span></a><a href="#isnonemptystring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Non<wbr/>Empty<wbr/>String</span></a><a href="#issingleline"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line</span></a><a href="#issinglelinelowercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Lowercase</span></a><a href="#issinglelinelowercasetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Lowercase<wbr/>Trimmed<wbr/>String</span></a><a href="#issinglelinetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Trimmed<wbr/>String</span></a><a href="#issinglelineuppercase"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase</span></a><a href="#issinglelineuppercasetrimmedstring" class="tsd-is-deprecated"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Single<wbr/>Line<wbr/>Uppercase<wbr/>Trimmed<wbr/>String</span></a><a href="#isstring"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>String</span></a><a href="#istext"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>is<wbr/>Text</span></a></div></details></div></details></div>
 <div class="site-menu">
 <nav id="tsd-sidebar-links" class="tsd-navigation"><a href="https://blwatkins.github.io/typescript-utils/" class="tsd-nav-link">TypeScript Utilities</a><a href="https://blwatkins.github.io/" class="tsd-nav-link">Brittni Watkins</a></nav>
 <nav class="tsd-navigation"><a href="../modules.html">@blwatkins/utils - v0.1.0-alpha.4</a>

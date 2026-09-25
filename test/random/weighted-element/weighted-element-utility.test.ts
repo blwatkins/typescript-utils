@@ -45,6 +45,20 @@ describe('WeightedElementUtility', (): void => {
         return StringUtility.isSingleLine(input);
     };
 
+    const successScenarios: Scenario[] = [
+        {
+            label: 'Valid weighted element objects',
+            inputs: [
+                { value: 'hello', weight: 0 },
+                { value: 'hi', weight: 0.5 },
+                { value: 'hey', weight: 1 },
+                { value: 100, weight: 0.5 },
+                { value: { key: 'value' }, weight: 1 }
+            ],
+            expected: undefined
+        }
+    ];
+
     const failureScenarios: Scenario[] = [
         {
             label: 'Non-object type inputs',
@@ -117,20 +131,6 @@ describe('WeightedElementUtility', (): void => {
                 { value: 'hello', weight: 1, day: 7 }
             ],
             expected: SchemaTypeError
-        }
-    ];
-
-    const successScenarios: Scenario[] = [
-        {
-            label: 'Valid weighted element objects',
-            inputs: [
-                { value: 'hello', weight: 0 },
-                { value: 'hi', weight: 0.5 },
-                { value: 'hey', weight: 1 },
-                { value: 100, weight: 0.5 },
-                { value: { key: 'value' }, weight: 1 }
-            ],
-            expected: undefined
         }
     ];
 

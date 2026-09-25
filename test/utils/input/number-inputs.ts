@@ -83,12 +83,6 @@ export const unsafeNumberInputs: number[] = [
     ...positiveUnsafeNumberInputs
 ];
 
-export const invalidSafeNumberInputs: unknown[] = [
-    ...nonNumberInputs,
-    ...nonFiniteNumberInputs,
-    ...unsafeNumberInputs
-];
-
 export const negativeSafeFloatInputs: number[] = [
     -Number.MIN_VALUE,
     -Number.EPSILON,
@@ -147,3 +141,19 @@ export const safeNumberInputs: number[] = [
     ...positiveSafeNumberInputs,
     ...negativeSafeNumberInputs
 ];
+
+export const invalidSafeNumberInputs: unknown[] = [
+    ...nonNumberInputs,
+    ...nonFiniteNumberInputs,
+    ...unsafeNumberInputs
+];
+
+export const invalidSafePositiveIntegerInputs: unknown[] = [
+    ...invalidSafeNumberInputs,
+    ...safeFloatInputs,
+    ...negativeSafeIntegerInputs
+];
+
+export const definedInvalidSafePositiveIntegerInputs: unknown[] = invalidSafePositiveIntegerInputs.filter((input: unknown): boolean => {
+    return input !== undefined;
+});

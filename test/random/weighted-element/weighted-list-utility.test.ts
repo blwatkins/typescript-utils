@@ -44,6 +44,28 @@ describe('WeightedListUtility', (): void => {
         return StringUtility.isSingleLine(input);
     };
 
+    const successScenarios: Scenario[] = [
+        {
+            label: 'Weighted elements weight sum is equal to 1 and all weights are valid',
+            inputs: [
+                [
+                    { value: 'hello', weight: 0 },
+                    { value: 'hi', weight: 1 }
+                ],
+                [
+                    { value: 'hello', weight: 0.5 },
+                    { value: 'hi', weight: 0.5 }
+                ],
+                [
+                    { value: 'hello', weight: 0.5 },
+                    { value: 'hi', weight: 0.25 },
+                    { value: 'howdy', weight: 0.25 }
+                ]
+            ],
+            expected: undefined
+        }
+    ];
+
     const failureScenarios: Scenario[] = [
         {
             label: 'Non-array type inputs',
@@ -130,22 +152,13 @@ describe('WeightedListUtility', (): void => {
         }
     ];
 
-    const successScenarios: Scenario[] = [
+    const stringListSuccessScenarios: Scenario[] = [
         {
-            label: 'Weighted elements weight sum is equal to 1 and all weights are valid',
+            label: 'All single line values',
             inputs: [
                 [
-                    { value: 'hello', weight: 0 },
-                    { value: 'hi', weight: 1 }
-                ],
-                [
-                    { value: 'hello', weight: 0.5 },
-                    { value: 'hi', weight: 0.5 }
-                ],
-                [
-                    { value: 'hello', weight: 0.5 },
-                    { value: 'hi', weight: 0.25 },
-                    { value: 'howdy', weight: 0.25 }
+                    { value: 'single line', weight: 1 },
+                    { value: 'another single line', weight: 0 }
                 ]
             ],
             expected: undefined
@@ -192,19 +205,6 @@ describe('WeightedListUtility', (): void => {
                 ]
             ],
             expected: SchemaTypeError
-        }
-    ];
-
-    const stringListSuccessScenarios: Scenario[] = [
-        {
-            label: 'All single line values',
-            inputs: [
-                [
-                    { value: 'single line', weight: 1 },
-                    { value: 'another single line', weight: 0 }
-                ]
-            ],
-            expected: undefined
         }
     ];
 

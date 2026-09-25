@@ -26,7 +26,7 @@ import { NumberUtility } from '../../number';
 
 /**
  * Deterministic seeded pseudorandom number generator.
- * This generator utilizes the xoshiro128** algorithm, which is a pseudorandom number generator suitable for general-purpose use.
+ * This generator uses the xoshiro128** algorithm, which is a pseudorandom number generator suitable for general-purpose use.
  *
  * @since 0.1.0
  */
@@ -54,7 +54,7 @@ export class SeededRandomNumberGenerator {
      * @since 0.1.0
      */
     public constructor(state: [number, number, number, number]) {
-        this.#assertState(state);
+        this.#assertValidState(state);
         this.#state = [state[0], state[1], state[2], state[3]];
     }
 
@@ -70,7 +70,7 @@ export class SeededRandomNumberGenerator {
      * @since 0.1.0
      */
     public next(): number {
-        // xoshiro128** output: rotl(this.#state[1] * 5, 7) * 9, mapped to [0, 1)
+        // xoshiro128** output
         const result = SeededRandomNumberGenerator.#rotl(Math.imul(this.#state[1], 5), 7);
         const output = (Math.imul(result, 9) >>> 0) / 4294967296;
 
@@ -112,41 +112,41 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
-     * Assert that `input` is a valid state array.
+     * Assert that `state` is a valid state array.
      *
      * @remarks For a state array to be valid, it must be an array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
      * Additionally, a valid state array must have at least one element that is greater than zero.
      *
      * @see {@link TypeAssertions.assertArray}
      *
-     * @param {unknown} input - The input to check.
+     * @param {unknown} state - The state to check.
      *
-     * @returns {asserts input is [number, number, number, number]} Asserts that `input` is a valid state array.
+     * @returns {asserts state is [number, number, number, number]} Asserts that `state` is a valid state array.
      *
-     * @throws {PrimitiveTypeError} When `input` is not an array with exactly 4 elements.
-     * @throws {ValueRangeError} When any element of `input` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
-     * @throws {ValueRangeError} When all elements of `input` are equal to zero.
+     * @throws {PrimitiveTypeError} When `state` is not an array with exactly 4 elements.
+     * @throws {ValueRangeError} When any element of `state` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
+     * @throws {ValueRangeError} When all elements of `state` are equal to zero.
      *
      * @private
      */
-    #assertState(input: unknown): asserts input is [number, number, number, number] {
-        TypeAssertions.assertArray(input);
-        if (input.length !== 4) throw new PrimitiveTypeError('Input must have exactly 4 elements.');
+    #assertValidState(state: unknown): asserts state is [number, number, number, number] {
+        TypeAssertions.assertArray(state);
+        if (state.length !== 4) throw new PrimitiveTypeError('state must have exactly 4 elements.');
 
-        const allValidStateValues: boolean = input.every((value: unknown): boolean => {
+        const allValidStateValues: boolean = state.every((value: unknown): boolean => {
             return NumberUtility.isPositiveInteger(value, true) && value <= SeededRandomNumberGenerator.#maxStateValue;
         });
 
         if (!allValidStateValues) {
-            throw new ValueRangeError('All elements of input must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
+            throw new ValueRangeError('All elements of state must be 32-bit unsigned integers (maximum value 0xFFFFFFFF).');
         }
 
-        const allZeroValues: boolean = input.every((value: unknown): boolean => {
+        const allZeroValues: boolean = state.every((value: unknown): boolean => {
             return NumberUtility.isFinite(value) && value === 0;
         });
 
         if (allZeroValues) {
-            throw new ValueRangeError('Input must have at least one element that is greater than 0.');
+            throw new ValueRangeError('state must have at least one element that is greater than 0.');
         }
     }
 }

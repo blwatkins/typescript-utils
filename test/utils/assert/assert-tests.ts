@@ -40,7 +40,7 @@ export function testAssertMethod(
 
             test.each(
                 successCases
-            )(`${method.name}($input) should not throw an error`, ({ input: testInput }: TestCase): void => {
+            )(`%# - ${method.name}($input) should not throw an error`, ({ input: testInput }: TestCase): void => {
                 expect((): void => {
                     method(testInput);
                 }).not.toThrow();
@@ -154,16 +154,16 @@ export function testIsMethod(
     failureScenarios: Scenario[]
 ): void {
     const scenarios: Scenario[] = [
-        ...failureScenarios.map((scenario: Scenario): Scenario => {
-            return {
-                ...scenario,
-                expected: false
-            };
-        }),
         ...successScenarios.map((scenario: Scenario): Scenario => {
             return {
                 ...scenario,
                 expected: true
+            };
+        }),
+        ...failureScenarios.map((scenario: Scenario): Scenario => {
+            return {
+                ...scenario,
+                expected: false
             };
         })
     ];

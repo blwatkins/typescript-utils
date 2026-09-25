@@ -117,9 +117,9 @@ Custom error classes must:
 
 Choose the error type by the kind of failure, not by the call site:
 
-- `PrimitiveTypeError` — input fails a `typeof`-level type check with no schema involved (e.g., not a string, not a number, not a function, not an object)
+- `PrimitiveTypeError` — input fails a type check with no schema involved (e.g., not a string, not a number, not a function, not an object), including a classifying guard that folds a content rule into the type it narrows to
 - `SchemaTypeError` — input is checked against an expected object schema and fails it, either because it does not satisfy the schema or because it is not an object at all
-- `ValueRangeError` — input is the correct type but falls outside an allowed range or bound
+- `ValueRangeError` — input has already passed its type check, but its value falls outside what is allowed: a range, a bound, or a content rule on an already-typed value
 - `StaticInstanceError` — a static class constructor was invoked
 
 Custom error types intentionally do not expose a Node.js-style `code` property.
@@ -159,8 +159,9 @@ A **classifying guard** answers "what is this?" about an input of unknown proven
 It takes a single `unknown` parameter and returns a type predicate: every input yields `true` or `false`, and no input makes it throw.
 Where such a guard needs a check that would itself reject a bad argument, it establishes the type first, so that check is never reached with an argument it would throw on.
 
-A **relational guard** answers "how do these compare?" about parameters that are already typed.
-It takes named parameters of concrete types, returns a plain `boolean` rather than a type predicate, and validates its arguments before comparing them.
+A **constraint guard** answers "does this value satisfy the constraint?" about parameters that are already typed.
+The constraint may relate one parameter to another, bound a parameter against an internal state, or restrict its content.
+It takes named parameters of concrete types, returns a plain `boolean` rather than a type predicate, and validates its arguments before checking the constraint.
 An argument of the wrong type is a broken call rather than one of the answers, so it throws instead of returning `false`.
 
 Choose the shape from the question the guard answers, not from what a call site would find convenient.
@@ -171,16 +172,16 @@ Do not encode the checked type in the member name — the `assert` or `is` prefi
 Where a regular-expression getter backs a guard, it carries the same concept without the prefix.
 This is the guard-pair application of the suffix guidance under ["Code Style Preferences and Conventions"](#code-style-preferences-and-conventions); where the two overlap they say the same thing.
 
-**The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, or a non-string, falls through to the default message.
+**The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, a non-string, or any string that does not pass `StringUtility.isText`, falls through to the default message.
 This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
 It is also observable behavior, asserted by the shared assertion-contract helpers under `test/utils/assert/` for the failures each guard's `message` covers.
 A new `assert*` method therefore either applies this check itself or forwards `message` unchanged to a method that does; a member that delegates to another guard, including a deprecated alias delegating to its replacement, takes the second form.
 Never use `message` unconditionally.
 
 **How far `message` reaches.** A classifying pair has one failure, so `message` covers it.
-A relational pair can have multiple, and `message` covers only the relation the pair is named for.
+A constraint pair can have multiple, and `message` covers only the constraint the pair is named for.
 Argument validation runs first, inside the guard, so a caller's `message` never reaches the argument failure path.
-This is deliberate rather than a gap: the caller's message describes the relation it expected, which says nothing useful about an argument that was wrong before any comparison happened.
+This is deliberate rather than a gap: the caller's message describes the constraint it expected, which says nothing useful about an argument that was wrong before the constraint was checked.
 Do not treat the split as a defect, and do not route `message` into the argument validation.
 
 ### Deprecation
@@ -382,6 +383,7 @@ Conventions for the pattern:
 - Before adding a block, check whether a shared scenario array already carries its inputs through the method under test. A block that restates inputs a shared array already holds adds test count without adding coverage, and has to be kept in step with that array by hand.
 - Declare a scenario array once in the widest scope that needs it and reuse it across every method that shares those inputs, rather than repeating it per method.
 - Derive a related set from an existing array with `filter` or `map` rather than writing a near-copy.
+- Generate fixture inputs from the rule they exercise rather than listing variations by hand, when possible, and remove duplicates from the result. A generated list stays complete when the rule changes, where a hand-written list only covers the cases its author thought of.
 - Use `SingleInputScenario` when a scenario describes one input rather than a set, so a `test.each` can run over the scenarios directly. It suits a case that pairs one argument combination with one expected result.
 - Put a scenario set shared across files in `test/utils/test-case/scenarios/`, exported for the suites that consume it, so an edge case added once reaches every suite that runs it.
 - `assert*` and `is*` methods taking a single input use the shared assertion-contract helpers under `test/utils/assert/`, which take `Scenario[]` for success and failure directly and emit their own `describe`/`test` blocks. Prefer those over hand-written scenario blocks where the method's shape fits.
@@ -423,7 +425,7 @@ describe.each(
 - For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`). This attributes a failure to one argument rather than leaving it ambiguous.
 - Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
 - Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method.
-- A relational guard's suite uses both mechanisms: its wrong-type inputs belong in the `Argument errors` block, and its in-type failures go through the shared assertion-contract helpers, reached by a local wrapper that adapts the argument list to the single-input shape those helpers take. A classifying guard needs no `Argument errors` block because it has no wrong-type failure to attribute. The presence or absence of that block therefore tracks which shape a guard is, and is not on its own a sign that a suite is inconsistent.
+- A constraint guard's suite uses both mechanisms: its wrong-type inputs belong in the `Argument errors` block, and its in-type failures go through the shared assertion-contract helpers, reached by a local wrapper that adapts the argument list to the single-input shape those helpers take. A classifying guard needs no `Argument errors` block because it has no wrong-type failure to attribute. The presence or absence of that block therefore tracks which shape a guard is, and is not on its own a sign that a suite is inconsistent.
 - Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks, or as their own scenarios when the inputs group meaningfully. The argument-validation conventions above do not apply to them.
 
 ### Validation Steps
