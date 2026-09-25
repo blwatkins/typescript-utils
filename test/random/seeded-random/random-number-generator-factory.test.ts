@@ -31,7 +31,7 @@ import {
     ValueRangeError
 } from '../../../src';
 
-import { definedNonStringInputs, nonSingleLineStringInputs, nonStringInputs } from '../../utils/input/string-inputs';
+import { definedNonStringInputs, nonStringInputs, singleLineFailureStringInputs } from '../../utils/input/string-inputs';
 
 import { definedInvalidSafePositiveIntegerInputs } from '../../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
@@ -92,7 +92,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
         },
         {
             label: 'Invalid seed - not a single-line string',
-            inputs: nonSingleLineStringInputs.map((input: unknown): SharedArgs => {
+            inputs: singleLineFailureStringInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: input
                 };
@@ -111,7 +111,7 @@ describe('RandomNumberGeneratorFactory', (): void => {
         },
         {
             label: 'Invalid namespace - not a single-line string',
-            inputs: nonSingleLineStringInputs.map((input: unknown): SharedArgs => {
+            inputs: singleLineFailureStringInputs.map((input: unknown): SharedArgs => {
                 return {
                     seed: asciiSeed,
                     namespace: input
