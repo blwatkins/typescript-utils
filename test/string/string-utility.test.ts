@@ -27,6 +27,8 @@ import { PrimitiveTypeError, StaticInstanceError, StringUtility } from '../../sr
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
+    emptyStringInputs,
+    nonEmptyStringInputs,
     nonStringInputs,
     stringInputs
 } from '../utils/input/string-inputs';
@@ -53,14 +55,23 @@ describe('StringUtility', (): void => {
         }
     ];
 
-    // const emptySuccessScenarios: Scenario[] = [
-    //     {
-    //         label: 'Empty string inputs',
-    //         inputs: emptyStringInputs,
-    //         expected: undefined
-    //     }
-    // ];
-    //
+    const emptySuccessScenarios: Scenario[] = [
+        {
+            label: 'Empty string inputs',
+            inputs: emptyStringInputs,
+            expected: undefined
+        }
+    ];
+
+    const emptyFailureScenarios: Scenario[] = [
+        ...stringFailureScenarios,
+        {
+            label: 'Non-empty string inputs',
+            inputs: nonEmptyStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
     // const numsAndSymbolsScenario: Scenario = {
     //     label: 'Caseless single-line inputs',
     //     inputs: singleLineCaselessInputs,
@@ -84,17 +95,6 @@ describe('StringUtility', (): void => {
     //     inputs: nonTextStringInputs,
     //     expected: PrimitiveTypeError
     // };
-    //
-    // const stringFailureScenarios: Scenario[] = [nonStringErrorScenario];
-    //
-    // const emptyFailureScenarios: Scenario[] = [
-    //     nonStringErrorScenario,
-    //     {
-    //         label: 'Non-empty string inputs',
-    //         inputs: nonEmptyStringInputs,
-    //         expected: PrimitiveTypeError
-    //     }
-    // ];
     //
     // const nonEmptyFailureScenarios: Scenario[] = [
     //     nonStringErrorScenario,
@@ -223,21 +223,21 @@ describe('StringUtility', (): void => {
         });
     });
 
-    // describe('Empty', (): void => {
-    //     describe('assertEmpty', (): void => {
-    //         testAssertMethod(
-    //             StringUtility.assertEmpty.bind(StringUtility),
-    //             emptySuccessScenarios,
-    //             emptyFailureScenarios,
-    //             'Expected an empty string.'
-    //         );
-    //     });
-    //
-    //     describe('isEmpty', (): void => {
-    //         testIsMethod(StringUtility.isEmpty.bind(StringUtility), emptySuccessScenarios, emptyFailureScenarios);
-    //     });
-    // });
-    //
+    describe('Empty', (): void => {
+        describe('assertEmpty', (): void => {
+            testAssertMethod(
+                StringUtility.assertEmpty.bind(StringUtility),
+                emptySuccessScenarios,
+                emptyFailureScenarios,
+                'Expected an empty string.'
+            );
+        });
+
+        describe('isEmpty', (): void => {
+            testIsMethod(StringUtility.isEmpty.bind(StringUtility), emptySuccessScenarios, emptyFailureScenarios);
+        });
+    });
+
     // describe('NonEmpty', (): void => {
     //     describe('assertNonEmpty', (): void => {
     //         testAssertMethod(
@@ -356,16 +356,16 @@ describe('StringUtility', (): void => {
     //         expect(StringUtility.singleLineTrimmedPattern).toBe(StringUtility.singleLine);
     //     });
     // });
-    //
-    // describe('[DEPRECATED] assertStringType', (): void => {
-    //     testAssertMethod(
-    //         StringUtility.assertStringType.bind(StringUtility),
-    //         stringSuccessScenarios,
-    //         stringFailureScenarios,
-    //         'Expected a string.'
-    //     );
-    // });
-    //
+
+    describe('[DEPRECATED] assertStringType', (): void => {
+        testAssertMethod(
+            StringUtility.assertStringType.bind(StringUtility),
+            stringSuccessScenarios,
+            stringFailureScenarios,
+            'Expected a string.'
+        );
+    });
+
     // describe('[DEPRECATED] assertSingleLineTrimmedString', (): void => {
     //     testAssertMethod(
     //         StringUtility.assertSingleLineTrimmedString.bind(StringUtility),

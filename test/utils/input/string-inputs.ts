@@ -293,6 +293,11 @@ export const singleLineFailureStringInputs: string[] = unique([
     ...singleLineFailureTextInputs
 ]);
 
+export const nonEmptyStringInputs: string[] = unique([
+    ...nonTextStringInputs,
+    ...textInputs
+]);
+
 export const stringInputs: string[] = unique([
     ...emptyStringInputs,
     ...nonTextStringInputs,
