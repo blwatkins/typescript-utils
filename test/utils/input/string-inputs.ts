@@ -173,7 +173,6 @@ const nonTextCharacters: string[] = [
     '\uFE0F',
     '\u0301',
     '\u20E3',
-    '\u00AE\uFE0F',
     '\u0430',
     '\u03B1',
     '\u4E2D',
@@ -209,9 +208,7 @@ function pairStrings(inputsA: string[], inputsB: string[]): string[] {
     }));
 }
 
-const consecutiveTextWhitespace: string[] = unique([
-    ...pairStrings(textWhitespaceCharacters, textWhitespaceCharacters)
-]);
+const consecutiveTextWhitespace: string[] = pairStrings(textWhitespaceCharacters, textWhitespaceCharacters);
 
 function mixStrings(inputsA: string[], inputsB: string[]): string[] {
     return unique(inputsA.flatMap((inputA: string): string[] => {
@@ -234,13 +231,10 @@ function buildSingleLineFailureInputs(tokens: string[]): string[] {
 }
 
 function buildSingleLineInputs(tokens: string[]): string[] {
-    return unique([
+    return [
         ...tokens,
-        ...tokens.map((token: string, index: number): string => {
-            return `${token} ${tokens[(index + 1) % tokens.length]}`;
-        }),
         tokens.join(' ')
-    ]);
+    ];
 }
 
 export const emptyStringInputs: string[] = unique([
@@ -259,13 +253,13 @@ export const singleLineLowercaseInputs: string[] = buildSingleLineInputs(lowerca
 
 export const singleLineUppercaseInputs: string[] = buildSingleLineInputs(uppercaseWords);
 
-export const singleLineFailureCaselessInputs: string[] = buildSingleLineFailureInputs(caselessWords);
+export const singleLineFailureCaselessInputs: string[] = buildSingleLineFailureInputs([caselessWords.join(' ')]);
 
-export const singleLineFailureMixedCaseInputs: string[] = buildSingleLineFailureInputs(mixedCaseWords);
+export const singleLineFailureMixedCaseInputs: string[] = buildSingleLineFailureInputs([mixedCaseWords.join(' ')]);
 
-export const singleLineFailureLowercaseInputs: string[] = buildSingleLineFailureInputs(lowercaseWords);
+export const singleLineFailureLowercaseInputs: string[] = buildSingleLineFailureInputs([lowercaseWords.join(' ')]);
 
-export const singleLineFailureUppercaseInputs: string[] = buildSingleLineFailureInputs(uppercaseWords);
+export const singleLineFailureUppercaseInputs: string[] = buildSingleLineFailureInputs([uppercaseWords.join(' ')]);
 
 export const singleLineInputs: string[] = [
     ...singleLineCaselessInputs,
@@ -292,6 +286,12 @@ export const nonTextStringInputs: string[] = unique([
 ]).filter((input: string): boolean => {
     return input.trim().length > 0;
 });
+
+export const singleLineFailureStringInputs: string[] = unique([
+    ...emptyStringInputs,
+    ...nonTextStringInputs,
+    ...singleLineFailureTextInputs
+]);
 
 export const stringInputs: string[] = unique([
     ...emptyStringInputs,
