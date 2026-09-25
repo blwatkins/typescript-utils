@@ -36,7 +36,13 @@ description: "Resources and references used to develop the TypeScript Utilities 
 
 - [Xoshiro128** Algorithm](https://github.com/bryc/code/blob/master/jshash/PRNGs.md#xoshiro)
 
-## Unicode Text
+## Text
+
+### ASCII Text
+
+- [ASCII Table](https://www.ascii-code.com/)
+
+### Unicode Text
 
 - [Unicode Character Ranges](https://jrgraphix.net/r/Unicode/)
 - [Unicode code converter](https://r12a.github.io/app-conversion/)
