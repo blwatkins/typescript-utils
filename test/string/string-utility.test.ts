@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe } from 'vitest';
+import { describe, test, expect } from 'vitest';
 
 import { PrimitiveTypeError, StaticInstanceError, StringUtility } from '../../src';
 
@@ -72,6 +72,23 @@ describe('StringUtility', (): void => {
         }
     ];
 
+    const nonEmptySuccessScenarios: Scenario[] = [
+        {
+            label: 'Non-empty string inputs',
+            inputs: nonEmptyStringInputs,
+            expected: undefined
+        }
+    ];
+
+    const nonEmptyFailureScenarios: Scenario[] = [
+        ...stringFailureScenarios,
+        {
+            label: 'Empty string inputs',
+            inputs: emptyStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
     // const numsAndSymbolsScenario: Scenario = {
     //     label: 'Caseless single-line inputs',
     //     inputs: singleLineCaselessInputs,
@@ -95,19 +112,6 @@ describe('StringUtility', (): void => {
     //     inputs: nonTextStringInputs,
     //     expected: PrimitiveTypeError
     // };
-    //
-    // const nonEmptyFailureScenarios: Scenario[] = [
-    //     nonStringErrorScenario,
-    //     emptyStringErrorScenario
-    // ];
-    //
-    // const nonEmptySuccessScenarios: Scenario[] = [
-    //     {
-    //         label: 'Non-empty string inputs',
-    //         inputs: nonEmptyStringInputs,
-    //         expected: undefined
-    //     }
-    // ];
     //
     // const textFailureScenarios: Scenario[] = [
     //     nonStringErrorScenario,
@@ -238,21 +242,21 @@ describe('StringUtility', (): void => {
         });
     });
 
-    // describe('NonEmpty', (): void => {
-    //     describe('assertNonEmpty', (): void => {
-    //         testAssertMethod(
-    //             StringUtility.assertNonEmpty.bind(StringUtility),
-    //             nonEmptySuccessScenarios,
-    //             nonEmptyFailureScenarios,
-    //             'Expected a non-empty string.'
-    //         );
-    //     });
-    //
-    //     describe('isNonEmpty', (): void => {
-    //         testIsMethod(StringUtility.isNonEmpty.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
-    //     });
-    // });
-    //
+    describe('NonEmpty', (): void => {
+        describe('assertNonEmpty', (): void => {
+            testAssertMethod(
+                StringUtility.assertNonEmpty.bind(StringUtility),
+                nonEmptySuccessScenarios,
+                nonEmptyFailureScenarios,
+                'Expected a non-empty string.'
+            );
+        });
+
+        describe('isNonEmpty', (): void => {
+            testIsMethod(StringUtility.isNonEmpty.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
+        });
+    });
+
     // describe('Text', (): void => {
     //     describe('assertText', (): void => {
     //         testAssertMethod(
@@ -339,23 +343,23 @@ describe('StringUtility', (): void => {
 
     /* ******************* TODO: DEPRECATED ******************* */
 
-    // describe('[DEPRECATED] singleLineLowercaseTrimmedPattern', (): void => {
-    //     test('should return the same regular expression as singleLineLowercase', (): void => {
-    //         expect(StringUtility.singleLineLowercaseTrimmedPattern).toBe(StringUtility.singleLineLowercase);
-    //     });
-    // });
-    //
-    // describe('[DEPRECATED] singleLineUppercaseTrimmedPattern', (): void => {
-    //     test('should return the same regular expression as singleLineUppercase', (): void => {
-    //         expect(StringUtility.singleLineUppercaseTrimmedPattern).toBe(StringUtility.singleLineUppercase);
-    //     });
-    // });
-    //
-    // describe('[DEPRECATED] singleLineTrimmedPattern', (): void => {
-    //     test('should return the same regular expression as singleLine', (): void => {
-    //         expect(StringUtility.singleLineTrimmedPattern).toBe(StringUtility.singleLine);
-    //     });
-    // });
+    describe('[DEPRECATED] singleLineLowercaseTrimmedPattern', (): void => {
+        test('should return the same regular expression as singleLineLowercase', (): void => {
+            expect(StringUtility.singleLineLowercaseTrimmedPattern).toBe(StringUtility.singleLineLowercase);
+        });
+    });
+
+    describe('[DEPRECATED] singleLineUppercaseTrimmedPattern', (): void => {
+        test('should return the same regular expression as singleLineUppercase', (): void => {
+            expect(StringUtility.singleLineUppercaseTrimmedPattern).toBe(StringUtility.singleLineUppercase);
+        });
+    });
+
+    describe('[DEPRECATED] singleLineTrimmedPattern', (): void => {
+        test('should return the same regular expression as singleLine', (): void => {
+            expect(StringUtility.singleLineTrimmedPattern).toBe(StringUtility.singleLine);
+        });
+    });
 
     describe('[DEPRECATED] assertStringType', (): void => {
         testAssertMethod(
@@ -374,11 +378,11 @@ describe('StringUtility', (): void => {
     //         'Expected a single-line string.'
     //     );
     // });
-    //
-    // describe('[DEPRECATED] isNonEmptyString', (): void => {
-    //     testIsMethod(StringUtility.isNonEmptyString.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
-    // });
-    //
+
+    describe('[DEPRECATED] isNonEmptyString', (): void => {
+        testIsMethod(StringUtility.isNonEmptyString.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
+    });
+
     // describe('[DEPRECATED] isSingleLineTrimmedString', (): void => {
     //     testIsMethod(StringUtility.isSingleLineTrimmedString.bind(StringUtility), singleLineSuccessScenarios, singleLineFailureScenarios);
     // });
