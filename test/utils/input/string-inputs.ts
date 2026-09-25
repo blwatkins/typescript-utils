@@ -125,7 +125,6 @@ const rejectedLatin1Characters: string[] = [
     '\u00AA',
     '\u00AC',
     '\u00AD',
-    '\u00AE',
     '\u00AF',
     '\u00B2',
     '\u00B3',

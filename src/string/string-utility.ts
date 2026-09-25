@@ -27,7 +27,7 @@ const regularExpressions = {
     singleLineUppercase: /^[^\s\p{Ll}]+(?:\u0020[^\s\p{Ll}]+)*$/u,
     singleLine: /^\S+(?:\u0020\S+)*$/,
     textCharacters: /^(?:[\t\n\r\u0020-\u007E\u00A1-\u00FF\u2022]|\p{RGI_Emoji})+$/v,
-    rejectedTextCharacters: /[\u00A6\u00A8\u00AA\u00AC-\u00AF\u00B2-\u00BA\u00BC-\u00BE\u00C6\u00D0\u00D7\u00D8\u00DE\u00DF\u00E6\u00F0\u00F8\u00FE]|\r(?!\n)/
+    rejectedTextCharacters: /[\u00A6\u00A8\u00AA\u00AC-\u00AD\u00AF\u00B2-\u00BA\u00BC-\u00BE\u00C6\u00D0\u00D7\u00D8\u00DE\u00DF\u00E6\u00F0\u00F8\u00FE]|\r(?!\n)/
 };
 
 /**
@@ -46,6 +46,22 @@ export class StringUtility {
      */
     private constructor() {
         throw new StaticInstanceError('StringUtility is a static class and cannot be instantiated.');
+    }
+
+    /**
+     * Get the regular expression for single-line mixed-case strings.
+     *
+     * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
+     * It matches non-whitespace characters separated by single spaces (U+0020).
+     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
+     *
+     * @returns {RegExp}
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static get singleLine(): RegExp {
+        return regularExpressions.singleLine;
     }
 
     /**
@@ -78,22 +94,6 @@ export class StringUtility {
      */
     public static get singleLineUppercase(): RegExp {
         return regularExpressions.singleLineUppercase;
-    }
-
-    /**
-     * Get the regular expression for single-line mixed-case strings.
-     *
-     * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
-     * It matches non-whitespace characters separated by single spaces (U+0020).
-     * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
-     *
-     * @returns {RegExp}
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static get singleLine(): RegExp {
-        return regularExpressions.singleLine;
     }
 
     /**
@@ -178,11 +178,11 @@ export class StringUtility {
     /**
      * Assert that `input` is a text string.
      *
-     * @remarks A text string must satisfy all of the following:
-     * - It is a string that contains at least one non-whitespace character.
-     * - Every character is a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet `•` (U+2022), or part of an emoji sequence recommended for general interchange (RGI).
-     * - Every carriage return is immediately followed by a line feed.
-     * - It contains none of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or `¦ ¨ ª ¬ ® ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ`.
+     * @remarks A text string must satisfy all of the following rules:
+     * - It must be a string that contains at least one non-whitespace character.
+     * - Every character must be a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet `•` (U+2022), or part of an emoji sequence recommended for general interchange (RGI).
+     * - A line feed must immediately follow every carriage return.
+     * - It must not contain any of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or `¦ ¨ ª ¬ ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ`.
      *
      * @see {@link StringUtility.isText}
      *
@@ -209,7 +209,7 @@ export class StringUtility {
     /**
      * Assert that `input` is a single-line string.
      *
-     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isSingleLine}
@@ -237,7 +237,7 @@ export class StringUtility {
     /**
      * Assert that `input` is a single-line lowercase string.
      *
-     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isSingleLineLowercase}
@@ -265,7 +265,7 @@ export class StringUtility {
     /**
      * Assert that `input` is a single-line uppercase string.
      *
-     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isSingleLineUppercase}
@@ -339,11 +339,11 @@ export class StringUtility {
     /**
      * Is `input` a text string?
      *
-     * @remarks A text string must satisfy all of the following:
-     * - It is a string that contains at least one non-whitespace character.
-     * - Every character is a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet `•` (U+2022), or part of an emoji sequence recommended for general interchange (RGI).
-     * - Every carriage return is immediately followed by a line feed.
-     * - It contains none of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or `¦ ¨ ª ¬ ® ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ`.
+     * @remarks A text string must satisfy all of the following rules:
+     * - It must be a string that contains at least one non-whitespace character.
+     * - Every character must be a tab, a line feed, a carriage return, printable Basic Latin (U+0020 to U+007E), printable Latin-1 Supplement (U+00A1 to U+00FF), the bullet `•` (U+2022), or part of an emoji sequence recommended for general interchange (RGI).
+     * - A line feed must immediately follow every carriage return.
+     * - It must not contain any of the following Latin-1 Supplement characters: the soft hyphen (U+00AD), or `¦ ¨ ª ¬ ¯ ² ³ ´ µ ¶ · ¸ ¹ º ¼ ½ ¾ × Æ Ð Ø Þ ß æ ð ø þ`.
      *
      * @see {@link StringUtility.isNonEmpty}
      *
@@ -363,7 +363,7 @@ export class StringUtility {
     /**
      * Is `input` a single-line string?
      *
-     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isText}
@@ -383,7 +383,7 @@ export class StringUtility {
     /**
      * Is `input` a single-line lowercase string?
      *
-     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isText}
@@ -403,7 +403,7 @@ export class StringUtility {
     /**
      * Is `input` a single-line uppercase string?
      *
-     * @remarks A single-line string is a text string, as defined by {@link StringUtility.isText}, whose non-whitespace characters are separated by single spaces (U+0020).
+     * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
      *
      * @see {@link StringUtility.isText}
