@@ -45,19 +45,6 @@ import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case
 describe('NumberUtility', (): void => {
     testStaticClassConstructor('NumberUtility', NumberUtility as unknown as new () => unknown, StaticInstanceError);
 
-    const finiteFailureScenarios: Scenario[] = [
-        {
-            label: 'Non-number inputs',
-            inputs: nonNumberInputs,
-            expected: PrimitiveTypeError
-        },
-        {
-            label: 'Non-finite number inputs',
-            inputs: nonFiniteNumberInputs,
-            expected: PrimitiveTypeError
-        }
-    ];
-
     const finiteSuccessScenarios: Scenario[] = [
         {
             label: 'Number inputs within the safe integer range',
@@ -73,6 +60,19 @@ describe('NumberUtility', (): void => {
             label: 'Zero inputs',
             inputs: zeroInputs,
             expected: undefined
+        }
+    ];
+
+    const finiteFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-number inputs',
+            inputs: nonNumberInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Non-finite number inputs',
+            inputs: nonFiniteNumberInputs,
+            expected: PrimitiveTypeError
         }
     ];
 
@@ -92,6 +92,19 @@ describe('NumberUtility', (): void => {
     });
 
     describe('Integer', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Zero inputs',
+                inputs: zeroInputs,
+                expected: undefined
+            },
+            {
+                label: 'Integer inputs',
+                inputs: safeIntegerInputs,
+                expected: undefined
+            }
+        ];
+
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
@@ -115,19 +128,6 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Zero inputs',
-                inputs: zeroInputs,
-                expected: undefined
-            },
-            {
-                label: 'Integer inputs',
-                inputs: safeIntegerInputs,
-                expected: undefined
-            }
-        ];
-
         describe('assertInteger', (): void => {
             testAssertMethod(
                 NumberUtility.assertInteger.bind(NumberUtility),
@@ -143,6 +143,14 @@ describe('NumberUtility', (): void => {
     });
 
     describe('PositiveInteger', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Positive integer inputs',
+                inputs: positiveSafeIntegerInputs,
+                expected: undefined
+            }
+        ];
+
         const failureScenarios: Scenario[] = [
             {
                 label: 'Non-number inputs',
@@ -168,14 +176,6 @@ describe('NumberUtility', (): void => {
                 label: 'Negative integer inputs',
                 inputs: negativeSafeIntegerInputs,
                 expected: PrimitiveTypeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Positive integer inputs',
-                inputs: positiveSafeIntegerInputs,
-                expected: undefined
             }
         ];
 
@@ -256,24 +256,6 @@ describe('NumberUtility', (): void => {
     });
 
     describe('Safe', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: nonNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: nonFiniteNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Number inputs outside the safe integer range',
-                inputs: unsafeNumberInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
         const successScenarios: Scenario[] = [
             {
                 label: 'Number inputs within the safe integer range',
@@ -292,6 +274,24 @@ describe('NumberUtility', (): void => {
             }
         ];
 
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Non-number inputs',
+                inputs: nonNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Non-finite number inputs',
+                inputs: nonFiniteNumberInputs,
+                expected: PrimitiveTypeError
+            },
+            {
+                label: 'Number inputs outside the safe integer range',
+                inputs: unsafeNumberInputs,
+                expected: PrimitiveTypeError
+            }
+        ];
+
         describe('assertSafe', (): void => {
             testAssertMethod(
                 NumberUtility.assertSafe.bind(NumberUtility),
@@ -307,6 +307,34 @@ describe('NumberUtility', (): void => {
     });
 
     describe('LessThan', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'a less than b',
+                inputs: [
+                    { a: 0, b: 10 },
+                    { a: Number.MIN_SAFE_INTEGER, b: 0 },
+                    { a: 0, b: Number.MAX_SAFE_INTEGER },
+                    { a: Number.MIN_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
+                    { a: -500, b: -100 },
+                    { a: -5.123, b: -3.123 },
+                    { a: 10, b: 100 },
+                    { a: 10.123, b: 100.123 },
+                    { a: 10.12345678912344, b: 10.12345678912345 },
+                    { a: -10.12345678912345, b: -10.12345678912344 }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'a less than b by the smallest representable amount',
+                inputs: [
+                    { a: 0, b: Number.MIN_VALUE },
+                    { a: 1, b: 1 + Number.EPSILON },
+                    { a: -1 - Number.EPSILON, b: -1 }
+                ],
+                expected: undefined
+            }
+        ];
+
         const failureScenarios: Scenario[] = [
             {
                 label: 'a greater than b',
@@ -319,7 +347,9 @@ describe('NumberUtility', (): void => {
                     { a: -3.123, b: -5.123 },
                     { a: 100, b: 10 },
                     { a: 100.123, b: 10.123 },
-                    { a: Number.EPSILON, b: 0 }
+                    { a: Number.EPSILON, b: 0 },
+                    { a: 10.12345678912345, b: 10.12345678912344 },
+                    { a: -10.12345678912344, b: -10.12345678912345 },
                 ],
                 expected: ValueRangeError
             },
@@ -336,32 +366,6 @@ describe('NumberUtility', (): void => {
                     { a: -5.123, b: -5.123 }
                 ],
                 expected: ValueRangeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'a less than b',
-                inputs: [
-                    { a: 0, b: 10 },
-                    { a: Number.MIN_SAFE_INTEGER, b: 0 },
-                    { a: 0, b: Number.MAX_SAFE_INTEGER },
-                    { a: Number.MIN_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
-                    { a: -500, b: -100 },
-                    { a: -5.123, b: -3.123 },
-                    { a: 10, b: 100 },
-                    { a: 10.123, b: 100.123 }
-                ],
-                expected: undefined
-            },
-            {
-                label: 'a less than b by the smallest representable amount',
-                inputs: [
-                    { a: 0, b: Number.MIN_VALUE },
-                    { a: 1, b: 1 + Number.EPSILON },
-                    { a: -1 - Number.EPSILON, b: -1 }
-                ],
-                expected: undefined
             }
         ];
 
@@ -445,6 +449,54 @@ describe('NumberUtility', (): void => {
     });
 
     describe('InRange', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'Unequal min and max, value in range',
+                inputs: [
+                    { value: 0, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: 0, min: -10, max: 10 },
+                    { value: -10, min: -10, max: 10 },
+                    { value: 10, min: -10, max: 10 },
+                    { value: -5, min: -10, max: -1 },
+                    { value: -10, min: -10, max: -1 },
+                    { value: -1, min: -10, max: -1 },
+                    { value: 50, min: 10, max: 100 },
+                    { value: 10, min: 10, max: 100 },
+                    { value: 100, min: 10, max: 100 },
+                    { value: 0, min: -10.123, max: 10.123 },
+                    { value: -10.123, min: -10.123, max: 10.123 },
+                    { value: 10.123, min: -10.123, max: 10.123 },
+                    { value: -5, min: -10.123, max: -1.123 },
+                    { value: -10.123, min: -10.123, max: -1.123 },
+                    { value: -1.132, min: -10.123, max: -1.123 },
+                    { value: 50, min: 10.123, max: 100.123 },
+                    { value: 10.123, min: 10.123, max: 100.123 },
+                    { value: 100.123, min: 10.123, max: 100.123 },
+                    { value: 50.5, min: 10, max: 100 },
+                    { value: 50, min: 10.5, max: 100 },
+                    { value: 50, min: 10, max: 100.5 }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'Equal min and max, value in range',
+                inputs: [
+                    { value: 0, min: 0, max: 0 },
+                    { value: 100, min: 100, max: 100 },
+                    { value: -100, min: -100, max: -100 },
+                    { value: 100.123, min: 100.123, max: 100.123 },
+                    { value: -100.123, min: -100.123, max: -100.123 },
+                    { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
+                    { value: Number.MAX_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                    { value: Number.MIN_VALUE, min: Number.MIN_VALUE, max: Number.MIN_VALUE },
+                    { value: Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
+                ],
+                expected: undefined
+            }
+        ];
+
         const failureScenarios: Scenario[] = [
             {
                 label: 'Unequal min and max, value not in range',
@@ -498,54 +550,6 @@ describe('NumberUtility', (): void => {
                     { value: Number.EPSILON + Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
                 ],
                 expected: ValueRangeError
-            }
-        ];
-
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Unequal min and max, value in range',
-                inputs: [
-                    { value: 0, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { value: Number.MAX_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { value: 0, min: -10, max: 10 },
-                    { value: -10, min: -10, max: 10 },
-                    { value: 10, min: -10, max: 10 },
-                    { value: -5, min: -10, max: -1 },
-                    { value: -10, min: -10, max: -1 },
-                    { value: -1, min: -10, max: -1 },
-                    { value: 50, min: 10, max: 100 },
-                    { value: 10, min: 10, max: 100 },
-                    { value: 100, min: 10, max: 100 },
-                    { value: 0, min: -10.123, max: 10.123 },
-                    { value: -10.123, min: -10.123, max: 10.123 },
-                    { value: 10.123, min: -10.123, max: 10.123 },
-                    { value: -5, min: -10.123, max: -1.123 },
-                    { value: -10.123, min: -10.123, max: -1.123 },
-                    { value: -1.132, min: -10.123, max: -1.123 },
-                    { value: 50, min: 10.123, max: 100.123 },
-                    { value: 10.123, min: 10.123, max: 100.123 },
-                    { value: 100.123, min: 10.123, max: 100.123 },
-                    { value: 50.5, min: 10, max: 100 },
-                    { value: 50, min: 10.5, max: 100 },
-                    { value: 50, min: 10, max: 100.5 }
-                ],
-                expected: undefined
-            },
-            {
-                label: 'Equal min and max, value in range',
-                inputs: [
-                    { value: 0, min: 0, max: 0 },
-                    { value: 100, min: 100, max: 100 },
-                    { value: -100, min: -100, max: -100 },
-                    { value: 100.123, min: 100.123, max: 100.123 },
-                    { value: -100.123, min: -100.123, max: -100.123 },
-                    { value: Number.MIN_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER },
-                    { value: Number.MAX_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-                    { value: Number.MIN_VALUE, min: Number.MIN_VALUE, max: Number.MIN_VALUE },
-                    { value: Number.EPSILON, min: Number.EPSILON, max: Number.EPSILON }
-                ],
-                expected: undefined
             }
         ];
 
@@ -653,23 +657,6 @@ describe('NumberUtility', (): void => {
     });
 
     describe('ValidRange', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Min greater than max',
-                inputs: [
-                    { max: 0, min: 10 },
-                    { max: Number.MIN_SAFE_INTEGER, min: 0 },
-                    { max: 0, min: Number.MAX_SAFE_INTEGER },
-                    { max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER },
-                    { max: -500, min: -100 },
-                    { max: -5.123, min: -3.123 },
-                    { max: 10, min: 100 },
-                    { max: 10.123, min: 100.123 }
-                ],
-                expected: ValueRangeError
-            }
-        ];
-
         const successScenarios: Scenario[] = [
             {
                 label: 'Unequal min and max',
@@ -697,6 +684,23 @@ describe('NumberUtility', (): void => {
                     { min: -5.123, max: -5.123 }
                 ],
                 expected: undefined
+            }
+        ];
+
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'Min greater than max',
+                inputs: [
+                    { max: 0, min: 10 },
+                    { max: Number.MIN_SAFE_INTEGER, min: 0 },
+                    { max: 0, min: Number.MAX_SAFE_INTEGER },
+                    { max: Number.MIN_SAFE_INTEGER, min: Number.MAX_SAFE_INTEGER },
+                    { max: -500, min: -100 },
+                    { max: -5.123, min: -3.123 },
+                    { max: 10, min: 100 },
+                    { max: 10.123, min: 100.123 }
+                ],
+                expected: ValueRangeError
             }
         ];
 
