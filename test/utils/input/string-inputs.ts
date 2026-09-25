@@ -226,7 +226,8 @@ function buildSingleLineFailureInputs(tokens: string[]): string[] {
                 return character !== ' ';
             })
         ),
-        ...mixStrings(tokens, consecutiveTextWhitespace)
+        ...mixStrings(tokens, consecutiveTextWhitespace),
+        ...pairStrings(tokens, [' '])
     ];
 }
 
