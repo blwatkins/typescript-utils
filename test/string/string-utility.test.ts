@@ -172,36 +172,36 @@ describe('StringUtility', (): void => {
         }
     ];
 
-    // const singleLineUppercaseFailureScenarios: Scenario[] = [
-    //     ...textFailureScenarios,
-    //     {
-    //         label: 'Incorrect case inputs',
-    //         inputs: [
-    //             ...singleLineLowercaseInputs,
-    //             ...singleLineMixedCaseInputs,
-    //             ...singleLineFailureLowercaseInputs,
-    //             ...singleLineFailureMixedCaseInputs
-    //         ],
-    //         expected: PrimitiveTypeError
-    //     },
-    //     {
-    //         label: 'Uppercase and caseless text inputs that are not single-line',
-    //         inputs: [
-    //             ...singleLineFailureUppercaseInputs,
-    //             ...singleLineFailureCaselessInputs
-    //         ],
-    //         expected: PrimitiveTypeError
-    //     }
-    // ];
-    //
-    // const singleLineUppercaseSuccessScenarios: Scenario[] = [
-    //     {
-    //         label: 'Single-line uppercase inputs',
-    //         inputs: singleLineUppercaseInputs,
-    //         expected: undefined
-    //     },
-    //     numsAndSymbolsScenario
-    // ];
+    const singleLineUppercaseSuccessScenarios: Scenario[] = [
+        singleLineCaselessScenario,
+        {
+            label: 'Single-line uppercase inputs',
+            inputs: singleLineUppercaseInputs,
+            expected: undefined
+        }
+    ];
+
+    const singleLineUppercaseFailureScenarios: Scenario[] = [
+        ...textFailureScenarios,
+        {
+            label: 'Incorrect case inputs',
+            inputs: [
+                ...singleLineLowercaseInputs,
+                ...singleLineMixedCaseInputs,
+                ...singleLineFailureLowercaseInputs,
+                ...singleLineFailureMixedCaseInputs
+            ],
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Uppercase and caseless text inputs that are not single-line',
+            inputs: [
+                ...singleLineFailureUppercaseInputs,
+                ...singleLineFailureCaselessInputs
+            ],
+            expected: PrimitiveTypeError
+        }
+    ];
 
     describe('String', (): void => {
         describe('assertString', (): void => {
@@ -293,28 +293,20 @@ describe('StringUtility', (): void => {
         });
     });
 
-    // describe('SingleLineUppercase', (): void => {
-    //     describe('assertSingleLineUppercase', (): void => {
-    //         testAssertMethod(
-    //             StringUtility.assertSingleLineUppercase.bind(StringUtility),
-    //             singleLineUppercaseSuccessScenarios,
-    //             singleLineUppercaseFailureScenarios,
-    //             'Expected a single-line uppercase string.'
-    //         );
-    //     });
-    //
-    //     describe('isSingleLineUppercase', (): void => {
-    //         testIsMethod(StringUtility.isSingleLineUppercase.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
-    //     });
-    //
-    //     describe('singleLineUppercase', (): void => {
-    //         function matchesSingleLineUppercase(input: unknown): boolean {
-    //             return StringUtility.singleLineUppercase.test(input as string);
-    //         }
-    //
-    //         testIsMethod(matchesSingleLineUppercase, singleLineUppercaseSuccessScenarios, withTextInputsOnly(singleLineUppercaseFailureScenarios));
-    //     });
-    // });
+    describe('SingleLineUppercase', (): void => {
+        describe('assertSingleLineUppercase', (): void => {
+            testAssertMethod(
+                StringUtility.assertSingleLineUppercase.bind(StringUtility),
+                singleLineUppercaseSuccessScenarios,
+                singleLineUppercaseFailureScenarios,
+                'Expected a single-line uppercase string.'
+            );
+        });
+
+        describe('isSingleLineUppercase', (): void => {
+            testIsMethod(StringUtility.isSingleLineUppercase.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
+        });
+    });
 
     /* ******************* TODO: DEPRECATED ******************* */
 
@@ -366,7 +358,7 @@ describe('StringUtility', (): void => {
         testIsMethod(StringUtility.isSingleLineLowercaseTrimmedString.bind(StringUtility), singleLineLowercaseSuccessScenarios, singleLineLowercaseFailureScenarios);
     });
 
-    // describe('[DEPRECATED] isSingleLineUppercaseTrimmedString', (): void => {
-    //     testIsMethod(StringUtility.isSingleLineUppercaseTrimmedString.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
-    // });
+    describe('[DEPRECATED] isSingleLineUppercaseTrimmedString', (): void => {
+        testIsMethod(StringUtility.isSingleLineUppercaseTrimmedString.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
+    });
 });
