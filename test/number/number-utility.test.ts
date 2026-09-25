@@ -28,7 +28,6 @@ import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
     invalidSafeNumberInputs,
-    negativeSafeIntegerInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
     positiveSafeIntegerInputs,
@@ -40,6 +39,7 @@ import {
 } from '../utils/input/number-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
+import { positiveIntegerFailureScenarios } from '../utils/test-case/scenarios/number-scenarios';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('NumberUtility', (): void => {
@@ -151,37 +151,9 @@ describe('NumberUtility', (): void => {
             }
         ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-number inputs',
-                inputs: nonNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Non-finite number inputs',
-                inputs: nonFiniteNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Number inputs outside the safe integer range',
-                inputs: unsafeNumberInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Float inputs',
-                inputs: safeFloatInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Negative integer inputs',
-                inputs: negativeSafeIntegerInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
         describe('zeroInclusive = false/undefined', (): void => {
             const zeroExclusiveFailureScenarios: Scenario[] = [
-                ...failureScenarios,
+                ...positiveIntegerFailureScenarios,
                 {
                     label: 'Zero inputs',
                     inputs: zeroInputs,
@@ -240,7 +212,7 @@ describe('NumberUtility', (): void => {
                 testAssertMethod(
                     assertPositiveInteger,
                     zeroInclusiveSuccessScenarios,
-                    failureScenarios,
+                    positiveIntegerFailureScenarios,
                     'Expected a positive integer within the safe integer range or zero if zeroInclusive is true.'
                 );
             });
@@ -250,7 +222,7 @@ describe('NumberUtility', (): void => {
                     return NumberUtility.isPositiveInteger(input, true);
                 }
 
-                testIsMethod(isPositiveInteger, zeroInclusiveSuccessScenarios, failureScenarios);
+                testIsMethod(isPositiveInteger, zeroInclusiveSuccessScenarios, positiveIntegerFailureScenarios);
             });
         });
     });
