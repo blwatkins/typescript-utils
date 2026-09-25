@@ -20,34 +20,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-function unique(inputs: string[]): string[] {
-    return [...new Set(inputs)];
-}
-
-function mixStrings(inputsA: string[], inputsB: string[]): string[] {
-    return unique(inputsA.flatMap((inputA: string): string[] => {
-        return inputsB.flatMap((inputB: string): string[] => {
-            return [`${inputA}${inputB}`, `${inputB}${inputA}`, `${inputA}${inputB}${inputA}`, `${inputB}${inputA}${inputB}`];
-        });
-    }));
-}
-
-function codePointRange(start: number, end: number): string[] {
-    return Array.from({ length: end - start + 1 }, (_value: unknown, index: number): string => {
-        return String.fromCodePoint(start + index);
-    });
-}
-
-function buildSingleLineInputs(words: string[]): string[] {
-    return unique([
-        ...words,
-        ...words.map((word: string, index: number): string => {
-            return `${word} ${words[(index + 1) % words.length]}`;
-        }),
-        words.join(' ')
-    ]);
-}
-
 // noinspection JSPrimitiveTypeWrapperUsage
 export const nonStringInputs: unknown[] = [
     null,
@@ -91,33 +63,18 @@ export const nonStringInputs: unknown[] = [
     Symbol('test')
 ];
 
-export const definedNonStringInputs: unknown[] = nonStringInputs.filter((input: unknown): boolean => {
-    return input !== undefined;
-});
+const textWhitespaceCharacters: string[] = [' ', '\t', '\n', '\r\n'];
 
-const textWhitespace: string[] = [' ', '\t', '\n', '\r\n'];
-
-const textWhitespaceRuns: string[] = unique([
-    ...textWhitespace,
-    ...textWhitespace.flatMap((first: string): string[] => {
-        return textWhitespace.map((second: string): string => {
-            return `${first}${second}`;
-        });
-    })
-]);
-
-const whitespaceCharacters: string[] = codePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
-    return /^\s$/.test(character);
-});
-
-export const emptyStringInputs: string[] = unique([
-    '',
-    ...whitespaceCharacters,
-    ...textWhitespaceRuns,
-    ...whitespaceCharacters.map((character: string): string => {
-        return ` ${character} `;
-    })
-]);
+const emojiInputs: string[] = [
+    '\u{1F3A8}', // 🎨 - Palette
+    '\u{1F44D}\u{1F3FD}', // 👍🏽 - Thumbs up with skin tone
+    '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}', // 👨‍👩‍👧 - Family
+    '\u{1F1FA}\u{1F1F8}', // 🇺🇸 - US flag
+    '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}', // Scottish flag
+    '1\uFE0F\u20E3', // One
+    '\u00A9\uFE0F', // ©️ - Copyright
+    '\u2122\uFE0F' // ™️ - Trademark
+];
 
 const rejectedLatin1Characters: string[] = [
     '\u00A6',
@@ -150,105 +107,58 @@ const rejectedLatin1Characters: string[] = [
     '\u00FE'
 ];
 
-const acceptedLatin1Characters: string[] = codePointRange(0x00A1, 0x00FF).filter((character: string): boolean => {
-    return !rejectedLatin1Characters.includes(character);
+export const definedNonStringInputs: unknown[] = nonStringInputs.filter((input: unknown): boolean => {
+    return input !== undefined;
 });
 
-const acceptedLatin1Symbols: string[] = acceptedLatin1Characters.filter((character: string): boolean => {
-    return !/\p{L}/u.test(character);
-});
+function charactersFromCodePointRange(start: number, end: number): string[] {
+    return Array.from({ length: end - start + 1 }, (_value: unknown, index: number): string => {
+        return String.fromCodePoint(start + index);
+    });
+}
 
-const acceptedLowercaseLetters: string = acceptedLatin1Characters.filter((character: string): boolean => {
-    return /\p{Ll}/u.test(character);
-}).join('');
-
-const acceptedUppercaseLetters: string = acceptedLatin1Characters.filter((character: string): boolean => {
-    return /\p{Lu}/u.test(character);
-}).join('');
-
-const asciiSymbols: string = codePointRange(0x0021, 0x007E).filter((character: string): boolean => {
+const asciiSymbols: string = charactersFromCodePointRange(0x0021, 0x007E).filter((character: string): boolean => {
     return !/[A-Za-z]/.test(character);
 }).join('');
 
-const emojiInputs: string[] = [
-    '\u{1F3A8}',
-    '\u{1F44D}\u{1F3FD}',
-    '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}',
-    '\u{1F1FA}\u{1F1F8}',
-    '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}',
-    '1\uFE0F\u20E3',
-    '\u00A9\uFE0F',
-    '\u2122\uFE0F'
-];
+const acceptedLatin1Characters: string[] = charactersFromCodePointRange(0x00A1, 0x00FF).filter((character: string): boolean => {
+    return !rejectedLatin1Characters.includes(character);
+});
 
-const lowercaseWords: string[] = ['example', 'caf\u00E9', acceptedLowercaseLetters];
+const acceptedLatin1Symbols: string = acceptedLatin1Characters.filter((character: string): boolean => {
+    return !/\p{L}/u.test(character);
+}).join('');
 
-const uppercaseWords: string[] = ['EXAMPLE', 'CAF\u00C9', acceptedUppercaseLetters];
+const acceptedLatin1LowercaseLetters: string = acceptedLatin1Characters.filter((character: string): boolean => {
+    return /\p{Ll}/u.test(character);
+}).join('');
 
-const mixedCaseWords: string[] = ['Example', 'wOrD', `${acceptedUppercaseLetters}${acceptedLowercaseLetters}`];
+const acceptedLatin1UppercaseLetters: string = acceptedLatin1Characters.filter((character: string): boolean => {
+    return /\p{Lu}/u.test(character);
+}).join('');
 
-const caselessWords: string[] = ['12345', asciiSymbols, acceptedLatin1Symbols.join(''), '\u2022', ...emojiInputs];
+const caselessWords: string[] = ['1234567890', asciiSymbols, acceptedLatin1Symbols, '\u2022', ...emojiInputs];
 
-function buildSingleLineFailureInputs(words: string[]): string[] {
-    const [firstWord, secondWord] = words;
+const mixedCaseWords: string[] = ['Example', 'wOrD', 'CaF\u00E9', `${acceptedLatin1UppercaseLetters}${acceptedLatin1LowercaseLetters}`];
 
-    return unique([
-        ...textWhitespaceRuns.filter((run: string): boolean => {
-            return run !== ' ';
-        }).map((run: string): string => {
-            return `${firstWord}${run}${secondWord}`;
-        }),
-        ...textWhitespaceRuns.flatMap((run: string): string[] => {
-            return [`${run}${firstWord}`, `${firstWord}${run}`, `${run}${firstWord}${run}`];
-        })
-    ]);
-}
+const lowercaseWords: string[] = ['example', 'word', 'caf\u00E9', acceptedLatin1LowercaseLetters];
 
-export const singleLineInputsNumsAndSymbols: string[] = buildSingleLineInputs(caselessWords);
+const uppercaseWords: string[] = ['EXAMPLE', 'WORD', 'CAF\u00C9', acceptedLatin1UppercaseLetters];
 
-export const singleLineInputsMixedCase: string[] = buildSingleLineInputs(mixedCaseWords);
-
-export const singleLineInputsLowercase: string[] = buildSingleLineInputs(lowercaseWords);
-
-export const singleLineInputsUppercase: string[] = buildSingleLineInputs(uppercaseWords);
-
-export const singleLineFailureInputsLowercase: string[] = buildSingleLineFailureInputs(lowercaseWords);
-
-export const singleLineFailureInputsUppercase: string[] = buildSingleLineFailureInputs(uppercaseWords);
-
-export const singleLineFailureInputsMixedCase: string[] = buildSingleLineFailureInputs(mixedCaseWords);
-
-export const singleLineFailureInputsNumsAndSymbols: string[] = buildSingleLineFailureInputs(caselessWords);
-
-export const singleLineInputs: string[] = [
-    ...singleLineInputsLowercase,
-    ...singleLineInputsUppercase,
-    ...singleLineInputsMixedCase,
-    ...singleLineInputsNumsAndSymbols
-];
-
-export const singleLineFailureInputs: string[] = [
-    ...singleLineFailureInputsLowercase,
-    ...singleLineFailureInputsUppercase,
-    ...singleLineFailureInputsMixedCase,
-    ...singleLineFailureInputsNumsAndSymbols
-];
-
-export const textInputs: string[] = [
-    ...singleLineInputs,
-    ...singleLineFailureInputs
-];
+const allWhitespaceCharacters: string[] = charactersFromCodePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
+    return /^\s$/.test(character);
+});
 
 const nonTextCharacters: string[] = [
     '\r',
-    ...codePointRange(0x0000, 0x009F).filter((character: string): boolean => {
+    ...charactersFromCodePointRange(0x0000, 0x009F).filter((character: string): boolean => {
         return /\p{Cc}/u.test(character) && !['\t', '\n', '\r'].includes(character);
     }),
-    ...whitespaceCharacters.filter((character: string): boolean => {
-        return ![' ', '\t', '\n', '\r'].includes(character);
-    }),
-    ...codePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
+    ...charactersFromCodePointRange(0x0000, 0xFFFF).filter((character: string): boolean => {
         return /\p{Cf}/u.test(character) && !/\s/.test(character);
+    }),
+    ...allWhitespaceCharacters.filter((character: string): boolean => {
+        return ![' ', '\t', '\n', '\r'].includes(character);
     }),
     ...rejectedLatin1Characters,
     '\u{E0001}',
@@ -287,23 +197,104 @@ const nonTextCharacters: string[] = [
     '\uDC00'
 ];
 
-export const nonTextCharacterInputs: string[] = unique(nonTextCharacters.flatMap((character: string): string[] => {
-    return [character, ...mixStrings([character], ['text'])];
-})).filter((input: string): boolean => {
+function unique(inputs: string[]): string[] {
+    return [...new Set(inputs)];
+}
+
+function pairStrings(inputsA: string[], inputsB: string[]): string[] {
+    return unique(inputsA.flatMap((inputA: string): string[] => {
+        return inputsB.flatMap((inputB: string): string[] => {
+            return [`${inputA}${inputB}`, `${inputB}${inputA}`];
+        });
+    }));
+}
+
+const consecutiveTextWhitespace: string[] = unique([
+    ...pairStrings(textWhitespaceCharacters, textWhitespaceCharacters)
+]);
+
+function mixStrings(inputsA: string[], inputsB: string[]): string[] {
+    return unique(inputsA.flatMap((inputA: string): string[] => {
+        return inputsB.flatMap((inputB: string): string[] => {
+            return [`${inputA}${inputB}`, `${inputB}${inputA}`, `${inputA}${inputB}${inputA}`, `${inputB}${inputA}${inputB}`];
+        });
+    }));
+}
+
+function buildSingleLineFailureInputs(tokens: string[]): string[] {
+    return [
+        ...mixStrings(
+            tokens,
+            textWhitespaceCharacters.filter((character: String): boolean => {
+                return character !== ' ';
+            })
+        ),
+        ...mixStrings(tokens, consecutiveTextWhitespace)
+    ];
+}
+
+function buildSingleLineInputs(tokens: string[]): string[] {
+    return unique([
+        ...tokens,
+        ...tokens.map((token: string, index: number): string => {
+            return `${token} ${tokens[(index + 1) % tokens.length]}`;
+        }),
+        tokens.join(' ')
+    ]);
+}
+
+export const emptyStringInputs: string[] = unique([
+    '',
+    ...allWhitespaceCharacters,
+    ...textWhitespaceCharacters,
+    ...consecutiveTextWhitespace,
+    ...mixStrings(allWhitespaceCharacters, textWhitespaceCharacters)
+]);
+
+export const singleLineCaselessInputs: string[] = buildSingleLineInputs(caselessWords);
+
+export const singleLineMixedCaseInputs: string[] = buildSingleLineInputs(mixedCaseWords);
+
+export const singleLineLowercaseInputs: string[] = buildSingleLineInputs(lowercaseWords);
+
+export const singleLineUppercaseInputs: string[] = buildSingleLineInputs(uppercaseWords);
+
+export const singleLineFailureCaselessInputs: string[] = buildSingleLineFailureInputs(caselessWords);
+
+export const singleLineFailureMixedCaseInputs: string[] = buildSingleLineFailureInputs(mixedCaseWords);
+
+export const singleLineFailureLowercaseInputs: string[] = buildSingleLineFailureInputs(lowercaseWords);
+
+export const singleLineFailureUppercaseInputs: string[] = buildSingleLineFailureInputs(uppercaseWords);
+
+export const singleLineInputs: string[] = [
+    ...singleLineCaselessInputs,
+    ...singleLineMixedCaseInputs,
+    ...singleLineLowercaseInputs,
+    ...singleLineUppercaseInputs
+];
+
+export const singleLineFailureTextInputs: string[] = [
+    ...singleLineFailureCaselessInputs,
+    ...singleLineFailureMixedCaseInputs,
+    ...singleLineFailureLowercaseInputs,
+    ...singleLineFailureUppercaseInputs
+];
+
+export const textInputs: string[] = [
+    ...singleLineInputs,
+    ...singleLineFailureTextInputs
+];
+
+export const nonTextStringInputs: string[] = unique([
+    ...nonTextCharacters,
+    ...mixStrings(nonTextCharacters, ['text'])
+]).filter((input: string): boolean => {
     return input.trim().length > 0;
 });
 
-export const nonTextStringInputs: string[] = [
+export const stringInputs: string[] = unique([
     ...emptyStringInputs,
-    ...nonTextCharacterInputs
-];
-
-export const nonSingleLineStringInputs: string[] = [
     ...nonTextStringInputs,
-    ...singleLineFailureInputs
-];
-
-export const nonEmptyStringInputs: string[] = [
-    ...textInputs,
-    ...nonTextCharacterInputs
-];
+    ...textInputs
+]);
