@@ -30,7 +30,7 @@ import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-c
 describe('SeededRandomNumberGenerator', (): void => {
     describe('new SeededRandomNumberGenerator()', (): void => {
         describe('Argument errors', (): void => {
-            const scenarios: Scenario[] = [
+            const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Non-array inputs',
                     inputs: [
@@ -87,7 +87,7 @@ describe('SeededRandomNumberGenerator', (): void => {
             ];
 
             describe.each(
-                scenarios
+                argumentFailureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
