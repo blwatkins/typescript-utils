@@ -34,20 +34,12 @@ import { arrayInputs, nonArrayInputs } from '../utils/input/array-inputs';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
-import { emptyStringInputs, nonEmptyStringInputs, nonStringInputs } from '../utils/input/string-inputs';
+import { nonStringInputs, stringInputs } from '../utils/input/string-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario } from '../utils/test-case/test-case';
 
 describe('TypeAssertions', (): void => {
     testStaticClassConstructor('TypeAssertions', TypeAssertions as unknown as new () => unknown, StaticInstanceError);
-
-    const arrayFailureScenarios: Scenario[] = [
-        {
-            label: 'Non-array inputs',
-            inputs: nonArrayInputs,
-            expected: PrimitiveTypeError
-        }
-    ];
 
     const arraySuccessScenarios: Scenario[] = [
         {
@@ -57,10 +49,10 @@ describe('TypeAssertions', (): void => {
         }
     ];
 
-    const booleanFailureScenarios: Scenario[] = [
+    const arrayFailureScenarios: Scenario[] = [
         {
-            label: 'Non-boolean inputs',
-            inputs: nonBooleanInputs,
+            label: 'Non-array inputs',
+            inputs: nonArrayInputs,
             expected: PrimitiveTypeError
         }
     ];
@@ -76,10 +68,10 @@ describe('TypeAssertions', (): void => {
         }
     ];
 
-    const functionFailureScenarios: Scenario[] = [
+    const booleanFailureScenarios: Scenario[] = [
         {
-            label: 'Non-function inputs',
-            inputs: nonFunctionInputs,
+            label: 'Non-boolean inputs',
+            inputs: nonBooleanInputs,
             expected: PrimitiveTypeError
         }
     ];
@@ -103,15 +95,10 @@ describe('TypeAssertions', (): void => {
         }
     ];
 
-    const objectFailureScenarios: Scenario[] = [
+    const functionFailureScenarios: Scenario[] = [
         {
-            label: 'Non-object inputs',
-            inputs: nonObjectInputs,
-            expected: PrimitiveTypeError
-        },
-        {
-            label: 'Array inputs',
-            inputs: arrayInputs,
+            label: 'Non-function inputs',
+            inputs: nonFunctionInputs,
             expected: PrimitiveTypeError
         }
     ];
@@ -143,10 +130,15 @@ describe('TypeAssertions', (): void => {
         }
     ];
 
-    const stringFailureScenarios: Scenario[] = [
+    const objectFailureScenarios: Scenario[] = [
         {
-            label: 'Non-string inputs',
-            inputs: nonStringInputs,
+            label: 'Non-object inputs',
+            inputs: nonObjectInputs,
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Array inputs',
+            inputs: arrayInputs,
             expected: PrimitiveTypeError
         }
     ];
@@ -154,11 +146,16 @@ describe('TypeAssertions', (): void => {
     const stringSuccessScenarios: Scenario[] = [
         {
             label: 'String inputs',
-            inputs: [
-                ...emptyStringInputs,
-                ...nonEmptyStringInputs
-            ],
+            inputs: stringInputs,
             expected: undefined
+        }
+    ];
+
+    const stringFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-string inputs',
+            inputs: nonStringInputs,
+            expected: PrimitiveTypeError
         }
     ];
 
