@@ -30,7 +30,9 @@ import {
     emptyStringInputs,
     nonEmptyStringInputs,
     nonStringInputs,
-    stringInputs
+    nonTextStringInputs,
+    stringInputs,
+    textInputs
 } from '../utils/input/string-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
@@ -89,6 +91,23 @@ describe('StringUtility', (): void => {
         }
     ];
 
+    const textSuccessScenarios: Scenario[] = [
+        {
+            label: 'Text inputs',
+            inputs: textInputs,
+            expected: undefined
+        }
+    ];
+
+    const textFailureScenarios: Scenario[] = [
+        ...nonEmptyFailureScenarios,
+        {
+            label: 'Non-text string inputs',
+            inputs: nonTextStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
     // const numsAndSymbolsScenario: Scenario = {
     //     label: 'Caseless single-line inputs',
     //     inputs: singleLineCaselessInputs,
@@ -112,20 +131,6 @@ describe('StringUtility', (): void => {
     //     inputs: nonTextStringInputs,
     //     expected: PrimitiveTypeError
     // };
-    //
-    // const textFailureScenarios: Scenario[] = [
-    //     nonStringErrorScenario,
-    //     emptyStringErrorScenario,
-    //     nonTextErrorScenario
-    // ];
-    //
-    // const textSuccessScenarios: Scenario[] = [
-    //     {
-    //         label: 'Text inputs',
-    //         inputs: textInputs,
-    //         expected: undefined
-    //     }
-    // ];
     //
     // const singleLineFailureScenarios: Scenario[] = [
     //     ...textFailureScenarios,
@@ -257,21 +262,21 @@ describe('StringUtility', (): void => {
         });
     });
 
-    // describe('Text', (): void => {
-    //     describe('assertText', (): void => {
-    //         testAssertMethod(
-    //             StringUtility.assertText.bind(StringUtility),
-    //             textSuccessScenarios,
-    //             textFailureScenarios,
-    //             'Expected a text string.'
-    //         );
-    //     });
-    //
-    //     describe('isText', (): void => {
-    //         testIsMethod(StringUtility.isText.bind(StringUtility), textSuccessScenarios, textFailureScenarios);
-    //     });
-    // });
-    //
+    describe('Text', (): void => {
+        describe('assertText', (): void => {
+            testAssertMethod(
+                StringUtility.assertText.bind(StringUtility),
+                textSuccessScenarios,
+                textFailureScenarios,
+                'Expected a text string.'
+            );
+        });
+
+        describe('isText', (): void => {
+            testIsMethod(StringUtility.isText.bind(StringUtility), textSuccessScenarios, textFailureScenarios);
+        });
+    });
+
     // describe('SingleLine', (): void => {
     //     describe('assertSingleLine', (): void => {
     //         testAssertMethod(
