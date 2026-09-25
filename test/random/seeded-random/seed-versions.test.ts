@@ -23,7 +23,6 @@
 import { describe, test, expect } from 'vitest';
 
 import {
-    PrimitiveTypeError,
     SeedVersion,
     SeedVersions,
     StaticInstanceError,
@@ -32,15 +31,8 @@ import {
 
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 
-import {
-    negativeSafeIntegerInputs,
-    nonFiniteNumberInputs,
-    nonNumberInputs,
-    safeFloatInputs,
-    unsafeNumberInputs
-} from '../../utils/input/number-inputs';
-
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
+import { positiveIntegerFailureScenarios } from "../../utils/test-case/scenarios/number-scenarios";
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', (): void => {
@@ -62,48 +54,30 @@ describe('SeedVersions', (): void => {
         }
     ];
 
-    function buildValidIndexes(): number[] {
+    function buildValidIndices(): number[] {
         const indexes: number[] = [];
 
-        for (let i = 0; i < expectedSeedVersions.length; i++) {
+        for (let i: number = 0; i < expectedSeedVersions.length; i++) {
             indexes.push(i);
         }
 
         return indexes;
     }
 
-    const argumentFailureScenarios: Scenario[] = [
-        {
-            label: 'Non-number inputs',
-            inputs: nonNumberInputs,
-            expected: PrimitiveTypeError
-        },
-        {
-            label: 'Non-finite number inputs',
-            inputs: nonFiniteNumberInputs,
-            expected: PrimitiveTypeError
-        },
-        {
-            label: 'Number inputs outside the safe integer range',
-            inputs: unsafeNumberInputs,
-            expected: PrimitiveTypeError
-        },
-        {
-            label: 'Float inputs',
-            inputs: safeFloatInputs,
-            expected: PrimitiveTypeError
-        },
-        {
-            label: 'Negative integer inputs',
-            inputs: negativeSafeIntegerInputs,
-            expected: PrimitiveTypeError
-        }
-    ];
+    const validIndices: number[] = buildValidIndices();
 
-    const outOfBoundsInputs: number[] = [
+    const outOfBoundsIndices: number[] = [
         expectedSeedVersions.length,
         expectedSeedVersions.length + 1,
         Number.MAX_SAFE_INTEGER
+    ];
+
+    const outOfBoundsFailureScenarios: Scenario[] = [
+        {
+            label: 'Out of bounds number indexes',
+            inputs: outOfBoundsIndices,
+            expected: ValueRangeError
+        }
     ];
 
     describe('size', (): void => {
@@ -113,18 +87,10 @@ describe('SeedVersions', (): void => {
     });
 
     describe('ValidIndex', (): void => {
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Out of bounds number indexes',
-                inputs: outOfBoundsInputs,
-                expected: ValueRangeError
-            }
-        ];
-
         const successScenarios: Scenario[] = [
             {
                 label: 'Valid indexes',
-                inputs: buildValidIndexes(),
+                inputs: validIndices,
                 expected: undefined
             }
         ];
@@ -137,7 +103,7 @@ describe('SeedVersions', (): void => {
             testAssertMethod(
                 assertValidIndex,
                 successScenarios,
-                failureScenarios,
+                outOfBoundsFailureScenarios,
                 'index must be a valid seed version index.'
             );
         });
@@ -147,12 +113,12 @@ describe('SeedVersions', (): void => {
                 return SeedVersions.isValidIndex(input as number);
             }
 
-            testIsMethod(isValidIndex, successScenarios, failureScenarios);
+            testIsMethod(isValidIndex, successScenarios, outOfBoundsFailureScenarios);
         });
 
         describe('Argument errors', (): void => {
             describe.each(
-                argumentFailureScenarios
+                positiveIntegerFailureScenarios
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
@@ -181,19 +147,15 @@ describe('SeedVersions', (): void => {
 
     describe('getVersion', (): void => {
         test.each(
-            buildValidIndexes()
+            validIndices
         )('%# - Valid index (%i) should return the expected seed version.', (index: number): void => {
             expect(SeedVersions.getVersion(index)).toEqual(expectedSeedVersions[index]);
         });
 
-        describe('Input validation', (): void => {
+        describe('Argument errors', (): void => {
             const scenarios: Scenario[] = [
-                ...argumentFailureScenarios,
-                {
-                    label: 'Out of bounds number indexes',
-                    inputs: outOfBoundsInputs,
-                    expected: ValueRangeError
-                }
+                ...positiveIntegerFailureScenarios,
+                ...outOfBoundsFailureScenarios
             ];
 
             describe.each(
