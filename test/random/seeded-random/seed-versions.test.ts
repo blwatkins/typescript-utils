@@ -32,7 +32,7 @@ import {
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
-import { positiveIntegerFailureScenarios } from "../../utils/test-case/scenarios/number-scenarios";
+import { positiveIntegerFailureScenarios } from '../../utils/test-case/scenarios/number-scenarios';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('SeedVersions', (): void => {

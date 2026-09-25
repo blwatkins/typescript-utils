@@ -222,7 +222,7 @@ function buildSingleLineFailureInputs(tokens: string[]): string[] {
     return [
         ...mixStrings(
             tokens,
-            textWhitespaceCharacters.filter((character: String): boolean => {
+            textWhitespaceCharacters.filter((character: string): boolean => {
                 return character !== ' ';
             })
         ),
