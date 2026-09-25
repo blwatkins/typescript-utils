@@ -251,6 +251,7 @@ All source files must include the MIT License copyright header at the top.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 - Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
 - Variable, constant and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
+- Write every non-ASCII character in source and test source files as a Unicode escape (e.g., `\u00E9`, `\u{1F3A8}`), never as the raw character. Many non-ASCII characters are invisible or look identical to an ASCII character — a zero-width joiner, a no-break space, a Cyrillic `\u0430` — so a raw character can change behavior without being visible in a diff or a review. The one exception is the trailing emoji comment described under ["Vitest Testing"](#vitest-testing).
 
 #### Formatting Rules
 
@@ -340,7 +341,7 @@ A page whose content did not change keeps its existing `modified_date`.
 - Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
 - Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file.
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
-- Test files carry no explanatory comments. A `describe` title states what is under test and a scenario `label` states why its inputs belong together, so a comment explaining either is bloat and a signal that the title or the label needs the work instead. The only comments a test file keeps are the deprecated banner, editor pragmas, and a warning on data that must never change, such as published seed sequences.
+- Test files carry no explanatory comments. A `describe` title states what is under test and a scenario `label` states why its inputs belong together, so a comment explaining either is bloat and a signal that the title or the label needs the work instead. The only comments a test file keeps are the deprecated banner, editor pragmas, a warning on data that must never change, such as published seed sequences, and a trailing comment on an emoji fixture entry that shows the rendered emoji and its name, since the escape sequence alone is unreadable.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
 #### The Scenario Pattern
