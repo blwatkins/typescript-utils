@@ -26,8 +26,8 @@ import { SingleInputScenario } from '../test-case';
 
 export const asciiSeed: 'test-seed-00' = 'test-seed-00' as const;
 export const asciiNamespace: 'test-namespace-00' = 'test-namespace-00' as const;
-export const unicodeSeed: '\u2B50' = '\u2B50' as const;
-export const unicodeNamespace: '\u2B50' = '\u2B50' as const;
+export const unicodeSeed: '\u2B50' = '\u2B50' as const; // ⭐ - Star
+export const unicodeNamespace: '\u2B50' = '\u2B50' as const; // ⭐ - Star
 export const alternateAsciiSeed: 'test-seed-01' = 'test-seed-01' as const;
 export const alternateAsciiNamespace: 'test-namespace-01' = 'test-namespace-01' as const;
 
