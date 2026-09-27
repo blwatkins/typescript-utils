@@ -26,8 +26,7 @@ import { MathUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError }
 
 import {
     invalidSafeNumberInputs,
-    negativeSafeIntegerInputs,
-    safeFloatInputs,
+    invalidSafePositiveIntegerInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
 
@@ -217,11 +216,7 @@ describe('MathUtility', (): void => {
             const argumentFailureScenarios: Scenario[] = [
                 {
                     label: 'Invalid x argument',
-                    inputs: [
-                        ...invalidSafeNumberInputs,
-                        ...safeFloatInputs,
-                        ...negativeSafeIntegerInputs
-                    ].map((input: unknown): { x: unknown; y: number; columns: number; rows: number; } => {
+                    inputs: invalidSafePositiveIntegerInputs.map((input: unknown): { x: unknown; y: number; columns: number; rows: number; } => {
                         return {
                             x: input,
                             y: defaultY,
@@ -233,11 +228,7 @@ describe('MathUtility', (): void => {
                 },
                 {
                     label: 'Invalid y argument',
-                    inputs: [
-                        ...invalidSafeNumberInputs,
-                        ...safeFloatInputs,
-                        ...negativeSafeIntegerInputs
-                    ].map((input: unknown): { x: number; y: unknown; columns: number; rows: number; } => {
+                    inputs: invalidSafePositiveIntegerInputs.map((input: unknown): { x: number; y: unknown; columns: number; rows: number; } => {
                         return {
                             x: defaultX,
                             y: input,
@@ -250,9 +241,7 @@ describe('MathUtility', (): void => {
                 {
                     label: 'Invalid columns argument',
                     inputs: [
-                        ...invalidSafeNumberInputs,
-                        ...safeFloatInputs,
-                        ...negativeSafeIntegerInputs,
+                        ...invalidSafePositiveIntegerInputs,
                         ...zeroInputs
                     ].map((input: unknown): { x: number; y: number; columns: unknown; rows: number; } => {
                         return {
@@ -267,9 +256,7 @@ describe('MathUtility', (): void => {
                 {
                     label: 'Invalid rows argument',
                     inputs: [
-                        ...invalidSafeNumberInputs,
-                        ...safeFloatInputs,
-                        ...negativeSafeIntegerInputs,
+                        ...invalidSafePositiveIntegerInputs,
                         ...zeroInputs
                     ].map((input: unknown): { x: number; y: number; columns: number; rows: unknown; } => {
                         return {
