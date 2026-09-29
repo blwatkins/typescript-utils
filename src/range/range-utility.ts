@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import Value from 'typebox/value';
+import { Compile, Validator } from 'typebox/compile';
 
 import { SchemaTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { MathUtility } from '../math';
@@ -40,6 +40,16 @@ import { Range, rangeSchema } from './range';
  * @private
  */
 const maxDrawAttempts: number = 10;
+
+/**
+ * Compiled TypeBox validator for {@link rangeSchema}.
+ *
+ * @remarks The schema is compiled once, when the module loads, so that {@link RangeUtility.isRange} does not interpret the schema on every call.
+ *
+ * @type {Validator}
+ * @private
+ */
+const rangeValidator: Validator = Compile(rangeSchema);
 
 /**
  * Static methods and properties for validating and using {@link Range} objects.
@@ -138,7 +148,7 @@ export class RangeUtility {
      * @since 0.1.0
      */
     public static isRange(input: unknown): input is Range {
-        const validSchema: boolean = Value.Check(rangeSchema, input);
+        const validSchema: boolean = rangeValidator.Check(input);
 
         if (validSchema) {
             const range: Range = input as Range;
