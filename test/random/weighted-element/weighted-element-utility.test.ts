@@ -131,6 +131,13 @@ describe('WeightedElementUtility', (): void => {
                 { value: 'hello', weight: 1, day: 7 }
             ],
             expected: SchemaTypeError
+        },
+        {
+            label: 'Object inputs with inherited properties',
+            inputs: [
+                Object.create({ value: 1, weight: 0.5 })
+            ],
+            expected: SchemaTypeError
         }
     ];
 
