@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import Value from 'typebox/value';
+import { Compile, Validator } from 'typebox/compile';
 
 import { Type } from 'typebox';
 
@@ -29,6 +29,17 @@ import { SchemaTypeError, StaticInstanceError } from '../../error';
 import { StringUtility } from '../../string';
 
 import { WeightedElement, weightedElementSchema } from './weighted-element';
+
+/**
+ * Compiled TypeBox validator for {@link weightedElementSchema}, instantiated with an unknown value type.
+ *
+ * @remarks The generic schema is instantiated and compiled once, when the module loads, so that {@link WeightedElementUtility.isGenericWeightedElement} does not build and interpret a new schema on every call.
+ * The generic schema must be instantiated with `Type.Call` before it is compiled; a validator compiled from the uninstantiated generic accepts any input.
+ *
+ * @type {Validator}
+ * @private
+ */
+const genericWeightedElementValidator: Validator = Compile(Type.Call(weightedElementSchema, [Type.Unknown()]));
 
 /**
  * Static methods and properties for validating {@link WeightedElement} objects.
@@ -123,7 +134,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isGenericWeightedElement(input: unknown): input is WeightedElement<unknown> {
-        return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
+        return genericWeightedElementValidator.Check(input);
     }
 
     /**
