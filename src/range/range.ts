@@ -22,6 +22,8 @@
 
 import { Type, Static } from 'typebox';
 
+import { Compile } from 'typebox/compile';
+
 /**
  * TypeBox schema to validate a {@link Range} object.
  *
@@ -81,6 +83,15 @@ export const rangeSchema = Type.Object(
     },
     { additionalProperties: false }
 );
+
+/**
+ * Compiled TypeBox validator for {@link rangeSchema}.
+ *
+ * @remarks This validator is used to check if an object conforms to the {@link rangeSchema} and {@link Range} type.
+ *
+ * @since 0.1.0
+ */
+export const rangeValidator = Compile(rangeSchema);
 
 /**
  * Interface for a range of numbers, starting at `min` and ending at `max`.

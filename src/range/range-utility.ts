@@ -20,15 +20,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Compile, Validator } from 'typebox/compile';
-
 import { SchemaTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { MathUtility } from '../math';
 import { NumberUtility } from '../number';
 import { Random } from '../random';
 import { StringUtility } from '../string';
 
-import { Range, rangeSchema } from './range';
+import { Range, rangeValidator } from './range';
 
 /**
  * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw falls
@@ -40,16 +38,6 @@ import { Range, rangeSchema } from './range';
  * @private
  */
 const maxDrawAttempts: number = 10;
-
-/**
- * Compiled TypeBox validator for {@link rangeSchema}.
- *
- * @remarks The schema is compiled once, when the module loads, so that {@link RangeUtility.isRange} does not interpret the schema on every call.
- *
- * @type {Validator}
- * @private
- */
-const rangeValidator: Validator = Compile(rangeSchema);
 
 /**
  * Static methods and properties for validating and using {@link Range} objects.
@@ -139,6 +127,8 @@ export class RangeUtility {
      * Additionally, the range must contain at least one representable value.
      * When either bound is excluded, `min` must be less than `max`.
      * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`; otherwise, there is no representable value available to satisfy the range.
+     *
+     * @see {@link rangeValidator}
      *
      * @param {unknown} input - The input to check.
      *
