@@ -50,6 +50,7 @@ export class WeightedListUtility {
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      * For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
      *
@@ -77,6 +78,7 @@ export class WeightedListUtility {
      * Assert that `input` is a valid {@link WeightedList} object.
      *
      * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link WeightedListUtility.isWeightedList}
      *
@@ -111,6 +113,7 @@ export class WeightedListUtility {
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      * For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
@@ -135,14 +138,14 @@ export class WeightedListUtility {
         }
 
         const weightSum: number = input.reduce((sum: number, element: unknown): number => sum + (element as WeightedElement<unknown>).weight, 0);
-        const precisionSum: number = Number.parseFloat(weightSum.toFixed(4));
-        return precisionSum === 1;
+        return Math.abs(weightSum - 1) <= (input.length * Number.EPSILON);
     }
 
     /**
      * Is `input` a valid {@link WeightedList} object?
      *
      * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link TypeAssertions.assertFunction}
      * @see {@link WeightedListUtility.isGenericWeightedList}
