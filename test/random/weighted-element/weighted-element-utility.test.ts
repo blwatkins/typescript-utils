@@ -135,7 +135,8 @@ describe('WeightedElementUtility', (): void => {
         {
             label: 'Object inputs with inherited properties',
             inputs: [
-                Object.create({ value: 1, weight: 0.5 })
+                Object.create({ value: 1, weight: 0.5 }),
+                Object.create({ value: 'hi', weight: 1.0 })
             ],
             expected: SchemaTypeError
         }

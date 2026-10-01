@@ -119,6 +119,14 @@ export const validRangeScenarios: Scenario[] = [
             { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: true }
         ],
         expected: undefined
+    },
+    {
+        label: 'Object inputs with inherited properties',
+        inputs: [
+            Object.create({ min: 5, max: 10 }),
+            Object.create({ min: 5, max: 10, isMinInclusive: true, isMaxInclusive: false })
+        ],
+        expected: SchemaTypeError
     }
 ];
 
