@@ -55,6 +55,9 @@
   "customFooterHtml": "<br/>Copyright &copy; 2022-2026 Brittni Watkins.",
 
   "externalSymbolLinkMappings": {
+    "typebox": {
+      "Unknown": "https://sinclairzx81.github.io/typebox/#/docs/type/unknown"
+    },
     "typescript": {
       "NumberConstructor.MAX_SAFE_INTEGER": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER"
     }
