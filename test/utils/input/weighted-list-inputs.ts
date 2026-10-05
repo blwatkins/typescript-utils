@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -20,11 +20,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-export * from './array';
-export * from './assert';
-export * from './error';
-export * from './math';
-export * from './number';
-export * from './random';
-export * from './range';
-export * from './string';
+export const sparseWeightedListInputs: unknown[] = [
+    Object.assign(new Array(2), { 1: { value: 'last', weight: 1 } }),
+    Object.assign(new Array(3), { 0: { value: 'first', weight: 0.5 }, 2: { value: 'last', weight: 0.5 } }),
+    Object.assign(new Array(2), { 0: { value: 'first', weight: 1 } })
+];
