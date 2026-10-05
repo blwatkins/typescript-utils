@@ -44,20 +44,20 @@ describe('WeightedListUtility', (): void => {
         return StringUtility.isSingleLine(input);
     };
 
-    const weightedList: (weights: number[]) => { value: string; weight: number; }[] = (weights: number[]): { value: string; weight: number; }[] => {
+    function buildWeightedList(weights: number[]): { value: string; weight: number; }[] {
         return weights.map((weight: number, index: number): { value: string; weight: number; } => {
             return { value: `value ${index}`, weight: weight };
         });
-    };
+    }
 
-    const equalWeights: (length: number) => number[] = (length: number): number[] => {
+    function getEqualWeights(length: number): number[] {
         return Array.from({ length: length }, (): number => 1 / length);
-    };
+    }
 
-    const proportionalWeights: (length: number) => number[] = (length: number): number[] => {
+    function getProportionalWeights(length: number): number[] {
         const total: number = (length * (length + 1)) / 2;
         return Array.from({ length: length }, (_: unknown, index: number): number => (index + 1) / total);
-    };
+    }
 
     const successScenarios: Scenario[] = [
         {
@@ -82,16 +82,16 @@ describe('WeightedListUtility', (): void => {
         {
             label: 'Weighted elements weight sum accumulates rounding error within the tolerance',
             inputs: [
-                ...[3, 7, 10, 20, 100, 1000].map((length: number): { value: string; weight: number; }[] => weightedList(equalWeights(length))),
-                weightedList(proportionalWeights(500))
+                ...[3, 7, 10, 20, 100, 1000].map((length: number): { value: string; weight: number; }[] => buildWeightedList(getEqualWeights(length))),
+                buildWeightedList(getProportionalWeights(500))
             ],
             expected: undefined
         },
         {
             label: 'Weighted elements weight sum differs from 1 by exactly the tolerance',
             inputs: [
-                weightedList([1, 2 * Number.EPSILON]),
-                weightedList([1 - (2 * Number.EPSILON), 0])
+                buildWeightedList([1, 2 * Number.EPSILON]),
+                buildWeightedList([1 - (2 * Number.EPSILON), 0])
             ],
             expected: undefined
         }
@@ -174,9 +174,9 @@ describe('WeightedListUtility', (): void => {
         {
             label: 'Weighted elements weight sum differs from 1 by more than the tolerance',
             inputs: [
-                weightedList([0.33332, 0.33332, 0.33332]),
-                weightedList([1, 3 * Number.EPSILON]),
-                weightedList([1 - (2.5 * Number.EPSILON), 0])
+                buildWeightedList([0.33332, 0.33332, 0.33332]),
+                buildWeightedList([1, 3 * Number.EPSILON]),
+                buildWeightedList([1 - (2.5 * Number.EPSILON), 0])
             ],
             expected: SchemaTypeError
         },
