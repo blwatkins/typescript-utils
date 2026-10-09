@@ -19,7 +19,7 @@
 <h4 class="tsd-anchor-link" id="since">Since<a href="#since" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/0700d6e7ade4032d60466bcb4260af6a3afce5e0/src/random/weighted-element/weighted-list-utility.ts#L35">src/random/weighted-element/weighted-list-utility.ts:35</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17256b968f09ce2c3496b1257953d37804b9e6f0/src/random/weighted-element/weighted-list-utility.ts#L36">src/random/weighted-element/weighted-list-utility.ts:36</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -56,7 +56,7 @@
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
 <h4 class="tsd-anchor-link" id="remarks">Remarks<a href="#remarks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not enforce type checking for the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of the list elements.
-For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
+For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty, dense array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
 The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <code>n</code> is the number of elements in the array, to absorb the floating-point rounding error of the summation.</p>
 </div>
 <div class="tsd-tag-see">
@@ -69,7 +69,7 @@ The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <cod
 <h4 class="tsd-anchor-link" id="since-1">Since<a href="#since-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/0700d6e7ade4032d60466bcb4260af6a3afce5e0/src/random/weighted-element/weighted-list-utility.ts#L67">src/random/weighted-element/weighted-list-utility.ts:67</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17256b968f09ce2c3496b1257953d37804b9e6f0/src/random/weighted-element/weighted-list-utility.ts#L68">src/random/weighted-element/weighted-list-utility.ts:68</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="assertweightedlist"><code class="tsd-tag">Static</code><span>assert<wbr/>Weighted<wbr/>List</span><a href="#assertweightedlist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -101,7 +101,7 @@ The type validated by the function should match the assigned type of the <a href
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-keyword">asserts</span> <span class="tsd-kind-parameter">input</span> <span class="tsd-signature-keyword">is</span> <a href="../types/random.WeightedList.html" class="tsd-signature-type tsd-kind-type-alias">WeightedList</a><span class="tsd-signature-symbol">&lt;</span><a class="tsd-signature-type tsd-kind-type-parameter" href="#assertweightedlisttvalue">TValue</a><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-1">Remarks<a href="#remarks-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
+<h4 class="tsd-anchor-link" id="remarks-1">Remarks<a href="#remarks-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty, dense array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
 The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <code>n</code> is the number of elements in the array, to absorb the floating-point rounding error of the summation.</p>
 </div>
 <div class="tsd-tag-see">
@@ -117,7 +117,7 @@ The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <cod
 <h4 class="tsd-anchor-link" id="since-2">Since<a href="#since-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/0700d6e7ade4032d60466bcb4260af6a3afce5e0/src/random/weighted-element/weighted-list-utility.ts#L101">src/random/weighted-element/weighted-list-utility.ts:101</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17256b968f09ce2c3496b1257953d37804b9e6f0/src/random/weighted-element/weighted-list-utility.ts#L102">src/random/weighted-element/weighted-list-utility.ts:102</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isgenericweightedlist"><code class="tsd-tag">Static</code><span>is<wbr/>Generic<wbr/>Weighted<wbr/>List</span><a href="#isgenericweightedlist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -137,17 +137,20 @@ The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <cod
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
 <h4 class="tsd-anchor-link" id="remarks-2">Remarks<a href="#remarks-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>This method does not enforce type checking for the <a href="../interfaces/random.WeightedElement.html#value" class="tsd-kind-property">WeightedElement.value</a> property of the list elements.
-For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
+For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty, dense array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
 The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <code>n</code> is the number of elements in the array, to absorb the floating-point rounding error of the summation.</p>
 </div>
 <div class="tsd-tag-see">
-<h4 class="tsd-anchor-link" id="see-2">See<a href="#see-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="random.WeightedElementUtility.html#isgenericweightedelement" class="tsd-kind-method">WeightedElementUtility.isGenericWeightedElement</a></p>
+<h4 class="tsd-anchor-link" id="see-2">See<a href="#see-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li><a href="array.ArrayUtility.html#isdensearray" class="tsd-kind-method">ArrayUtility.isDenseArray</a></li>
+<li><a href="random.WeightedElementUtility.html#isgenericweightedelement" class="tsd-kind-method">WeightedElementUtility.isGenericWeightedElement</a></li>
+</ul>
 </div>
 <div class="tsd-tag-since">
 <h4 class="tsd-anchor-link" id="since-3">Since<a href="#since-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/0700d6e7ade4032d60466bcb4260af6a3afce5e0/src/random/weighted-element/weighted-list-utility.ts#L127">src/random/weighted-element/weighted-list-utility.ts:127</a></li></ul></aside></div></li></ul></section>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17256b968f09ce2c3496b1257953d37804b9e6f0/src/random/weighted-element/weighted-list-utility.ts#L129">src/random/weighted-element/weighted-list-utility.ts:129</a></li></ul></aside></div></li></ul></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="isweightedlist"><code class="tsd-tag">Static</code><span>is<wbr/>Weighted<wbr/>List</span><a href="#isweightedlist" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
@@ -177,7 +180,7 @@ The type validated by the function should match the assigned type of the <a href
 
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-remarks">
-<h4 class="tsd-anchor-link" id="remarks-3">Remarks<a href="#remarks-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
+<h4 class="tsd-anchor-link" id="remarks-3">Remarks<a href="#remarks-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>For a <a href="../types/random.WeightedList.html" class="tsd-kind-type-alias">WeightedList</a> object to be valid, it must be a non-empty, dense array of <a href="../interfaces/random.WeightedElement.html" class="tsd-kind-interface">WeightedElement</a> objects, where the sum of <a href="../interfaces/random.WeightedElement.html#weight" class="tsd-kind-property">WeightedElement.weight</a> properties in the array is equal to 1.
 The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <code>n</code> is the number of elements in the array, to absorb the floating-point rounding error of the summation.</p>
 </div>
 <div class="tsd-tag-see">
@@ -193,7 +196,7 @@ The sum may differ from 1 by at most <code>n * Number.EPSILON</code>, where <cod
 <h4 class="tsd-anchor-link" id="since-4">Since<a href="#since-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p>0.1.0</p>
 </div></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/0700d6e7ade4032d60466bcb4260af6a3afce5e0/src/random/weighted-element/weighted-list-utility.ts#L167">src/random/weighted-element/weighted-list-utility.ts:167</a></li></ul></aside></div></li></ul></section></section></details></div>
+<li>Defined in <a href="https://github.com/blwatkins/typescript-utils/blob/17256b968f09ce2c3496b1257953d37804b9e6f0/src/random/weighted-element/weighted-list-utility.ts#L169">src/random/weighted-element/weighted-list-utility.ts:169</a></li></ul></aside></div></li></ul></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
