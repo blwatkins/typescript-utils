@@ -88,6 +88,7 @@
     "seeded-random",
     "non-uniform random",
     "range",
-    "string"
+    "string",
+    "array"
   ]
 }
