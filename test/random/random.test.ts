@@ -33,7 +33,7 @@ import {
     WeightedList
 } from '../../src';
 
-import { nonArrayInputs } from '../utils/input/array-inputs';
+import { nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 
 import {
@@ -703,7 +703,7 @@ describe('Random', (): void => {
         });
 
         describe('Input validation', (): void => {
-            describe('Input must be a non-empty array', (): void => {
+            describe('Input must be a non-empty, dense array', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-array type inputs',
@@ -715,6 +715,11 @@ describe('Random', (): void => {
                         inputs: [
                             []
                         ],
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Sparse array inputs',
+                        inputs: [...sparseArrayInputs],
                         expected: PrimitiveTypeError
                     }
                 ];

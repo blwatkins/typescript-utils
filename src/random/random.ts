@@ -20,6 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { ArrayUtility } from '../array';
 import { TypeAssertions } from '../assert';
 import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
@@ -196,13 +197,20 @@ export class Random {
     /**
      * Get a random element.
      *
+     * @remarks `elements` must be a non-empty, dense array.
+     * A dense array has an element at every index from `0` to `length - 1`.
+     * An array with a hole at any index, such as `[1, , 3]` or `new Array(3)`, is a sparse array and is rejected, because a hole has no element to return.
+     * An element that is explicitly `undefined` is not a hole, so `[undefined, 1]` is accepted, and `undefined` is a valid result.
+     * The density check visits every index, so this method runs in O(n) time, where `n` is the length of `elements`.
+     *
      * @see {@link TypeAssertions.assertArray}
+     * @see {@link ArrayUtility.assertDenseArray}
      *
      * @param {Type[]} elements - An array of elements to choose from.
      *
      * @returns {Type} A random element from `elements`.
      *
-     * @throws {PrimitiveTypeError} When `elements` is not a non-empty array.
+     * @throws {PrimitiveTypeError} When `elements` is not a non-empty, dense array.
      *
      * @public
      * @since 0.1.0
@@ -214,6 +222,7 @@ export class Random {
             throw new PrimitiveTypeError('elements must be a non-empty array.');
         }
 
+        ArrayUtility.assertDenseArray(elements, 'elements must be a dense array.');
         return elements[Random.randomInt(0, elements.length)];
     }
 
