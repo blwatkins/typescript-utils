@@ -70,7 +70,7 @@ export const nonArrayInputs: unknown[] = [
     new Int32Array([1, 2, 3])
 ];
 
-export const arrayInputs: unknown[] = [
+export const denseArrayInputs: unknown[] = [
     [],
     [1, 2, 3],
     ['a', 'b', 'c'],

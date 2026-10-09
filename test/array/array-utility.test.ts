@@ -25,7 +25,7 @@ import { describe } from 'vitest';
 import { ArrayUtility, PrimitiveTypeError, StaticInstanceError } from '../../src';
 
 import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
-import { arrayInputs, nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';
+import { denseArrayInputs, nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario } from '../utils/test-case/test-case';
 
@@ -41,7 +41,7 @@ describe('ArrayUtility', (): void => {
     const denseArraySuccessScenarios: Scenario[] = [
         {
             label: 'Dense array inputs',
-            inputs: arrayInputs,
+            inputs: denseArrayInputs,
             expected: undefined
         }
     ];
