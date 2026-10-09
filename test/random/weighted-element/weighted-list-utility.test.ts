@@ -35,6 +35,7 @@ import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests'
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
+import { sparseWeightedListInputs } from '../../utils/input/weighted-list-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('WeightedListUtility', (): void => {
@@ -188,6 +189,11 @@ describe('WeightedListUtility', (): void => {
                     { value: 'hi', weight: 2 }
                 ]
             ],
+            expected: SchemaTypeError
+        },
+        {
+            label: 'Sparse arrays whose weighted elements are valid and sum to 1',
+            inputs: sparseWeightedListInputs,
             expected: SchemaTypeError
         }
     ];

@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { TypeAssertions } from '../../assert';
+import { ArrayUtility } from '../../array';
 import { PrimitiveTypeError, ValueRangeError } from '../../error';
 import { NumberUtility } from '../../number';
 
@@ -44,9 +44,9 @@ export class SeededRandomNumberGenerator {
      * Public constructor.
      *
      * @param {[number, number, number, number]} state - Initial 128-bit state.
-     * Must be an array with 4 32-bit unsigned integers, where at least one element is greater than 0.
+     * Must be a dense array with 4 32-bit unsigned integers, where at least one element is greater than 0.
      *
-     * @throws {PrimitiveTypeError} When `state` is not an array with exactly 4 elements.
+     * @throws {PrimitiveTypeError} When `state` is not a dense array with exactly 4 elements.
      * @throws {ValueRangeError} When any element of `state` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
      * @throws {ValueRangeError} When all elements of `state` are equal to zero.
      *
@@ -114,23 +114,23 @@ export class SeededRandomNumberGenerator {
     /**
      * Assert that `state` is a valid state array.
      *
-     * @remarks For a state array to be valid, it must be an array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
+     * @remarks For a state array to be valid, it must be a dense array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
      * Additionally, a valid state array must have at least one element that is greater than zero.
      *
-     * @see {@link TypeAssertions.assertArray}
+     * @see {@link ArrayUtility.assertDenseArray}
      *
      * @param {unknown} state - The state to check.
      *
      * @returns {asserts state is [number, number, number, number]} Asserts that `state` is a valid state array.
      *
-     * @throws {PrimitiveTypeError} When `state` is not an array with exactly 4 elements.
+     * @throws {PrimitiveTypeError} When `state` is not a dense array with exactly 4 elements.
      * @throws {ValueRangeError} When any element of `state` is not a 32-bit unsigned integer less than or equal to 0xFFFFFFFF.
      * @throws {ValueRangeError} When all elements of `state` are equal to zero.
      *
      * @private
      */
     #assertValidState(state: unknown): asserts state is [number, number, number, number] {
-        TypeAssertions.assertArray(state);
+        ArrayUtility.assertDenseArray(state);
         if (state.length !== 4) throw new PrimitiveTypeError('state must have exactly 4 elements.');
 
         const allValidStateValues: boolean = state.every((value: unknown): boolean => {

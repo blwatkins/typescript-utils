@@ -52,6 +52,7 @@ Claude Code skips backticked and fenced content when parsing imports, but a bare
 
 ```
 src/
+  array/                  # Array utilities
   assert/                 # Type assertion utilities
   error/                  # Custom error types
   math/                   # Math utilities
@@ -63,6 +64,7 @@ src/
   string/                 # String utilities
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
+  array/                  # Tests for the array module
   assert/                 # Tests for the assert module
   error/                  # Tests for the error module
   math/                   # Tests for the math module
