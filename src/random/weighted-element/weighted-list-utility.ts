@@ -20,6 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { ArrayUtility } from '../../array';
 import { TypeAssertions } from '../../assert';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
 import { StringUtility } from '../../string';
@@ -49,7 +50,7 @@ export class WeightedListUtility {
      * Assert that `input` is a valid generic {@link WeightedList} object.
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
-     * For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * For a {@link WeightedList} object to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link WeightedListUtility.isGenericWeightedList}
@@ -77,7 +78,7 @@ export class WeightedListUtility {
     /**
      * Assert that `input` is a valid {@link WeightedList} object.
      *
-     * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link WeightedListUtility.isWeightedList}
@@ -112,9 +113,10 @@ export class WeightedListUtility {
      * Is `input` a valid generic {@link WeightedList} object?
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
-     * For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * For a {@link WeightedList} object to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
+     * @see {@link ArrayUtility.isDenseArray}
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
@@ -125,7 +127,7 @@ export class WeightedListUtility {
      * @since 0.1.0
      */
     public static isGenericWeightedList(input: unknown): input is WeightedList<unknown> {
-        if (!input || !Array.isArray(input) || input.length === 0) {
+        if (!ArrayUtility.isDenseArray(input) || input.length === 0) {
             return false;
         }
 
@@ -144,7 +146,7 @@ export class WeightedListUtility {
     /**
      * Is `input` a valid {@link WeightedList} object?
      *
-     * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link TypeAssertions.assertFunction}

@@ -20,6 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { ArrayUtility } from '../array';
 import { PrimitiveTypeError, StaticInstanceError } from '../error';
 import { StringUtility } from '../string';
 
@@ -44,7 +45,9 @@ export class TypeAssertions {
     /**
      * Assert that `input` is an array.
      *
-     * @remarks This method does not enforce size requirements or type checking for any array elements.
+     * @remarks This method does not enforce size requirements, density requirements, or type checking for any array elements.
+     *
+     * @see {@link ArrayUtility.assertArray}
      *
      * @param {unknown} input - The input to check.
      * @param {string | undefined} message - Optional message for the error thrown when `input` is not an array.
@@ -57,13 +60,7 @@ export class TypeAssertions {
      * @since 0.1.0
      */
     public static assertArray(input: unknown, message?: string): asserts input is unknown[] {
-        if (!Array.isArray(input)) {
-            if (StringUtility.isSingleLine(message)) {
-                throw new PrimitiveTypeError(message);
-            }
-
-            throw new PrimitiveTypeError('Expected an array.');
-        }
+        ArrayUtility.assertArray(input, message);
     }
 
     /**

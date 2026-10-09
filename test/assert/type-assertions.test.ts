@@ -30,7 +30,7 @@ import {
 } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
-import { arrayInputs, nonArrayInputs } from '../utils/input/array-inputs';
+import { arrayInputs, nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
@@ -45,6 +45,11 @@ describe('TypeAssertions', (): void => {
         {
             label: 'Array inputs',
             inputs: arrayInputs,
+            expected: undefined
+        },
+        {
+            label: 'Sparse array inputs',
+            inputs: sparseArrayInputs,
             expected: undefined
         }
     ];

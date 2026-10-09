@@ -50,6 +50,17 @@ describe('SeededRandomNumberGenerator', (): void => {
                     expected: PrimitiveTypeError
                 },
                 {
+                    label: 'Sparse array inputs',
+                    inputs: [
+                        new Array(4),
+                        Object.assign(new Array(4), { 1: 1, 2: 1, 3: 1 }),
+                        Object.assign(new Array(4), { 0: 1, 2: 1, 3: 1 }),
+                        Object.assign(new Array(4), { 0: 1, 1: 1, 3: 1 }),
+                        Object.assign(new Array(4), { 0: 1, 1: 1, 2: 1 })
+                    ],
+                    expected: PrimitiveTypeError
+                },
+                {
                     label: 'Array inputs with non-integer elements',
                     inputs: [
                         [1.5, 0, 0, 0],

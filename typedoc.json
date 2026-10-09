@@ -6,6 +6,7 @@
   },
 
   "entryPoints": [
+    "./src/array/index.ts",
     "./src/assert/index.ts",
     "./src/error/index.ts",
     "./src/math/index.ts",
