@@ -201,7 +201,10 @@ describe('MathUtility', (): void => {
                 { x: 4, y: 0, columns: 5, rows: 1, expected: 4 },
                 { x: 0, y: 4, columns: 1, rows: 5, expected: 4 },
                 { x: Number.MAX_SAFE_INTEGER - 1, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 1, expected: Number.MAX_SAFE_INTEGER - 1 },
-                { x: 0, y: Number.MAX_SAFE_INTEGER - 1, columns: 1, rows: Number.MAX_SAFE_INTEGER, expected: Number.MAX_SAFE_INTEGER - 1 }
+                { x: 0, y: Number.MAX_SAFE_INTEGER - 1, columns: 1, rows: Number.MAX_SAFE_INTEGER, expected: Number.MAX_SAFE_INTEGER - 1 },
+                { x: 0, y: 0, columns: 441650591, rows: 20394401, expected: 0 },
+                { x: 441650590, y: 20394400, columns: 441650591, rows: 20394401, expected: Number.MAX_SAFE_INTEGER - 1 },
+                { x: 20394400, y: 441650590, columns: 20394401, rows: 441650591, expected: Number.MAX_SAFE_INTEGER - 1 }
             ])('%# - toFlatIndex($x, $y, $columns, $rows) should return $expected', ({ x, y, columns, rows, expected }: { x: number; y: number; columns: number; rows: number; expected: number; }): void => {
                 expect(MathUtility.toFlatIndex(x, y, columns, rows)).toBe(expected);
             });
@@ -292,7 +295,18 @@ describe('MathUtility', (): void => {
                     inputs: [
                         { x: 0, y: 0, columns: Number.MAX_SAFE_INTEGER, rows: 2 },
                         { x: 0, y: 0, columns: 2, rows: Number.MAX_SAFE_INTEGER },
-                        { x: 0, y: 0, columns: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)), rows: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)) }
+                        { x: 0, y: 0, columns: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)), rows: Math.ceil(Math.sqrt(Number.MAX_SAFE_INTEGER)) },
+                        { x: 0, y: 0, columns: 134217728, rows: 67108864 },
+                        { x: 0, y: 0, columns: 67108864, rows: 134217728 }
+                    ],
+                    expected: ValueRangeError
+                },
+                {
+                    label: 'Grid size larger than the maximum safe integer with a product that is not exactly representable',
+                    inputs: [
+                        { x: 0, y: 0, columns: 3, rows: 3002399751580331 },
+                        { x: 0, y: 0, columns: 3002399751580331, rows: 3 },
+                        { x: 0, y: 0, columns: 94906267, rows: 94906267 }
                     ],
                     expected: ValueRangeError
                 }
