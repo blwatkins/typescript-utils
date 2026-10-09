@@ -70,7 +70,7 @@ export const nonArrayInputs: unknown[] = [
     new Int32Array([1, 2, 3])
 ];
 
-export const arrayInputs: unknown[] = [
+export const denseArrayInputs: unknown[] = [
     [],
     [1, 2, 3],
     ['a', 'b', 'c'],
@@ -79,4 +79,13 @@ export const arrayInputs: unknown[] = [
     [undefined, undefined],
     new (class extends Array {})(),
     Array.from({ length: 2 })
+];
+
+export const sparseArrayInputs: unknown[] = [
+    new Array(1),
+    new Array(3),
+    Object.assign(new Array(3), { 1: 'b', 2: 'c' }),
+    Object.assign(new Array(3), { 0: 'a', 2: 'c' }),
+    Object.assign(new Array(3), { 0: 'a', 1: 'b' }),
+    Object.assign(new Array(3), { 0: undefined, 2: undefined })
 ];

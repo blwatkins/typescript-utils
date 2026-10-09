@@ -30,7 +30,7 @@ import {
 } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
-import { arrayInputs, nonArrayInputs } from '../utils/input/array-inputs';
+import { denseArrayInputs, nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';
 import { nonBooleanInputs } from '../utils/input/boolean-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 import { nonObjectInputs } from '../utils/input/object-inputs';
@@ -43,8 +43,13 @@ describe('TypeAssertions', (): void => {
 
     const arraySuccessScenarios: Scenario[] = [
         {
-            label: 'Array inputs',
-            inputs: arrayInputs,
+            label: 'Dense array inputs',
+            inputs: denseArrayInputs,
+            expected: undefined
+        },
+        {
+            label: 'Sparse array inputs',
+            inputs: sparseArrayInputs,
             expected: undefined
         }
     ];
@@ -138,7 +143,7 @@ describe('TypeAssertions', (): void => {
         },
         {
             label: 'Array inputs',
-            inputs: arrayInputs,
+            inputs: denseArrayInputs,
             expected: PrimitiveTypeError
         }
     ];

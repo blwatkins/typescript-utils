@@ -20,15 +20,11 @@
  * SPDX-License-Identifier: MIT
  */
 
-import Value from 'typebox/value';
-
-import { Type } from 'typebox';
-
 import { TypeAssertions } from '../../assert';
 import { SchemaTypeError, StaticInstanceError } from '../../error';
 import { StringUtility } from '../../string';
 
-import { WeightedElement, weightedElementSchema } from './weighted-element';
+import { WeightedElement, weightedElementValidator } from './weighted-element';
 
 /**
  * Static methods and properties for validating {@link WeightedElement} objects.
@@ -115,6 +111,8 @@ export class WeightedElementUtility {
      * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
      * For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *
+     * @see {@link weightedElementValidator}
+     *
      * @param {unknown} input - The input to check.
      *
      * @returns {input is WeightedElement<unknown>} `true` if `input` is a valid generic {@link WeightedElement} object; `false` otherwise.
@@ -123,7 +121,7 @@ export class WeightedElementUtility {
      * @since 0.1.0
      */
     public static isGenericWeightedElement(input: unknown): input is WeightedElement<unknown> {
-        return Value.Check(Type.Call(weightedElementSchema, [Type.Unknown()]), input);
+        return weightedElementValidator.Check(input);
     }
 
     /**

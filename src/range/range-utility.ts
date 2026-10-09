@@ -20,15 +20,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import Value from 'typebox/value';
-
 import { SchemaTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { MathUtility } from '../math';
 import { NumberUtility } from '../number';
 import { Random } from '../random';
 import { StringUtility } from '../string';
 
-import { Range, rangeSchema } from './range';
+import { Range, rangeValidator } from './range';
 
 /**
  * The maximum number of times {@link RangeUtility.randomFloat} draws a new value when a draw falls
@@ -130,6 +128,8 @@ export class RangeUtility {
      * When either bound is excluded, `min` must be less than `max`.
      * When both bounds are excluded, the midpoint of the range must also be distinct from both `min` and `max`; otherwise, there is no representable value available to satisfy the range.
      *
+     * @see {@link rangeValidator}
+     *
      * @param {unknown} input - The input to check.
      *
      * @returns {input is Range} `true` if `input` is a valid {@link Range} object; `false` otherwise.
@@ -138,7 +138,7 @@ export class RangeUtility {
      * @since 0.1.0
      */
     public static isRange(input: unknown): input is Range {
-        const validSchema: boolean = Value.Check(rangeSchema, input);
+        const validSchema: boolean = rangeValidator.Check(input);
 
         if (validSchema) {
             const range: Range = input as Range;

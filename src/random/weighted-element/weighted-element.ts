@@ -22,6 +22,8 @@
 
 import { Type } from 'typebox';
 
+import { Compile } from 'typebox/compile';
+
 /**
  * Minimum value for a {@link WeightedElement.weight}.
  *
@@ -69,6 +71,17 @@ export const weightedElementSchema = Type.Generic(
         { additionalProperties: false }
     )
 );
+
+/**
+ * Compiled TypeBox validator for {@link weightedElementSchema}.
+ *
+ * @remarks This validator is used to check if an object conforms to the {@link weightedElementSchema} and {@link WeightedElement} type.
+ * Due to the nature of TypeBox generic types, this validator is compiled with {@link Type.Unknown} as the generic type argument.
+ * This means that this validator can only be used to verify that an object conforms to the `WeightedElement<unknown>` type, where the type of the {@link WeightedElement.value} property is `unknown`.
+ *
+ * @since 0.1.0
+ */
+export const weightedElementValidator = Compile(Type.Call(weightedElementSchema, [Type.Unknown()]));
 
 /**
  * Interface for a weighted element, which can be used for non-uniform random selection from a list.

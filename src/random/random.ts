@@ -220,7 +220,8 @@ export class Random {
     /**
      * Get a random element from a non-uniform distribution.
      *
-     * @remarks For a {@link WeightedList} to be valid, it must be a non-empty array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * @remarks For a {@link WeightedList} to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
+     * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
      *
      * @see {@link WeightedListUtility.assertGenericWeightedList}
      *

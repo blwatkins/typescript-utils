@@ -119,6 +119,15 @@ export const validRangeScenarios: Scenario[] = [
             { min: -Number.MIN_VALUE, max: Number.MIN_VALUE, isMinInclusive: true, isMaxInclusive: true }
         ],
         expected: undefined
+    },
+    {
+        label: 'Object inputs with inherited properties',
+        inputs: [
+            Object.create({ min: 5, max: 10 }),
+            Object.create({ min: 5, max: 10, isMinInclusive: true, isMaxInclusive: false }),
+            Object.create({ min: 5, max: 10, isMinInclusive: true, isMaxInclusive: false, day: 1 })
+        ],
+        expected: undefined
     }
 ];
 
@@ -148,7 +157,8 @@ export const invalidRangeScenarios: Scenario[] = [
             { min: -10.12345678912344, max: -10.12345678912345, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: Number.EPSILON, max: 0, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: Number.MAX_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: undefined, isMaxInclusive: undefined },
-            { min: 10, max: 0, isMinInclusive: true, isMaxInclusive: true }
+            { min: 10, max: 0, isMinInclusive: true, isMaxInclusive: true },
+            Object.create({ min: 10, max: 0, isMinInclusive: true, isMaxInclusive: true })
         ],
         expected: SchemaTypeError
     },
@@ -165,7 +175,8 @@ export const invalidRangeScenarios: Scenario[] = [
             { min: -5.5, max: -5.5, isMinInclusive: undefined, isMaxInclusive: false },
             { min: -5.5, max: -5.5, isMinInclusive: false, isMaxInclusive: true },
             { min: Number.MAX_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false },
-            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false }
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false },
+            Object.create({ min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER, isMinInclusive: true, isMaxInclusive: false })
         ],
         expected: SchemaTypeError
     },
@@ -179,7 +190,8 @@ export const invalidRangeScenarios: Scenario[] = [
             { min: Number.MAX_SAFE_INTEGER - 1, max: Number.MAX_SAFE_INTEGER, isMinInclusive: false, isMaxInclusive: false },
             { min: Number.MIN_SAFE_INTEGER, max: Number.MIN_SAFE_INTEGER + 1, isMinInclusive: false, isMaxInclusive: false },
             { min: 1 + Number.EPSILON, max: 1 + (2 * Number.EPSILON), isMinInclusive: false, isMaxInclusive: false },
-            { min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: false, isMaxInclusive: false }
+            { min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: false, isMaxInclusive: false },
+            Object.create({ min: -1 - (2 * Number.EPSILON), max: -1 - Number.EPSILON, isMinInclusive: false, isMaxInclusive: false })
         ],
         expected: SchemaTypeError
     }
@@ -192,7 +204,8 @@ export const optionalPropertyRangeScenarios: Scenario[] = [
             { min: 0, max: 10 },
             { min: -10, max: -1 },
             { min: 5, max: 5 },
-            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }
+            { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+            Object.create({ min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER })
         ],
         expected: undefined
     },
@@ -205,7 +218,8 @@ export const optionalPropertyRangeScenarios: Scenario[] = [
             { min: 0, max: 10, isMaxInclusive: false },
             { min: -5, max: -5, isMinInclusive: true },
             { min: 1, max: 1 + Number.EPSILON, isMaxInclusive: false },
-            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false }
+            { min: 1, max: 1 + Number.EPSILON, isMinInclusive: false },
+            Object.create({ min: 1, max: 1 + Number.EPSILON, isMinInclusive: false })
         ],
         expected: undefined
     },
@@ -216,7 +230,8 @@ export const optionalPropertyRangeScenarios: Scenario[] = [
             { min: 0, max: 10, isMaxInclusive: undefined },
             { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: undefined },
             { min: 0, max: 10, isMinInclusive: undefined, isMaxInclusive: false },
-            { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined }
+            { min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined },
+            Object.create({ min: 0, max: 10, isMinInclusive: true, isMaxInclusive: undefined })
         ],
         expected: undefined
     }
@@ -243,7 +258,8 @@ export const invalidRangeSchemaScenarios: Scenario[] = [
         inputs: [
             { max: 10 },
             { max: 0, isMinInclusive: true },
-            { max: -5, isMinInclusive: false, isMaxInclusive: false }
+            { max: -5, isMinInclusive: false, isMaxInclusive: false },
+            Object.create({ max: -5, isMinInclusive: false, isMaxInclusive: false })
         ],
         expected: SchemaTypeError
     },
@@ -252,7 +268,8 @@ export const invalidRangeSchemaScenarios: Scenario[] = [
         inputs: [
             { min: 0 },
             { min: -5, isMaxInclusive: false },
-            { min: 10, isMinInclusive: true, isMaxInclusive: true }
+            { min: 10, isMinInclusive: true, isMaxInclusive: true },
+            Object.create({ min: 10, isMinInclusive: true, isMaxInclusive: true })
         ],
         expected: SchemaTypeError
     },
@@ -262,7 +279,8 @@ export const invalidRangeSchemaScenarios: Scenario[] = [
             {},
             { isMinInclusive: true },
             { isMaxInclusive: false },
-            { isMinInclusive: true, isMaxInclusive: true }
+            { isMinInclusive: true, isMaxInclusive: true },
+            Object.create({ isMinInclusive: true, isMaxInclusive: true })
         ],
         expected: SchemaTypeError
     },
@@ -302,7 +320,8 @@ export const invalidRangeSchemaScenarios: Scenario[] = [
             { min: Infinity, max: Infinity },
             { min: -Infinity, max: -Infinity },
             { min: NaN, max: Infinity },
-            { min: -Infinity, max: NaN }
+            { min: -Infinity, max: NaN },
+            Object.create({ min: -Infinity, max: NaN })
         ],
         expected: SchemaTypeError
     },
@@ -344,7 +363,8 @@ export const invalidRangeSchemaScenarios: Scenario[] = [
             { min: -1e300, max: 1e300 },
             { min: -Number.MAX_VALUE, max: Number.MAX_VALUE },
             { min: -Number.MAX_VALUE, max: 0 },
-            { min: 0, max: Math.pow(2, 53) }
+            { min: 0, max: Math.pow(2, 53) },
+            Object.create({ min: 0, max: Math.pow(2, 53) })
         ],
         expected: SchemaTypeError
     }

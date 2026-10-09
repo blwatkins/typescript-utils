@@ -26,9 +26,11 @@ import {
     PrimitiveTypeError,
     Random,
     RandomNumberGeneratorFactory,
+    SchemaTypeError,
     SeededRandomNumberGenerator,
     StaticInstanceError,
-    ValueRangeError
+    ValueRangeError,
+    WeightedList
 } from '../../src';
 
 import { nonArrayInputs } from '../utils/input/array-inputs';
@@ -41,6 +43,8 @@ import {
     unsafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
+
+import { sparseWeightedListInputs } from '../utils/input/weighted-list-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 
@@ -917,6 +921,32 @@ describe('Random', (): void => {
 
                     const selected: unknown = Random.randomWeightedElement(input);
                     expect(selected).toBe(input[input.length - 1].value);
+                });
+            });
+        });
+
+        describe('Input validation', (): void => {
+            describe('Input must be a dense weighted list', (): void => {
+                const scenarios: Scenario[] = [
+                    {
+                        label: 'Sparse arrays whose weighted elements are valid and sum to 1',
+                        inputs: sparseWeightedListInputs,
+                        expected: SchemaTypeError
+                    }
+                ];
+
+                describe.each(
+                    scenarios
+                )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                    const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                    test.each(
+                        testCases
+                    )('%# - randomWeightedElement($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        expect((): void => {
+                            Random.randomWeightedElement(testInput as WeightedList<unknown>);
+                        }).toThrow(testExpected);
+                    });
                 });
             });
         });

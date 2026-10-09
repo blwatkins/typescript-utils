@@ -35,6 +35,7 @@ import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests'
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
+import { sparseWeightedListInputs } from '../../utils/input/weighted-list-inputs';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('WeightedListUtility', (): void => {
@@ -43,6 +44,21 @@ describe('WeightedListUtility', (): void => {
     const typeGuard: (input: unknown) => input is string = (input: unknown): input is string => {
         return StringUtility.isSingleLine(input);
     };
+
+    function buildWeightedList(weights: number[]): { value: string; weight: number; }[] {
+        return weights.map((weight: number, index: number): { value: string; weight: number; } => {
+            return { value: `value ${index}`, weight: weight };
+        });
+    }
+
+    function getEqualWeights(length: number): number[] {
+        return Array.from({ length: length }, (): number => 1 / length);
+    }
+
+    function getProportionalWeights(length: number): number[] {
+        const total: number = (length * (length + 1)) / 2;
+        return Array.from({ length: length }, (_: unknown, index: number): number => (index + 1) / total);
+    }
 
     const successScenarios: Scenario[] = [
         {
@@ -61,6 +77,22 @@ describe('WeightedListUtility', (): void => {
                     { value: 'hi', weight: 0.25 },
                     { value: 'howdy', weight: 0.25 }
                 ]
+            ],
+            expected: undefined
+        },
+        {
+            label: 'Weighted elements weight sum accumulates rounding error within the tolerance',
+            inputs: [
+                ...[3, 7, 10, 20, 100, 1000].map((length: number): { value: string; weight: number; }[] => buildWeightedList(getEqualWeights(length))),
+                buildWeightedList(getProportionalWeights(500))
+            ],
+            expected: undefined
+        },
+        {
+            label: 'Weighted elements weight sum differs from 1 by exactly the tolerance',
+            inputs: [
+                buildWeightedList([1, 2 * Number.EPSILON]),
+                buildWeightedList([1 - (2 * Number.EPSILON), 0])
             ],
             expected: undefined
         }
@@ -141,6 +173,15 @@ describe('WeightedListUtility', (): void => {
             expected: SchemaTypeError
         },
         {
+            label: 'Weighted elements weight sum differs from 1 by more than the tolerance',
+            inputs: [
+                buildWeightedList([0.33332, 0.33332, 0.33332]),
+                buildWeightedList([1, 3 * Number.EPSILON]),
+                buildWeightedList([1 - (2.5 * Number.EPSILON), 0])
+            ],
+            expected: SchemaTypeError
+        },
+        {
             label: 'Weighted elements sum is equal to 1 but contains invalid weights',
             inputs: [
                 [
@@ -148,6 +189,11 @@ describe('WeightedListUtility', (): void => {
                     { value: 'hi', weight: 2 }
                 ]
             ],
+            expected: SchemaTypeError
+        },
+        {
+            label: 'Sparse arrays whose weighted elements are valid and sum to 1',
+            inputs: sparseWeightedListInputs,
             expected: SchemaTypeError
         }
     ];
