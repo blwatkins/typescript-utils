@@ -195,6 +195,30 @@ export class Random {
     }
 
     /**
+     * Get a random index for an array of the given length.
+     *
+     * @remarks This method runs in O(1) time.
+     * It receives only the length of an array, so it does not check the array itself.
+     * When the array may be sparse, the returned index may be a hole, and reading it yields `undefined`.
+     * Use {@link Random.randomElement} to select from an array that has not already been verified as dense.
+     *
+     * @see {@link NumberUtility.assertPositiveInteger}
+     *
+     * @param {number} length - The length of the array, which must be a positive integer greater than 0.
+     *
+     * @returns {number} A random integer within the range [0, `length` - 1] (both inclusive).
+     *
+     * @throws {PrimitiveTypeError} When `length` is not a positive integer within the safe integer range.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomIndex(length: number): number {
+        NumberUtility.assertPositiveInteger(length, false, 'length must be a positive integer greater than 0.');
+        return Random.randomInt(0, length);
+    }
+
+    /**
      * Get a random element.
      *
      * @remarks `elements` must be a non-empty, dense array.
@@ -223,7 +247,7 @@ export class Random {
         }
 
         ArrayUtility.assertDenseArray(elements, 'elements must be a dense array.');
-        return elements[Random.randomInt(0, elements.length)];
+        return elements[Random.randomIndex(elements.length)];
     }
 
     /**
