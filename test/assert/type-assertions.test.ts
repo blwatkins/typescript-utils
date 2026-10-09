@@ -43,7 +43,7 @@ describe('TypeAssertions', (): void => {
 
     const arraySuccessScenarios: Scenario[] = [
         {
-            label: 'Array inputs',
+            label: 'Dense array inputs',
             inputs: denseArrayInputs,
             expected: undefined
         },
