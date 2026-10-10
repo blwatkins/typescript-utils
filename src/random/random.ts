@@ -39,14 +39,15 @@ import { WeightedList, WeightedListUtility } from './weighted-element';
 const maxDrawAttempts: number = 10;
 
 /**
- * Static properties and methods for generating random values and for selecting random elements from arrays.
+ * Static properties and methods for generating random values and for selecting random elements.
  *
  * @since 0.1.0
  */
 export class Random {
     /**
      * The primary function used to generate random numbers.
-     * By default, this is set to {@link Math.random}, but it can be overridden for testing or seeded pseudorandom number generation.
+     *
+     * @remarks By default, this is set to {@link Math.random}, but it can be overridden for testing or seeded pseudorandom number generation.
      *
      * @default {@link Math.random}
      *
@@ -195,20 +196,15 @@ export class Random {
     }
 
     /**
-     * Get a random index for an array of the given length.
-     *
-     * @remarks This method runs in O(1) time.
-     * It receives only the length of an array, so it does not check the array itself.
-     * When the array may be sparse, the returned index may be a hole, and reading it yields `undefined`.
-     * Use {@link Random.randomElement} to select from an array that has not already been verified as dense.
+     * Get a random index for an array with the given length.
      *
      * @see {@link NumberUtility.assertPositiveInteger}
      *
-     * @param {number} length - The length of the array, which must be a positive integer greater than 0.
+     * @param {number} length - The length of the array.
      *
-     * @returns {number} A random integer within the range [0, `length` - 1] (both inclusive).
+     * @returns {number} A random integer within the range [0, `length` - 1] (inclusive).
      *
-     * @throws {PrimitiveTypeError} When `length` is not a positive integer within the safe integer range.
+     * @throws {PrimitiveTypeError} When `length` is not a positive integer within the safe integer range greater than 0.
      *
      * @public
      * @since 0.1.0
@@ -221,13 +217,6 @@ export class Random {
     /**
      * Get a random element.
      *
-     * @remarks `elements` must be a non-empty, dense array.
-     * A dense array has an element at every index from `0` to `length - 1`.
-     * An array with a hole at any index, such as `[1, , 3]` or `new Array(3)`, is a sparse array and is rejected, because a hole has no element to return.
-     * An element that is explicitly `undefined` is not a hole, so `[undefined, 1]` is accepted, and `undefined` is a valid result.
-     * The density check visits every index, so this method runs in O(n) time, where `n` is the length of `elements`.
-     *
-     * @see {@link TypeAssertions.assertArray}
      * @see {@link ArrayUtility.assertDenseArray}
      *
      * @param {Type[]} elements - An array of elements to choose from.
@@ -240,13 +229,12 @@ export class Random {
      * @since 0.1.0
      */
     public static randomElement<Type>(elements: Type[]): Type {
-        TypeAssertions.assertArray(elements);
+        ArrayUtility.assertDenseArray(elements, 'elements must be a dense array.');
 
         if (elements.length === 0) {
             throw new PrimitiveTypeError('elements must be a non-empty array.');
         }
 
-        ArrayUtility.assertDenseArray(elements, 'elements must be a dense array.');
         return elements[Random.randomIndex(elements.length)];
     }
 
