@@ -20,6 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { ArrayUtility } from '../array';
 import { TypeAssertions } from '../assert';
 import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
@@ -38,14 +39,15 @@ import { WeightedList, WeightedListUtility } from './weighted-element';
 const maxDrawAttempts: number = 10;
 
 /**
- * Static properties and methods for generating random values and for selecting random elements from arrays.
+ * Static properties and methods for generating random values and for selecting random elements.
  *
  * @since 0.1.0
  */
 export class Random {
     /**
      * The primary function used to generate random numbers.
-     * By default, this is set to {@link Math.random}, but it can be overridden for testing or seeded pseudorandom number generation.
+     *
+     * @remarks By default, this is set to {@link Math.random}, but it can be overridden for testing or seeded pseudorandom number generation.
      *
      * @default {@link Math.random}
      *
@@ -194,27 +196,46 @@ export class Random {
     }
 
     /**
+     * Get a random index for an array with the given length.
+     *
+     * @see {@link NumberUtility.assertPositiveInteger}
+     *
+     * @param {number} length - The length of the array.
+     *
+     * @returns {number} A random integer within the range [0, `length` - 1] (inclusive).
+     *
+     * @throws {PrimitiveTypeError} When `length` is not a positive integer within the safe integer range greater than 0.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static randomIndex(length: number): number {
+        NumberUtility.assertPositiveInteger(length, false, 'length must be a positive integer greater than 0.');
+        return Random.randomInt(0, length);
+    }
+
+    /**
      * Get a random element.
      *
-     * @see {@link TypeAssertions.assertArray}
+     * @see {@link ArrayUtility.assertDenseArray}
      *
      * @param {Type[]} elements - An array of elements to choose from.
      *
      * @returns {Type} A random element from `elements`.
      *
-     * @throws {PrimitiveTypeError} When `elements` is not a non-empty array.
+     * @throws {PrimitiveTypeError} When `elements` is not a non-empty, dense array.
      *
      * @public
      * @since 0.1.0
      */
     public static randomElement<Type>(elements: Type[]): Type {
-        TypeAssertions.assertArray(elements);
+        ArrayUtility.assertDenseArray(elements, 'elements must be a dense array.');
 
         if (elements.length === 0) {
             throw new PrimitiveTypeError('elements must be a non-empty array.');
         }
 
-        return elements[Random.randomInt(0, elements.length)];
+        return elements[Random.randomIndex(elements.length)];
     }
 
     /**

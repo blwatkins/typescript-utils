@@ -33,13 +33,15 @@ import {
     WeightedList
 } from '../../src';
 
-import { nonArrayInputs } from '../utils/input/array-inputs';
+import { nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';
 import { nonFunctionInputs } from '../utils/input/function-inputs';
 
 import {
     invalidSafeNumberInputs,
+    invalidSafePositiveIntegerInputs,
     nonFiniteNumberInputs,
     nonNumberInputs,
+    positiveSafeIntegerInputs,
     unsafeNumberInputs,
     zeroInputs
 } from '../utils/input/number-inputs';
@@ -62,7 +64,7 @@ describe('Random', (): void => {
 
     const testRepeatTotal: number = 50;
 
-    const outOfContractDraws: number[] = [-1, -0.5, NaN, 2, Infinity, -Infinity];
+    const outOfContractDraws: number[] = [-1, -0.5, NaN, 1, 2, Infinity, -Infinity];
 
     afterEach((): void => {
         Random.randomNumberGenerator = Math.random;
@@ -197,6 +199,19 @@ describe('Random', (): void => {
 
                 for (let i: number = 0; i < testRepeatTotal; i++) {
                     expect(Random.randomInt(0, 4)).toBe(expected);
+                }
+            });
+
+            test('randomIndex', (): void => {
+                const random: number = 0.25;
+                const expected: number = 1;
+
+                Random.randomNumberGenerator = (): number => {
+                    return random;
+                };
+
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    expect(Random.randomIndex(4)).toBe(expected);
                 }
             });
 
@@ -637,6 +652,90 @@ describe('Random', (): void => {
         });
     });
 
+    describe('randomIndex', (): void => {
+        const largestDraw: number = 1 - (Number.EPSILON / 2);
+
+        describe('randomIndex should return an integer between 0 and length - 1', (): void => {
+            test.each(
+                positiveSafeIntegerInputs
+            )('%# - randomIndex(%d) should return an integer within [0, %d)', (length: number): void => {
+                const indices: number[] = [];
+
+                for (let i: number = 0; i < testRepeatTotal; i++) {
+                    indices.push(Random.randomIndex(length));
+                }
+
+                validateRandomIntValues(indices, 0, length);
+            });
+        });
+
+        describe('randomIndex should return every index from 0 to length - 1', (): void => {
+            test.each([
+                1,
+                2,
+                3,
+                5,
+                10
+            ])('%# - randomIndex(%d) should return every index', (length: number): void => {
+                const indices: Set<number> = new Set<number>();
+                const repeatTotal: number = Math.max(testRepeatTotal, length * 20);
+
+                for (let i: number = 0; i < repeatTotal; i++) {
+                    indices.add(Random.randomIndex(length));
+                }
+
+                expect(indices.size).toBe(length);
+
+                for (let index: number = 0; index < length; index++) {
+                    expect(indices.has(index)).toBe(true);
+                }
+            });
+        });
+
+        describe('randomIndex should return 0 for the smallest draw and length - 1 for the largest draw', (): void => {
+            test.each(
+                positiveSafeIntegerInputs
+            )('%# - randomIndex(%d) should return 0 when the generator returns 0', (length: number): void => {
+                Random.randomNumberGenerator = (): number => 0;
+                expect(Random.randomIndex(length)).toBe(0);
+            });
+
+            test.each(
+                positiveSafeIntegerInputs
+            )('%# - randomIndex(%d) should return length - 1 when the generator returns the largest draw below 1', (length: number): void => {
+                Random.randomNumberGenerator = (): number => largestDraw;
+                expect(Random.randomIndex(length)).toBe(length - 1);
+            });
+        });
+
+        describe('Argument errors', (): void => {
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid length argument',
+                    inputs: [
+                        ...invalidSafePositiveIntegerInputs,
+                        ...zeroInputs
+                    ],
+                    expected: PrimitiveTypeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                test.each(
+                    testCases
+                )('%# - randomIndex($input) should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                    expect((): void => {
+                        Random.randomIndex(testInput as number);
+                    }).toThrow(testExpected);
+                });
+            });
+        });
+    });
+
     describe('randomElement', (): void => {
         describe('randomElement should return an element from the given list with the proper element type', (): void => {
             test.each([
@@ -703,7 +802,7 @@ describe('Random', (): void => {
         });
 
         describe('Input validation', (): void => {
-            describe('Input must be a non-empty array', (): void => {
+            describe('Input must be a non-empty, dense array', (): void => {
                 const scenarios: Scenario[] = [
                     {
                         label: 'Non-array type inputs',
@@ -715,6 +814,11 @@ describe('Random', (): void => {
                         inputs: [
                             []
                         ],
+                        expected: PrimitiveTypeError
+                    },
+                    {
+                        label: 'Sparse array inputs',
+                        inputs: [...sparseArrayInputs],
                         expected: PrimitiveTypeError
                     }
                 ];
@@ -1036,7 +1140,7 @@ describe('Random', (): void => {
         });
     });
 
-    describe('randomFloat and randomInt should stay in range for a generator outside its contract', (): void => {
+    describe('randomFloat, randomInt and randomIndex should stay in range for a generator outside its contract', (): void => {
         const outOfContractScenarios: Scenario[] = [
             {
                 label: 'Draws outside the documented [0, 1) contract',
@@ -1058,6 +1162,7 @@ describe('Random', (): void => {
 
                 const floatValue: number = Random.randomFloat(0, 10);
                 const intValue: number = Random.randomInt(0, 10);
+                const indexValue: number = Random.randomIndex(10);
 
                 expect(Number.isFinite(floatValue)).toBe(true);
                 expect(floatValue).toBeGreaterThanOrEqual(0);
@@ -1066,6 +1171,10 @@ describe('Random', (): void => {
                 expect(Number.isSafeInteger(intValue)).toBe(true);
                 expect(intValue).toBeGreaterThanOrEqual(0);
                 expect(intValue).toBeLessThan(10);
+
+                expect(Number.isSafeInteger(indexValue)).toBe(true);
+                expect(indexValue).toBeGreaterThanOrEqual(0);
+                expect(indexValue).toBeLessThan(10);
             });
         });
     });
