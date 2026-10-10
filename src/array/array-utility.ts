@@ -71,7 +71,7 @@ export class ArrayUtility {
     /**
      * Assert that `input` is a dense array.
      *
-     * @remarks A dense array has an element at every index from `0` to `length - 1`.
+     * @remarks A dense array has an element at every index.
      * An array with a hole at any index, such as `[1, , 3]` or `new Array(3)`, is a sparse array and is rejected.
      * An element that is explicitly `undefined` is not a hole, so `[undefined, 1]` is a dense array.
      * An empty array is a dense array.
@@ -118,7 +118,7 @@ export class ArrayUtility {
     /**
      * Is `input` a dense array?
      *
-     * @remarks A dense array has an element at every index from `0` to `length - 1`.
+     * @remarks A dense array has an element at every index.
      * An array with a hole at any index, such as `[1, , 3]` or `new Array(3)`, is a sparse array and is rejected.
      * An element that is explicitly `undefined` is not a hole, so `[undefined, 1]` is a dense array.
      * An empty array is a dense array.
