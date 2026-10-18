@@ -145,6 +145,33 @@ export class NumberUtility {
     }
 
     /**
+     * Assert that `a` is greater than `b`.
+     *
+     * @see {@link NumberUtility.isGreaterThan}
+     *
+     * @param {number} a - The value that must be the greater of the two.
+     * @param {number} b - The value that must be the lesser of the two.
+     * @param {string | undefined} message - Optional message for the error thrown when `a` is not greater than `b`.
+     *
+     * @returns {void}
+     *
+     * @throws {PrimitiveTypeError} When `a` and `b` are not both numbers within the safe integer range.
+     * @throws {ValueRangeError} When `a` is not greater than `b`.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static assertGreaterThan(a: number, b: number, message?: string): void {
+        if (!NumberUtility.isGreaterThan(a, b)) {
+            if (StringUtility.isSingleLine(message)) {
+                throw new ValueRangeError(message);
+            }
+
+            throw new ValueRangeError('a must be greater than b.');
+        }
+    }
+
+    /**
      * Assert that `a` is less than `b`.
      *
      * @see {@link NumberUtility.isLessThan}
@@ -298,6 +325,27 @@ export class NumberUtility {
         }
 
         return false;
+    }
+
+    /**
+     * Is `a` greater than `b`?
+     *
+     * @see {@link NumberUtility.assertSafe}
+     *
+     * @param {number} a - The value that must be the greater of the two.
+     * @param {number} b - The value that must be the lesser of the two.
+     *
+     * @returns {boolean} `true` if `a` is greater than `b`; `false` otherwise.
+     *
+     * @throws {PrimitiveTypeError} When `a` and `b` are not both numbers within the safe integer range.
+     *
+     * @public
+     * @since 0.1.0
+     */
+    public static isGreaterThan(a: number, b: number): boolean {
+        NumberUtility.assertSafe(a, 'a must be within the safe integer range.');
+        NumberUtility.assertSafe(b, 'b must be within the safe integer range.');
+        return a > b;
     }
 
     /**
