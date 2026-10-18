@@ -339,6 +339,7 @@ describe('NumberUtility', (): void => {
                 inputs: [
                     { a: 0, b: 0 },
                     { a: 0, b: -0 },
+                    { a: -0, b: 0 },
                     { a: Number.MIN_SAFE_INTEGER, b: Number.MIN_SAFE_INTEGER },
                     { a: Number.MAX_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
                     { a: 5, b: 5 },
@@ -402,7 +403,7 @@ describe('NumberUtility', (): void => {
             )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
                 const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
 
-                describe('Argument errors - assertLessThan', (): void => {
+                describe('Argument errors - assertGreaterThan', (): void => {
                     test.each(
                         testCases
                     )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
@@ -414,7 +415,7 @@ describe('NumberUtility', (): void => {
                     });
                 });
 
-                describe('Argument errors - isLessThan', (): void => {
+                describe('Argument errors - isGreaterThan', (): void => {
                     test.each(
                         testCases
                     )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
@@ -490,6 +491,7 @@ describe('NumberUtility', (): void => {
                 inputs: [
                     { a: 0, b: 0 },
                     { a: 0, b: -0 },
+                    { a: -0, b: 0 },
                     { a: Number.MIN_SAFE_INTEGER, b: Number.MIN_SAFE_INTEGER },
                     { a: Number.MAX_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
                     { a: 5, b: 5 },
