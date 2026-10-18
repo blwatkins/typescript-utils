@@ -300,7 +300,7 @@ describe('NumberUtility', (): void => {
             {
                 label: 'a greater than b by the smallest representable amount',
                 inputs: [
-                    { a: Number.MIN_VALUE, b: 0, },
+                    { a: Number.MIN_VALUE, b: 0 },
                     { a: 1 + Number.EPSILON, b: 1 },
                     { a: -1, b: -1 - Number.EPSILON }
                 ],
@@ -479,7 +479,7 @@ describe('NumberUtility', (): void => {
             {
                 label: 'a greater than b by the smallest representable amount',
                 inputs: [
-                    { a: Number.MIN_VALUE, b: 0, },
+                    { a: Number.MIN_VALUE, b: 0 },
                     { a: 1 + Number.EPSILON, b: 1 },
                     { a: -1, b: -1 - Number.EPSILON }
                 ],
