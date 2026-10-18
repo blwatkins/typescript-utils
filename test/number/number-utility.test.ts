@@ -278,6 +278,157 @@ describe('NumberUtility', (): void => {
         });
     });
 
+    describe('GreaterThan', (): void => {
+        const successScenarios: Scenario[] = [
+            {
+                label: 'a greater than b',
+                inputs: [
+                    { a: 10, b: 0 },
+                    { a: 0, b: Number.MIN_SAFE_INTEGER },
+                    { a: Number.MAX_SAFE_INTEGER, b: 0 },
+                    { a: Number.MAX_SAFE_INTEGER, b: Number.MIN_SAFE_INTEGER },
+                    { a: -100, b: -500 },
+                    { a: -3.123, b: -5.123 },
+                    { a: 100, b: 10 },
+                    { a: 100.123, b: 10.123 },
+                    { a: Number.EPSILON, b: 0 },
+                    { a: 10.12345678912345, b: 10.12345678912344 },
+                    { a: -10.12345678912344, b: -10.12345678912345 }
+                ],
+                expected: undefined
+            },
+            {
+                label: 'a greater than b by the smallest representable amount',
+                inputs: [
+                    { a: Number.MIN_VALUE, b: 0, },
+                    { a: 1 + Number.EPSILON, b: 1 },
+                    { a: -1, b: -1 - Number.EPSILON }
+                ],
+                expected: undefined
+            }
+        ];
+
+        const failureScenarios: Scenario[] = [
+            {
+                label: 'a less than b',
+                inputs: [
+                    { a: 0, b: 10 },
+                    { a: Number.MIN_SAFE_INTEGER, b: 0 },
+                    { a: 0, b: Number.MAX_SAFE_INTEGER },
+                    { a: Number.MIN_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
+                    { a: -500, b: -100 },
+                    { a: -5.123, b: -3.123 },
+                    { a: 10, b: 100 },
+                    { a: 10.123, b: 100.123 },
+                    { a: 10.12345678912344, b: 10.12345678912345 },
+                    { a: -10.12345678912345, b: -10.12345678912344 }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'a less than b by the smallest representable amount',
+                inputs: [
+                    { a: 0, b: Number.MIN_VALUE },
+                    { a: 1, b: 1 + Number.EPSILON },
+                    { a: -1 - Number.EPSILON, b: -1 }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'a equal to b',
+                inputs: [
+                    { a: 0, b: 0 },
+                    { a: 0, b: -0 },
+                    { a: Number.MIN_SAFE_INTEGER, b: Number.MIN_SAFE_INTEGER },
+                    { a: Number.MAX_SAFE_INTEGER, b: Number.MAX_SAFE_INTEGER },
+                    { a: 5, b: 5 },
+                    { a: 5.123, b: 5.123 },
+                    { a: -5, b: -5 },
+                    { a: -5.123, b: -5.123 }
+                ],
+                expected: ValueRangeError
+            }
+        ];
+
+        describe('assertGreaterThan', (): void => {
+            function assertGreaterThan(input: unknown, message?: string): void {
+                const args = input as { a: number; b: number; };
+                NumberUtility.assertGreaterThan(args.a, args.b, message);
+            }
+
+            testAssertMethod(
+                assertGreaterThan,
+                successScenarios,
+                failureScenarios,
+                'a must be greater than b.'
+            );
+        });
+
+        describe('isGreaterThan', (): void => {
+            function isGreaterThan(input: unknown): boolean {
+                const args = input as { a: number; b: number; };
+                return NumberUtility.isGreaterThan(args.a, args.b);
+            }
+
+            testIsMethod(isGreaterThan, successScenarios, failureScenarios);
+        });
+
+        describe('Argument errors', (): void => {
+            const argumentFailureScenarios: Scenario[] = [
+                {
+                    label: 'Invalid a argument',
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { a: unknown; b: number; } => {
+                        return {
+                            a: input,
+                            b: Number.MAX_SAFE_INTEGER
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                },
+                {
+                    label: 'Invalid b argument',
+                    inputs: invalidSafeNumberInputs.map((input: unknown): { a: number; b: unknown; } => {
+                        return {
+                            a: Number.MIN_SAFE_INTEGER,
+                            b: input
+                        };
+                    }),
+                    expected: PrimitiveTypeError
+                }
+            ];
+
+            describe.each(
+                argumentFailureScenarios
+            )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
+                const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
+
+                describe('Argument errors - assertLessThan', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { a: unknown; b: unknown; } = testInput as { a: unknown; b: unknown; };
+
+                        expect((): void => {
+                            NumberUtility.assertGreaterThan(args.a as number, args.b as number);
+                        }).toThrow(testExpected);
+                    });
+                });
+
+                describe('Argument errors - isLessThan', (): void => {
+                    test.each(
+                        testCases
+                    )('%# - Input $input should throw $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
+                        const args: { a: unknown; b: unknown; } = testInput as { a: unknown; b: unknown; };
+
+                        expect((): void => {
+                            NumberUtility.isGreaterThan(args.a as number, args.b as number);
+                        }).toThrow(testExpected);
+                    });
+                });
+            });
+        });
+    });
+
     describe('LessThan', (): void => {
         const successScenarios: Scenario[] = [
             {
@@ -322,6 +473,15 @@ describe('NumberUtility', (): void => {
                     { a: Number.EPSILON, b: 0 },
                     { a: 10.12345678912345, b: 10.12345678912344 },
                     { a: -10.12345678912344, b: -10.12345678912345 }
+                ],
+                expected: ValueRangeError
+            },
+            {
+                label: 'a greater than b by the smallest representable amount',
+                inputs: [
+                    { a: Number.MIN_VALUE, b: 0, },
+                    { a: 1 + Number.EPSILON, b: 1 },
+                    { a: -1, b: -1 - Number.EPSILON }
                 ],
                 expected: ValueRangeError
             },
