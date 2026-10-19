@@ -844,9 +844,6 @@ describe('Random', (): void => {
         interface WeightedListCase {
             readonly input: { value: unknown; weight: number; }[];
             readonly type: string;
-        }
-
-        interface ZeroWeightListCase extends WeightedListCase {
             readonly expected: unknown[];
         }
 
@@ -858,7 +855,8 @@ describe('Random', (): void => {
                     { value: 3, weight: 0.25 },
                     { value: 4, weight: 0.25 }
                 ],
-                type: 'number'
+                type: 'number',
+                expected: [1, 2, 3, 4]
             },
             {
                 input: [
@@ -867,7 +865,8 @@ describe('Random', (): void => {
                     { value: 3, weight: 0.2 },
                     { value: 4, weight: 0.1 }
                 ],
-                type: 'number'
+                type: 'number',
+                expected: [1, 2, 3, 4]
             },
             {
                 input: [
@@ -876,13 +875,15 @@ describe('Random', (): void => {
                     { value: 3.3, weight: 0.25 },
                     { value: 4.4, weight: 0.25 }
                 ],
-                type: 'number'
+                type: 'number',
+                expected: [1.1, 2.2, 3.3, 4.4]
             },
             {
                 input: [
                     { value: 1, weight: 1 }
                 ],
-                type: 'number'
+                type: 'number',
+                expected: [1]
             },
             {
                 input: [
@@ -891,7 +892,8 @@ describe('Random', (): void => {
                     { value: 'the', weight: 0.25 },
                     { value: 'best', weight: 0.25 }
                 ],
-                type: 'string'
+                type: 'string',
+                expected: ['it', 'was', 'the', 'best']
             },
             {
                 input: [
@@ -899,17 +901,19 @@ describe('Random', (): void => {
                     { value: 'spot', weight: 0.33 },
                     { value: 'run', weight: 0.34 }
                 ],
-                type: 'string'
+                type: 'string',
+                expected: ['see', 'spot', 'run']
             },
             {
                 input: [
                     { value: 'hello', weight: 1 }
                 ],
-                type: 'string'
+                type: 'string',
+                expected: ['hello']
             }
         ];
 
-        const zeroWeightListCases: ZeroWeightListCase[] = [
+        const zeroWeightListCases: WeightedListCase[] = [
             {
                 input: [
                     { value: 1, weight: 0.25 },
@@ -992,7 +996,7 @@ describe('Random', (): void => {
         describe('randomWeightedElement should not return an element from the given list if the weight is zero', (): void => {
             test.each(
                 zeroWeightListCases
-            )('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: ZeroWeightListCase): void => {
+            )('%# - randomWeightedElement should not return an element from ($input) if the weight is zero', ({ input, expected, type }: WeightedListCase): void => {
                 const selected: unknown[] = [];
                 const repeatTotal: number = Math.max(testRepeatTotal, input.length * 10);
 
@@ -1008,14 +1012,14 @@ describe('Random', (): void => {
             describe.each([
                 ...weightedListCases,
                 ...zeroWeightListCases
-            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: WeightedListCase): void => {
+            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input, expected }: WeightedListCase): void => {
                 test('Should return elements[0] if the rng function returns a negative number', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return -0.1;
                     };
 
                     const selected: unknown = Random.randomWeightedElement(input);
-                    expect(selected).toBe(input[0].value);
+                    expect(selected).toBe(expected[0]);
                 });
 
                 test('Should return elements[length - 1] if the rng function returns a number greater than 1', (): void => {
@@ -1024,7 +1028,7 @@ describe('Random', (): void => {
                     };
 
                     const selected: unknown = Random.randomWeightedElement(input);
-                    expect(selected).toBe(input[input.length - 1].value);
+                    expect(selected).toBe(expected[expected.length - 1]);
                 });
             });
         });
