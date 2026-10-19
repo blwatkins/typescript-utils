@@ -25,7 +25,7 @@ import { TypeAssertions } from '../assert';
 import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
 
-import { WeightedList, WeightedListUtility } from './weighted-element';
+import {WeightedElement, WeightedList, WeightedListUtility} from './weighted-element';
 
 /**
  * The maximum number of times {@link Random.randomFloat} draws a new value when a draw falls outside
@@ -257,17 +257,21 @@ export class Random {
      */
     public static randomWeightedElement<Type>(elements: WeightedList<Type>): Type {
         WeightedListUtility.assertGenericWeightedList(elements);
+        const filtered: WeightedList<Type> = elements.filter((element: WeightedElement<Type>): boolean => {
+            return element.weight > 0;
+        });
+
         const r: number = Random.random();
         let cumulativeWeight: number = 0;
 
-        for (const element of elements) {
+        for (const element of filtered) {
             cumulativeWeight += element.weight;
             if (r < cumulativeWeight) {
                 return element.value;
             }
         }
 
-        return elements[elements.length - 1].value;
+        return filtered[filtered.length - 1].value;
     }
 
     /**
