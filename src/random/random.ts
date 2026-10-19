@@ -25,7 +25,7 @@ import { TypeAssertions } from '../assert';
 import { PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../error';
 import { NumberUtility } from '../number';
 
-import {WeightedElement, WeightedList, WeightedListUtility} from './weighted-element';
+import { WeightedElement, WeightedList, WeightedListUtility } from './weighted-element';
 
 /**
  * The maximum number of times {@link Random.randomFloat} draws a new value when a draw falls outside
