@@ -1013,7 +1013,7 @@ describe('Random', (): void => {
                 ...weightedListCases,
                 ...zeroWeightListCases
             ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input, expected }: WeightedListCase): void => {
-                test('Should return elements[0] if the rng function returns a negative number', (): void => {
+                test('Should return the first element with a nonzero weight if the rng function returns a negative number', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return -0.1;
                     };
@@ -1022,7 +1022,7 @@ describe('Random', (): void => {
                     expect(selected).toBe(expected[0]);
                 });
 
-                test('Should return elements[length - 1] if the rng function returns a number greater than 1', (): void => {
+                test('Should return the last element with a nonzero weight if the rng function returns a number greater than 1', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return 1.1;
                     };
