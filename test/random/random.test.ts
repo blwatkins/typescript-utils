@@ -1005,10 +1005,9 @@ describe('Random', (): void => {
         });
 
         describe('randomWeightedElement should return a fallback element if the randomNumberGenerator returns a number outside the range of 0 to 1', (): void => {
-            describe.each([
-                ...weightedListCases,
-                ...zeroWeightListCases
-            ])('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: WeightedListCase): void => {
+            describe.each(
+                weightedListCases
+            )('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input }: WeightedListCase): void => {
                 test('Should return elements[0] if the rng function returns a negative number', (): void => {
                     Random.randomNumberGenerator = (): number => {
                         return -0.1;
@@ -1025,6 +1024,30 @@ describe('Random', (): void => {
 
                     const selected: unknown = Random.randomWeightedElement(input);
                     expect(selected).toBe(input[input.length - 1].value);
+                });
+            });
+        });
+
+        describe('randomWeightedElement should not return a zero weight element if the randomNumberGenerator returns a number outside the range of 0 to 1', (): void => {
+            describe.each(
+                zeroWeightListCases
+            )('%# - randomWeightedElement($input) with a randomNumberGenerator outside the range of 0 to 1', ({ input, expected }: ZeroWeightListCase): void => {
+                test('Should return the first element with a nonzero weight if the rng function returns a negative number', (): void => {
+                    Random.randomNumberGenerator = (): number => {
+                        return -0.1;
+                    };
+
+                    const selected: unknown = Random.randomWeightedElement(input);
+                    expect(selected).toBe(expected[0]);
+                });
+
+                test('Should return the last element with a nonzero weight if the rng function returns a number greater than 1', (): void => {
+                    Random.randomNumberGenerator = (): number => {
+                        return 1.1;
+                    };
+
+                    const selected: unknown = Random.randomWeightedElement(input);
+                    expect(selected).toBe(expected[expected.length - 1]);
                 });
             });
         });
