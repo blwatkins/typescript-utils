@@ -489,6 +489,7 @@ describe('Random', (): void => {
                 { min: 5, max: 9 }
             ])('%# - randomInt($min, $max) should stay below $max', ({ min, max }: { min: number; max: number; }): void => {
                 Random.randomNumberGenerator = (): number => roundsUp;
+
                 const value: number = Random.randomInt(min, max);
 
                 expect(value).toBeGreaterThanOrEqual(min);
