@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { describe } from 'vitest';
 
 import { PrimitiveTypeError, StaticInstanceError, StringUtility } from '../../src';
 
@@ -306,59 +306,5 @@ describe('StringUtility', (): void => {
         describe('isSingleLineUppercase', (): void => {
             testIsMethod(StringUtility.isSingleLineUppercase.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
         });
-    });
-
-    /* ******************* TODO: DEPRECATED ******************* */
-
-    describe('[DEPRECATED] singleLineLowercaseTrimmedPattern', (): void => {
-        test('should return the same regular expression as singleLineLowercase', (): void => {
-            expect(StringUtility.singleLineLowercaseTrimmedPattern).toBe(StringUtility.singleLineLowercase);
-        });
-    });
-
-    describe('[DEPRECATED] singleLineUppercaseTrimmedPattern', (): void => {
-        test('should return the same regular expression as singleLineUppercase', (): void => {
-            expect(StringUtility.singleLineUppercaseTrimmedPattern).toBe(StringUtility.singleLineUppercase);
-        });
-    });
-
-    describe('[DEPRECATED] singleLineTrimmedPattern', (): void => {
-        test('should return the same regular expression as singleLine', (): void => {
-            expect(StringUtility.singleLineTrimmedPattern).toBe(StringUtility.singleLine);
-        });
-    });
-
-    describe('[DEPRECATED] assertStringType', (): void => {
-        testAssertMethod(
-            StringUtility.assertStringType.bind(StringUtility),
-            stringSuccessScenarios,
-            stringFailureScenarios,
-            'Expected a string.'
-        );
-    });
-
-    describe('[DEPRECATED] assertSingleLineTrimmedString', (): void => {
-        testAssertMethod(
-            StringUtility.assertSingleLineTrimmedString.bind(StringUtility),
-            singleLineSuccessScenarios,
-            singleLineFailureScenarios,
-            'Expected a single-line string.'
-        );
-    });
-
-    describe('[DEPRECATED] isNonEmptyString', (): void => {
-        testIsMethod(StringUtility.isNonEmptyString.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
-    });
-
-    describe('[DEPRECATED] isSingleLineTrimmedString', (): void => {
-        testIsMethod(StringUtility.isSingleLineTrimmedString.bind(StringUtility), singleLineSuccessScenarios, singleLineFailureScenarios);
-    });
-
-    describe('[DEPRECATED] isSingleLineLowercaseTrimmedString', (): void => {
-        testIsMethod(StringUtility.isSingleLineLowercaseTrimmedString.bind(StringUtility), singleLineLowercaseSuccessScenarios, singleLineLowercaseFailureScenarios);
-    });
-
-    describe('[DEPRECATED] isSingleLineUppercaseTrimmedString', (): void => {
-        testIsMethod(StringUtility.isSingleLineUppercaseTrimmedString.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
     });
 });
