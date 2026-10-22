@@ -12,7 +12,6 @@
     "./src/math/index.ts",
     "./src/number/index.ts",
     "./src/random/index.ts",
-    "./src/range/index.ts",
     "./src/string/index.ts"
   ],
 
