@@ -208,42 +208,4 @@ describe('TypeAssertions', (): void => {
             'Expected a string.'
         );
     });
-
-    /* ******************* TODO: DEPRECATED ******************* */
-
-    describe('[DEPRECATED] assertArrayType', (): void => {
-        testAssertMethod(
-            TypeAssertions.assertArrayType.bind(TypeAssertions),
-            arraySuccessScenarios,
-            arrayFailureScenarios,
-            'Expected an array.'
-        );
-    });
-
-    describe('[DEPRECATED] assertFunctionType', (): void => {
-        testAssertMethod(
-            TypeAssertions.assertFunctionType.bind(TypeAssertions),
-            functionSuccessScenarios,
-            functionFailureScenarios,
-            'Expected a function.'
-        );
-    });
-
-    describe('[DEPRECATED] assertObjectType', (): void => {
-        testAssertMethod(
-            TypeAssertions.assertObjectType.bind(TypeAssertions),
-            objectSuccessScenarios,
-            objectFailureScenarios,
-            'Expected a non-array object.'
-        );
-    });
-
-    describe('[DEPRECATED] assertStringType', (): void => {
-        testAssertMethod(
-            TypeAssertions.assertStringType.bind(TypeAssertions),
-            stringSuccessScenarios,
-            stringFailureScenarios,
-            'Expected a string.'
-        );
-    });
 });

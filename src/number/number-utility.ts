@@ -415,43 +415,4 @@ export class NumberUtility {
         NumberUtility.assertSafe(max, 'max must be within the safe integer range.');
         return min <= max;
     }
-
-    /* ******************* TODO: DEPRECATED ******************* */
-
-    /**
-     * Asserts that input is a finite number.
-     *
-     * @see {@link NumberUtility.isFiniteNumber}
-     *
-     * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when the input is not a finite number.
-     *
-     * @returns {asserts input is number} Asserts that input is a finite number.
-     *
-     * @throws {PrimitiveTypeError} When the input is not a finite number.
-     *
-     * @deprecated Replaced by {@link NumberUtility.assertFinite}. Will be removed in v0.1.0-alpha.5.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static assertFiniteNumber(input: unknown, message?: string): asserts input is number {
-        NumberUtility.assertFinite(input, message);
-    }
-
-    /**
-     * Is input a finite number?
-     *
-     * @param {unknown} input - The input to check.
-     *
-     * @returns {input is number} `true` when the input is a finite number; `false` otherwise.
-     *
-     * @deprecated Replaced by {@link NumberUtility.isFinite}. Will be removed in v0.1.0-alpha.5.
-     *
-     * @public
-     * @since 0.1.0
-     */
-    public static isFiniteNumber(input: unknown): input is number {
-        return NumberUtility.isFinite(input);
-    }
 }

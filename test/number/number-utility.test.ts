@@ -916,19 +916,4 @@ describe('NumberUtility', (): void => {
             });
         });
     });
-
-    /* ******************* TODO: DEPRECATED ******************* */
-
-    describe('[DEPRECATED] assertFiniteNumber', (): void => {
-        testAssertMethod(
-            NumberUtility.assertFiniteNumber.bind(NumberUtility),
-            finiteSuccessScenarios,
-            finiteFailureScenarios,
-            'Expected a finite number.'
-        );
-    });
-
-    describe('[DEPRECATED] isFiniteNumber', (): void => {
-        testIsMethod(NumberUtility.isFiniteNumber.bind(NumberUtility), finiteSuccessScenarios, finiteFailureScenarios);
-    });
 });

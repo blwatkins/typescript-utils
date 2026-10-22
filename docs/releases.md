@@ -19,4 +19,4 @@ description: "Past and current releases of the TypeScript Utilities (@blwatkins/
 - [v0.1.0-alpha.2](./releases/v0.x/v0.1.x/v0.1.0-alpha.x/v0.1.0-alpha.2/doc/index.html) *(July 20, 2026)*
 - [v0.1.0-alpha.3](./releases/v0.x/v0.1.x/v0.1.0-alpha.x/v0.1.0-alpha.3/doc/index.html) *(August 27, 2026)*
 - [v0.1.0-alpha.4](./releases/v0.x/v0.1.x/v0.1.0-alpha.x/v0.1.0-alpha.4/doc/index.html) *(October 22, 2026)* - **@alpha**
-- v0.1.0-alpha.5 - *In Development*
+- [v0.1.0-alpha.5](./releases/v0.x/v0.1.x/v0.1.0-alpha.x/v0.1.0-alpha.5/doc/index.html) - *In Development*

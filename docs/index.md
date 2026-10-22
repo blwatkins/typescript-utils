@@ -27,7 +27,7 @@ Over the years, the utilities have been refined, expanded, and organized into a 
 The source code of this project is licensed under the [MIT License](https://opensource.org/license/mit).
 The full text of the license is included with the project source code.
 
-## Project Status Badges
+## Project Links and Status Badges
 
 ### [npm](https://www.npmjs.com/package/@blwatkins/utils)
 
@@ -45,12 +45,9 @@ The full text of the license is included with the project source code.
 
 ![Socket Score](https://badge.socket.dev/npm/package/@blwatkins/utils)
 
-### [Bundlephobia](https://bundlephobia.com/package/@blwatkins/utils)
+### Bundlephobia
 
-![Bundlephobia Tree Shaking](https://badgen.net/bundlephobia/tree-shaking/@blwatkins/utils)
-![Bundlephobia Dependency Count](https://badgen.net/bundlephobia/dependency-count/@blwatkins/utils)
-![Bundlephobia Minified](https://badgen.net/bundlephobia/min/@blwatkins/utils)
-![Bundlephobia Minified + gzip](https://badgen.net/bundlephobia/minzip/@blwatkins/utils)
+- [Bundlephobia - `@blwatkins/utils`](https://bundlephobia.com/package/@blwatkins/utils)
 
 ### [Package Phobia](https://packagephobia.com/result?p=%40blwatkins%2Futils)
 
