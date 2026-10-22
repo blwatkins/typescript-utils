@@ -34,6 +34,6 @@ It is a live reflection of my current goals for the project, and it is subject t
 ## v0.2.0
 
 - [ ] String utility enhancements
-  - [ ] length tests and assertions 
-- [ ] Random Selectors
+  - [ ] Length tests and assertions
+- [ ] Random selectors
   - [ ] Weighted random selectors
