@@ -60,7 +60,6 @@ src/
   random/                 # Random number generation utilities
     seeded-random/        # Seeded random number generator utilities
     weighted-element/     # Weighted element and weighted list selection utilities
-  range/                  # Range utilities
   string/                 # String utilities
   index.ts                # Package entry point (re-exports all modules)
 test/                     # Vitest test suites (mirrors src/ module structure)
@@ -72,7 +71,6 @@ test/                     # Vitest test suites (mirrors src/ module structure)
   random/                 # Tests for the random module
     seeded-random/        # Tests for the seeded-random module
     weighted-element/     # Tests for the weighted-element module
-  range/                  # Tests for the range module
   string/                 # Tests for the string module
   utils/                  # Shared test fixtures and scenario helpers for use across test suites
     assert/               # Shared contract test suites for assertion methods and type guards
