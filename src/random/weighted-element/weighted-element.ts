@@ -22,6 +22,8 @@
 
 import { Type } from 'typebox';
 
+import { Compile } from 'typebox/compile';
+
 /**
  * Minimum value for a {@link WeightedElement.weight}.
  *
@@ -37,26 +39,6 @@ export const minWeight: 0 = 0 as const;
  * @since 0.1.0
  */
 export const maxWeight: 1 = 1 as const;
-
-/**
- * Minimum value for a {@link WeightedElement.weight}.
- *
- * @deprecated Replaced by {@link minWeight}. Will be removed in v0.1.0-alpha.4.
- *
- * @type {0}
- * @since 0.1.0
- */
-export const minElementWeight: 0 = 0 as const;
-
-/**
- * Maximum value for a {@link WeightedElement.weight}.
- *
- * @deprecated Replaced by {@link maxWeight}. Will be removed in v0.1.0-alpha.4.
- *
- * @type {1}
- * @since 0.1.0
- */
-export const maxElementWeight: 1 = 1 as const;
 
 /**
  * TypeBox schema to validate a {@link WeightedElement} object.
@@ -76,7 +58,7 @@ export const weightedElementSchema = Type.Generic(
 
             /**
              * The probability weight of the element.
-             * Should be a number between 0 and 1, inclusive.
+             * Must be a number between 0 and 1, inclusive.
              *
              * @type {number}
              * @readonly
@@ -89,6 +71,17 @@ export const weightedElementSchema = Type.Generic(
         { additionalProperties: false }
     )
 );
+
+/**
+ * Compiled TypeBox validator for {@link weightedElementSchema}.
+ *
+ * @remarks This validator is used to check if an object conforms to the {@link weightedElementSchema} and {@link WeightedElement} type.
+ * Due to the nature of TypeBox generic types, this validator is compiled with {@link Type.Unknown} as the generic type argument.
+ * This means that this validator can only be used to verify that an object conforms to the `WeightedElement<unknown>` type, where the type of the {@link WeightedElement.value} property is `unknown`.
+ *
+ * @since 0.1.0
+ */
+export const weightedElementValidator = Compile(Type.Call(weightedElementSchema, [Type.Unknown()]));
 
 /**
  * Interface for a weighted element, which can be used for non-uniform random selection from a list.
@@ -111,7 +104,7 @@ export interface WeightedElement<TValue> {
 
     /**
      * The probability weight of the element.
-     * Should be a number between 0 and 1, inclusive.
+     * Must be a number between 0 and 1, inclusive.
      *
      * @type {number}
      * @readonly

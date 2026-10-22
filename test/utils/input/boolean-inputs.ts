@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -20,35 +20,50 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Type, type Static } from 'typebox';
+// noinspection JSPrimitiveTypeWrapperUsage
+export const nonBooleanInputs: unknown[] = [
+    null,
+    undefined,
+    0,
+    1,
+    -1,
+    10n,
+    -10n,
+    1.5,
+    -1.5,
+    Number.MAX_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER,
+    Number.MAX_VALUE,
+    Number.MIN_VALUE,
+    Number.EPSILON,
+    Number.NaN,
+    Infinity,
+    -Infinity,
+    '',
+    'string',
+    '\n\t',
+    '     ',
+    'true',
+    'false',
+    '0',
+    '1',
+    (): string => 'value',
+    (): boolean => true,
+    Math.random,
+    new Number(10),
+    new String('value'),
+    new Boolean(true),
+    new Boolean(false),
+    new Object(true),
+    new Object('value'),
+    [],
+    [true, false],
+    {},
+    { key: 'value' },
+    { key: true },
+    Symbol('test')
+];
 
-/* ******************* TODO: DEPRECATED ******************* */
-
-/**
- * TypeBox schema for validating that an object implements the {@link Discriminated} type.
- *
- * @deprecated Will be removed in v0.1.0-alpha.4.
- *
- * @since 0.1.0
- */
-export const discriminatedSchema = Type.Object(
-    {
-        /**
-         * The discriminator value that identifies the type of a {@link Discriminated} object.
-         * This value must be unique across all registered discriminators.
-         *
-         * @type {string}
-         * @since 0.1.0
-         */
-        discriminator: Type.Readonly(Type.String())
-    }
-);
-
-/**
- * Discriminated objects can be type checked using the discriminator registry.
- *
- * @deprecated Will be removed in v0.1.0-alpha.4.
- *
- * @since 0.1.0
- */
-export type Discriminated = Static<typeof discriminatedSchema>;
+export const definedNonBooleanInputs: unknown[] = nonBooleanInputs.filter((input: unknown): boolean => {
+    return input !== undefined;
+});

@@ -20,14 +20,42 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { PrimitiveTypeError } from '../../../../src';
 
-import { Discriminators } from '../../src';
+import {
+    negativeSafeIntegerInputs,
+    nonFiniteNumberInputs,
+    nonNumberInputs,
+    safeFloatInputs,
+    unsafeNumberInputs
+} from '../../input/number-inputs';
 
-describe('Discriminators', (): void => {
-    test('All discriminators should be unique', (): void => {
-        const discriminatorsArray: Discriminators[] = Array.from(Object.values(Discriminators));
-        const uniqueDiscriminators = new Set(discriminatorsArray);
-        expect(uniqueDiscriminators.size).toBe(discriminatorsArray.length);
-    });
-});
+import { Scenario } from '../test-case';
+
+export const positiveIntegerFailureScenarios: Scenario[] = [
+    {
+        label: 'Non-number inputs',
+        inputs: nonNumberInputs,
+        expected: PrimitiveTypeError
+    },
+    {
+        label: 'Non-finite number inputs',
+        inputs: nonFiniteNumberInputs,
+        expected: PrimitiveTypeError
+    },
+    {
+        label: 'Number inputs outside the safe integer range',
+        inputs: unsafeNumberInputs,
+        expected: PrimitiveTypeError
+    },
+    {
+        label: 'Float inputs',
+        inputs: safeFloatInputs,
+        expected: PrimitiveTypeError
+    },
+    {
+        label: 'Negative integer inputs',
+        inputs: negativeSafeIntegerInputs,
+        expected: PrimitiveTypeError
+    }
+];

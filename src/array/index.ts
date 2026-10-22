@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Brittni Watkins.
+ * Copyright (c) 2026 Brittni Watkins.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"),
@@ -20,22 +20,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-/* ******************* TODO: DEPRECATED ******************* */
-
-/**
- * Valid discriminators for package types and interfaces.
- *
- * @deprecated Will be removed in v0.1.0-alpha.4.
- *
- * @since 0.1.0
- */
-export enum Discriminators {
-    /**
-     * Discriminator value for the WeightedElement interface.
-     *
-     * @deprecated Will be removed in v0.1.0-alpha.4.
-     *
-     * @since 0.1.0
-     */
-    WeightedElement = '@blwatkins/utils:WeightedElement'
-}
+export * from './array-utility';

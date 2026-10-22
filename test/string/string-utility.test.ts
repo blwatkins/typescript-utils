@@ -22,296 +22,343 @@
 
 import { describe, test, expect } from 'vitest';
 
-import { PrimitiveTypeError, StringUtility } from '../../src';
+import { PrimitiveTypeError, StaticInstanceError, StringUtility } from '../../src';
 
-import { testAssertMethod } from '../utils/assert/assert-tests';
+import { testAssertMethod, testIsMethod } from '../utils/assert/assert-tests';
 
 import {
     emptyStringInputs,
     nonEmptyStringInputs,
     nonStringInputs,
-    singleLineTrimmedInputsNumsAndSymbols,
-    singleLineTrimmedFailureInputsLowercase,
-    singleLineTrimmedInputsLowercase,
-    singleLineTrimmedInputsMixedCase,
-    singleLineTrimmedInputsUppercase,
-    singleLineTrimmedFailureInputsUppercase,
-    singleLineTrimmedFailureInputsMixedCase,
-    singleLineTrimmedFailureInputs,
-    singleLineTrimmedInputs
+    nonTextStringInputs,
+    singleLineCaselessInputs,
+    singleLineFailureCaselessInputs,
+    singleLineFailureLowercaseInputs,
+    singleLineFailureMixedCaseInputs,
+    singleLineFailureTextInputs,
+    singleLineFailureUppercaseInputs,
+    singleLineInputs,
+    singleLineLowercaseInputs,
+    singleLineMixedCaseInputs,
+    singleLineUppercaseInputs,
+    stringInputs,
+    textInputs
 } from '../utils/input/string-inputs';
 
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
-import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
+import { Scenario } from '../utils/test-case/test-case';
 
 describe('StringUtility', (): void => {
-    testStaticClassConstructor('StringUtility', StringUtility as unknown as new () => unknown, Error);
+    testStaticClassConstructor('StringUtility', StringUtility as unknown as new () => unknown, StaticInstanceError);
 
-    describe('assertStringType', (): void => {
-        const successScenarios: Scenario[] = [
-            {
-                label: 'String inputs',
-                inputs: [
-                    ...emptyStringInputs,
-                    ...nonEmptyStringInputs
-                ],
-                expected: undefined
-            }
-        ];
+    const stringSuccessScenarios: Scenario[] = [
+        {
+            label: 'String inputs',
+            inputs: stringInputs,
+            expected: undefined
+        }
+    ];
 
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: nonStringInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
+    const stringFailureScenarios: Scenario[] = [
+        {
+            label: 'Non-string inputs',
+            inputs: nonStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
 
+    const emptySuccessScenarios: Scenario[] = [
+        {
+            label: 'Empty string inputs',
+            inputs: emptyStringInputs,
+            expected: undefined
+        }
+    ];
+
+    const emptyFailureScenarios: Scenario[] = [
+        ...stringFailureScenarios,
+        {
+            label: 'Non-empty string inputs',
+            inputs: nonEmptyStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const nonEmptySuccessScenarios: Scenario[] = [
+        {
+            label: 'Non-empty string inputs',
+            inputs: nonEmptyStringInputs,
+            expected: undefined
+        }
+    ];
+
+    const nonEmptyFailureScenarios: Scenario[] = [
+        ...stringFailureScenarios,
+        {
+            label: 'Empty string inputs',
+            inputs: emptyStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const textSuccessScenarios: Scenario[] = [
+        {
+            label: 'Text inputs',
+            inputs: textInputs,
+            expected: undefined
+        }
+    ];
+
+    const textFailureScenarios: Scenario[] = [
+        ...nonEmptyFailureScenarios,
+        {
+            label: 'Non-text string inputs',
+            inputs: nonTextStringInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const singleLineSuccessScenarios: Scenario[] = [
+        {
+            label: 'Single-line inputs',
+            inputs: singleLineInputs,
+            expected: undefined
+        }
+    ];
+
+    const singleLineFailureScenarios: Scenario[] = [
+        ...textFailureScenarios,
+        {
+            label: 'Text inputs that are not single-line',
+            inputs: singleLineFailureTextInputs,
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const singleLineCaselessScenario: Scenario = {
+        label: 'Single-line caseless inputs',
+        inputs: singleLineCaselessInputs,
+        expected: undefined
+    };
+
+    const singleLineLowercaseSuccessScenarios: Scenario[] = [
+        singleLineCaselessScenario,
+        {
+            label: 'Single-line lowercase inputs',
+            inputs: singleLineLowercaseInputs,
+            expected: undefined
+        }
+    ];
+
+    const singleLineLowercaseFailureScenarios: Scenario[] = [
+        ...textFailureScenarios,
+        {
+            label: 'Incorrect case inputs',
+            inputs: [
+                ...singleLineUppercaseInputs,
+                ...singleLineMixedCaseInputs,
+                ...singleLineFailureUppercaseInputs,
+                ...singleLineFailureMixedCaseInputs
+            ],
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Lowercase and caseless text inputs that are not single-line',
+            inputs: [
+                ...singleLineFailureLowercaseInputs,
+                ...singleLineFailureCaselessInputs
+            ],
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    const singleLineUppercaseSuccessScenarios: Scenario[] = [
+        singleLineCaselessScenario,
+        {
+            label: 'Single-line uppercase inputs',
+            inputs: singleLineUppercaseInputs,
+            expected: undefined
+        }
+    ];
+
+    const singleLineUppercaseFailureScenarios: Scenario[] = [
+        ...textFailureScenarios,
+        {
+            label: 'Incorrect case inputs',
+            inputs: [
+                ...singleLineLowercaseInputs,
+                ...singleLineMixedCaseInputs,
+                ...singleLineFailureLowercaseInputs,
+                ...singleLineFailureMixedCaseInputs
+            ],
+            expected: PrimitiveTypeError
+        },
+        {
+            label: 'Uppercase and caseless text inputs that are not single-line',
+            inputs: [
+                ...singleLineFailureUppercaseInputs,
+                ...singleLineFailureCaselessInputs
+            ],
+            expected: PrimitiveTypeError
+        }
+    ];
+
+    describe('String', (): void => {
+        describe('assertString', (): void => {
+            testAssertMethod(
+                StringUtility.assertString.bind(StringUtility),
+                stringSuccessScenarios,
+                stringFailureScenarios,
+                'Expected a string.'
+            );
+        });
+
+        describe('isString', (): void => {
+            testIsMethod(StringUtility.isString.bind(StringUtility), stringSuccessScenarios, stringFailureScenarios);
+        });
+    });
+
+    describe('Empty', (): void => {
+        describe('assertEmpty', (): void => {
+            testAssertMethod(
+                StringUtility.assertEmpty.bind(StringUtility),
+                emptySuccessScenarios,
+                emptyFailureScenarios,
+                'Expected an empty string.'
+            );
+        });
+
+        describe('isEmpty', (): void => {
+            testIsMethod(StringUtility.isEmpty.bind(StringUtility), emptySuccessScenarios, emptyFailureScenarios);
+        });
+    });
+
+    describe('NonEmpty', (): void => {
+        describe('assertNonEmpty', (): void => {
+            testAssertMethod(
+                StringUtility.assertNonEmpty.bind(StringUtility),
+                nonEmptySuccessScenarios,
+                nonEmptyFailureScenarios,
+                'Expected a non-empty string.'
+            );
+        });
+
+        describe('isNonEmpty', (): void => {
+            testIsMethod(StringUtility.isNonEmpty.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
+        });
+    });
+
+    describe('Text', (): void => {
+        describe('assertText', (): void => {
+            testAssertMethod(
+                StringUtility.assertText.bind(StringUtility),
+                textSuccessScenarios,
+                textFailureScenarios,
+                'Expected a text string.'
+            );
+        });
+
+        describe('isText', (): void => {
+            testIsMethod(StringUtility.isText.bind(StringUtility), textSuccessScenarios, textFailureScenarios);
+        });
+    });
+
+    describe('SingleLine', (): void => {
+        describe('assertSingleLine', (): void => {
+            testAssertMethod(
+                StringUtility.assertSingleLine.bind(StringUtility),
+                singleLineSuccessScenarios,
+                singleLineFailureScenarios,
+                'Expected a single-line string.'
+            );
+        });
+
+        describe('isSingleLine', (): void => {
+            testIsMethod(StringUtility.isSingleLine.bind(StringUtility), singleLineSuccessScenarios, singleLineFailureScenarios);
+        });
+    });
+
+    describe('SingleLineLowercase', (): void => {
+        describe('assertSingleLineLowercase', (): void => {
+            testAssertMethod(
+                StringUtility.assertSingleLineLowercase.bind(StringUtility),
+                singleLineLowercaseSuccessScenarios,
+                singleLineLowercaseFailureScenarios,
+                'Expected a single-line lowercase string.'
+            );
+        });
+
+        describe('isSingleLineLowercase', (): void => {
+            testIsMethod(StringUtility.isSingleLineLowercase.bind(StringUtility), singleLineLowercaseSuccessScenarios, singleLineLowercaseFailureScenarios);
+        });
+    });
+
+    describe('SingleLineUppercase', (): void => {
+        describe('assertSingleLineUppercase', (): void => {
+            testAssertMethod(
+                StringUtility.assertSingleLineUppercase.bind(StringUtility),
+                singleLineUppercaseSuccessScenarios,
+                singleLineUppercaseFailureScenarios,
+                'Expected a single-line uppercase string.'
+            );
+        });
+
+        describe('isSingleLineUppercase', (): void => {
+            testIsMethod(StringUtility.isSingleLineUppercase.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
+        });
+    });
+
+    /* ******************* TODO: DEPRECATED ******************* */
+
+    describe('[DEPRECATED] singleLineLowercaseTrimmedPattern', (): void => {
+        test('should return the same regular expression as singleLineLowercase', (): void => {
+            expect(StringUtility.singleLineLowercaseTrimmedPattern).toBe(StringUtility.singleLineLowercase);
+        });
+    });
+
+    describe('[DEPRECATED] singleLineUppercaseTrimmedPattern', (): void => {
+        test('should return the same regular expression as singleLineUppercase', (): void => {
+            expect(StringUtility.singleLineUppercaseTrimmedPattern).toBe(StringUtility.singleLineUppercase);
+        });
+    });
+
+    describe('[DEPRECATED] singleLineTrimmedPattern', (): void => {
+        test('should return the same regular expression as singleLine', (): void => {
+            expect(StringUtility.singleLineTrimmedPattern).toBe(StringUtility.singleLine);
+        });
+    });
+
+    describe('[DEPRECATED] assertStringType', (): void => {
         testAssertMethod(
             StringUtility.assertStringType.bind(StringUtility),
-            successScenarios,
-            failureScenarios,
-            (input: unknown): string => {
-                return `Expected a string, but received: ${typeof input}.`;
-            }
+            stringSuccessScenarios,
+            stringFailureScenarios,
+            'Expected a string.'
         );
     });
 
-    describe('assertSingleLineTrimmedString', (): void => {
-        const successScenarios: Scenario[] = [
-            {
-                label: 'Single line trimmed string inputs',
-                inputs: singleLineTrimmedInputs,
-                expected: undefined
-            }
-        ];
-
-        const failureScenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: nonStringInputs,
-                expected: PrimitiveTypeError
-            },
-            {
-                label: 'Single line trimmed string failure inputs',
-                inputs: singleLineTrimmedFailureInputs,
-                expected: PrimitiveTypeError
-            }
-        ];
-
+    describe('[DEPRECATED] assertSingleLineTrimmedString', (): void => {
         testAssertMethod(
             StringUtility.assertSingleLineTrimmedString.bind(StringUtility),
-            successScenarios,
-            failureScenarios,
-            (input: unknown): string => {
-                return `Expected a single-line trimmed string, but received: ${typeof input}.`;
-            }
+            singleLineSuccessScenarios,
+            singleLineFailureScenarios,
+            'Expected a single-line string.'
         );
     });
 
-    describe('isString', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: [...nonStringInputs],
-                expected: false
-            },
-            {
-                label: 'String inputs',
-                inputs: [...emptyStringInputs, ...nonEmptyStringInputs],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(StringUtility.isString(testInput)).toBe(testExpected);
-            });
-        });
+    describe('[DEPRECATED] isNonEmptyString', (): void => {
+        testIsMethod(StringUtility.isNonEmptyString.bind(StringUtility), nonEmptySuccessScenarios, nonEmptyFailureScenarios);
     });
 
-    describe('isNonEmptyString', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: [...nonStringInputs],
-                expected: false
-            },
-            {
-                label: 'Empty string inputs',
-                inputs: [...emptyStringInputs],
-                expected: false
-            },
-            {
-                label: 'Non-empty string inputs',
-                inputs: [...nonEmptyStringInputs],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(StringUtility.isNonEmptyString(testInput)).toBe(testExpected);
-            });
-        });
+    describe('[DEPRECATED] isSingleLineTrimmedString', (): void => {
+        testIsMethod(StringUtility.isSingleLineTrimmedString.bind(StringUtility), singleLineSuccessScenarios, singleLineFailureScenarios);
     });
 
-    describe('isSingleLineLowercaseTrimmedString', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: [...nonStringInputs],
-                expected: false
-            },
-            {
-                label: 'Empty string inputs',
-                inputs: [...emptyStringInputs],
-                expected: false
-            },
-            {
-                label: 'Incorrect case inputs',
-                inputs: [
-                    ...singleLineTrimmedInputsUppercase,
-                    ...singleLineTrimmedInputsMixedCase,
-                    ...singleLineTrimmedFailureInputsUppercase,
-                    ...singleLineTrimmedFailureInputsMixedCase
-                ],
-                expected: false
-            },
-            {
-                label: 'Whitespace failure inputs',
-                inputs: [
-                    ...singleLineTrimmedFailureInputsLowercase
-                ],
-                expected: false
-            },
-            {
-                label: 'Single line lowercase trimmed inputs',
-                inputs: [...singleLineTrimmedInputsLowercase],
-                expected: true
-            },
-            {
-                label: 'Number and symbol trimmed inputs',
-                inputs: [...singleLineTrimmedInputsNumsAndSymbols],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(StringUtility.isSingleLineLowercaseTrimmedString(testInput)).toBe(testExpected);
-            });
-        });
+    describe('[DEPRECATED] isSingleLineLowercaseTrimmedString', (): void => {
+        testIsMethod(StringUtility.isSingleLineLowercaseTrimmedString.bind(StringUtility), singleLineLowercaseSuccessScenarios, singleLineLowercaseFailureScenarios);
     });
 
-    describe('isSingleLineUppercaseTrimmedString', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: [...nonStringInputs],
-                expected: false
-            },
-            {
-                label: 'Empty string inputs',
-                inputs: [...emptyStringInputs],
-                expected: false
-            },
-            {
-                label: 'Incorrect case inputs',
-                inputs: [
-                    ...singleLineTrimmedInputsLowercase,
-                    ...singleLineTrimmedInputsMixedCase,
-                    ...singleLineTrimmedFailureInputsLowercase,
-                    ...singleLineTrimmedFailureInputsMixedCase
-                ],
-                expected: false
-            },
-            {
-                label: 'Whitespace failure inputs',
-                inputs: [
-                    ...singleLineTrimmedFailureInputsUppercase
-                ],
-                expected: false
-            },
-            {
-                label: 'Single line uppercase trimmed inputs',
-                inputs: [...singleLineTrimmedInputsUppercase],
-                expected: true
-            },
-            {
-                label: 'Number and symbol trimmed inputs',
-                inputs: [...singleLineTrimmedInputsNumsAndSymbols],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(StringUtility.isSingleLineUppercaseTrimmedString(testInput)).toBe(testExpected);
-            });
-        });
-    });
-
-    describe('isSingleLineTrimmedString', (): void => {
-        const scenarios: Scenario[] = [
-            {
-                label: 'Non-string inputs',
-                inputs: [...nonStringInputs],
-                expected: false
-            },
-            {
-                label: 'Empty string inputs',
-                inputs: [...emptyStringInputs],
-                expected: false
-            },
-            {
-                label: 'Whitespace failure inputs',
-                inputs: [
-                    ...singleLineTrimmedFailureInputs
-                ],
-                expected: false
-            },
-            {
-                label: 'Single line trimmed inputs',
-                inputs: [...singleLineTrimmedInputs],
-                expected: true
-            }
-        ];
-
-        describe.each(
-            scenarios
-        )('%# - $label', ({ inputs: scenarioInputs, expected: scenarioExpected }: Scenario): void => {
-            const testCases: TestCase[] = buildTestCases(scenarioInputs, scenarioExpected);
-
-            test.each(
-                testCases
-            )('%# - Input $input should return $expected', ({ input: testInput, expected: testExpected }: TestCase): void => {
-                expect(StringUtility.isSingleLineTrimmedString(testInput)).toBe(testExpected);
-            });
-        });
+    describe('[DEPRECATED] isSingleLineUppercaseTrimmedString', (): void => {
+        testIsMethod(StringUtility.isSingleLineUppercaseTrimmedString.bind(StringUtility), singleLineUppercaseSuccessScenarios, singleLineUppercaseFailureScenarios);
     });
 });

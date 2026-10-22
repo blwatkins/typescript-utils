@@ -60,5 +60,6 @@ export const nonFunctionInputs: unknown[] = [
     { key: 'value' },
     { key: 10 },
     { key: [] },
-    { key: {} }
+    { key: {} },
+    Symbol('test')
 ];

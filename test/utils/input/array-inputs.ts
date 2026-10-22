@@ -64,5 +64,28 @@ export const nonArrayInputs: unknown[] = [
     { key: 'value' },
     { key: 10 },
     { key: [] },
-    { key: {} }
+    { key: {} },
+    Symbol('test'),
+    new Uint8Array(2),
+    new Int32Array([1, 2, 3])
+];
+
+export const denseArrayInputs: unknown[] = [
+    [],
+    [1, 2, 3],
+    ['a', 'b', 'c'],
+    [{ key: 1 }, { key: 2 }, { key: 3 }],
+    [[1, 2, 3], [4, 5, 6]],
+    [undefined, undefined],
+    new (class extends Array {})(),
+    Array.from({ length: 2 })
+];
+
+export const sparseArrayInputs: unknown[] = [
+    new Array(1),
+    new Array(3),
+    Object.assign(new Array(3), { 1: 'b', 2: 'c' }),
+    Object.assign(new Array(3), { 0: 'a', 2: 'c' }),
+    Object.assign(new Array(3), { 0: 'a', 1: 'b' }),
+    Object.assign(new Array(3), { 0: undefined, 2: undefined })
 ];
