@@ -271,7 +271,7 @@ These rules apply to every Markdown file in the repository, including `README.md
 
 ### YAML Formatting
 
-These rules apply to every YAML file in the repository, including `.github/dependabot.yml`, the workflows under `.github/workflows/`, `docs/_config.yml`, and the front matter of Markdown files.
+These rules apply to every YAML file in the repository, including `.github/dependabot.yml`, the workflows under `.github/workflows/`, `docs/_config.yml`, and Jekyll front matter in Markdown and HTML files.
 
 - Enclose every string value in single quotes (e.g., `runs-on: 'ubuntu-latest'`, `interval: 'monthly'`, `- 'main'`), including values in flow sequences (`['import']`).
 - Use double quotes only when the string needs an escape sequence such as `\n`, since single-quoted YAML strings do not process escapes.
