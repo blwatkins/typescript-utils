@@ -6,11 +6,11 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: monthly
+      interval: 'monthly'
     target-branch: 'main'
     allow:
       - dependency-type: 'direct'
-    versioning-strategy: increase
+    versioning-strategy: 'increase'
     commit-message:
       prefix: 'dependabot npm update'
       include: 'scope'
@@ -19,38 +19,38 @@ updates:
       - 'npm'
     groups:
       development-dependencies:
-        applies-to: version-updates
+        applies-to: 'version-updates'
         dependency-type: 'development'
         update-types:
           - 'major'
           - 'minor'
           - 'patch'
       development-dependencies-security:
-        applies-to: security-updates
+        applies-to: 'security-updates'
         dependency-type: 'development'
         update-types:
           - 'major'
           - 'minor'
           - 'patch'
       production-dependencies:
-        applies-to: version-updates
+        applies-to: 'version-updates'
         dependency-type: 'production'
         update-types:
           - 'major'
           - 'minor'
           - 'patch'
       production-dependencies-security:
-        applies-to: security-updates
+        applies-to: 'security-updates'
         dependency-type: 'production'
         update-types:
           - 'major'
           - 'minor'
           - 'patch'
 
-  - package-ecosystem: github-actions
+  - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: monthly
+      interval: 'monthly'
     target-branch: 'main'
     commit-message:
       prefix: 'dependabot github-action update'
@@ -60,18 +60,18 @@ updates:
       - 'github actions'
     groups:
       github-actions-dependencies:
-        applies-to: version-updates
+        applies-to: 'version-updates'
         patterns:
           - '*'
       github-actions-dependencies-security:
-        applies-to: security-updates
+        applies-to: 'security-updates'
         patterns:
           - '*'
 
-  - package-ecosystem: bundler
+  - package-ecosystem: 'bundler'
     directory: '/docs'
     schedule:
-      interval: monthly
+      interval: 'monthly'
     target-branch: 'main'
     allow:
       - dependency-type: 'direct'
@@ -83,10 +83,10 @@ updates:
       - 'ruby'
     groups:
       ruby-dependencies:
-        applies-to: version-updates
+        applies-to: 'version-updates'
         patterns:
           - '*'
       ruby-dependencies-security:
-        applies-to: security-updates
+        applies-to: 'security-updates'
         patterns:
           - '*'
