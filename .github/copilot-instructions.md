@@ -240,6 +240,8 @@ All source files must include the MIT License copyright header at the top.
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ * SPDX-License-Identifier: MIT
  */
 ```
 
@@ -312,7 +314,7 @@ Use `.md` relative links within `docs/` source files; the build process will con
 
 ### Front Matter Dates
 
-Markdown pages that use `layout: post` with `date` and `modified_date` front matter render both values through `docs/_layouts/post.html` as "Published" and "Updated", respectively.
+Markdown pages that use `layout: custom-post` with `date` and `modified_date` front matter render both values through `docs/_layouts/custom-post.html` as "Published" and "Updated", respectively.
 When a branch changes the content of one of these pages, bump that page's `modified_date` to the commit date and leave the original `date` unchanged.
 A page whose content did not change keeps its existing `modified_date`.
 
