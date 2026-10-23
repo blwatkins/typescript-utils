@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "main"
-      - "release/**"
+      - 'main'
+      - 'release/**'
   pull_request:
     branches:
-      - "main"
-      - "release/**"
+      - 'main'
+      - 'release/**'
 
 jobs:
   validate:
