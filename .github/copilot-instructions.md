@@ -252,7 +252,7 @@ All source files must include the MIT License copyright header at the top.
 - Prefer `if`/`else` blocks over ternary operators for conditional logic.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 - Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
-- Variable, constant and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
+- Variable, constant, and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
 - Write every non-ASCII character in source and test source files as a Unicode escape (e.g., `\u00E9`, `\u{1F3A8}`), never as the raw character. Many non-ASCII characters are invisible or look identical to an ASCII character, so a raw character can change behavior without being evident in a diff or a review.
 - A documentation comment may show a visible non-ASCII character rendered, because TypeDoc prints an escape literally and the generated documentation would lose the character. An invisible character in a documentation comment is named by its code point instead (e.g., U+00AD for the soft hyphen).
 
