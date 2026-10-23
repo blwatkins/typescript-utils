@@ -1,15 +1,15 @@
-name: "CodeQL"
+name: 'CodeQL'
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - "main"
+      - 'main'
       - "release/**"
   pull_request:
     branches:
-      - "main"
-      - "release/**"
+      - 'main'
+      - 'release/**'
   schedule:
     - cron: '0 0 1 * *' # Runs at 00:00 UTC on the first day of every month
 
@@ -43,4 +43,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4.38.2
         with:
-          category: "/language:${{matrix.language}}"
+          category: '/language:${{matrix.language}}'
