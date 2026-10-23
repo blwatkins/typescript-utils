@@ -1,57 +1,56 @@
 # Minima theme configuration
-remote_theme: jekyll/minima
+remote_theme: 'jekyll/minima'
 plugins:
-  - jekyll-coffeescript
-  - jekyll-default-layout
-  - jekyll-feed
-  - jekyll-gfm-admonitions
-  - jekyll-github-metadata
-  - jekyll-optional-front-matter
-  - jekyll-relative-links
-  - jekyll-remote-theme
-  - jekyll-seo-tag
-  - jekyll-titles-from-headings
-  - jekyll-toc
+  - 'jekyll-coffeescript'
+  - 'jekyll-default-layout'
+  - 'jekyll-feed'
+  - 'jekyll-gfm-admonitions'
+  - 'jekyll-github-metadata'
+  - 'jekyll-optional-front-matter'
+  - 'jekyll-relative-links'
+  - 'jekyll-remote-theme'
+  - 'jekyll-seo-tag'
+  - 'jekyll-titles-from-headings'
+  - 'jekyll-toc'
 
 # valid social icon names can be found at https://fontawesome.com/search?ic=brands
 
 minima:
-  skin: auto
+  skin: 'auto'
   hide_site_feed_link: true
   show_excerpts: false
   social_links:
     - title: 'GitHub Pages Home'
-      icon: house
-      icon_pack: regular
+      icon: 'house'
+      icon_pack: 'regular'
       url: 'https://blwatkins.github.io/'
     - title: 'Beehiiv Newsletter'
-      icon: envelope
-      icon_pack: regular
+      icon: 'envelope'
+      icon_pack: 'regular'
       url: 'https://brittniwatkins.beehiiv.com/'
     - title: '@blwatkins/utils'
-      icon: npm
-      icon_pack: brands
+      icon: 'npm'
+      icon_pack: 'brands'
       url: 'https://www.npmjs.com/package/@blwatkins/utils'
     - title: 'Source Code'
-      icon: git-alt
-      icon_pack: brands
+      icon: 'git-alt'
+      icon_pack: 'brands'
       url: 'https://github.com/blwatkins/typescript-utils'
-    - title: GitHub
-      icon: github
-      icon_pack: brands
+    - title: 'GitHub'
+      icon: 'github'
+      icon_pack: 'brands'
       url: 'https://github.com/blwatkins'
-    - title: YouTube
-      icon: youtube
-      icon_pack: brands
+    - title: 'YouTube'
+      icon: 'youtube'
+      icon_pack: 'brands'
       url: 'https://www.youtube.com/channel/UCeJ-huUU2AWP0z4-HWr1BXQ'
-    - title: Ko-fi
-      icon: ko-fi
-      icon_pack: brands
+    - title: 'Ko-fi'
+      icon: 'ko-fi'
+      icon_pack: 'brands'
       url: 'https://ko-fi.com/brittniwatkins'
   nav_pages:
-    - index.md
-    - releases.md
-    - roadmap.md
+    - 'index.md'
+    - 'releases.md'
 
 title: 'TypeScript Utilities'
 description: 'A toolkit of general-purpose TypeScript and JavaScript utilities.'
@@ -62,7 +61,7 @@ sass:
   silence_deprecations: ['import']
 
 exclude:
-  - .ruby-version
-  - Gemfile
-  - Gemfile.lock
-  - vendor
+  - '.ruby-version'
+  - 'Gemfile'
+  - 'Gemfile.lock'
+  - 'vendor'
