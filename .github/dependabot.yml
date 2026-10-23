@@ -3,90 +3,90 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
       interval: monthly
-    target-branch: "main"
+    target-branch: 'main'
     allow:
-      - dependency-type: "direct"
+      - dependency-type: 'direct'
     versioning-strategy: increase
     commit-message:
-      prefix: "dependabot npm update"
-      include: "scope"
+      prefix: 'dependabot npm update'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "npm"
+      - 'dependencies'
+      - 'npm'
     groups:
       development-dependencies:
         applies-to: version-updates
-        dependency-type: "development"
+        dependency-type: 'development'
         update-types:
-          - "major"
-          - "minor"
-          - "patch"
+          - 'major'
+          - 'minor'
+          - 'patch'
       development-dependencies-security:
         applies-to: security-updates
-        dependency-type: "development"
+        dependency-type: 'development'
         update-types:
-          - "major"
-          - "minor"
-          - "patch"
+          - 'major'
+          - 'minor'
+          - 'patch'
       production-dependencies:
         applies-to: version-updates
-        dependency-type: "production"
+        dependency-type: 'production'
         update-types:
-          - "major"
-          - "minor"
-          - "patch"
+          - 'major'
+          - 'minor'
+          - 'patch'
       production-dependencies-security:
         applies-to: security-updates
-        dependency-type: "production"
+        dependency-type: 'production'
         update-types:
-          - "major"
-          - "minor"
-          - "patch"
+          - 'major'
+          - 'minor'
+          - 'patch'
 
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: monthly
-    target-branch: "main"
+    target-branch: 'main'
     commit-message:
-      prefix: "dependabot github-action update"
-      include: "scope"
+      prefix: 'dependabot github-action update'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "github actions"
+      - 'dependencies'
+      - 'github actions'
     groups:
       github-actions-dependencies:
         applies-to: version-updates
         patterns:
-          - "*"
+          - '*'
       github-actions-dependencies-security:
         applies-to: security-updates
         patterns:
-          - "*"
+          - '*'
 
   - package-ecosystem: bundler
-    directory: "/docs"
+    directory: '/docs'
     schedule:
       interval: monthly
-    target-branch: "main"
+    target-branch: 'main'
     allow:
-      - dependency-type: "direct"
+      - dependency-type: 'direct'
     commit-message:
-      prefix: "dependabot bundler update"
-      include: "scope"
+      prefix: 'dependabot bundler update'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "ruby"
+      - 'dependencies'
+      - 'ruby'
     groups:
       ruby-dependencies:
         applies-to: version-updates
         patterns:
-          - "*"
+          - '*'
       ruby-dependencies-security:
         applies-to: security-updates
         patterns:
-          - "*"
+          - '*'
