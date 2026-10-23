@@ -107,20 +107,20 @@ Static classes must:
 
 ### Custom Error Types
 
-Custom error classes must:
-
-- Live in `src/error/` and be re-exported from that module's index file
-- Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
-- Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
-- Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
-- Expose a public static `defaultMessage` getter returning the default error message
-
 Choose the error type by the kind of failure, not by the call site:
 
 - `PrimitiveTypeError` — input fails a type check with no schema involved (e.g., not a string, not a number, not a function, not an object), including a classifying guard that folds a content rule into the type it narrows to
 - `SchemaTypeError` — input is checked against an expected object schema and fails it, either because it does not satisfy the schema or because it is not an object at all
 - `ValueRangeError` — input has already passed its type check, but its value falls outside what is allowed: a range, a bound, or a content rule on an already-typed value
 - `StaticInstanceError` — a static class constructor was invoked
+
+A custom error class this package defines for itself must:
+
+- Live in `src/error/` and be re-exported from that module's index file
+- Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
+- Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
+- Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
+- Expose a public static `defaultMessage` getter returning the default error message
 
 Custom error types intentionally do not expose a Node.js-style `code` property.
 Consumers discriminate with `instanceof` and the error `name`; the Node.js code namespace (e.g., `ERR_INVALID_ARG_TYPE`) is reserved for Node core and would not identify this package as the source.
@@ -240,6 +240,8 @@ All source files must include the MIT License copyright header at the top.
  * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT
  */
 ```
 
@@ -250,7 +252,7 @@ All source files must include the MIT License copyright header at the top.
 - Prefer `if`/`else` blocks over ternary operators for conditional logic.
 - Prefer `@returns` (not `@return`) in TSDoc comments.
 - Module-level private constants (e.g., lookup tables backing a set of public getters) use camelCase naming.
-- Variable, constant and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
+- Variable, constant, and member names do not need to encode their type or role in a suffix; the surrounding context usually carries it. A getter returning a regular expression does not need a `Pattern` suffix, and neither does the constant backing it. Keep a suffix only where the name is genuinely ambiguous without it.
 - Write every non-ASCII character in source and test source files as a Unicode escape (e.g., `\u00E9`, `\u{1F3A8}`), never as the raw character. Many non-ASCII characters are invisible or look identical to an ASCII character, so a raw character can change behavior without being evident in a diff or a review.
 - A documentation comment may show a visible non-ASCII character rendered, because TypeDoc prints an escape literally and the generated documentation would lose the character. An invisible character in a documentation comment is named by its code point instead (e.g., U+00AD for the soft hyphen).
 
@@ -266,6 +268,14 @@ These rules apply to every Markdown file in the repository, including `README.md
 - Indent a list item's nested content by the width of its parent marker: 2 spaces under `- `, 3 spaces under `1. `. Under-indenting by even one space detaches the content from the list item and splits the list in two. This applies to nested lists, paragraphs, and code fences alike.
 - A single file may need both widths, since the required indent comes from each item's own marker. Do not normalize a file to one indent width.
 - When a fenced code block sits inside a list item, indent the opening fence to the item's content column. The closing fence's indentation does not affect nesting, so match it to the opening fence for readability rather than correctness.
+
+### YAML Formatting
+
+These rules apply to every YAML file in the repository, including `.github/dependabot.yml`, the workflows under `.github/workflows/`, `docs/_config.yml`, and Jekyll front matter in Markdown and HTML files.
+
+- Enclose every string value in single quotes (e.g., `runs-on: 'ubuntu-latest'`, `interval: 'monthly'`, `- 'main'`), including values in flow sequences (`['import']`).
+- Use double quotes only when the string needs an escape sequence such as `\n`, since single-quoted YAML strings do not process escapes.
+- Leave keys, booleans, numbers, and dates unquoted (e.g., `on:`, `cancel-in-progress: false`, `timeout-minutes: 360`, `date: 2026-10-23`).
 
 ### Documentation Comment Preferences
 
@@ -292,7 +302,7 @@ The following preferences require manual review since no ESLint rule can check t
 - **Omit a `@returns` description that only restates its type:** Where the type carries the whole meaning, the type alone is the description — an `asserts input is ...` predicate, an `input is ...` guard, `@returns {void}`, or a getter returning a bare `RegExp`. Keep a description wherever it says something the type does not, which is most methods returning a value: a `@returns {number}` that states which of several bounds is returned earns its prose. A deprecated member keeps whatever `@returns` text it already had; do not retrofit this to the deprecated block, where a later diff would read as a change to a member that is on its way out.
 - **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag (and any optional type/identifier), e.g. `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
 - **State the removal version on `@deprecated`:** Every `@deprecated` tag ends with `Will be removed in v{version}.` What precedes it depends on what the consumer should do instead:
-  - **Replaced within this package** — name the replacement first, as a link: `@deprecated Replaced by {@link StringUtility.assertString}. Will be removed in v0.1.0-alpha.5.`
+  - **Replaced within this package** — name the replacement first, as a link: `@deprecated Replaced by {@link ExampleUtility.newMethod}. Will be removed in v1.0.0.`
   - **Moved to another package** — name the destination first, without a link, because TypeDoc cannot resolve a symbol outside this package and an unresolved link fails the documentation run: `@deprecated Migrated to @scope/package-name. Will be removed in v1.0.0.`
   - **Removed with no alternative** — the removal notice alone: `@deprecated Will be removed in v1.0.0.`
 
@@ -312,7 +322,7 @@ Use `.md` relative links within `docs/` source files; the build process will con
 
 ### Front Matter Dates
 
-Markdown pages that use `layout: post` with `date` and `modified_date` front matter render both values through `docs/_layouts/post.html` as "Published" and "Updated", respectively.
+Markdown pages that use `layout: custom-post` with `date` and `modified_date` front matter render both values through `docs/_layouts/custom-post.html` as "Published" and "Updated", respectively.
 When a branch changes the content of one of these pages, bump that page's `modified_date` to the commit date and leave the original `date` unchanged.
 A page whose content did not change keeps its existing `modified_date`.
 
@@ -425,7 +435,7 @@ describe.each(
 
 - Group the scenarios under a `describe('Argument errors')` block within the suite for the method under test.
 - For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`). This attributes a failure to one argument rather than leaving it ambiguous.
-- Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
+- Assert the most specific error type the method throws. Where the package defines its own error types, assert the custom type rather than the built-in base it extends: a built-in base passes for any subclass and does not pin down which failure occurred.
 - Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method.
 - A constraint guard's suite uses both mechanisms: its wrong-type inputs belong in the `Argument errors` block, and its in-type failures go through the shared assertion-contract helpers, reached by a local wrapper that adapts the argument list to the single-input shape those helpers take. A classifying guard needs no `Argument errors` block because it has no wrong-type failure to attribute. The presence or absence of that block therefore tracks which shape a guard is, and is not on its own a sign that a suite is inconsistent.
 - Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks, or as their own scenarios when the inputs group meaningfully. The argument-validation conventions above do not apply to them.

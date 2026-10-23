@@ -1,13 +1,13 @@
 ---
-title: "Resources and References"
-layout: custom-post
+title: 'Resources and References'
+layout: 'custom-post'
 author:
-  - Brittni Watkins
+  - 'Brittni Watkins'
 date: 2026-06-05
 modified_date: 2026-09-24
 toc: true
 read_time: false
-description: "Resources and references used to develop the TypeScript Utilities (@blwatkins/utils) npm package."
+description: 'Resources and references used to develop the TypeScript Utilities (@blwatkins/utils) npm package.'
 ---
 
 ## Languages

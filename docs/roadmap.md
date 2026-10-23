@@ -1,13 +1,13 @@
 ---
-title: "Roadmap"
-layout: custom-post
+title: 'Roadmap'
+layout: 'custom-post'
 author:
-  - Brittni Watkins
+  - 'Brittni Watkins'
 date: 2026-08-27
 modified_date: 2026-10-22
 toc: true
 read_time: false
-description: "Roadmap for the TypeScript Utilities (@blwatkins/utils) npm package."
+description: 'Roadmap for the TypeScript Utilities (@blwatkins/utils) npm package.'
 ---
 
 ## About this Roadmap

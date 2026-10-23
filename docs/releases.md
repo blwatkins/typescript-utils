@@ -1,13 +1,13 @@
 ---
-title: "Releases"
-layout: custom-post
+title: 'Releases'
+layout: 'custom-post'
 author:
-  - Brittni Watkins
+  - 'Brittni Watkins'
 date: 2026-05-18
 modified_date: 2026-10-22
 toc: true
 read_time: false
-description: "Past and current releases of the TypeScript Utilities (@blwatkins/utils) npm package."
+description: 'Past and current releases of the TypeScript Utilities (@blwatkins/utils) npm package.'
 ---
 
 ## v0.x
