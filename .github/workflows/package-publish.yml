@@ -1,4 +1,4 @@
-name: npm and GitHub Package Publish
+name: 'npm and GitHub Package Publish'
 
 on:
   workflow_dispatch:
@@ -11,45 +11,45 @@ on:
 jobs:
   validate:
     permissions:
-      contents: read
-    runs-on: ubuntu-latest
+      contents: 'read'
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.0.0
+      - uses: 'actions/checkout@v7.0.1'
+      - uses: 'actions/setup-node@v7.0.0'
         with:
           node-version: '24.x'
-      - run: npm ci
-      - run: npm run validate
+      - run: 'npm ci'
+      - run: 'npm run validate'
 
   publish-npm:
     permissions:
-      id-token: write
-      contents: read
-    needs: validate
-    runs-on: ubuntu-latest
+      id-token: 'write'
+      contents: 'read'
+    needs: 'validate'
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.0.0
+      - uses: 'actions/checkout@v7.0.1'
+      - uses: 'actions/setup-node@v7.0.0'
         with:
           node-version: '24.x'
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish --access public --tag ${{ github.event.inputs.release_tag }}
+          registry-url: 'https://registry.npmjs.org/'
+      - run: 'npm ci'
+      - run: 'npm publish --access public --tag ${{ github.event.inputs.release_tag }}'
 
   publish-github:
     permissions:
-      contents: read
-      packages: write
-    needs: validate
-    runs-on: ubuntu-latest
+      contents: 'read'
+      packages: 'write'
+    needs: 'validate'
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.0.0
+      - uses: 'actions/checkout@v7.0.1'
+      - uses: 'actions/setup-node@v7.0.0'
         with:
           node-version: '24.x'
-          registry-url: https://npm.pkg.github.com
+          registry-url: 'https://npm.pkg.github.com'
           scope: '@blwatkins'
-      - run: npm ci
-      - run: npm publish --tag ${{ github.event.inputs.release_tag }}
+      - run: 'npm ci'
+      - run: 'npm publish --tag ${{ github.event.inputs.release_tag }}'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

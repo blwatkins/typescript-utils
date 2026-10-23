@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - 'main'
-      - "release/**"
+      - 'release/**'
   pull_request:
     branches:
       - 'main'
@@ -15,13 +15,13 @@ on:
 
 jobs:
   analyze:
-    name: Analyze
+    name: 'Analyze'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 360
     permissions:
-      actions: read
-      contents: read
-      security-events: write
+      actions: 'read'
+      contents: 'read'
+      security-events: 'write'
 
     strategy:
       fail-fast: false
@@ -29,18 +29,18 @@ jobs:
         language: [ 'actions', 'javascript-typescript', 'ruby' ]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7.0.1
+      - name: 'Checkout repository'
+        uses: 'actions/checkout@v7.0.1'
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4.38.2
+      - name: 'Initialize CodeQL'
+        uses: 'github/codeql-action/init@v4.38.2'
         with:
-          languages: ${{ matrix.language }}
+          languages: '${{ matrix.language }}'
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v4.38.2
+      - name: 'Autobuild'
+        uses: 'github/codeql-action/autobuild@v4.38.2'
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4.38.2
+      - name: 'Perform CodeQL Analysis'
+        uses: 'github/codeql-action/analyze@v4.38.2'
         with:
           category: '/language:${{matrix.language}}'
