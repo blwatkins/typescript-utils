@@ -133,10 +133,10 @@ An assertion's failure path is precisely the path where the input has *not* been
 
 ```typescript
 // Correct.
-throw new Error('Expected an array.');
+throw new PrimitiveTypeError('Expected an array.');
 
 // Wrong. `input` failed the check, and its type is now visible to anyone who can read the error.
-throw new Error(`Expected an array, but received: ${typeof input}.`);
+throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}.`);
 ```
 
 The concern is disclosure, not verbosity.
@@ -174,7 +174,7 @@ This is the guard-pair application of the suffix guidance under ["Code Style Pre
 
 **The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, a non-string, or any string that does not pass `StringUtility.isText`, falls through to the default message.
 This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
-It is also observable behavior, so each guard's tests assert it for the failures its `message` covers.
+It is also observable behavior, asserted by the shared assertion-contract helpers under `test/utils/assert/` for the failures each guard's `message` covers.
 A new `assert*` method therefore either applies this check itself or forwards `message` unchanged to a method that does; a member that delegates to another guard, including a deprecated alias delegating to its replacement, takes the second form.
 Never use `message` unconditionally.
 
@@ -412,7 +412,7 @@ const argumentFailureScenarios: Scenario[] = [
         inputs: invalidInputs.map((input: unknown): { min: unknown; max: number; } => {
             return { min: input, max: defaultMax };
         }),
-        expected: TypeError
+        expected: PrimitiveTypeError
     }
 ];
 
