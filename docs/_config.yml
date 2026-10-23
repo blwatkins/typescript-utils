@@ -51,6 +51,7 @@ minima:
   nav_pages:
     - 'index.md'
     - 'releases.md'
+    - 'roadmap.md'
 
 title: 'TypeScript Utilities'
 description: 'A toolkit of general-purpose TypeScript and JavaScript utilities.'
