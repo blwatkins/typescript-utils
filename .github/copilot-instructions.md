@@ -133,10 +133,10 @@ An assertion's failure path is precisely the path where the input has *not* been
 
 ```typescript
 // Correct.
-throw new PrimitiveTypeError('Expected an array.');
+throw new Error('Expected an array.');
 
 // Wrong. `input` failed the check, and its type is now visible to anyone who can read the error.
-throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}.`);
+throw new Error(`Expected an array, but received: ${typeof input}.`);
 ```
 
 The concern is disclosure, not verbosity.
@@ -268,6 +268,14 @@ These rules apply to every Markdown file in the repository, including `README.md
 - Indent a list item's nested content by the width of its parent marker: 2 spaces under `- `, 3 spaces under `1. `. Under-indenting by even one space detaches the content from the list item and splits the list in two. This applies to nested lists, paragraphs, and code fences alike.
 - A single file may need both widths, since the required indent comes from each item's own marker. Do not normalize a file to one indent width.
 - When a fenced code block sits inside a list item, indent the opening fence to the item's content column. The closing fence's indentation does not affect nesting, so match it to the opening fence for readability rather than correctness.
+
+### YAML Formatting
+
+These rules apply to every YAML file in the repository, including `.github/dependabot.yml`, the workflows under `.github/workflows/`, `docs/_config.yml`, and the front matter of Markdown files.
+
+- Enclose every string value in single quotes (e.g., `runs-on: 'ubuntu-latest'`, `interval: 'monthly'`, `- 'main'`), including values in flow sequences (`['import']`).
+- Use double quotes only when the string needs an escape sequence such as `\n`, since single-quoted YAML strings do not process escapes.
+- Leave keys, booleans, numbers, and dates unquoted (e.g., `on:`, `cancel-in-progress: false`, `timeout-minutes: 360`, `date: 2026-10-23`).
 
 ### Documentation Comment Preferences
 
@@ -404,7 +412,7 @@ const argumentFailureScenarios: Scenario[] = [
         inputs: invalidInputs.map((input: unknown): { min: unknown; max: number; } => {
             return { min: input, max: defaultMax };
         }),
-        expected: PrimitiveTypeError
+        expected: TypeError
     }
 ];
 
@@ -427,7 +435,7 @@ describe.each(
 
 - Group the scenarios under a `describe('Argument errors')` block within the suite for the method under test.
 - For a method taking several arguments, map a fixture over one argument at a time, holding the others at a valid default, and give each mapped set its own scenario (e.g. `Invalid min argument`, `Invalid max argument`). This attributes a failure to one argument rather than leaving it ambiguous.
-- Assert the specific error type the package exports (e.g. `PrimitiveTypeError`, `ValueRangeError`, `SchemaTypeError`), never the built-in base type it extends. A built-in base passes for any subclass and does not pin down which failure occurred.
+- Assert the most specific error type the method throws. Where the package defines its own error types, assert the custom type rather than the built-in base it extends: a built-in base passes for any subclass and does not pin down which failure occurred.
 - Where several methods validate their arguments identically, assert the scenarios against all of them in one block rather than repeating the scenarios per method.
 - A constraint guard's suite uses both mechanisms: its wrong-type inputs belong in the `Argument errors` block, and its in-type failures go through the shared assertion-contract helpers, reached by a local wrapper that adapts the argument list to the single-input shape those helpers take. A classifying guard needs no `Argument errors` block because it has no wrong-type failure to attribute. The presence or absence of that block therefore tracks which shape a guard is, and is not on its own a sign that a suite is inconsistent.
 - Keep value and behavior tests — those asserting a returned value rather than a thrown error — as plain `test.each` blocks, or as their own scenarios when the inputs group meaningfully. The argument-validation conventions above do not apply to them.
