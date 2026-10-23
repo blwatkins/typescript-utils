@@ -133,10 +133,10 @@ An assertion's failure path is precisely the path where the input has *not* been
 
 ```typescript
 // Correct.
-throw new Error('Expected an array.');
+throw new PrimitiveTypeError('Expected an array.');
 
 // Wrong. `input` failed the check, and its type is now visible to anyone who can read the error.
-throw new Error(`Expected an array, but received: ${typeof input}.`);
+throw new PrimitiveTypeError(`Expected an array, but received: ${typeof input}.`);
 ```
 
 The concern is disclosure, not verbosity.
@@ -174,7 +174,7 @@ This is the guard-pair application of the suffix guidance under ["Code Style Pre
 
 **The optional `message` contract.** A custom `message` is used only when it passes `StringUtility.isSingleLine`; any other value, including a multi-line string, a whitespace-only string, `undefined`, a non-string, or any string that does not pass `StringUtility.isText`, falls through to the default message.
 This is deliberate: an error message that carries newlines or untrimmed padding corrupts logs and stack traces, so a malformed one is discarded rather than propagated.
-It is also observable behavior, so each guard's tests assert it for the failures its `message` covers.
+It is also observable behavior, asserted by the shared assertion-contract helpers under `test/utils/assert/` for the failures each guard's `message` covers.
 A new `assert*` method therefore either applies this check itself or forwards `message` unchanged to a method that does; a member that delegates to another guard, including a deprecated alias delegating to its replacement, takes the second form.
 Never use `message` unconditionally.
 
@@ -194,7 +194,7 @@ When a member is deprecated rather than removed:
 - Keep its test coverage until the member is removed. Do not delete a suite because a deprecated member started failing — a failing deprecated member is a defect in the current release, not dead weight.
 - Deprecate the member, any private helpers that exist only to support it, and the schema or type members it depends on, in the same change.
 - Mirror the grouping in the member's test suite: title its `describe` block `[DEPRECATED] <memberName>`, and group those blocks below the same deprecated banner at the end of the suite. A member tested alongside its replacement in a shared block has no separate section to group, so it needs neither.
-- A deprecated member that delegates to its replacement runs the replacement's test inputs rather than a copy of them. Copies drift. Declare the inputs once at suite scope and pass them to both.
+- A deprecated member that delegates to its replacement runs the replacement's scenario arrays rather than a copy of them. Copies drift. Declare the arrays once at suite scope and pass them to both.
 
 ### TypeScript Conventions
 
@@ -348,11 +348,11 @@ A page whose content did not change keeps its existing `modified_date`.
 
 - This repository uses Vitest for testing, with coverage reporting via V8.
 - Tests live in the `test/` directory, with a folder structure that mirrors the source code in `src/`.
-- Shared test fixtures and helpers live under `test/utils`.
+- Shared test fixtures and scenario helpers live under `test/utils`.
 - Vitest also type-checks test files at run time (in addition to executing them), configured via the `typecheck` block in `vitest.config.ts` against `tsconfig.vitest.json`.
 - Cross-cutting behavior that every member of a family of types must satisfy — for example, the custom error type contract, or the static class instantiation guard — is factored into a shared helper under `test/utils/` that emits its own `describe`/`test` blocks, and is called from each suite rather than duplicated per file.
 - Helper files use a `*-tests.ts` suffix (not `*.test.ts`) so Vitest does not collect them as suites directly.
-- Test files carry no explanatory comments. A `describe` title states what is under test and a `test` title states the case it covers, so a comment explaining either is bloat and a signal that the title needs the work instead. Exceptions to this rule include the deprecated banner, editor pragmas, warnings on data that must never change, and trailing comments on visible Unicode character entries that show the rendered character and its name.
+- Test files carry no explanatory comments. A `describe` title states what is under test and a scenario `label` states why its inputs belong together, so a comment explaining either is bloat and a signal that the title or the label needs the work instead. Exceptions to this rule include the deprecated banner, editor pragmas, warnings on data that must never change, and trailing comments on visible Unicode character entries that show the rendered character and its name.
 - Note that Vitest's `typecheck` pass collects cases by statically parsing `describe`/`test` literals per file, so cases emitted from a shared helper are type-checked but not individually counted in the typecheck totals.
 
 #### The Scenario Pattern
@@ -412,7 +412,7 @@ const argumentFailureScenarios: Scenario[] = [
         inputs: invalidInputs.map((input: unknown): { min: unknown; max: number; } => {
             return { min: input, max: defaultMax };
         }),
-        expected: TypeError
+        expected: PrimitiveTypeError
     }
 ];
 
