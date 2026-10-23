@@ -5,11 +5,11 @@ on:
   push:
     branches:
       - "main"
-      - "release/**/*"
+      - "release/**"
   pull_request:
     branches:
       - "main"
-      - "release/**/*"
+      - "release/**"
   schedule:
     - cron: '0 0 1 * *' # Runs at 00:00 UTC on the first day of every month
 
