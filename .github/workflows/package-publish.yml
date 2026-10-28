@@ -4,9 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'The tag of the release being published (e.g. alpha, beta, next, latest)'
+        description: 'The tag of the release being published (alpha, beta, next, or latest)'
         required: true
+        type: 'choice'
         default: 'alpha'
+        options:
+          - 'alpha'
+          - 'beta'
+          - 'next'
+          - 'latest'
 
 jobs:
   validate:

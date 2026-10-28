@@ -45,7 +45,7 @@ Claude Code skips backticked and fenced content when parsing imports, but a bare
 |---|---|---|---|
 | `codeql.yml` | CodeQL | Push/PR to `main` and `release/**`, manual, monthly schedule | Runs CodeQL security analysis for `actions`, `javascript-typescript`, and `ruby` |
 | `gh-pages-jekyll.yml` | Deploy GitHub Pages with Jekyll | Push to `main`, manual | Builds and deploys the `docs/` directory to GitHub Pages |
-| `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Runs `npm run validate` (lint, documentation generation, build, and tests), then publishes to npm and GitHub Packages; requires `release_tag` input and uses `id-token: write` trusted publishing permissions for the npm publish job |
+| `package-publish.yml` | npm and GitHub Package Publish | Manual (`workflow_dispatch`) | Runs `npm run validate` (lint, documentation generation, build, and tests), then publishes to npm and GitHub Packages; requires a `release_tag` input chosen from `alpha`, `beta`, `next`, or `latest` and uses `id-token: write` trusted publishing permissions for the npm publish job |
 | `npm-validate.yml` | npm Validate | Push/PR to `main` and `release/**`, manual | Runs `npm run validate` (lint, documentation generation, build, and tests) across supported Node.js versions |
 
 ## Directory Structure
@@ -219,6 +219,8 @@ The `types`, `module`, `main`, and `exports` fields in `package.json` should alw
 
 All source files must include the MIT License copyright header at the top.
 
+`velocity-copyright-template.txt` at the repository root contains a Velocity copyright notice template for JetBrains IDEs. Create a copyright profile in the IDE settings, paste the file's contents into its copyright text field, and select the profile for the project. The template preserves the original year and extends the year range when the copyright notice is updated in a later year.
+
 **Copyright year convention:** Use the original year the file was authored. If the file is subsequently modified in a later year, expand to a range (e.g., `2024-2026`). Do not change the starting year when editing an existing file.
 
 ```typescript
@@ -329,7 +331,7 @@ A page whose content did not change keeps its existing `modified_date`.
 ### TypeDoc Configuration
 
 - API docs are generated with TypeDoc (`npm run docs`) using `typedoc.json`.
-- TypeDoc entry points are intentionally pointed to module-level index files (e.g., `./src/number/index.ts`, `./src/random/index.ts`) rather than the root package entry point (e.g., `./src/index.ts`). This is done purposefully to maintain module-level organization in the generated documentation output. Do not change TypeDoc entry points to the root package entry point.
+- TypeDoc entry points are intentionally pointed to each module's index file (`./src/<module>/index.ts`, as listed in `typedoc.json`) rather than the root package entry point (`./src/index.ts`). This is done purposefully to maintain module-level organization in the generated documentation output. Do not change TypeDoc entry points to the root package entry point.
 
 ### Release Documentation
 
