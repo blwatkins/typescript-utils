@@ -153,7 +153,7 @@ Beyond that, messages follow a consistent voice:
 
 ### Assertions and Type Guards
 
-Assertion methods and type guards are the package's primary surface, and they are written as matched pairs.
+Where a package exposes assertion methods and type guards, they are written as matched pairs.
 
 A **classifying guard** answers "what is this?" about an input of unknown provenance.
 It takes a single `unknown` parameter and returns a type predicate: every input yields `true` or `false`, and no input makes it throw.

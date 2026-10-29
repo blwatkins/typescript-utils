@@ -25,7 +25,7 @@ The full text of the license is included with the project source code.
 
 ### [npm](https://www.npmjs.com/package/@blwatkins/utils)
 
-![npm License](https://badgen.net/npm/license/@blwatkins/utils/alpha)
+![npm License](https://badgen.net/npm/license/@blwatkins/utils)
 ![npm Version](https://badgen.net/npm/v/@blwatkins/utils)
 ![npm @alpha Version](https://badgen.net/npm/v/@blwatkins/utils/alpha)
 ![npm Types](https://badgen.net/npm/types/@blwatkins/utils)
