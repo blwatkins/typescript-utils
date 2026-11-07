@@ -27,7 +27,7 @@ minima:
     - title: "Beehiiv Newsletter"
       icon: envelope
       icon_pack: regular
-      url: "https://brittniwatkins.beehiiv.com/"
+      url: "https://brittnibuilds.beehiiv.com/"
     - title: "@blwatkins/utils"
       icon: npm
       icon_pack: brands
@@ -44,6 +44,10 @@ minima:
       icon: youtube
       icon_pack: brands
       url: "https://www.youtube.com/channel/UCeJ-huUU2AWP0z4-HWr1BXQ"
+    - title: Twitch
+      icon: twitch
+      icon_pack: brands
+      url: "https://www.twitch.tv/brittnibuilds"
     - title: Ko-fi
       icon: ko-fi
       icon_pack: brands
