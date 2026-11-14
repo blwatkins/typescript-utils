@@ -30,8 +30,7 @@ export class ValueRangeError extends RangeError {
     /**
      * Public constructor.
      *
-     * @param {string} message - The error message.
-     * Default value is {@link ValueRangeError.defaultMessage}.
+     * @param {string} [message] - The error message.
      *
      * @public
      * @since 0.1.0

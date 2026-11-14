@@ -68,8 +68,8 @@ export class RandomNumberGeneratorFactory {
      * @see {@link SeedVersions.assertValidIndex}
      *
      * @param {string} seed - The primary input to determine the random number sequence.
-     * @param {string | undefined} namespace - Namespace to create different sequences from the same seed.
-     * @param {number | undefined} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
+     * @param {string} [namespace] - Namespace to create different sequences from the same seed.
+     * @param {number} [version] - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same seed and namespace.
      *
      * @returns {SeededRandomNumberGenerator} A {@link SeededRandomNumberGenerator} object with the resulting initial state.
@@ -101,7 +101,7 @@ export class RandomNumberGeneratorFactory {
      * @see {@link StringUtility.assertSingleLine}
      *
      * @param {string} seed - The primary input to determine the random number sequence.
-     * @param {string | undefined} namespace - Namespace to create different sequences from the same seed.
+     * @param {string} [namespace] - Namespace to create different sequences from the same seed.
      *
      * @returns {Promise<SeededRandomNumberGenerator>} A {@link SeededRandomNumberGenerator} object with the resulting initial state.
      *
@@ -126,7 +126,7 @@ export class RandomNumberGeneratorFactory {
      * @see {@link StringUtility.assertSingleLine}
      *
      * @param {string} seed - The primary seed input to determine the random number sequence.
-     * @param {string | undefined} namespace - Optional namespace to create different sequences from the same seed.
+     * @param {string} [namespace] - Optional namespace to create different sequences from the same seed.
      *
      * @returns {string} The input string for the hash algorithm.
      * If `namespace` is provided, the input string will concatenate `namespace` and `seed` with a null character (`\x00`) separator.
@@ -156,9 +156,8 @@ export class RandomNumberGeneratorFactory {
      * @see {@link SeedVersions.assertValidIndex}
      *
      * @param {string} input - Input to be hashed and converted into the initial state of the random number generator.
-     * @param {number} version - The {@link SeedVersions} index to use for selecting the offsets for hashing.
+     * @param {number} [version] - The {@link SeedVersions} index to use for selecting the offsets for hashing.
      * Changing the version number will result in a different sequence of random numbers for the same input.
-     * Default value is 0.
      *
      * @returns {[number, number, number, number]} The initial state array for the random number generator.
      *

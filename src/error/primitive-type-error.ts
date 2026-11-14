@@ -30,8 +30,7 @@ export class PrimitiveTypeError extends TypeError {
     /**
      * Public constructor.
      *
-     * @param {string} message - The error message.
-     * Default value is {@link PrimitiveTypeError.defaultMessage}.
+     * @param {string} [message] - The error message.
      *
      * @public
      * @since 0.1.0

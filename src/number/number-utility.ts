@@ -47,7 +47,7 @@ export class NumberUtility {
      * @see {@link NumberUtility.isFinite}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a finite number.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a finite number.
      *
      * @returns {asserts input is number}
      *
@@ -72,7 +72,7 @@ export class NumberUtility {
      * @see {@link NumberUtility.isInteger}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not an integer within the safe integer range.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not an integer within the safe integer range.
      *
      * @returns {asserts input is number}
      *
@@ -97,10 +97,9 @@ export class NumberUtility {
      * @see {@link NumberUtility.isPositiveInteger}
      *
      * @param {unknown} input - The input to check.
-     * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
+     * @param {boolean} [zeroInclusive] - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
-     * Default value is `false`.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a positive integer within the safe integer range or zero when `zeroInclusive` is `true`.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a positive integer within the safe integer range or zero when `zeroInclusive` is `true`.
      *
      * @returns {asserts input is number}
      *
@@ -125,7 +124,7 @@ export class NumberUtility {
      * @see {@link NumberUtility.isSafe}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a number within the safe integer range.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a number within the safe integer range.
      *
      * @returns {asserts input is number}
      *
@@ -151,7 +150,7 @@ export class NumberUtility {
      *
      * @param {number} a - The value that must be the greater of the two.
      * @param {number} b - The value that must be the lesser of the two.
-     * @param {string | undefined} message - Optional message for the error thrown when `a` is not greater than `b`.
+     * @param {string} [message] - Optional message for the error thrown when `a` is not greater than `b`.
      *
      * @returns {void}
      *
@@ -178,7 +177,7 @@ export class NumberUtility {
      *
      * @param {number} a - The value that must be the lesser of the two.
      * @param {number} b - The value that must be the greater of the two.
-     * @param {string | undefined} message - Optional message for the error thrown when `a` is not less than `b`.
+     * @param {string} [message] - Optional message for the error thrown when `a` is not less than `b`.
      *
      * @returns {void}
      *
@@ -206,7 +205,7 @@ export class NumberUtility {
      * @param {number} value - The value to check.
      * @param {number} min - The inclusive minimum value.
      * @param {number} max - The inclusive maximum value.
-     * @param {string | undefined} message - Optional message for the error thrown when `value` is not within the range [`min`, `max`] (inclusive).
+     * @param {string} [message] - Optional message for the error thrown when `value` is not within the range [`min`, `max`] (inclusive).
      *
      * @returns {void}
      *
@@ -234,7 +233,7 @@ export class NumberUtility {
      *
      * @param {number} min - Minimum value to check.
      * @param {number} max - Maximum value to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `min` is not less than or equal to `max`.
+     * @param {string} [message] - Optional message for the error thrown when `min` is not less than or equal to `max`.
      *
      * @returns {void}
      *
@@ -288,9 +287,8 @@ export class NumberUtility {
      * @see {@link NumberUtility.isInteger}
      *
      * @param {unknown} input - The input to check.
-     * @param {boolean} zeroInclusive - `true` if zero should be considered a valid input.
+     * @param {boolean} [zeroInclusive] - `true` if zero should be considered a valid input.
      * `false` if zero should be considered an invalid input.
-     * Default value is `false`.
      *
      * @returns {input is number} `true` if `input` is a positive integer within the safe integer range, or zero when `zeroInclusive` is `true`; `false` otherwise.
      *

@@ -56,7 +56,7 @@ export class WeightedListUtility {
      * @see {@link WeightedListUtility.isGenericWeightedList}
      *
      * @param {unknown} input - The input to validate.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid generic {@link WeightedList} object.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a valid generic {@link WeightedList} object.
      *
      * @returns {asserts input is WeightedList<unknown>}
      *

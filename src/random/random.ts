@@ -34,7 +34,6 @@ import { WeightedElement, WeightedList, WeightedListUtility } from './weighted-e
  * @default 10
  *
  * @type {number}
- * @private
  */
 const maxDrawAttempts: number = 10;
 
@@ -179,8 +178,7 @@ export class Random {
      *
      * @see {@link NumberUtility.assertInRange}
      *
-     * @param {number} chanceOfTrue - The probability of returning `true` (between 0 and 1).
-     * Default value is `0.5`.
+     * @param {number} [chanceOfTrue] - The probability of returning `true` (between 0 and 1).
      *
      * @returns {boolean} A random boolean value.
      *

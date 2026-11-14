@@ -96,7 +96,7 @@ export class SeedVersions {
      * @see {@link SeedVersions.isValidIndex}
      *
      * @param {number} index - The index to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `index` is not a valid seed version index.
+     * @param {string} [message] - Optional message for the error thrown when `index` is not a valid seed version index.
      *
      * @returns {void}
      *

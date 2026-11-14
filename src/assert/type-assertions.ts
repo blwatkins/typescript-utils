@@ -50,7 +50,7 @@ export class TypeAssertions {
      * @see {@link ArrayUtility.assertArray}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not an array.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not an array.
      *
      * @returns {asserts input is unknown[]}
      *
@@ -67,7 +67,7 @@ export class TypeAssertions {
      * Assert that `input` is a boolean.
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a boolean.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a boolean.
      *
      * @returns {asserts input is boolean}
      *
@@ -92,7 +92,7 @@ export class TypeAssertions {
      * @remarks This method does not enforce type checking for function parameters or return type.
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a function.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a function.
      *
      * @returns {asserts input is (...args: unknown[]) => unknown}
      *
@@ -118,7 +118,7 @@ export class TypeAssertions {
      * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a non-array object.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a non-array object.
      *
      * @returns {asserts input is object}
      *
@@ -143,7 +143,7 @@ export class TypeAssertions {
      * @see {@link StringUtility.assertString}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a string.
      *
      * @returns {asserts input is string}
      *

@@ -102,7 +102,7 @@ export class StringUtility {
      * @see {@link StringUtility.isString}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a string.
      *
      * @returns {asserts input is string}
      *
@@ -129,7 +129,7 @@ export class StringUtility {
      * @see {@link StringUtility.isEmpty}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not an empty string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not an empty string.
      *
      * @returns {asserts input is string}
      *
@@ -156,7 +156,7 @@ export class StringUtility {
      * @see {@link StringUtility.isNonEmpty}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a non-empty string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a non-empty string.
      *
      * @returns {asserts input is string}
      *
@@ -187,7 +187,7 @@ export class StringUtility {
      * @see {@link StringUtility.isText}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a text string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a text string.
      *
      * @returns {asserts input is string}
      *
@@ -215,7 +215,7 @@ export class StringUtility {
      * @see {@link StringUtility.isSingleLine}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a single-line string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a single-line string.
      *
      * @returns {asserts input is string}
      *
@@ -243,7 +243,7 @@ export class StringUtility {
      * @see {@link StringUtility.isSingleLineLowercase}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a single-line lowercase string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a single-line lowercase string.
      *
      * @returns {asserts input is string}
      *
@@ -271,7 +271,7 @@ export class StringUtility {
      * @see {@link StringUtility.isSingleLineUppercase}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a single-line uppercase string.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a single-line uppercase string.
      *
      * @returns {asserts input is string}
      *

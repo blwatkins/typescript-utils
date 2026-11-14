@@ -53,7 +53,7 @@ export class WeightedElementUtility {
      * @see {@link WeightedElementUtility.isGenericWeightedElement}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a valid generic {@link WeightedElement} object.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a valid generic {@link WeightedElement} object.
      *
      * @returns {asserts input is WeightedElement<unknown>}
      *

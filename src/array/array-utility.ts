@@ -49,7 +49,7 @@ export class ArrayUtility {
      * @see {@link ArrayUtility.isArray}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not an array.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not an array.
      *
      * @returns {asserts input is unknown[]}
      *
@@ -80,7 +80,7 @@ export class ArrayUtility {
      * @see {@link ArrayUtility.isDenseArray}
      *
      * @param {unknown} input - The input to check.
-     * @param {string | undefined} message - Optional message for the error thrown when `input` is not a dense array.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a dense array.
      *
      * @returns {asserts input is unknown[]}
      *

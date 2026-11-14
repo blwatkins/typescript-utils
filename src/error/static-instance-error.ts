@@ -30,8 +30,7 @@ export class StaticInstanceError extends TypeError {
     /**
      * Public constructor.
      *
-     * @param {string} message - The error message.
-     * Default value is {@link StaticInstanceError.defaultMessage}.
+     * @param {string} [message] - The error message.
      *
      * @public
      * @since 0.1.0
