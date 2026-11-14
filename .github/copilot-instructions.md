@@ -119,7 +119,7 @@ A custom error class this package defines for itself must:
 - Live in `src/error/` and be re-exported from that module's index file
 - Extend the most specific built-in error type that fits the failure (e.g., `TypeError` for invalid input types) rather than the base `Error`
 - Set `this.name` to the class name in the constructor so the error is identifiable at runtime and in stack traces
-- Accept an optional `message` parameter that defaults to the class's `defaultMessage`, and document the default in the constructor `@param`
+- Accept an optional `message` parameter that defaults to the class's `defaultMessage`
 - Expose a public static `defaultMessage` getter returning the default error message
 
 Custom error types intentionally do not expose a Node.js-style `code` property.
@@ -296,10 +296,14 @@ The following preferences require manual review since no ESLint rule can check t
 - **Document version with `@since`:** Add `@since` to all public/exported members.
 - **Enclose boolean values in backticks:** Always use backticks for `true` and `false` in documentation comments.
 - **Use consistent tense and voice:** Write documentation in the present tense and active voice for clarity.
-- **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value, state the default via `@default` (e.g., `@default Math.random`).
-- **Document default parameter values:** Indicate default values for parameters in the `@param` annotation.
+- **Write summaries in the third person:** Start a function or method summary with a third-person verb (e.g., `Returns...`, `Builds...`), not the imperative (`Return...`). A type guard's summary may be a question instead (e.g., `Is input a ...?`).
+- **Document default values:** For class fields, object properties, and module-level constants and variables that have a default or initial value, state the default via `@default` (e.g., `@default Math.random`). Arrays do not take `@default`.
+- **Mark optional parameters:** Enclose the name of an optional parameter, including one with a default value, in square brackets, and write the type it accepts without `| undefined` (e.g., `@param {string} [message] - The custom error message.`).
+- **Document optional properties:** For optional properties, write the declared type in `@type`, without `| undefined`.
+- **Word remarks on `never` properties consistently:** A property typed `never` carries a `@remarks` that reads `A {@link Type} never has ...` (e.g., `A {@link ValueFailure} never has an expected error.`).
 - **Annotate abstract/readonly/private/protected/override members:** Use `@abstract`, `@readonly`, `@private`, `@protected`, and `@override`, respectively, matching the corresponding TypeScript modifier. `eslint.config.ts.mjs` validates these tags are well-formed where present, but does not require their presence for a given modifier.
 - **Scope `@public` to class members:** Apply `@public` to public class members and constructors. Do not add `@public` to the doc comment of an exported class, interface, type, enum, or constant itself, or to interface properties — in both cases the declaration is already the visibility signal.
+- **Scope `@private` to private class members:** Apply `@private` only to class members declared `private` or `#private`. Do not add it to a module-level function or constant that is simply not exported.
 - **Use a consistent constructor summary:** Document constructors as `Public constructor.` or `Private constructor.`, matching the TypeScript modifier.
 - **Omit a `@returns` description that only restates its type:** Where the type carries the whole meaning, the type alone is the description — an `asserts input is ...` predicate, an `input is ...` guard, `@returns {void}`, or a getter returning a bare `RegExp`. Keep a description wherever it says something the type does not, which is most methods returning a value: a `@returns {number}` that states which of several bounds is returned earns its prose. A deprecated member keeps whatever `@returns` text it already had; do not retrofit this to the deprecated block, where a later diff would read as a change to a member that is on its way out.
 - **Do not prefix block tag text with a hyphen, except on `@param`:** `@param` consumes a ` - ` separator between the name and the description, so `@param {string} name - The name to greet.` and `@param {string} name The name to greet.` render identically; keep the hyphen there. On every other block tag — `@remarks`, `@returns`, `@throws`, `@deprecated` — the separator is not consumed. It reaches the comment body, where Markdown reads it as a list marker and TypeDoc renders the description as a single-item bulleted list instead of a paragraph. Write those descriptions directly after the tag (and any optional type/identifier), e.g. `@remarks This method does not enforce type checking.`, `@returns {string} The greeting.` This applies to test sources as well as `src/`.
