@@ -47,7 +47,7 @@ export class WeightedListUtility {
     }
 
     /**
-     * Assert that `input` is a valid generic {@link WeightedList} object.
+     * Asserts that `input` is a valid generic {@link WeightedList} object.
      *
      * @remarks This method does not enforce type checking for the {@link WeightedElement.value} property of the list elements.
      * For a {@link WeightedList} object to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
@@ -76,7 +76,7 @@ export class WeightedListUtility {
     }
 
     /**
-     * Assert that `input` is a valid {@link WeightedList} object.
+     * Asserts that `input` is a valid {@link WeightedList} object.
      *
      * @remarks For a {@link WeightedList} object to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.

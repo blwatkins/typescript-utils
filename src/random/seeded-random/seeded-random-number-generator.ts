@@ -59,7 +59,7 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
-     * Get the next number in the seeded sequence.
+     * Gets the next number in the seeded sequence.
      *
      * @remarks This method advances the internal 128-bit xoshiro128** state by one step.
      * Successive calls produce an independent, uniformly distributed sequence.
@@ -112,7 +112,7 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
-     * Assert that `state` is a valid state array.
+     * Asserts that `state` is a valid state array.
      *
      * @remarks For a state array to be valid, it must be a dense array of exactly 4 32-bit unsigned integers, where each integer is less than or equal to 0xFFFFFFFF.
      * Additionally, a valid state array must have at least one element that is greater than zero.

@@ -42,7 +42,7 @@ export class ArrayUtility {
     }
 
     /**
-     * Assert that `input` is an array.
+     * Asserts that `input` is an array.
      *
      * @remarks This method does not enforce size requirements, density requirements, or type checking for any array elements.
      *
@@ -69,7 +69,7 @@ export class ArrayUtility {
     }
 
     /**
-     * Assert that `input` is a dense array.
+     * Asserts that `input` is a dense array.
      *
      * @remarks A dense array has an element at every index.
      * An array with a hole at any index, such as `[1, , 3]` or `new Array(3)`, is a sparse array and is rejected.

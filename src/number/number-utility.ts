@@ -42,7 +42,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `input` is a finite number.
+     * Asserts that `input` is a finite number.
      *
      * @see {@link NumberUtility.isFinite}
      *
@@ -67,7 +67,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `input` is an integer within the safe integer range.
+     * Asserts that `input` is an integer within the safe integer range.
      *
      * @see {@link NumberUtility.isInteger}
      *
@@ -92,7 +92,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `input` is a positive integer within the safe integer range.
+     * Asserts that `input` is a positive integer within the safe integer range.
      *
      * @see {@link NumberUtility.isPositiveInteger}
      *
@@ -119,7 +119,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `input` is a number within the safe integer range.
+     * Asserts that `input` is a number within the safe integer range.
      *
      * @see {@link NumberUtility.isSafe}
      *
@@ -144,7 +144,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `a` is greater than `b`.
+     * Asserts that `a` is greater than `b`.
      *
      * @see {@link NumberUtility.isGreaterThan}
      *
@@ -171,7 +171,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `a` is less than `b`.
+     * Asserts that `a` is less than `b`.
      *
      * @see {@link NumberUtility.isLessThan}
      *
@@ -198,7 +198,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `value` is greater than or equal to `min` and less than or equal to `max`.
+     * Asserts that `value` is greater than or equal to `min` and less than or equal to `max`.
      *
      * @see {@link NumberUtility.isInRange}
      *
@@ -227,7 +227,7 @@ export class NumberUtility {
     }
 
     /**
-     * Assert that `min` and `max` are numbers within the safe integer range, where `min` is less than or equal to `max`.
+     * Asserts that `min` and `max` are numbers within the safe integer range, where `min` is less than or equal to `max`.
      *
      * @see {@link NumberUtility.isValidRange}
      *

@@ -43,7 +43,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that `input` is an array.
+     * Asserts that `input` is an array.
      *
      * @remarks This method does not enforce size requirements, density requirements, or type checking for any array elements.
      *
@@ -64,7 +64,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that `input` is a boolean.
+     * Asserts that `input` is a boolean.
      *
      * @param {unknown} input - The input to check.
      * @param {string} [message] - Optional message for the error thrown when `input` is not a boolean.
@@ -87,7 +87,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that `input` is a callable function.
+     * Asserts that `input` is a callable function.
      *
      * @remarks This method does not enforce type checking for function parameters or return type.
      *
@@ -112,7 +112,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that `input` is a non-array object.
+     * Asserts that `input` is a non-array object.
      *
      * @remarks This method does not enforce presence or type checking for any object properties.
      * Additionally, although both are typed as `object` by TypeScript and JavaScript, `null` and arrays are rejected by this method.
@@ -138,7 +138,7 @@ export class TypeAssertions {
     }
 
     /**
-     * Assert that `input` is a string.
+     * Asserts that `input` is a string.
      *
      * @see {@link StringUtility.assertString}
      *

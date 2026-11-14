@@ -41,7 +41,7 @@ export class ValueRangeError extends RangeError {
     }
 
     /**
-     * Get the default error message.
+     * Gets the default error message.
      *
      * @returns {string} The default error message for {@link ValueRangeError}.
      *

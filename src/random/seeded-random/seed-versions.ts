@@ -79,7 +79,7 @@ export class SeedVersions {
     }
 
     /**
-     * The number of seed versions.
+     * Gets the number of seed versions.
      *
      * @returns {number} The total number of seed versions that currently exist.
      *
@@ -91,7 +91,7 @@ export class SeedVersions {
     }
 
     /**
-     * Assert that `index` is a valid seed version index.
+     * Asserts that `index` is a valid seed version index.
      *
      * @see {@link SeedVersions.isValidIndex}
      *
@@ -136,7 +136,7 @@ export class SeedVersions {
     }
 
     /**
-     * Get a {@link SeedVersion} object.
+     * Gets a {@link SeedVersion} object.
      *
      * @see {@link SeedVersions.assertValidIndex}
      *

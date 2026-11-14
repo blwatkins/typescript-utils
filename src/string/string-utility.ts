@@ -49,7 +49,7 @@ export class StringUtility {
     }
 
     /**
-     * Get the regular expression for single-line mixed-case strings.
+     * Gets the regular expression for single-line mixed-case strings.
      *
      * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
      * It matches non-whitespace characters separated by single spaces (U+0020).
@@ -65,7 +65,7 @@ export class StringUtility {
     }
 
     /**
-     * Get the regular expression for single-line lowercase strings.
+     * Gets the regular expression for single-line lowercase strings.
      *
      * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
      * It matches non-whitespace characters separated by single spaces (U+0020), with no uppercase letters.
@@ -81,7 +81,7 @@ export class StringUtility {
     }
 
     /**
-     * Get the regular expression for single-line uppercase strings.
+     * Gets the regular expression for single-line uppercase strings.
      *
      * @remarks This expression assumes the string has already passed {@link StringUtility.isText}.
      * It matches non-whitespace characters separated by single spaces (U+0020), with no lowercase letters.
@@ -97,7 +97,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is a string.
+     * Asserts that `input` is a string.
      *
      * @see {@link StringUtility.isString}
      *
@@ -122,7 +122,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is an empty string.
+     * Asserts that `input` is an empty string.
      *
      * @remarks Empty strings must only contain whitespace characters.
      *
@@ -149,7 +149,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is a non-empty string.
+     * Asserts that `input` is a non-empty string.
      *
      * @remarks Non-empty strings must contain at least one non-whitespace character.
      *
@@ -176,7 +176,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is a text string.
+     * Asserts that `input` is a text string.
      *
      * @remarks A text string must satisfy all of the following rules:
      * - It must be a string that contains at least one non-whitespace character.
@@ -207,7 +207,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is a single-line string.
+     * Asserts that `input` is a single-line string.
      *
      * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
@@ -235,7 +235,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is a single-line lowercase string.
+     * Asserts that `input` is a single-line lowercase string.
      *
      * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.
@@ -263,7 +263,7 @@ export class StringUtility {
     }
 
     /**
-     * Assert that `input` is a single-line uppercase string.
+     * Asserts that `input` is a single-line uppercase string.
      *
      * @remarks A single-line string is a text string whose non-whitespace characters are separated by single spaces (U+0020).
      * It does not allow tabs, line breaks, leading whitespace, trailing whitespace, or consecutive whitespace.

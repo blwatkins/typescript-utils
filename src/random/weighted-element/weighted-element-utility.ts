@@ -45,7 +45,7 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Assert that `input` is a valid generic {@link WeightedElement} object.
+     * Asserts that `input` is a valid generic {@link WeightedElement} object.
      *
      * @remarks This method does not enforce type checking for {@link WeightedElement.value}.
      * For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
@@ -73,7 +73,7 @@ export class WeightedElementUtility {
     }
 
     /**
-     * Assert that `input` is valid a {@link WeightedElement} object.
+     * Asserts that `input` is valid a {@link WeightedElement} object.
      *
      * @remarks For a {@link WeightedElement} object to be valid, its {@link WeightedElement.weight} must be a finite number between {@link minWeight} and {@link maxWeight}, inclusive.
      *

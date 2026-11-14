@@ -68,7 +68,7 @@ export class Random {
     }
 
     /**
-     * Set the primary function used to generate random numbers.
+     * Sets the primary function used to generate random numbers.
      *
      * @see {@link TypeAssertions.assertFunction}
      *
@@ -85,7 +85,7 @@ export class Random {
     }
 
     /**
-     * Get a random number.
+     * Gets a random number.
      *
      * @returns {number} A random number in the range [0, 1) (zero inclusive, one exclusive).
      *
@@ -97,7 +97,7 @@ export class Random {
     }
 
     /**
-     * Get a random floating-point number within the range [min, max) (min inclusive, max exclusive).
+     * Gets a random floating-point number within the range [min, max) (min inclusive, max exclusive).
      *
      * @remarks This method draws a random floating-point number, then checks to ensure it does not round to a value outside the range.
      * A draw that falls outside the range is discarded and replaced.
@@ -138,7 +138,7 @@ export class Random {
     }
 
     /**
-     * Get a random integer within the range [min, max) (min inclusive, max exclusive).
+     * Gets a random integer within the range [min, max) (min inclusive, max exclusive).
      *
      * @remarks Non-integer bounds are rounded inward to the smallest and largest integers that the range contains.
      * A range that contains no integer values, such as [1.5, 1.89) will throw a {@link ValueRangeError}.
@@ -174,7 +174,7 @@ export class Random {
     }
 
     /**
-     * Get a random boolean.
+     * Gets a random boolean.
      *
      * @see {@link NumberUtility.assertInRange}
      *
@@ -194,7 +194,7 @@ export class Random {
     }
 
     /**
-     * Get a random index for an array with the given length.
+     * Gets a random index for an array with the given length.
      *
      * @see {@link NumberUtility.assertPositiveInteger}
      *
@@ -213,7 +213,7 @@ export class Random {
     }
 
     /**
-     * Get a random element.
+     * Gets a random element.
      *
      * @see {@link ArrayUtility.assertDenseArray}
      *
@@ -237,7 +237,7 @@ export class Random {
     }
 
     /**
-     * Get a random element from a non-uniform distribution.
+     * Gets a random element from a non-uniform distribution.
      *
      * @remarks For a {@link WeightedList} to be valid, it must be a non-empty, dense array of {@link WeightedElement} objects, where the sum of {@link WeightedElement.weight} properties in the array is equal to 1.
      * The sum may differ from 1 by at most `n * Number.EPSILON`, where `n` is the number of elements in the array, to absorb the floating-point rounding error of the summation.
@@ -273,7 +273,7 @@ export class Random {
     }
 
     /**
-     * Get a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive).
+     * Gets a random float within the range [`min`, `max`) (`min` inclusive, `max` exclusive).
      *
      * @remarks This method assumes that `min` and `max` are finite numbers, where `min` is less than `max`.
      *
