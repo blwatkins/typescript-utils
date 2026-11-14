@@ -85,7 +85,7 @@ export class WeightedElementUtility {
      * @param {(value: unknown) => value is TValue} valueTypeGuard - The type guard function used to validate the type or schema of {@link WeightedElement.value}.
      * This method should return `true` if the {@link WeightedElement.value} property matches the expected type or schema, and `false` otherwise.
      * The type validated by the function should match the assigned type of the {@link WeightedElement}.
-     * @param {string|undefined} message - Optional message for the error thrown when `input` is not a valid {@link WeightedElement} object.
+     * @param {string} [message] - Optional message for the error thrown when `input` is not a valid {@link WeightedElement} object.
      *
      * @returns {asserts input is WeightedElement<TValue>}
      *

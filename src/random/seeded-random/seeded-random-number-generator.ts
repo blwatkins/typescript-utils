@@ -101,7 +101,7 @@ export class SeededRandomNumberGenerator {
     }
 
     /**
-     * The maximum valid value in the state array.
+     * Gets the maximum valid value in the state array.
      *
      * @returns {number} 0xFFFFFFFF
      *

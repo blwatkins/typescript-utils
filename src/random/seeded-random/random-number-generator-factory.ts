@@ -50,7 +50,7 @@ export class RandomNumberGeneratorFactory {
     }
 
     /**
-     * Prime number for FNV-1a hashing algorithm.
+     * Gets the prime number for the FNV-1a hashing algorithm.
      * This number is an algorithmic constant; it must not change.
      *
      * @returns {number} 0x01000193
