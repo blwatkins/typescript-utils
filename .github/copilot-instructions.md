@@ -258,6 +258,14 @@ All source files must include the MIT License copyright header at the top.
 - Write every non-ASCII character in source and test source files as a Unicode escape (e.g., `\u00E9`, `\u{1F3A8}`), never as the raw character. Many non-ASCII characters are invisible or look identical to an ASCII character, so a raw character can change behavior without being evident in a diff or a review.
 - A documentation comment may show a visible non-ASCII character rendered, because TypeDoc prints an escape literally and the generated documentation would lose the character. An invisible character in a documentation comment is named by its code point instead (e.g., U+00AD for the soft hyphen).
 
+#### Imports
+
+These rules apply to every file that uses ES module syntax, in TypeScript and JavaScript alike (e.g., `.ts`, `.mjs`).
+
+- Group imports into blocks separated by a blank line: external packages, then the package's other modules, then the module's own files. Order the lines in a block alphabetically by path.
+- Order the names in an import by kind (classes, types, functions, then constants), and alphabetically within each kind, e.g., `import { expect, describe, test } from 'vitest';`.
+- Split an import of 5 or more names into one name per line, with a blank line before and after it.
+
 #### Formatting Rules
 
 - Keep formatting compatible with the repository ESLint configurations in `eslint.config.js.mjs` and `eslint.config.ts.mjs`.
