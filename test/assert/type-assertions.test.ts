@@ -22,12 +22,7 @@
 
 import { describe } from 'vitest';
 
-import {
-    PrimitiveTypeError,
-    RandomNumberGeneratorFactory,
-    StaticInstanceError,
-    TypeAssertions
-} from '../../src';
+import { PrimitiveTypeError, RandomNumberGeneratorFactory, StaticInstanceError, TypeAssertions } from '../../src';
 
 import { testAssertMethod } from '../utils/assert/assert-tests';
 import { denseArrayInputs, nonArrayInputs, sparseArrayInputs } from '../utils/input/array-inputs';

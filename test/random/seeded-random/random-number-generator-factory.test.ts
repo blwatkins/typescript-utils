@@ -44,12 +44,7 @@ import {
     scenarios
 } from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
-import {
-    Scenario,
-    SingleInputScenario,
-    TestCase,
-    buildTestCases
-} from '../../utils/test-case/test-case';
+import { Scenario, SingleInputScenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => unknown, StaticInstanceError);

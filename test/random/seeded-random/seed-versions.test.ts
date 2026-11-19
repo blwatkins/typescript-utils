@@ -22,12 +22,7 @@
 
 import { expect, describe, test } from 'vitest';
 
-import {
-    SeedVersions,
-    StaticInstanceError,
-    ValueRangeError,
-    SeedVersion
-} from '../../../src';
+import { SeedVersions, StaticInstanceError, ValueRangeError, SeedVersion } from '../../../src';
 
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';

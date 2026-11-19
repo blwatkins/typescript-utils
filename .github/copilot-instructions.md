@@ -262,7 +262,7 @@ All source files must include the MIT License copyright header at the top.
 
 These rules apply to every file that uses ES module syntax, in TypeScript and JavaScript alike (e.g., `.ts`, `.mjs`).
 
-- Group imports into blocks separated by a blank line: external packages, then the package's other modules, then the module's own files. Imports from different directory levels (e.g., `'../../dir'`, `'../dir'`) go in separate blocks, farthest first. Order the lines in a block alphabetically by path.
+- Group imports into blocks separated by a blank line: external packages, then the package's other modules, then the module's own files. A package subpath (e.g., `'eslint/config'`) goes in its own block after its package's block. Imports from different directory levels (e.g., `'../../dir'`, `'../dir'`) go in separate blocks, farthest first. Within a block, default and namespace imports come before bracket imports, and lines of each kind are ordered alphabetically by path.
 - Order the names in an import by kind (classes, types, functions, then constants), and alphabetically within each kind, e.g., `import { expect, describe, test } from 'vitest';`.
 - Split an import of 5 or more names into one name per line, with a blank line before and after it.
 

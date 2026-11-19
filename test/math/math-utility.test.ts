@@ -24,12 +24,7 @@ import { expect, describe, test } from 'vitest';
 
 import { MathUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 
-import {
-    invalidSafeNumberInputs,
-    invalidSafePositiveIntegerInputs,
-    zeroInputs
-} from '../utils/input/number-inputs';
-
+import { invalidSafeNumberInputs, invalidSafePositiveIntegerInputs, zeroInputs } from '../utils/input/number-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 

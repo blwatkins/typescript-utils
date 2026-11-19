@@ -54,14 +54,7 @@ import {
 
 import { sparseWeightedListInputs } from '../utils/input/weighted-list-inputs';
 import { testStaticClassConstructor } from '../utils/static/static-class-tests';
-
-import {
-    getExpectedAsyncSequence,
-    getExpectedSequence,
-    asciiNamespace,
-    asciiSeed
-} from '../utils/test-case/scenarios/random-number-generator-factory-scenarios';
-
+import { getExpectedAsyncSequence, getExpectedSequence, asciiNamespace, asciiSeed } from '../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 import { Scenario, TestCase, buildTestCases } from '../utils/test-case/test-case';
 
 describe('Random', (): void => {
