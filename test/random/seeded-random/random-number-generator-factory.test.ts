@@ -20,21 +20,29 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { expect, describe, test } from 'vitest';
 
 import {
     PrimitiveTypeError,
     RandomNumberGeneratorFactory,
-    SeedVersions,
     SeededRandomNumberGenerator,
+    SeedVersions,
     StaticInstanceError,
     ValueRangeError
 } from '../../../src';
 
-import { definedNonStringInputs, nonStringInputs, singleLineFailureStringInputs } from '../../utils/input/string-inputs';
-
 import { definedInvalidSafePositiveIntegerInputs } from '../../utils/input/number-inputs';
+import { definedNonStringInputs, nonStringInputs, singleLineFailureStringInputs } from '../../utils/input/string-inputs';
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
+
+import {
+    alternateAsciiNamespace,
+    alternateAsciiSeed,
+    asciiNamespace,
+    asciiSeed,
+    asyncScenarios,
+    scenarios
+} from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 import {
     Scenario,
@@ -42,15 +50,6 @@ import {
     TestCase,
     buildTestCases
 } from '../../utils/test-case/test-case';
-
-import {
-    asyncScenarios,
-    scenarios,
-    asciiSeed,
-    alternateAsciiSeed,
-    asciiNamespace,
-    alternateAsciiNamespace
-} from '../../utils/test-case/scenarios/random-number-generator-factory-scenarios';
 
 describe('RandomNumberGeneratorFactory', (): void => {
     testStaticClassConstructor('RandomNumberGeneratorFactory', RandomNumberGeneratorFactory as unknown as new () => unknown, StaticInstanceError);

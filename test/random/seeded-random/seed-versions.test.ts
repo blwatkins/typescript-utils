@@ -20,17 +20,16 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { expect, describe, test } from 'vitest';
 
 import {
-    SeedVersion,
     SeedVersions,
     StaticInstanceError,
-    ValueRangeError
+    ValueRangeError,
+    SeedVersion
 } from '../../../src';
 
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
-
 import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { positiveIntegerFailureScenarios } from '../../utils/test-case/scenarios/number-scenarios';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';

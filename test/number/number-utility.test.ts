@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { expect, describe, test } from 'vitest';
 
 import { NumberUtility, PrimitiveTypeError, StaticInstanceError, ValueRangeError } from '../../src';
 

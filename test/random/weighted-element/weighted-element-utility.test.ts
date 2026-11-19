@@ -21,7 +21,7 @@
  */
 
 import { fail } from 'node:assert';
-import { describe, test, expect, expectTypeOf } from 'vitest';
+import { expect, describe, expectTypeOf, test } from 'vitest';
 
 import {
     PrimitiveTypeError,

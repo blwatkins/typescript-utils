@@ -21,7 +21,7 @@
  */
 
 import { fail } from 'node:assert';
-import { describe, test, expect, expectTypeOf } from 'vitest';
+import { expect, describe, expectTypeOf, test } from 'vitest';
 
 import {
     PrimitiveTypeError,
@@ -32,10 +32,10 @@ import {
 } from '../../../src';
 
 import { testAssertMethod, testIsMethod } from '../../utils/assert/assert-tests';
-import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { nonArrayInputs } from '../../utils/input/array-inputs';
 import { nonFunctionInputs } from '../../utils/input/function-inputs';
 import { sparseWeightedListInputs } from '../../utils/input/weighted-list-inputs';
+import { testStaticClassConstructor } from '../../utils/static/static-class-tests';
 import { Scenario, TestCase, buildTestCases } from '../../utils/test-case/test-case';
 
 describe('WeightedListUtility', (): void => {

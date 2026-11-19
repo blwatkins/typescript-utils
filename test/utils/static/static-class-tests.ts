@@ -20,7 +20,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, test, expect } from 'vitest';
+import { expect, describe, test } from 'vitest';
 
 export function testStaticClassConstructor(name: string, Constructor: new() => unknown, ErrorType: new () => Error): void {
     describe(`new ${name}()`, (): void => {
